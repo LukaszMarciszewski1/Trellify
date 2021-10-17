@@ -21,15 +21,16 @@ const Sidebar:React.FC = () => {
   const location = useLocation()
   return (
     <nav className={styles.container}>
-      <div className={styles.logo}></div>
+      <div className={styles.logo}><h1>TO DO</h1></div>
       <ul className={styles.listLinks}>
         {menuItems.map((item) => (
-          <li key={item.name} className={styles.navItem}>
+          <li key={item.name} 
+          className={
+            `${styles.navItem} ${location.pathname === item.path ? styles.active : styles.navItem}`
+          }
+          >
             <Link 
               to={item.path}
-              className={
-                location.pathname === item.path ? "active" : ''
-              }
             >
               {item.name}
             </Link>
