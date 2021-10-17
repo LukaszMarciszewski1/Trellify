@@ -1,0 +1,32 @@
+import React from 'react'
+import styles from './styles.module.scss'
+
+import IconButton from '../Details/IconButton/IconButton'
+
+import deleteIcon from '../../assets/icons/close.svg'
+import editIcon from '../../assets/icons/mode.svg'
+import doneIcon from '../../assets/icons/done.svg'
+
+const Task = () => {
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h3>Nowe zadanie</h3>
+        <div className={styles.actions}>
+          <IconButton icon={doneIcon} onClick={() => console.log('click')}/>
+          <IconButton icon={editIcon} onClick={() => console.log('click')}/>
+          <IconButton icon={deleteIcon} onClick={() => console.log('click')}/>
+
+        </div>
+      </div>
+      <div className={styles.content}>
+        <p>opis zadania raz dwa trzy</p>
+      </div>
+      <div className={styles.dedline}>
+        <p>dedline: 15.10.2022</p>
+      </div>
+    </div>
+  )
+}
+
+export default Task

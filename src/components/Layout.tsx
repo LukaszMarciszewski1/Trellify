@@ -2,7 +2,8 @@ import React from 'react'
 import styles from './styles.module.scss'
 import Sidebar from './Sidebar/Sidebar'
 import Topbar from './Topbar/Topbar'
-import History from './History/History'
+import Notes from './Notes/Notes'
+
 
 const Layout: React.FC = ({ children }) => {
   return (
@@ -13,9 +14,11 @@ const Layout: React.FC = ({ children }) => {
       <div className={styles.sidebarContainer}>
         <Sidebar />
       </div>
-      <div className={styles.pagesContainer}>{children}</div>
+      <div className={styles.pagesContainer}>
+        {children}
+      </div>
       <div className={styles.historyContainer}>
-        <History />
+        <Notes />
       </div>
     </div>
   )
