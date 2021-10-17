@@ -1,0 +1,29 @@
+.container{
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr minmax(auto, 400px);
+  grid-template-rows: 100px auto;
+}
+
+.sidebarContainer{
+  grid-column: 1/2;
+  grid-row: 1/-1;
+}
+
+.topbarContainer{
+  grid-column: 2/-1;
+  grid-row: 1/2;
+}
+
+.pagesContainer{
+  grid-column: 2/3;
+  grid-row: 2/-1;
+  background-color: #fcfcfc;
+  height: 100%;
+}
+
+.historyContainer{
+  grid-column: 3/-1;
+  grid-row: 2/-1;
+}
