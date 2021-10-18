@@ -1,7 +1,7 @@
 .container{
   flex-grow: 1;
   height: 100%;
-  background-color: #fcfcfc;
+  // background-color: #fcfcfc;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
 
@@ -40,8 +40,8 @@
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 1rem;
+    width: 1.2rem;
     height: 3px;
-    background-color: black;
+    background-color: grey;
   }
 }

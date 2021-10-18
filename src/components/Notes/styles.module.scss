@@ -1,8 +1,10 @@
+@import '../../scss/utils.scss';
+
 .container{
   width: 100%;
   height: 100%;
   border-left: 1px solid rgba(0, 0, 0, 0.12);
-  background-color: #fcfcfc;
+  // background-color: #fcfcfc;
   padding: 2.5rem;
   overflow: hidden;
 }
@@ -33,8 +35,8 @@
   padding: 1rem;
   border-radius: 1rem;
   margin-bottom: 2rem;
-  -webkit-box-shadow: 0px 2px 6px -1px rgba(0,0,0,0.31); 
-  box-shadow: 0px 2px 6px -1px rgba(0,0,0,0.31);
+  box-shadow: $box-shadow;
+  background-color: #fcfcfc;
   p{
     margin: 1.5rem 0;
     overflow: hidden;

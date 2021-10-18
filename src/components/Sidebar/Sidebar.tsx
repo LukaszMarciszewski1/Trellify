@@ -4,16 +4,16 @@ import styles from './styles.module.scss'
 
 const menuItems = [
   {
-    name: 'Do zrobienia',
+    name: 'Lista zadań',
     path: '/',
   },
   {
-    name: 'Zrobione',
-    path: '/zrobione',
+    name: 'View-1',
+    path: '/View-1',
   },
   {
-    name: 'Dodaj zadanie',
-    path: '/dodaj-zadanie',
+    name: 'View-2',
+    path: '/View-2',
   },
 ]
 

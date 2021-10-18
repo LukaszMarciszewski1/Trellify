@@ -1,0 +1,23 @@
+.tab{
+  position: relative;
+  background-color: transparent;
+  margin-right: 2rem;
+  padding-bottom: 8px;
+  font: {
+    size: 1rem;
+    weight: bold;
+  };
+  opacity: .7;
+}
+
+.active {
+  opacity: 1;
+  &::before{
+    content:'';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    border-bottom: 2px solid black;
+  }
+}
