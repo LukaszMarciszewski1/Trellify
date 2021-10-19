@@ -1,9 +1,10 @@
 import React from 'react'
 
-const View2:React.FC = () => {
+const View2: React.FC = () => {
+
   return (
     <div>
-      View2
+       View
     </div>
   )
 }

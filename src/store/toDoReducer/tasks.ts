@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../index'
+import type { RootState } from '../store'
 
 enum TodoActions {
   ADD_TASK = 'Add task',
@@ -9,7 +9,7 @@ enum TodoActions {
   IMPORT_TASKS = 'Import tasks'
 }
 
-interface Task {
+interface Todo {
   id: number;
   title: string;
   description: string;
@@ -17,20 +17,22 @@ interface Task {
   dataDedline: number;
 }
 
-const initialState: Task = {
-  id: 0,
-  title: '',
-  description: '',
-  dataCreation: 0,
-  dataDedline: 0,
-}
+// const initialState: Task = {
+//   id: 0,
+//   title: '',
+//   description: '',
+//   dataCreation: 0,
+//   dataDedline: 0,
+// }
+
+const initialState = [] as Todo[];
 
 export const counterSlice = createSlice({
   name: TodoActions.ADD_TASK,
   initialState,
   reducers: {
-    addTaskToList: () => {
-      
+    addTaskToList: (state, action: PayloadAction<Todo>) => {
+      state.push(action.payload);
     }
   },
 })
