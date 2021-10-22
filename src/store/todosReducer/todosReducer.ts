@@ -8,16 +8,9 @@ enum TodoActions {
   IMPORT_TASKS = 'Import tasks'
 }
 
-// const initialState: Task = {
-//   id: 0,
-//   title: '',
-//   description: '',
-//   dataCreation: 0,
-//   dataDedline: 0,
-// }
-
 interface Task {
   id: string
+  title: string
   description: string
   completed: boolean
 }
@@ -30,14 +23,25 @@ const todosSlice = createSlice({
       reducer: (state, action: PayloadAction<Task>) => {
         state.push(action.payload)
       },
-      prepare: (description: string) => {
+      prepare: (title: string, description: string) => {
         const id = nanoid()
-        return { payload: { id, description, completed: false } }
+        return { payload: { id, title, description, completed: false } }
       },
     },
+    removeTodo(state, action: PayloadAction<string>) {
+      const index = state.findIndex((task) => task.id === action.payload);
+      state.splice(index, 1);
+    },
+    changeStatus(
+      state,
+      action: PayloadAction<{completed: boolean, id: string}>
+    ){
+     const index = state.findIndex(task => task.id === action.payload.id)
+     state[index].completed = action.payload.completed
+    }
   },
 })
 
 
-export const { addTodo } = todosSlice.actions;
+export const { addTodo, removeTodo, changeStatus } = todosSlice.actions;
 export default todosSlice.reducer;

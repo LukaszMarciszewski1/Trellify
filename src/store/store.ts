@@ -4,7 +4,7 @@ import todosReducer from './todosReducer/todosReducer'
 
 export const store = configureStore({
   reducer: {
-    reducer: todosReducer,
+    todolist: todosReducer,
   }
 })
 
