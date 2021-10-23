@@ -1,4 +1,4 @@
-import React, {useEffect, useState, SyntheticEvent} from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from './styles.module.scss'
 
 import { useDispatch, useSelector } from "react-redux";

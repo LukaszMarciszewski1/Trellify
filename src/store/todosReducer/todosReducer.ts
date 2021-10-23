@@ -1,13 +1,6 @@
 import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
 import type { RootState } from '../store'
 
-enum TodoActions {
-  ADD_TASK = 'Add task',
-  EDIT_TASK = 'Edit task',
-  REMOVE_TASK = 'Remove task',
-  IMPORT_TASKS = 'Import tasks'
-}
-
 interface Task {
   id: string
   title: string
@@ -16,7 +9,7 @@ interface Task {
 }
 
 const todosSlice = createSlice({
-  name: TodoActions.ADD_TASK,
+  name: 'todo-list',
   initialState: [] as Task[],
   reducers: {
     addTodo: {
