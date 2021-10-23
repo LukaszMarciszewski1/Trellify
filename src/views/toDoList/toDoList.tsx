@@ -15,6 +15,7 @@ const ToDoList: React.FC = () => {
   const [todoTitle, setTodoTitle] = useState<string>('');
   const todoList = useSelector((state: RootState) => state.todolist);
   const dispatch = useDispatch<AppDispatch>();
+  const numberOfTasks = todoList.filter(task => task.completed === false)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -27,34 +28,32 @@ const ToDoList: React.FC = () => {
     e.target.id === 'task-title' ? setTodoTitle(e.target.value) : setTodoDescription(e.target.value)
   }
 
+  const displayTasks = (item: any ) => (
+    <Task 
+      key={item.id} 
+      title={item.title}
+      completed={item.completed}
+      description={item.description} 
+      handleRemove={() => dispatch(removeTodo(item.id))}
+      handleChangeStatus={()=> dispatch(changeStatus({completed: !item.completed, id: item.id}))}
+    />
+  )
+
   return (
     <div className={styles.container}>
       <Tabs>
         <TabsContent title="Do zrobienia">
-          {todoList.map(item => (
+          {todoList.slice(0).reverse().map(item => (
            item.completed === false ?
-            <Task 
-            key={item.id} 
-            title={item.title}
-            completed={item.completed}
-            description={item.description} 
-            handleRemove={() => dispatch(removeTodo(item.id))}
-            handleChangeStatus={()=> dispatch(changeStatus({completed: !item.completed, id: item.id}))}
-            /> :
+           displayTasks(item)
+           :
             null
           ))}
         </TabsContent>
         <TabsContent title="Zrobione">
-        {todoList.map(item => (
+        {todoList.slice(0).reverse().map(item => (
            item.completed === true ?
-            <Task 
-            key={item.id} 
-            title={item.title}
-            description={item.description} 
-            completed={item.completed}
-            handleRemove={() => dispatch(removeTodo(item.id))}
-            handleChangeStatus={()=> dispatch(changeStatus({completed: !item.completed, id: item.id}))}
-            /> :
+            displayTasks(item) :
             null
           ))}
         </TabsContent>
@@ -66,7 +65,7 @@ const ToDoList: React.FC = () => {
           descriptionValue={todoDescription}
         />
         <br />
-        <h2>zadania do zrobienia {todoList.length}</h2>
+        <h2>zadania do zrobienia {numberOfTasks.length}</h2>
         </TabsContent>
       </Tabs>
     </div>
