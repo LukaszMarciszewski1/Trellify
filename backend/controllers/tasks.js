@@ -8,9 +8,18 @@ export const getTasks = async (req, res) => {
   try {
     const tasks = await Tasks.find()
     res.status(200).json(tasks)
-    console.log(tasks)
   } catch (error) {
     res.status(404).json({ message: error.message })
+  }
+}
+
+export const getTask = async (req, res) => {
+  const { id } = req.params;
+  try{
+    const task = await Tasks.findById(id)
+    res.status(200).json(task)
+  } catch (error){
+    res.status(404).json({message: error.message})
   }
 }
 
@@ -25,15 +34,21 @@ export const createTask = async (req, res) => {
   }
 }
 
+export const updateTask = async (req, res) => {
+  const {id: _id} = req.params
+  const task = req.body
+  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No task with id: ${id}`);
+  const updateTask = await Tasks.findByIdAndUpdate(_id, task, {new: true})
+
+  res.json(updateTask)
+}
+
 export const deleteTask = async (req, res) => {
-  const id  = req.params.id;
+  const {id}  = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No task with id: ${id}`);
 
-  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
-
-  await newTask.deleteOne({ _id: id });
-  res.sendStatus(204).json({ message: "Post deleted successfully." });
-
-  // res.json({ message: "Post deleted successfully." });
+  await Tasks.findByIdAndRemove(id)
+  res.json({ message: "Task deleted successfully." });
 }
 
 export default router

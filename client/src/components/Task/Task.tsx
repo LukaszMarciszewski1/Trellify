@@ -11,8 +11,9 @@ interface Props {
   title: string,
   description: string,
   completed: number
-  handleRemove: any
-  handleChangeStatus: () => void
+  handleRemove?: any
+  handleChangeStatus?: any
+  handleUpdate?: any
 }
 
 const Task: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const Task: React.FC<Props> = ({
   completed,
   handleRemove,
   handleChangeStatus,
+  handleUpdate,
 }) => {
   return (
     <div className={styles.container}>
@@ -28,7 +30,7 @@ const Task: React.FC<Props> = ({
         <h3>{title}</h3>
         <div className={styles.actions}>
           {!completed && <IconButton icon={doneIcon} onClick={handleChangeStatus} />}
-          {!completed && <IconButton icon={editIcon} onClick={() => console.log('click')} />}
+          {!completed && <IconButton icon={editIcon} onClick={handleUpdate} />}
           <IconButton icon={deleteIcon} onClick={handleRemove} />
         </div>
       </div>

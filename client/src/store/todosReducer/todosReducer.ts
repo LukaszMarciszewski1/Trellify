@@ -18,7 +18,7 @@ export const todosApi = createApi({
       query: () => `tasks`,
       providesTags: ['Tasks'],
     }),
-    addTask: builder.mutation({
+    addTask: builder.mutation<Todos, Partial<Todos>>({
       query: (body:{}) => ({
         url: 'tasks',
         method: 'POST',
@@ -26,14 +26,25 @@ export const todosApi = createApi({
       }),
       invalidatesTags: ['Tasks'],
     }),
-    removeTask: builder.mutation({
+    removeTask: builder.mutation<{ success: boolean; id: string }, string>({
       query: (id) => ({
         url: `tasks/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Tasks'],
+    }),
+    updateTask: builder.mutation({
+      query: ({id, ...body}) => ({
+        url: `tasks/${id}`,
+        method: 'PUT',
+        body
+      })
     })
   }),
 });
 
-export const { useGetAllTasksQuery, useAddTaskMutation, useRemoveTaskMutation } = todosApi;
+export const { 
+  useGetAllTasksQuery, 
+  useAddTaskMutation, 
+  useRemoveTaskMutation, 
+  useUpdateTaskMutation } = todosApi;

@@ -7,8 +7,6 @@ type Props = {
   descriptionValue: string
 }
 
-
-
 const Form: React.FC<Props> = ({ handleChange, handleSubmit, titleValue, descriptionValue }) => {
 
   return (
