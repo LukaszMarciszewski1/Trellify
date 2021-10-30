@@ -10,8 +10,8 @@ import doneIcon from '../../assets/icons/done.svg'
 interface Props {
   title: string,
   description: string,
-  completed: boolean
-  handleRemove: () => void
+  completed: number
+  handleRemove: any
   handleChangeStatus: () => void
 }
 
