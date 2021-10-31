@@ -51,4 +51,21 @@ export const deleteTask = async (req, res) => {
   res.json({ message: "Task deleted successfully." });
 }
 
+export const completedTask = async (req, res) => {
+  const {id} = req.params
+  const completed = req.body
+  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No task with id: ${id}`);
+
+  const task = await Tasks.findById(id)
+  const updateTask = await Tasks.findByIdAndUpdate(id, req.body, {new: true})
+  res.json(updateTask);
+  // try {
+  //   const task = await Tasks.findById(id)
+  //   const updateTask = await Tasks.findByIdAndUpdate(id, {completed: task.completed + 1}, {new: true})
+  //   res.json(updateTask);
+  // } catch (error) {
+  //   res.status(409).json({message: error.message})
+  // }
+}
+
 export default router

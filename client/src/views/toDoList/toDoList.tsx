@@ -9,7 +9,8 @@ import {
   useGetAllTasksQuery, 
   useAddTaskMutation, 
   useRemoveTaskMutation, 
-  useUpdateTaskMutation } from "../../store/todosReducer/todosReducer";
+  useUpdateTaskMutation,
+  useCompletedTaskMutation } from "../../store/todosReducer/todosReducer";
 
 import Task from '../../components/Task/Task'
 import Tabs from '../../components/Tabs/Tabs'
@@ -26,6 +27,7 @@ const ToDoList: React.FC = () => {
   const [addTask] = useAddTaskMutation()
   const [removeTask] = useRemoveTaskMutation()
   const [updateTask] = useUpdateTaskMutation()
+  const [completedTask] = useCompletedTaskMutation()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.target.id === 'task-title' ? setTodoTitle(e.target.value) : setTodoDescription(e.target.value)
@@ -58,7 +60,7 @@ const ToDoList: React.FC = () => {
                 completed={item.completed}
                 description={item.description}
                 handleRemove={() => removeTask(item._id)}
-                handleChangeStatus={() => console.log('ok')}
+                handleChangeStatus={() => completedTask({id: item._id, completed: item.completed + 1})}
                 handleUpdate={() => updateTask(item._id)}
               />
             ))

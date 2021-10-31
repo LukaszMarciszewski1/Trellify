@@ -8,8 +8,8 @@ import editIcon from '../../assets/icons/mode.svg'
 import doneIcon from '../../assets/icons/done.svg'
 
 interface Props {
-  title: string,
-  description: string,
+  title: string
+  description: string
   completed: number
   handleRemove?: any
   handleChangeStatus?: any
@@ -27,7 +27,7 @@ const Task: React.FC<Props> = ({
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h3>{title}</h3>
+        <input type='text' disabled={true} value={title}></input>
         <div className={styles.actions}>
           {!completed && <IconButton icon={doneIcon} onClick={handleChangeStatus} />}
           {!completed && <IconButton icon={editIcon} onClick={handleUpdate} />}
