@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import styles from './styles.module.scss'
 
 import IconButton from '../Details/IconButton/IconButton'
@@ -13,7 +13,10 @@ interface Props {
   completed: number
   handleRemove?: any
   handleChangeStatus?: any
-  handleUpdate?: any
+  handleOpenEdit?: any
+  disabled?: boolean
+  onChangeTask?: (value: any) => void
+  saveEdit?:(value: any) => void
 }
 
 const Task: React.FC<Props> = ({
@@ -22,24 +25,43 @@ const Task: React.FC<Props> = ({
   completed,
   handleRemove,
   handleChangeStatus,
-  handleUpdate,
+  handleOpenEdit,
+  onChangeTask,
+  disabled,
+  saveEdit
 }) => {
+  const [state, setState] = useState(true)
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <input type='text' disabled={true} value={title}></input>
-        <div className={styles.actions}>
-          {!completed && <IconButton icon={doneIcon} onClick={handleChangeStatus} />}
-          {!completed && <IconButton icon={editIcon} onClick={handleUpdate} />}
-          <IconButton icon={deleteIcon} onClick={handleRemove} />
+      <form>
+        <div className={styles.header}>
+          <textarea
+            className={`${styles.titleText} ${disabled === false ? styles.activeEdit : styles.titleText}`}
+            disabled={disabled}
+            value={title}
+            onChange={onChangeTask}
+            id='task-title'
+          />
+          <div className={styles.actions}>
+            {!completed && <IconButton icon={doneIcon} onClick={handleChangeStatus} />}
+            {!completed && <IconButton icon={editIcon} onClick={handleOpenEdit} />}
+            <IconButton icon={deleteIcon} onClick={handleRemove} />
+          </div>
         </div>
-      </div>
-      <div className={styles.content}>
-        <p>{description}</p>
-      </div>
-      <div className={styles.dedline}>
-        <p>dedline: 15.10.2022</p>
-      </div>
+        <div className={styles.content}>
+          {/* <p className={styles.bodyText} >{description}</p> */}
+          <textarea
+            className={`${styles.bodyText} ${disabled === false ? styles.activeEdit : styles.bodyText}`}
+            disabled={disabled}
+            value={description}
+            onChange={onChangeTask}
+          ></textarea>
+        </div>
+        <div className={styles.dedline}>
+          <p>dedline: 15.10.2022</p>
+          {disabled === false ? <button type='submit' onClick={saveEdit} className={styles.button}>zapisz</button> : null}
+        </div>
+      </form>
     </div>
   )
 }

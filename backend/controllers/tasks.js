@@ -34,15 +34,6 @@ export const createTask = async (req, res) => {
   }
 }
 
-export const updateTask = async (req, res) => {
-  const {id: _id} = req.params
-  const task = req.body
-  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No task with id: ${id}`);
-  const updateTask = await Tasks.findByIdAndUpdate(_id, task, {new: true})
-
-  res.json(updateTask)
-}
-
 export const deleteTask = async (req, res) => {
   const {id}  = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No task with id: ${id}`);
@@ -51,12 +42,21 @@ export const deleteTask = async (req, res) => {
   res.json({ message: "Task deleted successfully." });
 }
 
+export const updateTask = async (req, res) => {
+  const {id} = req.params
+  const task = req.body
+  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No task with id: ${id}`);
+  const updateTask = await Tasks.findByIdAndUpdate(id, req.body, {new: true})
+
+  res.json(updateTask)
+}
+
 export const completedTask = async (req, res) => {
   const {id} = req.params
-  const completed = req.body
+  const task = req.body
   if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No task with id: ${id}`);
 
-  const task = await Tasks.findById(id)
+  // const task = await Tasks.findById(id)
   const updateTask = await Tasks.findByIdAndUpdate(id, req.body, {new: true})
   res.json(updateTask);
   // try {

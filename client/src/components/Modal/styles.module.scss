@@ -1,0 +1,14 @@
+@import '../../scss/utils.scss';
+
+.modal {
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  -webkit-box-shadow: $box-shadow; 
+  box-shadow: $box-shadow;
+  background-color: #fcfcfc;
+  width: 500px;
+  height: 300px;
+  position: absolute;
+}

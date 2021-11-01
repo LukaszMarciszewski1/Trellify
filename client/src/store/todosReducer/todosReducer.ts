@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import api from '../../api/index'
+import api from '../../helpers/index'
 
 interface Todos {
   _id: string
@@ -26,7 +26,7 @@ export const todosApi = createApi({
       }),
       invalidatesTags: ['Tasks'],
     }),
-    removeTask: builder.mutation<{ success: boolean; id: string }, string>({
+    deleteTask: builder.mutation<{ success: boolean; id: string }, string>({
       query: (id) => ({
         url: `tasks/${id}`,
         method: 'DELETE',
@@ -34,26 +34,26 @@ export const todosApi = createApi({
       invalidatesTags: ['Tasks'],
     }),
     updateTask: builder.mutation({
-      query: ({id, ...body}) => ({
-        url: `tasks/${id}`,
-        method: 'PATCH',
-        body
-      })
-    }),
-    completedTask: builder.mutation({
       query: ({id, ...patch}) => ({
         url: `tasks/${id}`,
         method: 'PATCH',
         body: patch
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['Tasks']
     }),
+    // completedTask: builder.mutation({
+    //   query: ({id, ...patch}) => ({
+    //     url: `tasks/${id}`,
+    //     method: 'PATCH',
+    //     body: patch
+    //   }),
+    //   invalidatesTags: ['Tasks'],
+    // }),
   }),
 });
 
 export const { 
   useGetAllTasksQuery, 
   useAddTaskMutation, 
-  useRemoveTaskMutation, 
-  useUpdateTaskMutation,
-  useCompletedTaskMutation } = todosApi;
+  useDeleteTaskMutation, 
+  useUpdateTaskMutation } = todosApi;
