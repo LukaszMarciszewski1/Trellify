@@ -5,33 +5,36 @@ import styles from './styles.module.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 
-import { 
-  useGetAllTasksQuery, 
-  useAddTaskMutation, 
-  useRemoveTaskMutation, 
-  useUpdateTaskMutation } from "../../store/todosReducer/todosReducer";
+import {
+  useGetAllTasksQuery,
+  useAddTaskMutation,
+  useDeleteTaskMutation,
+  useUpdateTaskMutation
+} from "../../store/todosReducer/todosReducer";
 
 import Task from '../../components/Task/Task'
 import Tabs from '../../components/Tabs/Tabs'
 import TabsContent from '../../components/Tabs/TabsContent/TabsContent'
 import Form from '../../components/Form/Form'
+import Modal from '../../components/Modal/Modal';
+import { idText } from 'typescript';
 
 const ToDoList: React.FC = () => {
   // const todoList = useSelector((state: RootState) => state);
   // const dispatch = useDispatch<AppDispatch>();
-  const [todoDescription, setTodoDescription] = useState<string>('');
   const [todoTitle, setTodoTitle] = useState<string>('');
+  const [todoDescription, setTodoDescription] = useState<string>('');
 
-  const { data, error, isLoading } = useGetAllTasksQuery();
+  const { data: tasks, error, isLoading } = useGetAllTasksQuery();
   const [addTask] = useAddTaskMutation()
-  const [removeTask] = useRemoveTaskMutation()
+  const [deleteTask] = useDeleteTaskMutation()
   const [updateTask] = useUpdateTaskMutation()
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.target.id === 'task-title' ? setTodoTitle(e.target.value) : setTodoDescription(e.target.value)
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     addTask({
       title: todoTitle,
@@ -41,7 +44,22 @@ const ToDoList: React.FC = () => {
     setTodoDescription('')
   }
 
-  const numberOfTasks = data?.filter(task => task.completed === 0)
+  // e: React.MouseEvent<HTMLElement>, 
+  //event.currentTarget
+
+  const displayTasks = (task:any) => (
+    <Task
+      key={task._id}
+      taskID={task._id}
+      title={task.title}
+      description={task.description}
+      completed={task.completed}
+    // handleRemove={() => deleteTask(task._id)}
+    // handleChangeStatus={() => updateTask({ id: task._id, completed: task.completed + 1 })}
+    />
+  )
+
+  const numberOfTasks = tasks?.filter(task => task.completed === 0)
 
   if (isLoading) return <h2>Loading...</h2>
   if (error) return <h2>error</h2>
@@ -51,25 +69,32 @@ const ToDoList: React.FC = () => {
       <Tabs>
         <TabsContent title="Do zrobienia">
           {
-            data?.slice(0).reverse().map(item => (
-              <Task
-                key={item._id}
-                title={item.title}
-                completed={item.completed}
-                description={item.description}
-                handleRemove={() => removeTask(item._id)}
-                handleChangeStatus={() => console.log('ok')}
-                handleUpdate={() => updateTask(item._id)}
-              />
+            tasks?.slice(0).reverse().map(task => (
+              task.completed === 0 ? (
+                displayTasks(task)
+              ) : null
             ))
           }
         </TabsContent>
         <TabsContent title="Zrobione">
+          {
+            tasks?.slice(0).reverse().map(task => (
+              task.completed >= 1 ? (
+                <Task
+                  key={task._id}
+                  taskID={task._id}
+                  title={task.title}
+                  completed={task.completed}
+                  description={task.description}
+                />
+              ) : null
+            ))
+          }
         </TabsContent>
         <TabsContent title="Dodaj zadanie">
           <Form
-            handleSubmit={handleSubmit}
-            handleChange={handleChange}
+            handleSubmit={handleAddTask}
+            handleChange={handleChangeValue}
             titleValue={todoTitle}
             descriptionValue={todoDescription}
           />
