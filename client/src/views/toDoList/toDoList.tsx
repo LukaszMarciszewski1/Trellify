@@ -22,9 +22,8 @@ import { idText } from 'typescript';
 const ToDoList: React.FC = () => {
   // const todoList = useSelector((state: RootState) => state);
   // const dispatch = useDispatch<AppDispatch>();
-  const [todoDescription, setTodoDescription] = useState<string>('');
   const [todoTitle, setTodoTitle] = useState<string>('');
-  const [editTask, setEditTask] = useState<boolean>(true)
+  const [todoDescription, setTodoDescription] = useState<string>('');
 
   const { data: tasks, error, isLoading } = useGetAllTasksQuery();
   const [addTask] = useAddTaskMutation()
@@ -33,7 +32,6 @@ const ToDoList: React.FC = () => {
 
   const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.target.id === 'task-title' ? setTodoTitle(e.target.value) : setTodoDescription(e.target.value)
-    console.log(e.target.value)
   }
 
   const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
@@ -46,27 +44,20 @@ const ToDoList: React.FC = () => {
     setTodoDescription('')
   }
 
-  const submitSaveEdit = (e: React.FormEvent<HTMLFormElement>, taskId: string) => {
-    e.preventDefault()
-    updateTask({ 
-      id: taskId,
-      title: todoTitle,
-      description: todoDescription
-    })
-    setTodoTitle('')
-    setTodoDescription('')
-    setEditTask(true)
-  }
   // e: React.MouseEvent<HTMLElement>, 
   //event.currentTarget
-  const handleToggleEdit = (id: string) => {
-    setEditTask(prev => !prev)
-    const select = tasks?.filter(task => {
-      if(task._id === id) return true
-      else return false
-    })
-    console.log(id)
-  }
+
+  const displayTasks = (task:any) => (
+    <Task
+      key={task._id}
+      taskID={task._id}
+      title={task.title}
+      description={task.description}
+      completed={task.completed}
+    // handleRemove={() => deleteTask(task._id)}
+    // handleChangeStatus={() => updateTask({ id: task._id, completed: task.completed + 1 })}
+    />
+  )
 
   const numberOfTasks = tasks?.filter(task => task.completed === 0)
 
@@ -80,22 +71,10 @@ const ToDoList: React.FC = () => {
           {
             tasks?.slice(0).reverse().map(task => (
               task.completed === 0 ? (
-                <Task
-                  key={task._id}
-                  title={editTask ? task.title : todoTitle}
-                  description={editTask ? task.description : todoDescription}
-                  completed={task.completed}
-                  handleRemove={() => deleteTask(task._id)}
-                  handleChangeStatus={() => updateTask({ id: task._id, completed: task.completed + 1 })}
-                  saveEdit={(e)=> submitSaveEdit(e, task._id)}
-                  disabled={editTask}
-                  onChangeTask={handleChangeValue}
-                  handleOpenEdit={()=>handleToggleEdit(task._id)}
-                />
+                displayTasks(task)
               ) : null
             ))
           }
-          {/* <Modal /> */}
         </TabsContent>
         <TabsContent title="Zrobione">
           {
@@ -103,10 +82,10 @@ const ToDoList: React.FC = () => {
               task.completed >= 1 ? (
                 <Task
                   key={task._id}
+                  taskID={task._id}
                   title={task.title}
                   completed={task.completed}
                   description={task.description}
-                  handleRemove={() => deleteTask(task._id)}
                 />
               ) : null
             ))
