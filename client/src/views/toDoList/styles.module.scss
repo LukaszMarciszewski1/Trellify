@@ -1,7 +1,27 @@
 .container{
   width: 100%;
-  max-width: 1000px;
+  max-width: 1600px;
   margin: 0 auto;
   min-height: 100%;
   padding: 3rem;
+}
+
+.wrapperTasks{
+  display:  flex;
+  overflow: auto;
+  padding: 1rem 0;
+}
+
+.column{
+  min-width: 300px;
+  margin-right: 2rem;
+}
+
+.header{
+  padding: 1rem;
+  background-color: rgb(233, 233, 233);
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
 }

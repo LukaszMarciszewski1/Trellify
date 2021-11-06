@@ -17,9 +17,9 @@ const Layout: React.FC = ({ children }) => {
       <div className={styles.pagesContainer}>
         {children}
       </div>
-      <div className={styles.historyContainer}>
+      {/* <div className={styles.historyContainer}>
         <Notes />
-      </div>
+      </div> */}
     </div>
   )
 }

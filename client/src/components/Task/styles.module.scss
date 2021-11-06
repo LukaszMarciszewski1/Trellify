@@ -1,29 +1,37 @@
 @import '../../scss/utils.scss';
 
 .container{
-  margin: 0 auto;
-  padding: 1rem 1.5rem;
+  // margin: 0 auto;
+  // position: relative;
+  padding: 1rem;
   border-radius: 1rem;
   margin-bottom: 1rem;
   -webkit-box-shadow: $box-shadow; 
   box-shadow: $box-shadow;
   background-color: #fcfcfc;
+  // max-width: 40%;
 }
 .header{
+  
   display: flex;
   justify-content: space-between;
-  padding-bottom: 1rem;
+  padding-bottom: .5rem;
   border-bottom: 1px solid rgb(190, 190, 190);
   h3{
    font-size: 1.4rem;
   }
 }
 
-.content{
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgb(190, 190, 190);
+.settings{
+  display: block;
+  position: relative;
 }
+
+// .title{
+//   display: flex;
+// }
+
+
 
 .dedline{
   padding-top: .5rem;
@@ -34,29 +42,67 @@
 }
 
 .actions {
-  min-width: 150px;
+  // min-width: 150px;
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
+  position: absolute;
+  background-color: #fcfcfc;
+  -webkit-box-shadow: $box-shadow; 
+  box-shadow: $box-shadow;
+  top: 2.3rem;
+  right: 0rem;
+  overflow: hidden;
+  // padding: 1rem;
+  border-radius: 10px;
+  z-index: 999;
 }
+
+.actionBtn{
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+
 
 .titleText {
   width: 100%;
   border: none;
   background-color:  transparent;
   font-size: 1.4rem;
-  height: 30px;
   max-height: 100px;
   margin-right: 1rem;
   resize: none;
 }
 
+.body{
+  // height: 40px;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid rgb(190, 190, 190);
+  display: flex;
+}
+
 .bodyText{
   width: 100%;
-  max-height: 500px;
+  height: 100%;
+  line-height: 1.5;
   border: none;
   background-color:  transparent;
   resize: none;
-  
+
+  &::-webkit-scrollbar-track{
+    display: none;
+  }
+  &::-webkit-scrollbar{
+    width: 6px;
+    background-color: #F5F5F5;
+    display: none;
+  }
+  &::-webkit-scrollbar-thumb{
+    background-color: rgba(58, 166, 0, 0.81);
+  }
 }
 
 .activeEdit{
@@ -64,6 +110,7 @@
   background-color:  transparent;
   padding: .5rem;
   min-height: 50px;
+  height: 100%;
 }
 
 .button{

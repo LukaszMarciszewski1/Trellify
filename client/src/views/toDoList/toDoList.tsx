@@ -12,12 +12,13 @@ import {
   useUpdateTaskMutation
 } from "../../store/todosReducer/todosReducer";
 
+import addTaskIcon from '../../assets/icons/plus-circle.svg'
+
 import Task from '../../components/Task/Task'
 import Tabs from '../../components/Tabs/Tabs'
 import TabsContent from '../../components/Tabs/TabsContent/TabsContent'
 import Form from '../../components/Form/Form'
-import Modal from '../../components/Modal/Modal';
-import { idText } from 'typescript';
+import IconButton from '../../components/Details/IconButton/IconButton';
 
 const ToDoList: React.FC = () => {
   // const todoList = useSelector((state: RootState) => state);
@@ -32,6 +33,7 @@ const ToDoList: React.FC = () => {
 
   const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.target.id === 'task-title' ? setTodoTitle(e.target.value) : setTodoDescription(e.target.value)
+    console.log(e.target.scrollHeight / 30)
   }
 
   const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,7 +49,7 @@ const ToDoList: React.FC = () => {
   // e: React.MouseEvent<HTMLElement>, 
   //event.currentTarget
 
-  const displayTasks = (task:any) => (
+  const displayTasks = (task: any) => (
     <Task
       key={task._id}
       taskID={task._id}
@@ -67,16 +69,53 @@ const ToDoList: React.FC = () => {
   return (
     <div className={styles.container}>
       <Tabs>
-        <TabsContent title="Do zrobienia">
-          {
-            tasks?.slice(0).reverse().map(task => (
-              task.completed === 0 ? (
-                displayTasks(task)
-              ) : null
-            ))
-          }
+        <TabsContent title="Zlecenia">
+          <div className={styles.wrapperTasks}>
+            <div className={styles.column}>
+              <div className={styles.header}><h3>Do zrobienia</h3><IconButton icon={addTaskIcon} onClick={() => console.log('add task')} title={'usuń'} /></div>
+              {
+                tasks?.slice(0).reverse().map(task => (
+                  task.completed === 0 ? (
+                    displayTasks(task)
+                  ) : null
+                ))
+              }
+            </div>
+            <div className={styles.column}>
+              <div className={styles.header}><h3>W trakcie realizacji</h3></div>
+              {
+                tasks?.slice(0).reverse().map(task => (
+                  task.completed === 1 ? (
+                    <Task
+                      key={task._id}
+                      taskID={task._id}
+                      title={task.title}
+                      completed={task.completed}
+                      description={task.description}
+                    />
+                  ) : null
+                ))
+              }
+            </div>
+            <div className={styles.column}>
+              <div className={styles.header}><h3>Zrobione</h3></div>
+              {
+                tasks?.slice(0).reverse().map(task => (
+                  task.completed >= 2 ? (
+                    <Task
+                      key={task._id}
+                      taskID={task._id}
+                      title={task.title}
+                      completed={task.completed}
+                      description={task.description}
+                    />
+                  ) : null
+                ))
+              }
+            </div>
+          </div>
         </TabsContent>
-        <TabsContent title="Zrobione">
+        <TabsContent title="Statystyki">
           {
             tasks?.slice(0).reverse().map(task => (
               task.completed >= 1 ? (
