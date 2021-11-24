@@ -1,4 +1,5 @@
 import React from 'react'
+import  TextareaAutosize  from  'react-textarea-autosize' ;
 import styles from './styles.module.scss'
 type Props = {
   handleSubmit: (value: any) => void
@@ -10,11 +11,11 @@ type Props = {
 const Form: React.FC<Props> = ({ handleChange, handleSubmit, titleValue, descriptionValue }) => {
 
   return (
-    <form >
+    <form className={styles.form}>
       <label htmlFor='task-title'>Tytół zadania</label>
-      <input onChange={handleChange} type='text' value={titleValue} className={styles.input} id='task-title'></input>
+      <TextareaAutosize maxRows={3} onChange={handleChange} value={titleValue} className={styles.textareaTitle} id='task-title'/>
       <label htmlFor='task-description'>Opis zadania zadania</label>
-      <textarea onChange={handleChange} value={descriptionValue} className={styles.textarea} id='task-description'></textarea>
+      <TextareaAutosize onChange={handleChange} value={descriptionValue} className={styles.textareaBody} id='task-description'/>
       <button type='submit' onClick={handleSubmit} className={styles.button}>dodaj</button>
     </form>
   )

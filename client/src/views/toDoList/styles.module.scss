@@ -1,27 +1,47 @@
+@import '../../scss/utils.scss';
+
 .container{
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;
   min-height: 100%;
-  padding: 3rem;
+  padding: 2rem 3rem;
 }
 
 .wrapperTasks{
   display:  flex;
   overflow: auto;
-  padding: 1rem 0;
 }
 
 .column{
   min-width: 300px;
-  margin-right: 2rem;
+  margin-right: 3%;
 }
 
 .header{
   padding: 1rem;
   background-color: rgb(233, 233, 233);
   border-radius: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: .8rem;
   display: flex;
   justify-content: space-between;
+}
+
+.tasks{
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  max-height: 630px;
+  padding: .1rem .5rem 1rem .1rem;
+
+  &::-webkit-scrollbar-track{
+  }
+  &::-webkit-scrollbar{
+    width: 6px;
+    background-color: #f0f0f0;
+  }
+  &::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background-color: rgba(194, 194, 194, 0.81);
+  }
 }

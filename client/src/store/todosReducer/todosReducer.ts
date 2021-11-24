@@ -6,7 +6,9 @@ interface Todos {
   title: string
   description: string
   completed: number
+  createdAt: Date
 }
+
 type TodosResponse = Todos[]
 
 export const todosApi = createApi({
@@ -41,14 +43,6 @@ export const todosApi = createApi({
       }),
       invalidatesTags: ['Tasks']
     }),
-    // completedTask: builder.mutation({
-    //   query: ({id, ...patch}) => ({
-    //     url: `tasks/${id}`,
-    //     method: 'PATCH',
-    //     body: patch
-    //   }),
-    //   invalidatesTags: ['Tasks'],
-    // }),
   }),
 });
 

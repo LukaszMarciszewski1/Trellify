@@ -8,11 +8,14 @@
   background-position: center;
   display: flex;
   align-items: center;
-  padding: .5rem;
+  padding: .2rem;
   border-radius: 5px;
+
   img{
+    transition: all .2s;
+    padding: 0 .2rem;
   }
   &:hover{
-    // background-color: #F7F8FA;
+    background-color: #F7F8FA;
   }
 }

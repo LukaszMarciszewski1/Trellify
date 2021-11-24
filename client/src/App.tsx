@@ -6,6 +6,9 @@ import View1 from './views/View1/View1';
 import ToDoList from './views/ToDoList/ToDoList';
 import './App.css';
 
+import { Test } from './data';
+
+
 const App:React.FC = () => {
   return (
     <Router>

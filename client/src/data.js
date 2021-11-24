@@ -1,3 +1,17 @@
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+
+
+export const Test = () => {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  const time = new Date()
+  console.log(dayjs(time).tz("Europe/Warsaw"))
+}
+
 export const historyTasks = [
   {
     id:1,
