@@ -22,15 +22,18 @@ const ToDoList: React.FC = () => {
 
   const handleChangeValue = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.target.id === 'task-title' ? setTodoTitle(e.target.value) : setTodoDescription(e.target.value)
-    // console.log(e.target.scrollHeight / 30)
   }
+  const date = new Date();
+  const now_utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+  const nowDate = new Date(now_utc)
 
   const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     addTask({
       title: todoTitle,
       description: todoDescription,
-      createdAt: new Date()
+      createdDate: nowDate
     })
     setTodoTitle('')
     setTodoDescription('')
@@ -44,11 +47,12 @@ const ToDoList: React.FC = () => {
       title={task.title}
       description={task.description}
       completed={task.completed}
-      createdAt={task.createdAt}
+      createdDate={task.createdDate}
+      nowDate={nowDate}
     />
   )
-
-  const sortedTasks = tasks?.slice().sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
+  
+  const sortedTasks = tasks?.slice().sort((a, b) => +new Date(b.createdDate) - +new Date(a.createdDate))
 
   const numberOfTasks = tasks?.filter(task => task.completed === 0)
   

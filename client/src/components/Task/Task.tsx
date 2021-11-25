@@ -20,10 +20,9 @@ interface Props {
   title: string
   description: string
   completed: number
-  handleRemove?: any
-  handleChangeStatus?: any
   taskID?: any
-  createdAt?: Date
+  createdDate?: Date
+  nowDate?: Date
 }
 
 const Task: React.FC<Props> = ({
@@ -31,7 +30,8 @@ const Task: React.FC<Props> = ({
   description,
   completed,
   taskID,
-  createdAt
+  createdDate,
+  nowDate
 }) => {
   const ref = useRef(null)
   const [updateTask] = useUpdateTaskMutation()
@@ -46,7 +46,7 @@ const Task: React.FC<Props> = ({
 
   const [todoTitle, setTodoTitle] = useState<string>(title);
   const [todoDescription, setTodoDescription] = useState<string>(description);
-  const [disable, setDisable] = useState<boolean>(true)
+  const [disableEdit, setDisableEdit] = useState<boolean>(true)
   const [showEditActions, setShowEditActions] = useState<boolean>(false)
   const [rows, setRows] = useState<number>(minRows)
 
@@ -62,32 +62,29 @@ const Task: React.FC<Props> = ({
       title: todoTitle,
       description: todoDescription
     })
-    setDisable(true)
+    setDisableEdit(true)
     setRows(minRows)
   }
 
   const handleEditSettings = () => {
-    setDisable(false)
+    setDisableEdit(false)
     setRows(maxRows)
     setShowEditActions(false)
   }
 
-  const handleUpdateTask = () => updateTask({ id: taskID, completed: completed + 1, createdAt: new Date() })
-
+  const handleUpdateTask = () => updateTask({ id: taskID, completed: completed + 1, createdDate: nowDate })
 
   const handleClickOutside = () => {setShowEditActions(false)}
   useOnClickOutside(ref, handleClickOutside)
-
-  // console.log(createdAt)
 
   return (
     <div className={styles.container} >
       <form>
         <div className={styles.header}>
           <TextareaAutosize
-            className={`${styles.titleText} ${disable === false ? styles.activeEdit : styles.titleText}`}
-            disabled={disable}
-            value={disable ? title : todoTitle}
+            className={`${styles.titleText} ${disableEdit === false ? styles.activeEdit : styles.titleText}`}
+            disabled={disableEdit}
+            value={disableEdit ? title : todoTitle}
             onChange={handleChangeValue}
             id='task-title'
           />
@@ -111,9 +108,9 @@ const Task: React.FC<Props> = ({
         <div className={styles.body}>
           <TextareaAutosize
             maxRows={rows}
-            className={`${styles.bodyText} ${disable === false ? styles.activeEdit : styles.bodyText}`}
-            disabled={disable}
-            value={disable ? description : todoDescription}
+            className={`${styles.bodyText} ${disableEdit === false ? styles.activeEdit : styles.bodyText}`}
+            disabled={disableEdit}
+            value={disableEdit ? description : todoDescription}
             onChange={handleChangeValue}
           />
           {
@@ -122,14 +119,14 @@ const Task: React.FC<Props> = ({
             ) : null
           }
           {
-            rows === maxRows && disable ? (
+            rows === maxRows && disableEdit ? (
               <IconButton icon={showLessBtn} onClick={() => setRows(minRows)} />
             ) : null
           }
         </div>
         <div className={styles.dedline}>
-          <p>{dayjs(createdAt).format('DD-MM-YYYY HH:mm:ss')}</p>
-          {disable === false ?
+          <p>{dayjs(createdDate).format('YYYY-MM-DDTHH:mm:ssZ')}</p>
+          {disableEdit === false ?
             <button
               type='submit'
               onClick={(e) => handleSaveChanges(e, taskID)}

@@ -6,7 +6,7 @@ interface Todos {
   title: string
   description: string
   completed: number
-  createdAt: Date
+  createdDate: Date
 }
 
 type TodosResponse = Todos[]

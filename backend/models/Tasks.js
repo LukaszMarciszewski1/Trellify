@@ -7,7 +7,7 @@ const TasksSchema = mongoose.Schema({
     type: Number,
     default: 0,
 },
-createdAt: {
+createdDate: {
   type: Date,
   default: new Date()
 },

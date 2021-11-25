@@ -27,12 +27,6 @@
   position: relative;
 }
 
-// .title{
-//   display: flex;
-// }
-
-
-
 .dedline{
   padding-top: .5rem;
   font-size: .9rem;
@@ -42,7 +36,6 @@
 }
 
 .actions {
-  // min-width: 150px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -71,7 +64,6 @@
   margin-bottom: .5rem;
 }
 
-
 .titleText {
   width: 100%;
   border: none;
@@ -83,7 +75,6 @@
 }
 
 .body{
-  // height: 40px;
   padding-top: .5rem;
   padding-bottom: .5rem;
   border-bottom: 1px solid rgb(190, 190, 190);
@@ -92,11 +83,11 @@
 
 .bodyText{
   width: 100%;
+  height: 100%;
   line-height: 1.5;
   border: none;
   background-color:  transparent;
   resize: none;
-  // overflow-y: hidden;
   &::-webkit-scrollbar-track{
     display: none;
   }
