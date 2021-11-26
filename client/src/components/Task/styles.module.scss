@@ -109,11 +109,17 @@
   height: 100%;
 }
 
-.button{
-  background-color: rgb(13, 97, 146);
-  color: white;
-  padding: .3rem 1rem;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: .05rem;
+
+
+.editActions{
+  display: flex;
+  .button{
+    background-color: rgb(13, 97, 146);
+    color: white;
+    padding: .3rem 1rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: .05rem;
+    margin-right: .5rem;
+  }
 }

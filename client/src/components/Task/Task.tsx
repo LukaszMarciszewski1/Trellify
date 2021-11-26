@@ -127,12 +127,15 @@ const Task: React.FC<Props> = ({
         <div className={styles.dedline}>
           <p>{dayjs(createdDate).format('YYYY-MM-DDTHH:mm:ssZ')}</p>
           {disableEdit === false ?
+          <div className={styles.editActions}>
             <button
               type='submit'
               onClick={(e) => handleSaveChanges(e, taskID)}
               className={styles.button}>
               zapisz
             </button>
+            <IconButton icon={deleteIcon} onClick={() => setDisableEdit(true)} />
+          </div>
             : null}
         </div>
       </form>
