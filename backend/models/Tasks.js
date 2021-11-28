@@ -6,11 +6,12 @@ const TasksSchema = mongoose.Schema({
   completed: {
     type: Number,
     default: 0,
-},
-createdDate: {
-  type: Date,
-  default: new Date()
-},
+  },
+  createdDate: {
+    type: Date,
+    default: new Date()
+  },
+  deadline: String,
 })
 
 const Tasks = mongoose.model('Task', TasksSchema)
