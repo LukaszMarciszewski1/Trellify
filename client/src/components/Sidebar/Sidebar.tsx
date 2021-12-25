@@ -3,17 +3,29 @@ import { Link, useLocation } from 'react-router-dom'
 import styles from './styles.module.scss'
 
 const menuItems = [
+  // {
+  //   name: 'Home',
+  //   path: '/',
+  // },
   {
-    name: 'Lista zadań',
+    name: 'Zlecenia',
     path: '/',
   },
   {
-    name: 'View-1',
+    name: 'Kalkulator',
     path: '/View-1',
   },
   {
-    name: 'View-2',
+    name: 'Magazyn',
     path: '/View-2',
+  },
+  {
+    name: 'Dostawcy',
+    path: '/View-3',
+  },
+  {
+    name: 'Informacje',
+    path: '/View-4',
   },
 ]
 
@@ -21,7 +33,7 @@ const Sidebar:React.FC = () => {
   const location = useLocation()
   return (
     <nav className={styles.container}>
-      <div className={styles.logo}><h1>TO DO</h1></div>
+      <div className={styles.logo}><h1>LOGO</h1></div>
       <ul className={styles.listLinks}>
         {menuItems.map((item) => (
           <li key={item.name} 

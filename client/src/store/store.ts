@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 // import counterReducer from '../reducers/reducer'
-import {todosApi} from './todosReducer/todosReducer'
+import {todosApi} from './api/todosReducer'
+import {cardsApi} from './api/cardsReducer'
 
 export const store = configureStore({
   reducer:{
     [todosApi.reducerPath]: todosApi.reducer,
+    [cardsApi.reducerPath]: cardsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-  getDefaultMiddleware().concat(todosApi.middleware),
+  getDefaultMiddleware().concat(todosApi.middleware, cardsApi.middleware),
 })
 
 

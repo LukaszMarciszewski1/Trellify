@@ -14,7 +14,7 @@ const IconButton: React.FC<IconButtonProps> = (props) => (
     onClick={props.onClick}
     // style={{ padding: props.padding }}
     type='button'
-  ><img src={props.icon}/> {props.title}</button>
+  ><img src={props.icon}/>{props.title}</button>
 )
 
 export default IconButton

@@ -1,0 +1,11 @@
+.taskButton {
+  width: 240px;
+  padding: .8rem;
+  background-color: rgb(231, 231, 231);
+  border-radius: 5px;
+  transition: .2s;
+  text-align: left;
+  &:hover{
+    background-color: darken(rgb(231, 231, 231), 5%);
+  }
+}

@@ -1,11 +1,11 @@
-@import '../../scss/utils.scss';
+@import '../../../scss/utils.scss';
 
 .container{
   // margin: 0 auto;
   // position: relative;
   padding: 1rem;
   border-radius: 1rem;
-  margin-bottom: .8rem;
+  // margin-bottom: .8rem;
   -webkit-box-shadow: $box-shadow; 
   box-shadow: $box-shadow;
   background-color: #fcfcfc;
@@ -27,10 +27,16 @@
   position: relative;
 }
 
-.dedline{
+.bottomBar{
   padding-top: .5rem;
   font-size: .9rem;
   color: grey;
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-between;
+  // align-items: center;
+}
+.dedlineBar {
   display: flex;
   justify-content: space-between;
 }
@@ -113,6 +119,8 @@
 
 .editActions{
   display: flex;
+  justify-content: flex-end;
+  margin-top: .6rem;
   .button{
     background-color: rgb(13, 97, 146);
     color: white;
@@ -120,6 +128,6 @@
     border-radius: 4px;
     text-transform: uppercase;
     letter-spacing: .05rem;
-    margin-right: .5rem;
+    margin-right: .3rem;
   }
 }

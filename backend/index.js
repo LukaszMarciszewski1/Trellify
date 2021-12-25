@@ -5,6 +5,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 
 import taskRoutes from './routes/tasks.js'
+import cardRouters from './routes/cards.js'
 
 dotenv.config()
 const app = express()
@@ -14,6 +15,7 @@ app.use(helmet())
 
 //routes
 app.use('/tasks', taskRoutes)
+app.use('/cards', cardRouters)
 
 const start = async () => {
    await mongoose
