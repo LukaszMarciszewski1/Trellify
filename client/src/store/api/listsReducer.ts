@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { v4 as uuidv4 } from 'uuid'
 import { cardsApi } from './cardsReducer'
 
-interface Todos {
+interface List {
   _id: string
   title: string
   cards: [
@@ -19,55 +19,55 @@ interface Todos {
   ]
 }
 
-type TodosResponse = Todos[]
+type ListResponse = List[]
 
-export const todosApi = createApi({
-  reducerPath: 'todosApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/' }),
-  tagTypes: ['Tasks'],
+export const listApi = createApi({
+  reducerPath: 'listApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/'}),
+  tagTypes: ['List'],
   endpoints: (builder) => ({
-    getAllTasks: builder.query<TodosResponse, void>({
-      query: () => `tasks`,
-      providesTags: ['Tasks'],
+    getAllTasks: builder.query<ListResponse, void>({
+      query: () => `lists`,
+      providesTags: ['List'],
     }),
-    getTask: builder.query<TodosResponse, void>({
-      query: (id) => `tasks/${id}`,
-      providesTags: ['Tasks'],
+    getTask: builder.query<ListResponse, void>({
+      query: (id) => `lists/${id}`,
+      providesTags: ['List'],
     }),
-    addTask: builder.mutation<Todos, Partial<Todos>>({
+    addTask: builder.mutation<List, Partial<List>>({
       query: (body: {}) => ({
-        url: 'tasks',
+        url: 'lists',
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['List'],
     }),
     deleteTask: builder.mutation<{ success: boolean; id: string }, string>({
       query: (id) => ({
-        url: `tasks/${id}`,
+        url: `lists/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['List'],
     }),
     updateTask: builder.mutation({
       query: ({ id, ...patch }) => ({
-        url: `tasks/${id}`,
+        url: `lists/${id}`,
         method: 'PATCH',
         body: patch,
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['List'],
     }),
-    getCards: builder.query<TodosResponse, void>({
-      query: () => `tasks`,
-      providesTags: ['Tasks'],
+    getCards: builder.query<ListResponse, void>({
+      query: () => `lists`,
+      providesTags: ['List'],
     }),
     addCard: builder.mutation({
       query: ( {id , ...cards}) => ({
-        url: `tasks/${id}`,
+        url: `lists/${id}`,
         method: 'PUT',
         body: cards,
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['List'],
     })
   }),
 })
@@ -80,4 +80,4 @@ export const {
   useUpdateTaskMutation,
   useGetCardsQuery,
   useAddCardMutation,
-} = todosApi
+} = listApi

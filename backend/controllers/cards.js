@@ -1,7 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import Card from '../models/Card.js'
-import Tasks from '../models/Tasks.js'
+import List from '../models/List.js'
 
 const router = express.Router()
 
@@ -26,9 +26,11 @@ export const getCard = async (req, res) => {
 
 export const createCard = async (req, res) => {
   // const {id} = req.params
-  const card = req.body
-  const newCard = new Card(card)
   try {
+  const listId = req.body.listId
+  const list = await List.findOne({_id: listId})
+  if(!list) return res.status(404).send()
+  const newCard = new Card(req.body)
     await newCard.save()
     // await Tasks.findByIdAndUpdate(id ,{ $push: { "cards": {newCard} } })
     res.status(201).json(newCard)

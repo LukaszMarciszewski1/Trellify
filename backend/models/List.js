@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 
-const TasksSchema = mongoose.Schema({
+const ListSchema = mongoose.Schema({
   title: String,
   cards: [
     {
@@ -20,6 +20,6 @@ const TasksSchema = mongoose.Schema({
   ],
 })
 
-const Tasks = mongoose.model('Task', TasksSchema)
+const List = mongoose.model('List', ListSchema)
 
-export default Tasks
+export default List

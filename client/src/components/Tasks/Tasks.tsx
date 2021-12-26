@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './styles.module.scss'
 import {
   useGetAllTasksQuery,
-} from "../../store/api/todosReducer";
+} from "../../store/api/listsReducer";
 // import Task from './Task/Task'
 
 

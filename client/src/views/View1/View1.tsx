@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import styles from './styles.module.scss'
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 import {
   useGetAllTasksQuery,
   useAddTaskMutation,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
   useGetTaskQuery
-} from "../../store/api/todosReducer";
+} from "../../store/api/listsReducer";
 import {
   useGetAllCardsQuery,
   useAddCardMutation,
@@ -28,9 +29,11 @@ const View1: React.FC = () => {
   const [deleteTask] = useDeleteTaskMutation()
   const [deleteCard] = useDeleteCardMutation()
 
+
   const [listTitle, setListTitle] = useState<string>('');
   const [toogleForm, setToogleForm] = useState<boolean>(false)
   const [taskValue, setTaskValue] = useState<string>('')
+  const [lists, setList] = useState(tasks)
 
   const handleToogleTaskForm = () => {
     setToogleForm(form => !form)
@@ -55,47 +58,85 @@ const View1: React.FC = () => {
 
   }
 
+  // const [exercises, setExercises] = useState(tasks)
 
+
+const onDragEnd = async (result: DropResult) => {
+  const {destination, source} = result
+  if(!destination) return;
+  if (
+    destination.droppableId === source.droppableId &&
+    destination.index === source.index
+  )return;
+
+  // const items = Array.from(tasks);
+  // const [reorderedItem] = tasks.splice(result.source.index, 1);
+  // items.splice(result.destination.index, 0, reorderedItem);
+  
+  // updateCharacters(items);
+}
+if (isLoading) return <h2>Loading...</h2>
+if (error) return <h2>error</h2>
+console.log(tasks)
   return (
-    <div className={styles.container}>
-      {
-        tasks?.map(list => (
-          <TasksList
-            id={list._id}
-            key={list._id}
-            title={list.title}
-            onClickDelete={() => {
-              deleteTask(list._id)
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className={styles.container}>
+        <Droppable droppableId="all-list" direction="horizontal" type="list">
+          {provided => (
+            <div className={styles.listContainer}
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {
+                tasks?.map((list, index) => (
+                  <TasksList
+                    index={index}
+                    id={list._id}
+                    key={list._id}
+                    title={list.title}
+                    onClickDelete={() => {
+                      deleteTask(list._id)
 
-            }}
-          >
-            {
-              list.cards.map(card => (
-                <TaskCard key={card._id} title={card.title} listId={list._id} />
-              ))
-            }
-            {/* {
-              cards?.map(card => (
-                card.listId === list._id ? (<TaskCard key={card._id} title={card.title} listId={list._id}/>) : null
-              ))
-            } */}
-          </TasksList>
-        ))
-      }
-      <div>
-        {toogleForm ?
-          <TaskForm
-            handleChange={handleChangeTaskValue}
-            handleSubmit={handleSubmitTaskForm}
-            titleValue={listTitle}
-            placeholder={'dodaj listę zadań'}
-          />
-          : null}
-        <TaskButton onClick={handleToogleTaskForm} />
+                    }}
+                  >
+                    {
+                      cards?.map((card, index) => (
+                        card.listId === list._id ? (<TaskCard index={index} key={card._id} id={card._id} title={card.title} listId={list._id} />) : null
+                      ))
+                    }
+                  </TasksList>
+                ))
+              }
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+        <div>
+          {toogleForm ?
+            <TaskForm
+              handleChange={handleChangeTaskValue}
+              handleSubmit={handleSubmitTaskForm}
+              titleValue={listTitle}
+              placeholder={'dodaj listę zadań'}
+            />
+            : null}
+          <TaskButton onClick={handleToogleTaskForm} />
+        </div>
       </div>
-    </div>
-
+    </DragDropContext>
   )
 }
 
 export default View1
+
+
+{/* {
+              list.cards.map(card => (
+                <TaskCard key={card._id} title={card.title} listId={list._id} />
+              ))
+            } */}
+{/* {
+              cards?.map((card, index) => (
+                card.listId === list._id ? (<TaskCard index={index} key={card._id} id={card._id} title={card.title} listId={list._id}/>) : null
+              ))
+            } */}

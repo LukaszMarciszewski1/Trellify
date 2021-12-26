@@ -1,9 +1,14 @@
 .container{
   width: 100%;
   display: flex;
+  flex-direction: row;
+  background-color: red;
   
   // max-width: 1000px;
   // margin: 0 auto;
   // min-height: 100%;
   // padding: 3rem;
+}
+.listContainer{
+  display: flex;
 }

@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import helmet from 'helmet'
 import cors from 'cors'
 
-import taskRoutes from './routes/tasks.js'
+import listRoutes from './routes/lists.js'
 import cardRouters from './routes/cards.js'
 
 dotenv.config()
@@ -14,7 +14,7 @@ app.use(express.json())
 app.use(helmet())
 
 //routes
-app.use('/tasks', taskRoutes)
+app.use('/lists',listRoutes)
 app.use('/cards', cardRouters)
 
 const start = async () => {
