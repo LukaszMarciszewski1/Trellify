@@ -5,10 +5,11 @@ import { cardsApi } from './cardsReducer'
 interface List {
   _id: string
   title: string
+  index: number
   cards: [
     {
       _id: string
-      listId: string
+      listId: string | number
       title: string
       description: string
       deadline: string
@@ -42,7 +43,7 @@ export const listApi = createApi({
       }),
       invalidatesTags: ['List'],
     }),
-    deleteTask: builder.mutation<{ success: boolean; id: string }, string>({
+    deleteTask: builder.mutation<{ success: boolean; id: string | number }, string>({
       query: (id) => ({
         url: `lists/${id}`,
         method: 'DELETE',

@@ -55,52 +55,53 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, children, id, index 
   }
 
   return (
-    <Draggable draggableId={String(id)} index={index}>
-      {provided => (
-        <div className={styles.tasksList} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
-          <div>
-            <TextareaAutosize
-              autoFocus={true}
-              value={title}
-              className={styles.textarea}
-              id='task-title'
-              required />
-            <Droppable droppableId="all-lists" direction="horizontal" type="list">
-              {provided => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {/* {
+    <div>
+      <Draggable draggableId={String(id)} index={index}>
+        {provided => (
+          <div className={styles.tasksList} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
+            <div>
+              <TextareaAutosize
+                autoFocus={true}
+                value={title}
+                className={styles.textarea}
+                id='task-title'
+                required />
+              <Droppable droppableId={String(id)} type="card">
+                {provided => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                    {/* {
                     cards?.map((card, index) => (
                       <TaskCard index={index} key={card._id} id={card._id} title={card.title} listId={''} />
                     ))
                   } */}
-                  {children}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
+                    {children}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
 
-            <div className={styles.actionList}>
-              <button onClick={onClickDelete}>X</button>
-              <TaskButton onClick={handleToogleTaskForm} />
-              {toogleForm ?
-                <TaskForm
-                  handleChange={handleChangeTaskValue}
-                  handleSubmit={(e) => handleAddCard(e, id)}
-                  titleValue={cardTitle}
-                  placeholder={'dodaj listę zadań'}
-                />
-                : null
-              }
+              <div className={styles.actionList}>
+                <button onClick={onClickDelete}>X</button>
+                <TaskButton onClick={handleToogleTaskForm} />
+                {toogleForm ?
+                  <TaskForm
+                    handleChange={handleChangeTaskValue}
+                    handleSubmit={(e) => handleAddCard(e, id)}
+                    titleValue={cardTitle}
+                    placeholder={'dodaj listę zadań'}
+                  />
+                  : null
+                }
+              </div>
             </div>
-            {/* {provided.placeholder} */}
           </div>
-        </div>
-      )
-      }
-    </Draggable>
+        )
+        }
+      </Draggable>
+    </div>
   )
 }
 

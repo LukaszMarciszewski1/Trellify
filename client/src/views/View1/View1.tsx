@@ -28,12 +28,13 @@ const View1: React.FC = () => {
   const [addTask] = useAddTaskMutation()
   const [deleteTask] = useDeleteTaskMutation()
   const [deleteCard] = useDeleteCardMutation()
+  const [updateTask] = useUpdateTaskMutation()
 
 
   const [listTitle, setListTitle] = useState<string>('');
   const [toogleForm, setToogleForm] = useState<boolean>(false)
   const [taskValue, setTaskValue] = useState<string>('')
-  const [lists, setList] = useState(tasks)
+
 
   const handleToogleTaskForm = () => {
     setToogleForm(form => !form)
@@ -58,26 +59,46 @@ const View1: React.FC = () => {
 
   }
 
-  // const [exercises, setExercises] = useState(tasks)
+  const [lists, setList] = useState(tasks)
+  // let el = tasks
+
+  const reorder = (list: any, startIndex: number, endIndex: number) => {
+    const result = Array.from(list)
+    const [removed] = result.splice(startIndex, 1)
+    result.splice(endIndex, 0, removed)
+    return result
+  }
+
+  const onDragEnd = async (result: DropResult) => {
+    const { destination, source } = result
+    if (!destination) return;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) return;
+
+    // if(tasks){
+
+    //   const newItems = tasks;
+    //   const [removed] = newItems.splice(source.index, 1);
+    //   newItems.splice(destination.index, 0, removed);
+    //   // użyć metod z baseQuery
+
+    // }
+    console.log(result)
+    updateTask(destination.index)
+    // const items = Array.from(lists);
+    // const [newList] = items.splice(result.source.index, 1);
+    // items.splice(destination.index, 0, newList);
+    // setElements(items)
+ 
+  }
 
 
-const onDragEnd = async (result: DropResult) => {
-  const {destination, source} = result
-  if(!destination) return;
-  if (
-    destination.droppableId === source.droppableId &&
-    destination.index === source.index
-  )return;
+  if (isLoading) return <h2>Loading...</h2>
+  if (error) return <h2>error</h2>
+  console.log(tasks)
 
-  // const items = Array.from(tasks);
-  // const [reorderedItem] = tasks.splice(result.source.index, 1);
-  // items.splice(result.destination.index, 0, reorderedItem);
-  
-  // updateCharacters(items);
-}
-if (isLoading) return <h2>Loading...</h2>
-if (error) return <h2>error</h2>
-console.log(tasks)
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={styles.container}>
@@ -99,11 +120,11 @@ console.log(tasks)
 
                     }}
                   >
-                    {
+                    {/* {
                       cards?.map((card, index) => (
                         card.listId === list._id ? (<TaskCard index={index} key={card._id} id={card._id} title={card.title} listId={list._id} />) : null
                       ))
-                    }
+                    } */}
                   </TasksList>
                 ))
               }
