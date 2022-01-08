@@ -1,25 +1,28 @@
 import mongoose from 'mongoose'
-
+const { Schema } = mongoose
 
 const ListSchema = mongoose.Schema({
   title: String,
-  cards: [
-    {
-      title: String,
-      description: String,
-      deadline: String,
-      completed: {
-        type: Number,
-        default: 0
-      },
-      createdDate: {
-        type: Date,
-        default: new Date
-      }
-    }
-  ],
+  index: Number,
+  sourceIndex: Number,
+  destinationIndex: Number,
+  sortIndex: Number,
+  boardId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Board',
+    // required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
+  updateddAt: {
+    type: Date,
+    default: null,
+  },
+  
 })
-
+// ListSchema.virtual('id').get(() => this._id)
 const List = mongoose.model('List', ListSchema)
 
 export default List

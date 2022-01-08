@@ -12,6 +12,57 @@ export const Test = () => {
   console.log(dayjs(time).tz("Europe/Warsaw"))
 }
 
+export const initialData = {
+  boards: [
+    {
+      _id: 'board-1',
+      columnOrder: ['columnn-1', 'columnn-2'],
+      columns: [
+       {
+        _id: 'column-1',
+        boardId: 'board-1',
+        title: 'column-1',
+        cardOrder: ['card-1', 'card-2'],
+        cards: [
+          {
+            _id: 'card-1',
+            boardId: 'board-1',
+            columnId: 'column-1',
+            title: 'card-1',
+          },
+          {
+            _id: 'card-2',
+            boardId: 'board-1',
+            columnId: 'column-1',
+            title: 'card-2',
+          },
+        ]
+       },
+       {
+        _id: 'column-2',
+        boardId: 'board-1',
+        title: 'column-2',
+        cardOrder: ['card-4', 'card-5'],
+        cards: [
+          {
+            _id: 'card-4',
+            boardId: 'board-1',
+            columnId: 'column-1',
+            title: 'card-4',
+          },
+          {
+            _id: 'card-5',
+            boardId: 'board-1',
+            columnId: 'column-1',
+            title: 'card-5',
+          },
+        ]
+       },
+      ]
+    }
+  ]
+} 
+
 export const historyTasks = [
   {
     id:1,

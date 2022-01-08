@@ -21,9 +21,10 @@ import TaskCard from '../TaskCard/TaskCard';
 
 type Props = {
   id: string
-  title: string
+  title?: string
   index: number
-  onClickDelete: () => void
+  sortIndex?: number
+  onClickDelete?: () => void
 }
 const TasksList: React.FC<Props> = ({ title, onClickDelete, children, id, index }) => {
   // const { data: tasks, error, isLoading } = useGetAllTasksQuery();
@@ -66,6 +67,7 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, children, id, index 
                 className={styles.textarea}
                 id='task-title'
                 required />
+                <p>{id}</p>
               <Droppable droppableId={String(id)} type="card">
                 {provided => (
                   <div

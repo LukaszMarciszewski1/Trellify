@@ -7,17 +7,20 @@ import {
   createList,
   deleteList,
   updateList,
-  getCards,
+  // getCards,
   addCard,
+  getUpdateList,
+  getUpdateCards
 } from '../controllers/lists.js'
 // import { getCards, getCard, createCard, deleteCard, updateCard} from '../controllers/cards.js'
 
 router.get('/', getLists)
 router.post('/', createList)
-router.get('/:id', getList)
+// router.get('/:id', getList)
 router.patch('/:id', updateList)
 router.delete('/:id', deleteList)
-router.get('/:id', getCards)
-router.put('/:id', addCard)
+// router.get('/:id', getCards)
+// router.patch('/:id', getUpdateList)
+router.put('/:id', getUpdateCards)
 
 export default router

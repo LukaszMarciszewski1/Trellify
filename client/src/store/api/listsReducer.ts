@@ -6,6 +6,9 @@ interface List {
   _id: string
   title: string
   index: number
+  sourceIndex: Number,
+  destinationIndex: Number,
+  sortIndex: Number,
   cards: [
     {
       _id: string
@@ -35,7 +38,7 @@ export const listApi = createApi({
       query: (id) => `lists/${id}`,
       providesTags: ['List'],
     }),
-    addTask: builder.mutation<List, Partial<List>>({
+    addTask: builder.mutation({
       query: (body: {}) => ({
         url: 'lists',
         method: 'POST',
@@ -59,17 +62,25 @@ export const listApi = createApi({
       invalidatesTags: ['List'],
     }),
     getCards: builder.query<ListResponse, void>({
-      query: () => `lists`,
+      query: (id) => `lists/${id}`,
       providesTags: ['List'],
     }),
+    // addCard: builder.mutation({
+    //   query: ( {id , ...cards}) => ({
+    //     url: `lists/${id}`,
+    //     method: 'PUT',
+    //     body: cards,
+    //   }),
+    //   invalidatesTags: ['List'],
+    // }),
     addCard: builder.mutation({
-      query: ( {id , ...cards}) => ({
+      query: ({ id, ...patch }) => ({
         url: `lists/${id}`,
         method: 'PUT',
-        body: cards,
+        body: patch,
       }),
       invalidatesTags: ['List'],
-    })
+    }),
   }),
 })
 

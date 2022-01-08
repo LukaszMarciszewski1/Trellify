@@ -1,22 +1,28 @@
 import mongoose from 'mongoose'
-const { Schema } = mongoose
 
 const CardSchema = mongoose.Schema({
   title: String,
   description: String,
   deadline: String,
+  boardID: {
+    type: String,
+    required: true,
+  },
   listId: {
-    type: Schema.Types.ObjectId,
-    ref: 'List',
+    type: String,
     required: true,
   },
   completed: {
     type: Number,
     default: 0,
   },
-  createdDate: {
+  createdAt: {
     type: Date,
     default: new Date(),
+  },
+  updateddAt: {
+    type: Date,
+    default: null,
   },
 })
 
