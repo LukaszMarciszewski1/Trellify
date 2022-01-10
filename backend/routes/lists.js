@@ -21,6 +21,6 @@ router.patch('/:id', updateList)
 router.delete('/:id', deleteList)
 // router.get('/:id', getCards)
 // router.patch('/:id', getUpdateList)
-router.put('/:id', getUpdateCards)
+router.put('/:id', getUpdateList)
 
 export default router

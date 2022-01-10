@@ -12,7 +12,6 @@ import {
   useDeleteTaskMutation,
   useUpdateTaskMutation,
   useGetTaskQuery,
-  useAddCardMutation,
   useGetCardsQuery,
 } from "../../../store/api/listsReducer";
 import {
@@ -30,7 +29,7 @@ import TaskCard from '../TaskCard/TaskCard';
 import { initialData } from '../../../data';
 
 const Board: React.FC = () => {
-  const boardID = '61d81621515521bcb506ab88'
+  const boardID = '61dc8d9fc607ebe1a1363e06'
   const { data: board, error, isLoading } = useGetBoardQuery(boardID);
   const { data: lists } = useGetAllTasksQuery();
   const { data: cards } = useGetAllCardsQuery();
@@ -39,7 +38,6 @@ const Board: React.FC = () => {
   const [deleteTask] = useDeleteTaskMutation()
   const [deleteCard] = useDeleteCardMutation()
   const [updateTask] = useUpdateTaskMutation()
-  const [newList] = useAddCardMutation()
 
   const [updateBoard] = useUpdateBoardMutation()
 
@@ -67,47 +65,59 @@ const Board: React.FC = () => {
         // sourceIndex: lists?.length,
         // destinationIndex: lists?.length,
         boardId: boardID,
-        sortIndex: lists?.length + 1,
+        // sortIndex: lists?.length + 1,
       })
       setListTitle('')
     }
     // else alert('uzupełnij pole')
   }
 
+  
+
+  // const preload = async () => {
+  //   try {
+  //     const newList = lists
+  //     setColumns(newList);
+  //   } catch (error) {
+  //     alert("Couldn't find any Todos! ");
+  //   }
+  // };
+  const [columns, setColumns] = useState(lists)
+
+ 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type, draggableId } = result
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-    // const newItems = [...items];
-    // const [removed] = newItems.splice(source.index, 1);
-    // newItems.splice(destination.index, 0, removed);
-    // setItems(newItems)
-
-    // const newItems = [...columnsDB];
-    // const [removed] = newItems.splice(source.index, 1);
-    // newItems.splice(destination.index, 0, removed);
-    // setColumnsDB(newItems)
-    let newBoard = {...board}
+    let newBoard = { ...board }
     newBoard.listOrder = lists?.map(c => c._id)
+
     if (board) {
+      let newList = [...board.lists]
+      const [removed] = newList.splice(source.index, 1)
+      newList.splice(destination.index, 0, removed)
+
       updateBoard({
-        id: newBoard._id,
+        title: 'zmiana',
+        id: boardID,
         listOrder: newBoard.listOrder,
-        sourceIndex: source.index,
+        lists: newList,
+        sourceIndex: destination.index,
         destinationIndex: destination.index,
-        sortIndex: destination.index,
+        // sortIndex: destination.index,
       })
     }
   }
-
-  console.log(board?.lists)
-  console.log(lists)
+console.log(board)
+  // console.log(newList)
+ //////////////// przetestować bezpośrenie wrzucenie do board.list
  
-
-  if (isLoading) return <h2>Loading...</h2>
-  if (error) return <h2>error</h2>
+ if (isLoading) return <h2>Loading...</h2>
+ if (error) return <h2>error</h2>
+//  const sortedByCreationDate = lists?.slice().sort( (a, b) => (b.index) - (a.index) );
   return (
     <div>
+      <h2>{board.title}</h2>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className={styles.container}>
           <Droppable droppableId="all-list" direction="horizontal" type="list">
@@ -117,10 +127,10 @@ const Board: React.FC = () => {
                 ref={provided.innerRef}
               >
                 {
-                  lists?.map((list: { _id: string; title: string }, index: number) => (
+                 board.lists?.map((list: { _id: string; title: string | undefined; }, index: number) => (
                     <TasksList
                       index={index}
-                      sortIndex={index}
+                      // sortIndex={list.sortIndex}
                       id={list._id}
                       key={list._id}
                       title={list.title}

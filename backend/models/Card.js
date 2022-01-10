@@ -6,11 +6,11 @@ const CardSchema = mongoose.Schema({
   deadline: String,
   boardID: {
     type: String,
-    required: true,
+    // required: true,
   },
   listId: {
     type: String,
-    required: true,
+    // required: true,
   },
   completed: {
     type: Number,
@@ -25,6 +25,10 @@ const CardSchema = mongoose.Schema({
     default: null,
   },
 })
+
+CardSchema.statics.updateOne = (id, data) => {
+  return Card.findByIdAndUpdate(id, data);
+}
 
 const Card = mongoose.model('Card', CardSchema)
 

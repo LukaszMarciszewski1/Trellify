@@ -25,8 +25,9 @@ type Props = {
   index: number
   sortIndex?: number
   onClickDelete?: () => void
+  changeIndex?: () => void
 }
-const TasksList: React.FC<Props> = ({ title, onClickDelete, children, id, index }) => {
+const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, children, id, index, sortIndex }) => {
   // const { data: tasks, error, isLoading } = useGetAllTasksQuery();
   const { data: cards, error, isLoading } = useGetAllCardsQuery();
   const [addCard] = useAddCardMutation()
@@ -68,6 +69,7 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, children, id, index 
                 id='task-title'
                 required />
                 <p>{id}</p>
+                <p>{sortIndex}</p>
               <Droppable droppableId={String(id)} type="card">
                 {provided => (
                   <div

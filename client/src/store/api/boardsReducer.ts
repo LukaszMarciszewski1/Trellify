@@ -7,8 +7,9 @@ interface Board {
   title: string
   lists: [],
   listOrder: string[],
-  sourceIndex: number,
-  destinationIndex: number,
+  // sourceIndex: Number,
+  // destinationIndex: Number,
+  // sortIndex: Number,
 }
 
 type BoardResponse = Board[]

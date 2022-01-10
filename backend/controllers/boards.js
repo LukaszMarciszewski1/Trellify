@@ -4,7 +4,6 @@ import List from '../models/List.js'
 import Card from '../models/Card.js'
 import Board from '../models/Board.js'
 import { Container } from 'typedi'
-import BoardService from '../services/board.js'
 
 const router = express.Router()
 // .sort({sortIndex:0})
@@ -14,8 +13,8 @@ export const getBoards = async (req, res) => {
       .populate({
         path: 'lists',
       })
-      .exec()
-      .sort('sortIndex')
+      // .exec()
+      // .sort('sortIndex')
     res.status(200).json(boards)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -29,7 +28,6 @@ export const getBoard = async (req, res) => {
       .populate({
         path: 'lists',
       })
-      .exec()
     res.status(200).json(board)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -38,42 +36,62 @@ export const getBoard = async (req, res) => {
 
 export const createBoard = async (req, res) => {
   const board = req.body
-  const newBoard = new Board(board)
+  const {id} = req.params
   try {
-    await newBoard.save()
+    const newBoard = await new Board(board).save()
     res.status(201).json(newBoard)
   } catch (error) {
     res.status(409).json({ message: error.message })
   }
 }
 
+export const createList = async (req, res) => {
+  const list = req.body
+  const {id} = req.params
+  const newList = new List(list)
+  try {
+    await newList.save()
+    let parentBoard = await Board.findById(id)
+    parentBoard.lists = [...parentBoard.lists, newList]
+    await parentBoard.save()
+    res.status(201).json(newList)
+  } catch (error) {
+    res.status(409).json({message: error.message})
+  }
+}
+
 export const updateBoardLists = async (req, res) => {
   const { id } = req.params
-  const { sourceIndex, destinationIndex, sortIndex } = req.body
+  const { sourceIndex, destinationIndex, sortIndex, title, lists } = req.body
   const updates = Object.keys(req.body)
 
   try {
-    const board = await Board.findById(id)
-    const lists = await List.find()
-    const [removed] = lists.splice(sourceIndex, 1)
-    lists.splice(destinationIndex, 0, removed)
+    // const board = await Board.findById(id)
+    // const lists = await List.find()
 
-    const orderedLists = lists.map((l, index) => {
-      return { id: l._id, sortIndex: index + 1 }
-    })
-console.log(board.lists)
-    //TODO: Multi update implementation rather than separate queries
-    orderedLists.forEach(async (l) => {
-      await List.findByIdAndUpdate(l.id, {
-        sortIndex: l.sortIndex,
-      })
-    })
-    const updateBoard = await Board.findOneAndUpdate(id, req.body, {new: true})
+    // const newList = [...lists]
+    // const [removed] = newList.splice(sourceIndex, 1)
+    // newList.splice(destinationIndex, 0, removed)
 
-    res.json(updateBoard)
+    // const orderedLists = newList.map((l, index) => {
+    //   return { id: l._id, sortIndex: index + 1 }
+    // })
+
+    // orderedLists.forEach(async (l) => {
+    //   await List.findByIdAndUpdate(l.id, {
+    //     sortIndex: l.sortIndex,
+
+    //   })
+    // })
+
+    await Board.findByIdAndUpdate(id, req.body, {new: true})
+
+    res.json(lists)
   } catch (error) {
     res.status(404).json({ message: error.message })
   }
+  // if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No list with id: ${id}`);
+  // const updateBoard = await Board.findByIdAndUpdate(id, req.body, {new: true})
 }
 
 // export default router

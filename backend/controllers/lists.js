@@ -2,12 +2,13 @@ import express from 'express'
 import mongoose from 'mongoose'
 import List from '../models/List.js'
 import Card from '../models/Card.js'
+import Board from '../models/Board.js'
 
 const router = express.Router()
 // .sort({sortIndex:0})
 export const getLists = async (req, res) => {
   try {
-    const lists = await List.find().sort('sortIndex');
+    const lists = await List.find()
     res.status(200).json(lists)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -26,9 +27,13 @@ export const getList = async (req, res) => {
 
 export const createList = async (req, res) => {
   const list = req.body
-  const newList = new List(list)
+  const id = '61dc8d9fc607ebe1a1363e06'
+  
   try {
-    await newList.save()
+    const newList = await new List(list).save()
+    let parentBoard = await Board.findById(id)
+    parentBoard.lists = [...parentBoard.lists, newList]
+    await parentBoard.save()
     res.status(201).json(newList)
   } catch (error) {
     res.status(409).json({message: error.message})

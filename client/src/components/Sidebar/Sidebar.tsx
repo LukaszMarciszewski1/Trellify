@@ -7,13 +7,13 @@ const menuItems = [
   //   name: 'Home',
   //   path: '/',
   // },
-  {
-    name: 'Zlecenia',
-    path: '/',
-  },
+  // {
+  //   name: 'Zlecenia',
+  //   path: '/',
+  // },
   {
     name: 'Kalkulator',
-    path: '/View-1',
+    path: '/',
   },
   {
     name: 'Magazyn',

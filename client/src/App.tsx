@@ -20,7 +20,7 @@ const App: React.FC = () => {
         <Layout>
           <Switch>
             {/* <Route exact path='/' component={ToDoList}/> */}
-            <Route path='/View-1' component={View1} />
+            <Route exact path='/' component={View1} />
             <Route path='/View-2' component={View2} />
             <Route path='/View-3' component={View3} />
             <Route path='/View-4' component={View4} />
