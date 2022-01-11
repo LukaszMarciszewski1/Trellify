@@ -6,21 +6,10 @@ interface List {
   _id: string
   title: string
   index: number
+  boardId: string
   sourceIndex: number,
   destinationIndex: number,
   sortIndex: number,
-  cards: [
-    {
-      _id: string
-      listId: string | number
-      title: string
-      description: string
-      deadline: string
-      completed: number
-      createdDate: Date
-      text: string
-    }
-  ]
 }
 
 type ListResponse = List[]

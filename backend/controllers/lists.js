@@ -9,6 +9,9 @@ const router = express.Router()
 export const getLists = async (req, res) => {
   try {
     const lists = await List.find()
+    let parentBoard = await Board.find().populate({
+      path: 'lists',
+    })
     res.status(200).json(lists)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -26,14 +29,16 @@ export const getList = async (req, res) => {
 }
 
 export const createList = async (req, res) => {
-  const list = req.body
-  const id = '61dc8d9fc607ebe1a1363e06'
-  
+  const {title, boardId} = req.body
+  // const boardId = '61dddb69911985a8b66dbefe'
+  const newList = new List({title, boardId})
+  let parentBoard = await Board.findById(boardId).populate({
+    path: 'lists',
+  })
   try {
-    const newList = await new List(list).save()
-    let parentBoard = await Board.findById(id)
     parentBoard.lists = [...parentBoard.lists, newList]
     await parentBoard.save()
+    await newList.save()
     res.status(201).json(newList)
   } catch (error) {
     res.status(409).json({message: error.message})

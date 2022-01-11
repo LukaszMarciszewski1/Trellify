@@ -24,6 +24,9 @@ const CardSchema = mongoose.Schema({
     type: Date,
     default: null,
   },
+},
+{
+  timestamps: true
 })
 
 CardSchema.statics.updateOne = (id, data) => {

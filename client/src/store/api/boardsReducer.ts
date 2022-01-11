@@ -30,7 +30,7 @@ export const boardApi = createApi({
     updateBoard: builder.mutation({
       query: ({ id, ...patch }) => ({
         url: `boards/${id}`,
-        method: 'PUT',
+        method: 'PATCH',
         body: patch,
       }),
       invalidatesTags: ['Board'],
