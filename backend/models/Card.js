@@ -1,16 +1,20 @@
 import mongoose from 'mongoose'
+const { Schema } = mongoose
 
 const CardSchema = mongoose.Schema({
   title: String,
   description: String,
   deadline: String,
-  boardID: {
-    type: String,
-    // required: true,
-  },
+  sourceIndex: Number,
+  destinationIndex: Number,
+  sortIndex: Number,
   listId: {
-    type: String,
-    // required: true,
+    type: Schema.Types.ObjectId,
+    ref: 'Board',
+  },
+  boardId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Board',
   },
   completed: {
     type: Number,

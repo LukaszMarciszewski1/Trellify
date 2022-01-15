@@ -13,6 +13,7 @@ const ListSchema = mongoose.Schema(
       ref: 'Board',
       // required: true,
     },
+    cards: [{type: Schema.Types.ObjectId, ref: 'Card'}],
     createdAt: {
       type: Date,
       default: new Date(),
