@@ -12,6 +12,11 @@ import {
   // useAddCardMutation,
 } from "../../../store/api/listsReducer";
 import {
+  useGetAllBoardsQuery,
+  useGetBoardQuery,
+  useUpdateBoardMutation,
+} from '../../../store/api/boardsReducer'
+import {
   useGetAllCardsQuery,
   useAddCardMutation,
   useDeleteCardMutation,
@@ -23,17 +28,18 @@ type Props = {
   id: string
   title?: string
   index: number
-  sortIndex?: number
+  boardId: string
   onClickDelete?: () => void
   changeIndex?: () => void
 }
-const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, children, id, index, sortIndex }) => {
+const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, children, id, index, boardId }) => {
   // const { data: tasks, error, isLoading } = useGetAllTasksQuery();
   const { data: cards, error, isLoading } = useGetAllCardsQuery();
   const [addCard] = useAddCardMutation()
   // const [addTask] = useAddTaskMutation()
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
+  const [updateBoard] = useUpdateBoardMutation()
 
   const [cardTitle, setCardTitle] = useState<string>('')
   const [toogleForm, setToogleForm] = useState<boolean>(false)
@@ -44,18 +50,25 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, childre
   const handleChangeTaskValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setCardTitle(e.target.value)
   }
-  const handleAddCard = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string): void => {
 
+  const handleAddCard = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string): void => {
     e.preventDefault()
     addCard({
       //  listId:id,
       //  title: cardTitle,
       //  id,
+      boardId: '61e458c95b6b39b805ae2dcd',
       listId: id,
       title: cardTitle,
     })
+    updateBoard({
+      id: '61e458c95b6b39b805ae2dcd',
+      cards: cards,
+    })
+    setCardTitle('')
   }
-
+  if (isLoading) return <h2>Loading...</h2>
+  if (error) return <h2>error</h2>
   return (
     <div>
       <Draggable draggableId={String(id)} index={index}>
@@ -68,8 +81,7 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, childre
                 className={styles.textarea}
                 id='task-title'
                 required />
-                <p>{id}</p>
-                <p>{sortIndex}</p>
+              <p>{id}</p>
               <Droppable droppableId={String(id)} type="card">
                 {provided => (
                   <div

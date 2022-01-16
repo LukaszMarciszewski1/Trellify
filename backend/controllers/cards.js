@@ -4,10 +4,10 @@ import Card from '../models/Card.js'
 import List from '../models/List.js'
 
 const router = express.Router()
-
+// .sort('sortIndex')
 export const getCards = async (req, res) => {
   try {
-    const card = await Card.find().sort('destinationIndex')
+    const card = await Card.find().sort('sortIndex')
     res.status(200).json(card)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -38,15 +38,13 @@ export const createCard = async (req, res) => {
   //   res.status(409).json({message: error.message})
   // }
 
-  const { title, listId } = req.body
+  const { title, listId, boardId } = req.body
   // const boardId = '61dddb69911985a8b66dbefe'
-  const newCard = new Card({ title, listId })
-  let parentList = await List.findById(listId).populate({
-    path: 'cards',
-  })
+  const newCard = new Card({ title, listId, boardId })
+  let parentList = await List.findById(listId)
   try {
-    parentList.cards = [...parentList.cards, newCard]
-    await parentList.save()
+    // parentList.cards = [...parentList.cards, newCard]
+    // await parentList.save()
     await newCard.save()
     res.status(201).json(newCard)
   } catch (error) {
@@ -87,36 +85,13 @@ export const updateList = async (req, res) => {
   res.json(updateList)
 }
 
-export const getUpdateCards = async (req, res) => {
-  const { id, index, sourceIndex, destinationIndex } = req.params
-  // const newItems = [...items];
-  // const [removed] = newItems.splice(source.index, 1);
-  // newItems.splice(destination.index, 0, removed);
-  // setItems(newItems)
-  // const list = await List.get(id);
-  try {
-    const lists = await List.find()
-    const updateList = await List.findById(id)
-    // const newLists = [...lists]
-    const newEl = [...lists]
-    const [list] = newEl.splice(sourceIndex, 1)
-    newEl.splice(destinationIndex, 0, list)
+export const updateAllCards = async (req, res) => {
+  const { id } = req.params
+  const card = req.body
+  if (!mongoose.Types.ObjectId.isValid(id))
+  return res.status(404).send(`No card with id: ${id}`)
 
-    const orderedLists = lists.map((l, index) => {
-      return { id: l._id, sortOrder: index + 1 }
-    })
-
-    //TODO: Multi update implementation rather than separate queries
-    orderedLists.forEach(async (l) => {
-      await listService.update(l.id, {
-        sortOrder: l.sortOrder,
-      })
-    })
-
-    res.status(200).json(newEl)
-  } catch (error) {
-    res.status(404).json({ message: error.message })
-  }
+  res.json(updateCard)
 }
 
 export default router

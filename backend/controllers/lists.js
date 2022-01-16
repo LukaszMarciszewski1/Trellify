@@ -9,9 +9,9 @@ const router = express.Router()
 export const getLists = async (req, res) => {
   try {
     const lists = await List.find()
-    let parentBoard = await Board.find().populate({
-      path: 'lists',
-    })
+    // .populate({
+    //   path: 'cards',
+    // })
     res.status(200).json(lists)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -32,12 +32,10 @@ export const createList = async (req, res) => {
   const { title, boardId } = req.body
   // const boardId = '61dddb69911985a8b66dbefe'
   const newList = new List({ title, boardId })
-  let parentBoard = await Board.findById(boardId).populate({
-    path: 'cards',
-  })
+  let parentBoard = await Board.findById(boardId)
   try {
-    parentBoard.lists = [...parentBoard.lists, newList]
-    await parentBoard.save()
+    // parentBoard.lists = [...parentBoard.lists, newList]
+    // await parentBoard.save()
     await newList.save()
     res.status(201).json(newList)
   } catch (error) {
@@ -61,10 +59,13 @@ export const deleteList = async (req, res) => {
 
 export const updateList = async (req, res) => {
   const { id } = req.params
-  const list = req.body
+  const { sourceIndex, destinationIndex } = req.body
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No list with id: ${id}`)
   const updateList = await List.findByIdAndUpdate(id, req.body, { new: true })
+  // const updateList = await List.findById(id)
+  //  .then(() => )
+
   res.json(updateList)
 }
 
@@ -74,8 +75,11 @@ export const getUpdateList = async (req, res) => {
   const updates = Object.keys(req.body)
 
   try {
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No card with id: ${id}`);
-    const updateList = await List.findByIdAndUpdate(id, req.body, { new: false })
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return res.status(404).send(`No card with id: ${id}`)
+    const updateList = await List.findByIdAndUpdate(id, req.body, {
+      new: false,
+    })
     res.json(updateList)
   } catch (error) {
     res.status(404).json({ message: error.message })

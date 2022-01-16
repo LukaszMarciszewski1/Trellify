@@ -2,13 +2,17 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 interface Cards {
   _id: string
+  boardId: string
   listId: string
   title: string
   description: string
   deadline: string
   completed: number
   createdDate: Date
-  text: string
+  text: string,
+  sourceIndex: number
+  destinationIndex: number
+  sortIndex: number
 }
 
 type CardsResponse = Cards[]

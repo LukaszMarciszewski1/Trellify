@@ -7,23 +7,23 @@ interface List {
   title: string
   index: number
   boardId: string
-  sourceIndex: number,
-  destinationIndex: number,
-  sortIndex: number,
+  sourceIndex: number
+  destinationIndex: number
+  sortIndex: number
 }
 
 type ListResponse = List[]
 
 export const listApi = createApi({
   reducerPath: 'listApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/'}),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/' }),
   tagTypes: ['List'],
   endpoints: (builder) => ({
     getAllTasks: builder.query<ListResponse, void>({
       query: () => `lists`,
       providesTags: ['List'],
     }),
-    getTask: builder.query<ListResponse, void>({
+    getTask: builder.query<ListResponse, Partial<List>>({
       query: (id) => `lists/${id}`,
       providesTags: ['List'],
     }),
@@ -35,7 +35,10 @@ export const listApi = createApi({
       }),
       invalidatesTags: ['List'],
     }),
-    deleteTask: builder.mutation<{ success: boolean; id: string | number }, string>({
+    deleteTask: builder.mutation<
+      { success: boolean; id: string | number },
+      string
+    >({
       query: (id) => ({
         url: `lists/${id}`,
         method: 'DELETE',
@@ -45,7 +48,7 @@ export const listApi = createApi({
     updateTask: builder.mutation({
       query: ({ id, ...patch }) => ({
         url: `lists/${id}`,
-        method: 'PUT',
+        method: 'PATCH',
         body: patch,
       }),
       invalidatesTags: ['List'],

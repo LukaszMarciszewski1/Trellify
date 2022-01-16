@@ -10,7 +10,7 @@ const CardSchema = mongoose.Schema({
   sortIndex: Number,
   listId: {
     type: Schema.Types.ObjectId,
-    ref: 'Board',
+    ref: 'List',
   },
   boardId: {
     type: Schema.Types.ObjectId,

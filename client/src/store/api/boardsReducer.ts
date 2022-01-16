@@ -6,6 +6,7 @@ interface Board {
   _id: string
   title: string
   lists: [],
+  cards: [],
   listOrder: string[],
   // sourceIndex: Number,
   // destinationIndex: Number,
