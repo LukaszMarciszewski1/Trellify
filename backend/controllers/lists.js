@@ -30,12 +30,12 @@ export const getList = async (req, res) => {
 
 export const createList = async (req, res) => {
   const { title, boardId } = req.body
-  // const boardId = '61dddb69911985a8b66dbefe'
-  const newList = new List({ title, boardId })
-  let parentBoard = await Board.findById(boardId)
+  // const boardId = '61e458c95b6b39b805ae2dcd'
   try {
-    // parentBoard.lists = [...parentBoard.lists, newList]
-    // await parentBoard.save()
+    const newList = new List({ title, boardId })
+    let parentBoard = await Board.findById(boardId)
+    parentBoard.lists = [...parentBoard.lists, newList]
+    await parentBoard.save()
     await newList.save()
     res.status(201).json(newList)
   } catch (error) {
@@ -74,16 +74,10 @@ export const getUpdateList = async (req, res) => {
   const { sourceIndex, destinationIndex, sortIndex, title, lists } = req.body
   const updates = Object.keys(req.body)
 
-  try {
-    if (!mongoose.Types.ObjectId.isValid(id))
-      return res.status(404).send(`No card with id: ${id}`)
-    const updateList = await List.findByIdAndUpdate(id, req.body, {
-      new: false,
-    })
-    res.json(updateList)
-  } catch (error) {
-    res.status(404).json({ message: error.message })
-  }
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send(`No card with id: ${id}`)
+  const updateList = await List.findByIdAndUpdate(id, req.body, { new: false })
+  res.json(updateList)
 }
 
 export const getUpdateCards = async (req, res) => {

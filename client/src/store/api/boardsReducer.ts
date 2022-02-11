@@ -8,9 +8,6 @@ interface Board {
   lists: [],
   cards: [],
   listOrder: string[],
-  // sourceIndex: Number,
-  // destinationIndex: Number,
-  // sortIndex: Number,
 }
 
 type BoardResponse = Board[]
