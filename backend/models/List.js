@@ -12,7 +12,7 @@ const ListSchema = mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: 'Board',
     },
-    // cards: [{type: Schema.Types.ObjectId, ref: 'Card'}],
+    cards: [{type: Schema.Types.ObjectId, ref: 'Card'}],
     createdAt: {
       type: Date,
       default: new Date(),

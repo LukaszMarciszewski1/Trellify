@@ -5,7 +5,7 @@ import {
   getBoards,
   getBoard,
   createBoard,
-  updateBoardLists,
+  updateBoard,
 
 } from '../controllers/boards.js'
 // import { getCards, getCard, createCard, deleteCard, updateCard} from '../controllers/cards.js'
@@ -13,6 +13,6 @@ import {
 router.get('/', getBoards)
 router.get('/:id', getBoard)
 router.post('/', createBoard)
-router.patch('/:id', updateBoardLists)
+router.patch('/:id', updateBoard)
 
 export default router

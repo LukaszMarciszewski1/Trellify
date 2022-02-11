@@ -10,6 +10,7 @@ interface List {
   sourceIndex: number
   destinationIndex: number
   sortIndex: number
+  cards: []
 }
 
 type ListResponse = List[]

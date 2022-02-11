@@ -40,6 +40,7 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, childre
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
+  const [updateList] = useUpdateTaskMutation()
 
   const [cardTitle, setCardTitle] = useState<string>('')
   const [toogleForm, setToogleForm] = useState<boolean>(false)
@@ -61,8 +62,8 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, childre
       listId: id,
       title: cardTitle,
     })
-    updateBoard({
-      id: '6202bd1aad30336094afc17f',
+    updateList({
+      id: id,
       cards: cards,
     })
     setCardTitle('')

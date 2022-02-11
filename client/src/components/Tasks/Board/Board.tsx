@@ -28,6 +28,7 @@ import TasksList from '../TasksList/TasksList'
 import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import TaskCard from '../TaskCard/TaskCard';
+import { setSourceMapRange } from 'typescript';
 
 // import { initialData } from '../../../data';
 
@@ -55,13 +56,16 @@ const Board: React.FC = () => {
   const [columns, setColumns] = useState([])
 
   useEffect(() => {
-    if (board) {
-      setCar(board.cards)
-      setBar(board)
+    if (board && lists && cards) {
+      setBar(board && cards && lists)
       setColumns(board.lists)
+      const newList = board.lists.map((list: any) => list.cards).flat(1)
+      // lists.map(list => setCar(list.cards))
+      setCar(newList)
     }
-  }, [board]);
-
+  }, [board, lists, cards]);
+  
+  console.log(car)
   const handleToogleTaskForm = () => {
     setToogleForm(form => !form)
   }
@@ -88,8 +92,6 @@ const Board: React.FC = () => {
   }
 
 
-
-
   if (isEmpty(board)) return <div>no data</div>
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type, draggableId } = result
@@ -104,40 +106,33 @@ const Board: React.FC = () => {
 
         const [removed] = newList.splice(source.index, 1)
         newList.splice(destination.index, 0, removed)
+
         setColumns(newList)
         updateBoard({
           id: boardID,
           lists: newList,
         })
       }
-      if (cards && lists && board) {
-        // const newCards = [...board.lists]
-        const sourcetList = lists.find(l => l._id === source.droppableId)
-        const destinationtList = lists.find(l => l._id === destination.droppableId)
-        // const currentCards = [...currentList.cards]
-        // const [removed] = currentCards.splice(source.index, 1)
-        // currentCards.splice(destination.index, 0, removed)
-        // console.log(currentCards)
-        // const currentCards = [...currentList.cards]
-        // console.log(sourcetList)
-        // const newCards = newList.find(list => list._id)
-        const newBoard = { ...board }
-        const newCards = [...car]
-        const [removed] = newCards.splice(source.index, 1)
-        newCards.splice(destination.index, 0, removed)
-
-        // const el = newCards.map(li => li.listId)
+      if (cards && lists) {
         if (type === 'card') {
+          let newCards = [...car]
+          let newBoard = { ...board }
+
+          const [removed] = newCards.splice(source.index, 1)
+          newCards.splice(destination.index, 0, removed)
           // console.log(newCards)
-          // updateCard({
-          //   id: draggableId,
-          //   listId: destination.droppableId,
-          // })
+          console.log(newCards)
+
           setCar(newCards)
-          updateBoard({
-            id: boardID,
+          updateCard({
+            id: draggableId,
+            listId: destination.droppableId,
+          })
+          updateList({
+            id: source.droppableId,
             cards: newCards,
           })
+          console.log(destination.droppableId)
           // setCar(newCards)
           // setBar(newBoard)
         }
@@ -148,7 +143,7 @@ const Board: React.FC = () => {
   if (isLoading) return <h2>Loading...</h2>
   if (error) return <h2>error</h2>
   //  const sortedByCreationDate = lists?.slice().sort( (a, b) => (b.index) - (a.index) );
-  // console.log(car)
+
   return (
     <div>
       {/* <h2>{board.title}</h2> */}
@@ -173,7 +168,7 @@ const Board: React.FC = () => {
                       }}
                     >
                       {
-                        car?.map((card: { listId: string; _id: string; title: string }, index: number) => (
+                        cards?.map((card: { listId: string; _id: string; title: string }, index: number) => (
                           card.listId === list._id ? (
                             <TaskCard index={index} key={card._id} id={card._id} title={card.title} listId={list._id} onClickDelete={() => deleteCard(card._id)} />) : null
                         ))

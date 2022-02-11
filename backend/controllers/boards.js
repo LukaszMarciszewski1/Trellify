@@ -22,8 +22,15 @@ export const getBoard = async (req, res) => {
   const { id } = req.params
   try {
     const board = await Board.findById(id)
-      .populate({ path: 'lists' })
-      .populate({ path: 'cards' })
+      // .populate({ path: 'lists' })
+      // .populate({ path: 'cards' })
+      // .exec()
+      .populate({ path: 'lists',
+       populate: {
+        path: 'cards',
+      } 
+    })
+      
       .exec()
     res.status(200).json(board)
   } catch (error) {
@@ -42,7 +49,7 @@ export const createBoard = async (req, res) => {
   }
 }
 
-export const updateBoardLists = async (req, res) => {
+export const updateBoard = async (req, res) => {
   const { id } = req.params
   const { sourceIndex, destinationIndex, sortIndex, title, lists } = req.body
   try {
