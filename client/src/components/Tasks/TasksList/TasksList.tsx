@@ -58,13 +58,13 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, childre
       //  listId:id,
       //  title: cardTitle,
       //  id,
-      boardId: '6202bd1aad30336094afc17f',
+      boardId: '6207b30f895b88b2e00473a8',
       listId: id,
       title: cardTitle,
     })
-    updateList({
-      id: id,
-      cards: cards,
+    updateBoard({
+      id: '6207b30f895b88b2e00473a8',
+      // cards: cards,
     })
     setCardTitle('')
   }

@@ -33,7 +33,7 @@ import { setSourceMapRange } from 'typescript';
 // import { initialData } from '../../../data';
 
 const Board: React.FC = () => {
-  const boardID = '6202bd1aad30336094afc17f'
+  const boardID = '6207b30f895b88b2e00473a8'
   const { data: board, error, isLoading } = useGetBoardQuery(boardID);
   const { data: lists } = useGetAllTasksQuery();
   const { data: cards } = useGetAllCardsQuery();
@@ -57,15 +57,14 @@ const Board: React.FC = () => {
 
   useEffect(() => {
     if (board && lists && cards) {
-      setBar(board && cards && lists)
+      setBar(board)
       setColumns(board.lists)
       const newList = board.lists.map((list: any) => list.cards).flat(1)
       // lists.map(list => setCar(list.cards))
       setCar(newList)
     }
-  }, [board, lists, cards]);
-  
-  console.log(car)
+  }, [board]);
+console.log(lists)
   const handleToogleTaskForm = () => {
     setToogleForm(form => !form)
   }
@@ -113,26 +112,30 @@ const Board: React.FC = () => {
           lists: newList,
         })
       }
-      if (cards && lists) {
+      if (cards && lists && columns) {
         if (type === 'card') {
           let newCards = [...car]
           let newBoard = { ...board }
 
           const [removed] = newCards.splice(source.index, 1)
           newCards.splice(destination.index, 0, removed)
-          // console.log(newCards)
+ 
           console.log(newCards)
-
+          // const el = columns.find(li => li._id)
           setCar(newCards)
-          updateCard({
-            id: draggableId,
-            listId: destination.droppableId,
-          })
+          // updateCard({
+          //   id: draggableId,
+          //   listId: destination.droppableId,
+          // })
           updateList({
-            id: source.droppableId,
-            cards: newCards,
+            id: destination.droppableId,
+            cards: newCards
           })
-          console.log(destination.droppableId)
+          console.log(result)
+          // updateBoard({
+          //   id: boardID,
+          //   cards: newCards,
+          // })
           // setCar(newCards)
           // setBar(newBoard)
         }
@@ -168,7 +171,7 @@ const Board: React.FC = () => {
                       }}
                     >
                       {
-                        cards?.map((card: { listId: string; _id: string; title: string }, index: number) => (
+                        car?.map((card: { listId: string; _id: string; title: string }, index: number) => (
                           card.listId === list._id ? (
                             <TaskCard index={index} key={card._id} id={card._id} title={card.title} listId={list._id} onClickDelete={() => deleteCard(card._id)} />) : null
                         ))

@@ -22,16 +22,16 @@ export const getBoard = async (req, res) => {
   const { id } = req.params
   try {
     const board = await Board.findById(id)
-      // .populate({ path: 'lists' })
-      // .populate({ path: 'cards' })
-      // .exec()
-      .populate({ path: 'lists',
-       populate: {
-        path: 'cards',
-      } 
-    })
-      
+      .populate({
+        path: 'lists',
+        populate: {
+          path: 'cards',
+        },
+      })
       .exec()
+    // .populate({ path: 'lists' })
+    // .populate({ path: 'cards' })
+    // .exec()
     res.status(200).json(board)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -55,7 +55,9 @@ export const updateBoard = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(404).send(`No card with id: ${id}`)
-      const updateBoard = await Board.findByIdAndUpdate(id, req.body, { new: false })
+    const updateBoard = await Board.findByIdAndUpdate(id, req.body, {
+      new: false,
+    })
     res.json(updateBoard)
   } catch (error) {
     res.status(404).json({ message: error.message })

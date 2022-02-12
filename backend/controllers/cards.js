@@ -42,7 +42,7 @@ export const createCard = async (req, res) => {
   const { title, listId, boardId } = req.body
   // const boardId = '61dddb69911985a8b66dbefe'
   const newCard = new Card({ title, listId, boardId })
-  let parentBoard = await Board.findById(boardId)
+  let parentBoard = await List.findById(listId)
   try {
     parentBoard.cards = [...parentBoard.cards, newCard]
     await parentBoard.save()
@@ -60,7 +60,7 @@ export const updateCard = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No card with id: ${id}`)
-  const updateCard = await Card.findByIdAndUpdate(id, req.body, { new: true })
+   const updateCard = await Card.findByIdAndUpdate(id, req.body, { new: true })
 
   res.json(updateCard)
   } catch (error) {
