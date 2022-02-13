@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useMemo, } from 'react'
 import { isEmpty, cloneDeep } from 'lodash'
 import styles from './styles.module.scss'
 import { DragDropContext, Droppable, Draggable, DropResult, resetServerContext } from 'react-beautiful-dnd'
@@ -18,7 +18,7 @@ import {
 } from "../../../store/api/listsReducer";
 import {
   useGetAllCardsQuery,
-  // useAddCardMutation,
+  useAddCardMutation,
   useDeleteCardMutation,
   useUpdateCardMutation,
   useDeleteAllMutation,
@@ -33,7 +33,7 @@ import { setSourceMapRange } from 'typescript';
 // import { initialData } from '../../../data';
 
 const Board: React.FC = () => {
-  const boardID = '6207b30f895b88b2e00473a8'
+  const boardID = '6208d6bf1bb693481233f6fb'
   const { data: board, error, isLoading } = useGetBoardQuery(boardID);
   const { data: lists } = useGetAllTasksQuery();
   const { data: cards } = useGetAllCardsQuery();
@@ -43,7 +43,7 @@ const Board: React.FC = () => {
   const [deleteCard] = useDeleteCardMutation()
   const [updateList] = useUpdateTaskMutation()
   const [updateCard] = useUpdateCardMutation()
-
+  const [addCard] = useAddCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
   const [listTitle, setListTitle] = useState<string>('');
@@ -51,20 +51,23 @@ const Board: React.FC = () => {
   // const [taskValue, setTaskValue] = useState<string>('')
 
 
-  const [car, setCar] = useState([])
-  const [bar, setBar] = useState({})
-  const [columns, setColumns] = useState([])
+  const [car, setCar] = useState([] as any)
+  const [bar, setBar] = useState({} as any)
+  const [columns, setColumns] = useState([] as any)
+  const [activeColumn, setActiveColumn] = useState({} as any)
 
   useEffect(() => {
-    if (board && lists && cards) {
+    if (board) {
       setBar(board)
       setColumns(board.lists)
       const newList = board.lists.map((list: any) => list.cards).flat(1)
+      // setActiveColumn(board.lists[0].cards)
       // lists.map(list => setCar(list.cards))
+      // setCar(newList)
+      setCar(board.cards)
       setCar(newList)
     }
   }, [board]);
-console.log(lists)
   const handleToogleTaskForm = () => {
     setToogleForm(form => !form)
   }
@@ -84,14 +87,15 @@ console.log(lists)
       })
       updateBoard({
         id: boardID,
-        lists: lists,
+        lists: columns,
       })
       setListTitle('')
     }
   }
 
 
-  if (isEmpty(board)) return <div>no data</div>
+  // if (isEmpty(board)) return <div>no data</div>
+
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type, draggableId } = result
     if (!destination) return;
@@ -99,45 +103,63 @@ console.log(lists)
 
     if (board && lists) {
       if (type === 'list') {
-        let newBoard = { ...board }
         // newBoard.listOrder = lists?.map(c => c._id === boardID)
         let newList = [...columns]
-
         const [removed] = newList.splice(source.index, 1)
         newList.splice(destination.index, 0, removed)
 
-        setColumns(newList)
         updateBoard({
           id: boardID,
           lists: newList,
         })
+        setColumns(newList)
       }
-      if (cards && lists && columns) {
-        if (type === 'card') {
-          let newCards = [...car]
-          let newBoard = { ...board }
 
-          const [removed] = newCards.splice(source.index, 1)
-          newCards.splice(destination.index, 0, removed)
- 
-          console.log(newCards)
-          // const el = columns.find(li => li._id)
-          setCar(newCards)
+      if (type === 'card') {
+        let newColumns = [...columns]
+        if (source.droppableId === destination.droppableId) {
+          const currentColumn = newColumns.find((list: { _id: string; }) => list._id === source.droppableId)
+          const column = [...currentColumn.cards]
+
+          console.log(currentColumn._id)
+          const [removed] = column.splice(source.index, 1)
+          column.splice(destination.index, 0, removed)
+
+          setCar(column)
+          updateList({
+            id: currentColumn._id,
+            cards: column
+          })
+          updateBoard({
+            id: boardID,
+          })
+        }
+        if (source.droppableId !== destination.droppableId) {
+          const startColumn = newColumns.find((list: { _id: string; }) => list._id === source.droppableId)
+          const endColumn = newColumns.find((list: { _id: string; }) => list._id === destination.droppableId)
+          const newStartColumn = [...startColumn.cards]
+          const newEndColumn = [...endColumn.cards]
+          const currentCard = newStartColumn.find(card => card._id === draggableId)
+
+          const [removed] = newStartColumn.splice(source.index, 1)
+          // setCar(newStartColumn)
+          deleteCard(draggableId)
+          newEndColumn.splice(destination.index, 0, removed)
+          // setCar(newEndColumn)
+          addCard({
+            title: currentCard.title,
+            listId: endColumn._id
+          })
+          
+          updateBoard({
+            id: boardID,
+            lists: columns
+          })
           // updateCard({
           //   id: draggableId,
-          //   listId: destination.droppableId,
+          //   listId: endColumn._id,
           // })
-          updateList({
-            id: destination.droppableId,
-            cards: newCards
-          })
-          console.log(result)
-          // updateBoard({
-          //   id: boardID,
-          //   cards: newCards,
-          // })
-          // setCar(newCards)
-          // setBar(newBoard)
+
         }
       }
     }
@@ -166,16 +188,17 @@ console.log(lists)
                       key={list._id}
                       id={list._id}
                       title={list.title}
+                      cards={car}
                       onClickDelete={() => {
                         deleteTask(list._id)
                       }}
                     >
-                      {
-                        car?.map((card: { listId: string; _id: string; title: string }, index: number) => (
+                      {/* {
+                        list.cards?.map((card: { listId: string; _id: string; title: string }, index: number) => (
                           card.listId === list._id ? (
                             <TaskCard index={index} key={card._id} id={card._id} title={card.title} listId={list._id} onClickDelete={() => deleteCard(card._id)} />) : null
                         ))
-                      }
+                      } */}
                     </TasksList>
                   ))
                 }

@@ -13,9 +13,9 @@ const BoardSchema = mongoose.Schema(
     lists: [{ type: Schema.Types.ObjectId, ref: 'List' }],
     cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
   },
-  {
-    timestamps: true,
-  }
+  // {
+  //   timestamps: true,
+  // }
 )
 
 BoardSchema.statics.getBoardAndLists = (_id) => {

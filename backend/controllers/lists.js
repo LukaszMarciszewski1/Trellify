@@ -9,9 +9,9 @@ const router = express.Router()
 export const getLists = async (req, res) => {
   try {
     const lists = await List.find()
-    .populate({
-      path: 'cards',
-    })
+    // .populate({
+    //   path: 'cards',
+    // })
     res.status(200).json(lists)
   } catch (error) {
     res.status(404).json({ message: error.message })

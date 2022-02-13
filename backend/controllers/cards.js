@@ -26,19 +26,6 @@ export const getCard = async (req, res) => {
 }
 
 export const createCard = async (req, res) => {
-  // const {id} = req.params
-  // try {
-  // const listId = req.body.listId
-  // const list = await List.findOne({_id: listId})
-  // if(!list) return res.status(404).send()
-  // const newCard = new Card(req.body)
-  //   await newCard.save()
-  //   // await Tasks.findByIdAndUpdate(id ,{ $push: { "cards": {newCard} } })
-  //   res.status(201).json(newCard)
-  // } catch (error) {
-  //   res.status(409).json({message: error.message})
-  // }
-
   const { title, listId, boardId } = req.body
   // const boardId = '61dddb69911985a8b66dbefe'
   const newCard = new Card({ title, listId, boardId })
@@ -55,14 +42,11 @@ export const createCard = async (req, res) => {
 
 export const updateCard = async (req, res) => {
   const { id } = req.params
-  const card = req.body
-
   try {
     if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No card with id: ${id}`)
-   const updateCard = await Card.findByIdAndUpdate(id, req.body, { new: true })
-
-  res.json(updateCard)
+    const updateCard = await Card.findByIdAndUpdate(id, req.body, { new: true })
+    res.json(updateCard)
   } catch (error) {
     res.status(404).json({ message: error.message })
   }

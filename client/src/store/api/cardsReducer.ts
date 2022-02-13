@@ -8,7 +8,8 @@ interface Cards {
   description: string
   deadline: string
   completed: number
-  createdDate: Date
+  createdAt: Date
+  updateDate: Date
   text: string,
   sourceIndex: number
   destinationIndex: number

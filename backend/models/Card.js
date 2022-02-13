@@ -24,7 +24,7 @@ const CardSchema = mongoose.Schema({
     type: Date,
     default: new Date(),
   },
-  updateddAt: {
+  updateDate: {
     type: Date,
     default: null,
   },

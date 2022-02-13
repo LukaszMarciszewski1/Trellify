@@ -13,8 +13,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       boardApi.middleware,
-      listApi.middleware,
-      cardsApi.middleware
+      // listApi.middleware,
+      // cardsApi.middleware
     ),
 })
 

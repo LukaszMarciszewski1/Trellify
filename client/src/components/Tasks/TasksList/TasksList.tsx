@@ -29,12 +29,13 @@ type Props = {
   title?: string
   index: number
   boardId: string
+  cards?: []
   onClickDelete?: () => void
   changeIndex?: () => void
 }
-const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, children, id, index, boardId }) => {
+const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, children, id, index, cards }) => {
   // const { data: tasks, error, isLoading } = useGetAllTasksQuery();
-  const { data: cards, error, isLoading } = useGetAllCardsQuery();
+  // const { data: cards, error, isLoading } = useGetAllCardsQuery();
   const [addCard] = useAddCardMutation()
   // const [addTask] = useAddTaskMutation()
   const [deleteCard] = useDeleteCardMutation()
@@ -58,18 +59,20 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, childre
       //  listId:id,
       //  title: cardTitle,
       //  id,
-      boardId: '6207b30f895b88b2e00473a8',
+      boardId: '6208d6bf1bb693481233f6fb',
       listId: id,
       title: cardTitle,
     })
+
     updateBoard({
-      id: '6207b30f895b88b2e00473a8',
+      id: '6208d6bf1bb693481233f6fb',
+      // id: id,
       // cards: cards,
     })
     setCardTitle('')
   }
-  if (isLoading) return <h2>Loading...</h2>
-  if (error) return <h2>error</h2>
+  // if (isLoading) return <h2>Loading...</h2>
+  // if (error) return <h2>error</h2>
   return (
     <div>
       <Draggable draggableId={String(id)} index={index}>
@@ -89,12 +92,20 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, childre
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                   >
-                    {/* {
-                    cards?.map((card, index) => (
-                      <TaskCard index={index} key={card._id} id={card._id} title={card.title} listId={''} />
-                    ))
-                  } */}
-                    {children}
+                    {
+                      cards?.map((card: { listId: string; _id: string; title: string }, index: number) => (
+                        card.listId === id ? (
+                          <TaskCard
+                            index={index}
+                            key={card._id}
+                            id={card._id}
+                            title={card.title}
+                            listId={id}
+                            onClickDelete={() => deleteCard(card._id)} />
+                        ) : null
+                      ))
+                    }
+                    {/* {children} */}
                     {provided.placeholder}
                   </div>
                 )}

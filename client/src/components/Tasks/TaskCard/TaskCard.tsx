@@ -7,6 +7,7 @@ type Props = {
   listId?: string
   id: string
   index: number
+  updateDate?: Date
   onClickDelete?: () => void
 }
 
