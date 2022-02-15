@@ -11,6 +11,7 @@ interface List {
   destinationIndex: number
   sortIndex: number
   cards: []
+  list: any
 }
 
 type ListResponse = List[]

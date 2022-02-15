@@ -14,6 +14,7 @@ interface Cards {
   sourceIndex: number
   destinationIndex: number
   sortIndex: number
+  position: number
 }
 
 type CardsResponse = Cards[]

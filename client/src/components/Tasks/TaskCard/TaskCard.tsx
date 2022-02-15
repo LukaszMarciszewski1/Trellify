@@ -11,7 +11,7 @@ type Props = {
   onClickDelete?: () => void
 }
 
-const TaskCard: React.FC<Props> = ({ title, listId, id, index, onClickDelete }) => {
+const TaskCard: React.FC<Props> = ({ title, listId, id, index, onClickDelete, updateDate }) => {
   return (
     <Draggable draggableId={String(id)} index={index}>
       {provided => (
@@ -20,6 +20,7 @@ const TaskCard: React.FC<Props> = ({ title, listId, id, index, onClickDelete }) 
             <h4>{title}</h4>
             <p>listId: {listId}</p>
             <p>cardId: {id}</p>
+            <p>{updateDate}</p>
             <button onClick={onClickDelete}>X</button>
           </div>
         </div>

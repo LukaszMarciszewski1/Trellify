@@ -32,8 +32,60 @@ import { setSourceMapRange } from 'typescript';
 
 // import { initialData } from '../../../data';
 
+const store = {
+  _id: "620b88e199b7a598ce7b7187",
+  user: [],
+  createdAt: "2022-02-15T10:35:24.286Z",
+  listOrder: [
+    "620b8a1d99b7a598ce7b719b",
+    "620b8c4c99b7a598ce7b71b8"
+  ],
+  lists: [
+    {
+      _id: "620b8a1d99b7a598ce7b719b",
+      title: "1",
+      boardId: "620b88e199b7a598ce7b7187",
+      cards: [
+        {
+          _id: "620b927799b7a598ce7b71f8",
+          title: "2",
+          listId: "620b8a1d99b7a598ce7b719b",
+          boardId: "620b88e199b7a598ce7b7187",
+          completed: 0,
+          createdAt: "2022-02-15T10:35:24.281Z",
+          updateDate: null,
+          updatedAt: "2022-02-15T10:35:24.281Z",
+        },
+        {
+          _id: "620b92fa99b7a598ce7b7214",
+          title: "1",
+          listId: "620b8a1d99b7a598ce7b719b",
+          boardId: "620b88e199b7a598ce7b7187",
+          completed: 0,
+          createdAt: "2022-02-15T10:35:24.281Z",
+          updateDate: null,
+          updatedAt: "2022-02-15T10:35:24.281Z",
+        }
+      ],
+      createdAt: "2022-02-15T10:35:24.264Z",
+      updateddAt: null,
+      updatedAt: "2022-02-15T10:35:24.264Z",
+    },
+    {
+      _id: "620b8c4c99b7a598ce7b71b8",
+      title: "2",
+      boardId: "620b88e199b7a598ce7b7187",
+      cards: [],
+      createdAt: "2022-02-15T10:35:24.264Z",
+      updateddAt: null,
+      updatedAt: "2022-02-15T10:35:24.264Z",
+    }
+  ],
+  cards: [],
+}
+
 const Board: React.FC = () => {
-  const boardID = '6208d6bf1bb693481233f6fb'
+  const boardID = '620b88e199b7a598ce7b7187'
   const { data: board, error, isLoading } = useGetBoardQuery(boardID);
   const { data: lists } = useGetAllTasksQuery();
   const { data: cards } = useGetAllCardsQuery();
@@ -54,20 +106,20 @@ const Board: React.FC = () => {
   const [car, setCar] = useState([] as any)
   const [bar, setBar] = useState({} as any)
   const [columns, setColumns] = useState([] as any)
-  const [activeColumn, setActiveColumn] = useState({} as any)
+  const [activeCard, setActiveCard] = useState({})
+
+  const [data, setData] = useState(store)
 
   useEffect(() => {
-    if (board) {
-      setBar(board)
-      setColumns(board.lists)
+    if (board && lists) {
+      const newBoard = { ...board }
+      setBar(newBoard)
+      setColumns(newBoard.lists)
       const newList = board.lists.map((list: any) => list.cards).flat(1)
-      // setActiveColumn(board.lists[0].cards)
-      // lists.map(list => setCar(list.cards))
-      // setCar(newList)
-      setCar(board.cards)
       setCar(newList)
     }
   }, [board]);
+
   const handleToogleTaskForm = () => {
     setToogleForm(form => !form)
   }
@@ -103,67 +155,105 @@ const Board: React.FC = () => {
 
     if (board && lists) {
       if (type === 'list') {
-        // newBoard.listOrder = lists?.map(c => c._id === boardID)
+        let newBoard = { ...bar }
         let newList = [...columns]
+
         const [removed] = newList.splice(source.index, 1)
         newList.splice(destination.index, 0, removed)
 
-        updateBoard({
-          id: boardID,
-          lists: newList,
-        })
+        newBoard.listOrder = newList.map(c => c._id)
+        newBoard.columns = newList
+
         setColumns(newList)
+        setBar(newBoard)
       }
 
-      if (type === 'card') {
-        let newColumns = [...columns]
+      if (type === 'card' && data) {
+        // let newColumns = [...columns]
+        let newList = [...columns]
+        const dataBar = { ...bar }
+
+        const sourceColumn = dataBar.lists.find((list: { _id: string; }) => list._id === source.droppableId)
+        const destinationColumn = dataBar.lists.find((list: { _id: string; }) => list._id === destination.droppableId)
+
+        const start = newList.find(c => c._id === source.droppableId)
+        const finish = newList.find(c => c._id === destination.droppableId)
+
+        const startCards = [...start.cards]
+        const finishCards = [...finish.cards]
+
+        const [removed] = startCards.splice(source.index, 1)
+        const newStart = {
+          ...start,
+          cards: startCards
+        }
+        finishCards.splice(destination.index, 0, removed)
+        const newFinish = {
+          ...finish,
+          cards: finishCards
+        }
+        const updateDate = [newStart, newFinish]
+
+        const newDate = newList.map(obj => updateDate.find(o => o._id === obj._id) || obj);
+
+        setColumns(newDate)
+        console.log(startCards)
+
+        updateList({
+          id: source.droppableId,
+          cards: startCards
+        })
+        updateList({
+          id: destination.droppableId,
+          cards: finishCards
+        })
+
+
         if (source.droppableId === destination.droppableId) {
-          const currentColumn = newColumns.find((list: { _id: string; }) => list._id === source.droppableId)
-          const column = [...currentColumn.cards]
 
-          console.log(currentColumn._id)
-          const [removed] = column.splice(source.index, 1)
-          column.splice(destination.index, 0, removed)
+          // const newCards = [...car]
+          // const startColumn = [...sourceColumn.cards]
+          // const finishColumn = [...destinationColumn.cards]
 
-          setCar(column)
-          updateList({
-            id: currentColumn._id,
-            cards: column
-          })
-          updateBoard({
-            id: boardID,
-          })
+          // const currentCard = sourceColumn.cards.find((card: { _id: string; }) => card._id === draggableId)
+
+          // const [removed] = startColumn.splice(source.index, 1)
+          // finishColumn.splice(destination.index, 0, removed)
+
         }
         if (source.droppableId !== destination.droppableId) {
-          const startColumn = newColumns.find((list: { _id: string; }) => list._id === source.droppableId)
-          const endColumn = newColumns.find((list: { _id: string; }) => list._id === destination.droppableId)
-          const newStartColumn = [...startColumn.cards]
-          const newEndColumn = [...endColumn.cards]
-          const currentCard = newStartColumn.find(card => card._id === draggableId)
+          // const newCards = [...car]
+          // const startColumn = newCards.find((card: { listId: string; }) => card.listId === source.droppableId)
+          // const endColumn = newCards.find((card: { listId: string; }) => card.listId === destination.droppableId)
+          // const start = columns.find((list: { _id: string; }) => list._id === source.droppableId)
+          // const finish = columns.find((list: { _id: string; }) => list._id === destination.droppableId)
 
-          const [removed] = newStartColumn.splice(source.index, 1)
-          // setCar(newStartColumn)
-          deleteCard(draggableId)
-          newEndColumn.splice(destination.index, 0, removed)
-          // setCar(newEndColumn)
-          addCard({
-            title: currentCard.title,
-            listId: endColumn._id
-          })
-          
-          updateBoard({
-            id: boardID,
-            lists: columns
-          })
-          // updateCard({
-          //   id: draggableId,
-          //   listId: endColumn._id,
+          // let currentCard = newCards.find((card: { _id: string; }) => card._id === draggableId)
+          // const [removed] = newCards.splice(source.index, 1)
+          // newCards.splice(destination.index, 0, removed)
+
+          // const newState = {
+          //   ...board,
+          //   cards: newCards
+          // }
+          // setCar(newCards)
+          // setBar(newState)
+          // updateList({
+          //   cards: newCards
           // })
-
         }
       }
     }
   }
+  const show = () => {
+
+    data.listOrder.map((listId: any, index: any) => {
+      const list = data.lists[listId];
+      // return <div list={list} key={listId} index={index} />;
+    })
+  }
+
+  show()
 
   if (isLoading) return <h2>Loading...</h2>
   if (error) return <h2>error</h2>
@@ -188,18 +278,11 @@ const Board: React.FC = () => {
                       key={list._id}
                       id={list._id}
                       title={list.title}
-                      cards={car}
+                      cards={list.cards}
                       onClickDelete={() => {
                         deleteTask(list._id)
                       }}
-                    >
-                      {/* {
-                        list.cards?.map((card: { listId: string; _id: string; title: string }, index: number) => (
-                          card.listId === list._id ? (
-                            <TaskCard index={index} key={card._id} id={card._id} title={card.title} listId={list._id} onClickDelete={() => deleteCard(card._id)} />) : null
-                        ))
-                      } */}
-                    </TasksList>
+                    />
                   ))
                 }
                 {provided.placeholder}

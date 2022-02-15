@@ -59,15 +59,19 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, childre
       //  listId:id,
       //  title: cardTitle,
       //  id,
-      boardId: '6208d6bf1bb693481233f6fb',
+      boardId: '620b88e199b7a598ce7b7187',
       listId: id,
       title: cardTitle,
     })
 
     updateBoard({
-      id: '6208d6bf1bb693481233f6fb',
+      id: '620b88e199b7a598ce7b7187',
       // id: id,
-      // cards: cards,
+      cards: cards,
+    })
+    updateList({
+      id:id,
+      cards: cards
     })
     setCardTitle('')
   }
@@ -93,16 +97,17 @@ const TasksList: React.FC<Props> = ({ title, onClickDelete, changeIndex, childre
                     ref={provided.innerRef}
                   >
                     {
-                      cards?.map((card: { listId: string; _id: string; title: string }, index: number) => (
-                        card.listId === id ? (
+                      cards?.map((card: { listId: string; _id: string; title: string; updateDate: Date }, index: number) => (
+                        // card.listId === id ? (
                           <TaskCard
                             index={index}
                             key={card._id}
                             id={card._id}
                             title={card.title}
                             listId={id}
+                            updateDate={card.updateDate}
                             onClickDelete={() => deleteCard(card._id)} />
-                        ) : null
+                        // ) : null
                       ))
                     }
                     {/* {children} */}
