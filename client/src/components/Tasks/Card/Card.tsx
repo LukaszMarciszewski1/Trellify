@@ -5,13 +5,14 @@ import { Draggable } from 'react-beautiful-dnd';
 type Props = {
   title: string
   listId?: string
+  // boardId: string
   id: string
   index: number
   updateDate?: Date
   onClickDelete?: () => void
 }
 
-const TaskCard: React.FC<Props> = ({ title, listId, id, index, onClickDelete, updateDate }) => {
+const Card: React.FC<Props> = ({ title, listId, id, index, onClickDelete, updateDate }) => {
   return (
     <Draggable draggableId={String(id)} index={index}>
       {provided => (
@@ -29,4 +30,4 @@ const TaskCard: React.FC<Props> = ({ title, listId, id, index, onClickDelete, up
   )
 }
 
-export default TaskCard
+export default Card

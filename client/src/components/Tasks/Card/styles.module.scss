@@ -1,0 +1,14 @@
+@import '../../../scss/utils.scss';
+.card {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 8px;
+  -webkit-box-shadow: $box-shadow;
+  box-shadow: $box-shadow;
+  background-color: #ffffff;
+  border-radius: 3px;
+  &:hover{
+    // background-color: fade(#fdfdfd, 0.2);
+    background-color: #f8f8f8;
+  }
+}

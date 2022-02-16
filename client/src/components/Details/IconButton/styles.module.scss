@@ -1,20 +1,16 @@
 
 .iconButton{
-  // margin: 5px 0;
-  // width: 30px;
-  // height: 30px;
+  width: 30px;
+  height: 30px;
   background-color: transparent;
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: center;
-  padding: .2rem;
-  border-radius: 5px;
-
-  img{
-    transition: all .2s;
-    padding: 0 .2rem;
-  }
+  justify-content: center;
+  padding: .3rem;
+  border-radius: 3px;
+  max-height: 100%;
   &:hover{
     background-color: #F7F8FA;
   }

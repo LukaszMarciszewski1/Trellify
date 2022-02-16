@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, } from 'react'
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { isEmpty, cloneDeep } from 'lodash'
 import styles from './styles.module.scss'
 import { DragDropContext, Droppable, Draggable, DropResult, resetServerContext } from 'react-beautiful-dnd'
@@ -24,172 +24,108 @@ import {
   useDeleteAllMutation,
 } from "../../../store/api/cardsReducer";
 
-import TasksList from '../TasksList/TasksList'
+import List from '../List/List'
 import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
-import TaskCard from '../TaskCard/TaskCard';
+import TaskCard from '../Card/Card';
 import { setSourceMapRange } from 'typescript';
-
-// import { initialData } from '../../../data';
-
-const store = {
-  _id: "620b88e199b7a598ce7b7187",
-  user: [],
-  createdAt: "2022-02-15T10:35:24.286Z",
-  listOrder: [
-    "620b8a1d99b7a598ce7b719b",
-    "620b8c4c99b7a598ce7b71b8"
-  ],
-  lists: [
-    {
-      _id: "620b8a1d99b7a598ce7b719b",
-      title: "1",
-      boardId: "620b88e199b7a598ce7b7187",
-      cards: [
-        {
-          _id: "620b927799b7a598ce7b71f8",
-          title: "2",
-          listId: "620b8a1d99b7a598ce7b719b",
-          boardId: "620b88e199b7a598ce7b7187",
-          completed: 0,
-          createdAt: "2022-02-15T10:35:24.281Z",
-          updateDate: null,
-          updatedAt: "2022-02-15T10:35:24.281Z",
-        },
-        {
-          _id: "620b92fa99b7a598ce7b7214",
-          title: "1",
-          listId: "620b8a1d99b7a598ce7b719b",
-          boardId: "620b88e199b7a598ce7b7187",
-          completed: 0,
-          createdAt: "2022-02-15T10:35:24.281Z",
-          updateDate: null,
-          updatedAt: "2022-02-15T10:35:24.281Z",
-        }
-      ],
-      createdAt: "2022-02-15T10:35:24.264Z",
-      updateddAt: null,
-      updatedAt: "2022-02-15T10:35:24.264Z",
-    },
-    {
-      _id: "620b8c4c99b7a598ce7b71b8",
-      title: "2",
-      boardId: "620b88e199b7a598ce7b7187",
-      cards: [],
-      createdAt: "2022-02-15T10:35:24.264Z",
-      updateddAt: null,
-      updatedAt: "2022-02-15T10:35:24.264Z",
-    }
-  ],
-  cards: [],
-}
+import useOnClickOutside from '../../../hooks/useOnClickOutside';
 
 const Board: React.FC = () => {
-  const boardID = '620b88e199b7a598ce7b7187'
-  const { data: board, error, isLoading } = useGetBoardQuery(boardID);
-  const { data: lists } = useGetAllTasksQuery();
-  const { data: cards } = useGetAllCardsQuery();
 
-  const [addTask] = useAddTaskMutation()
-  const [deleteTask] = useDeleteTaskMutation()
-  const [deleteCard] = useDeleteCardMutation()
+  const boardId = '620b88e199b7a598ce7b7187'
+  const { data, error, isLoading } = useGetBoardQuery(boardId);
+  // const { data: lists } = useGetAllTasksQuery();
+  // const { data: cards } = useGetAllCardsQuery();
+  const [addList] = useAddTaskMutation()
+  const [deleteList] = useDeleteTaskMutation()
   const [updateList] = useUpdateTaskMutation()
   const [updateCard] = useUpdateCardMutation()
-  const [addCard] = useAddCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
   const [listTitle, setListTitle] = useState<string>('');
-  const [toogleForm, setToogleForm] = useState<boolean>(false)
-  // const [taskValue, setTaskValue] = useState<string>('')
+  const [toggleForm, setToggleForm] = useState<boolean>(false)
+
+  const [board, setBoard] = useState({} as any)
+  const [lists, setLists] = useState([] as any)
+
+  const ref = useRef(null)
+  const handleClickOutside = () => { setToggleForm(false); setListTitle('') }
+  useOnClickOutside(ref, handleClickOutside)
 
 
-  const [car, setCar] = useState([] as any)
-  const [bar, setBar] = useState({} as any)
-  const [columns, setColumns] = useState([] as any)
-  const [activeCard, setActiveCard] = useState({})
-
-  const [data, setData] = useState(store)
 
   useEffect(() => {
-    if (board && lists) {
-      const newBoard = { ...board }
-      setBar(newBoard)
-      setColumns(newBoard.lists)
-      const newList = board.lists.map((list: any) => list.cards).flat(1)
-      setCar(newList)
+    if (data) {
+      const newBoard = { ...data }
+      setBoard(newBoard)
+      setLists(newBoard.lists)
     }
-  }, [board]);
+  }, [data]);
 
-  const handleToogleTaskForm = () => {
-    setToogleForm(form => !form)
+  const handleToggleTaskForm = () => {
+    setToggleForm(form => !form)
   }
 
-  const handleChangeTaskValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleChangeListValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'task-title') setListTitle(e.target.value)
   }
 
-
-  const handleSubmitTaskForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitList = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (lists === undefined) return
-    if (listTitle.length > 0) {
-      addTask({
-        title: listTitle,
-        boardId: boardID,
-      })
-      updateBoard({
-        id: boardID,
-        lists: columns,
-      })
-      setListTitle('')
-    }
+    if (listTitle.length === 0) return
+    addList({
+      title: listTitle,
+      boardId: boardId,
+    })
+    updateBoard({
+      id: boardId,
+    })
+    setListTitle('')
+    setToggleForm(false)
   }
 
 
-  // if (isEmpty(board)) return <div>no data</div>
+  if (isEmpty(board)) return <div>no data</div>
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type, draggableId } = result
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
 
-    if (board && lists) {
+    if (board) {
       if (type === 'list') {
-        // let newBoard = { ...bar }
-        let newList = [...columns]
+        let newLists = [...lists]
 
-        const [removed] = newList.splice(source.index, 1)
-        newList.splice(destination.index, 0, removed)
-
+        const [removed] = newLists.splice(source.index, 1)
+        newLists.splice(destination.index, 0, removed)
         // newBoard.listOrder = newList.map(c => c._id)
         // newBoard.columns = newList
-
-        setColumns(newList)
-        // setBar(newBoard)
+        setLists(newLists)
         updateBoard({
-          id: boardID,
-          lists: newList
+          id: boardId,
+          lists: newLists
         })
       }
 
       if (type === 'card' && data) {
-        const newColumns = [...columns]
-        const sourceColumn = newColumns.find((list: { _id: string; }) => list._id === source.droppableId)
-        const destinationColumn = newColumns.find((list: { _id: string; }) => list._id === destination.droppableId)
+        const newLists = [...lists]
+        const sourceList = newLists.find((list: { _id: string; }) => list._id === source.droppableId)
+        const destinationList = newLists.find((list: { _id: string; }) => list._id === destination.droppableId)
 
         if (source.droppableId === destination.droppableId) {
-          const newCards = [...sourceColumn.cards]
+          const newCards = [...sourceList.cards]
           const [removed] = newCards.splice(source.index, 1)
           newCards.splice(destination.index, 0, removed)
 
-          const newColumn = {
-            ...sourceColumn,
+          const updateCards = {
+            ...sourceList,
             cards: newCards
           }
           //replace the contents of the list
-          const newState = newColumns.map(obj => [newColumn].find(o => o._id === obj._id) || obj);
+          const newState = newLists.map(obj => [updateCards].find(o => o._id === obj._id) || obj);
 
-          setColumns(newState)
+          setLists(newState)
           updateList({
             id: source.droppableId,
             cards: newCards
@@ -198,18 +134,18 @@ const Board: React.FC = () => {
         }
         if (source.droppableId !== destination.droppableId) {
 
-          const startCards = [...sourceColumn.cards]
-          const finishCards = [...destinationColumn.cards]
+          const startCards = [...sourceList.cards]
+          const finishCards = [...destinationList.cards]
 
           const [removed] = startCards.splice(source.index, 1)
           const startState = {
-            ...sourceColumn,
+            ...sourceList,
             cards: startCards
           }
 
           finishCards.splice(destination.index, 0, removed)
           const finishState = {
-            ...destinationColumn,
+            ...destinationList,
             cards: finishCards
           }
 
@@ -217,14 +153,14 @@ const Board: React.FC = () => {
           const updateCards = [startState, finishState]
 
           //replace the contents of the lists
-          const newState = newColumns.map(obj => updateCards.find(o => o._id === obj._id) || obj);
+          const newState = newLists.map(obj => updateCards.find(o => o._id === obj._id) || obj);
 
-          setColumns(newState)
+          setLists(newState)
 
-          updateCard({
-            id: draggableId,
-            listId: destination.droppableId
-          })
+          // updateCard({
+          //   id: draggableId,
+          //   listId: destination.droppableId
+          // })
           updateList({
             id: source.droppableId,
             cards: startCards
@@ -238,13 +174,24 @@ const Board: React.FC = () => {
     }
   }
 
+  const handleBlur = () => {
+
+    // setToggleForm(false)
+    // setListTitle('')
+  }
 
   if (isLoading) return <h2>Loading...</h2>
   if (error) return <h2>error</h2>
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className={styles.container}>
+      <div className={styles.container}
+        style={{
+          backgroundImage: `url("https://s1.1zoom.me/big0/590/Germany_Morning_Mountains_Lake_Bavaria_Alps_597796_1280x650.jpg")`,
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+        }}>
         <Droppable droppableId="all-list" direction="horizontal" type="list">
           {provided => (
             <div className={styles.listContainer}
@@ -252,16 +199,17 @@ const Board: React.FC = () => {
               ref={provided.innerRef}
             >
               {
-                columns?.map((list: any, index: number) => (
-                  <TasksList
+                lists?.map((list: any, index: number) => (
+                  <List
                     index={index}
                     boardId={list.boardId}
                     key={list._id}
-                    id={list._id}
+                    listId={list._id}
                     title={list.title}
                     cards={list.cards}
                     onClickDelete={() => {
-                      deleteTask(list._id)
+                      deleteList(list._id);
+                      updateBoard({ id: boardId })
                     }}
                   />
                 ))
@@ -270,16 +218,20 @@ const Board: React.FC = () => {
             </div>
           )}
         </Droppable>
-        <div>
-          {toogleForm ?
-            <TaskForm
-              handleChange={handleChangeTaskValue}
-              handleSubmit={handleSubmitTaskForm}
-              titleValue={listTitle}
-              placeholder={'dodaj listę zadań'}
-            />
-            : null}
-          <TaskButton onClick={handleToogleTaskForm} />
+        <div >
+          {toggleForm ?
+            <div className={styles.formContainer} ref={ref}>
+              <TaskForm
+                handleChange={handleChangeListValue}
+                handleSubmit={handleSubmitList}
+                toggleState={() => setToggleForm(false)}
+                onBlur={handleBlur}
+                title={listTitle}
+                placeholder={'dodaj listę zadań'}
+              />
+            </div>
+            : <TaskButton onClick={handleToggleTaskForm} />
+          }
         </div>
       </div>
     </DragDropContext>
@@ -288,4 +240,5 @@ const Board: React.FC = () => {
 }
 
 export default Board
+
 

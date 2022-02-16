@@ -30,12 +30,12 @@ export const createCard = async (req, res) => {
   const { title, listId, boardId } = req.body
   // const boardId = '61dddb69911985a8b66dbefe'
   const newCard = new Card({ title, listId, boardId})
-  let parentBoard = await Board.findById(boardId)
+  // let parentBoard = await Board.findById(boardId)
   let parentList = await List.findById(listId)
   try {
-    parentBoard.cards = [...parentBoard.cards, newCard]
+    // parentBoard.cards = [...parentBoard.cards, newCard]
     parentList.cards = [...parentList.cards, newCard]
-    parentBoard.save()
+    // parentBoard.save()
     parentList.save()
     newCard.save()
     res.status(201).json(newCard)
@@ -58,6 +58,7 @@ export const updateCard = async (req, res) => {
 
 export const deleteCard = async (req, res) => {
   const { id } = req.params
+  const {boardId} = req.body
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No card with id: ${id}`)
 

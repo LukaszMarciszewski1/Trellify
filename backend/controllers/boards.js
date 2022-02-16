@@ -28,9 +28,7 @@ export const getBoard = async (req, res) => {
           path: 'cards',
         },
       })
-      // .exec()
-      // .populate({path: 'lists'})
-      .populate({ path: 'cards' })
+      // .populate({ path: 'cards' })
       .exec()
     res.status(200).json(board)
   } catch (error) {

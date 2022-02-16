@@ -3,27 +3,37 @@ import TextareaAutosize from 'react-textarea-autosize';
 import styles from './styles.module.scss'
 
 import Button from '../../Details/Button/Button'
+import { BsXLg } from "react-icons/bs";
+import IconButton from '../../Details/IconButton/IconButton';
 
 type Props = {
   handleSubmit: (value: any) => void
   handleChange: (value: any) => void
-  titleValue: string
-  placeholder:string
+  toggleState?: () => void
+  onBlur?: () => void
+  title: string
+  placeholder: string
 }
 
-const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, titleValue, placeholder }) => {
+const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, toggleState, title, placeholder, onBlur }) => {
   return (
-      <form className={styles.form}>
-        <TextareaAutosize 
+    <form className={styles.form}>
+      <TextareaAutosize
+        id='task-title'
+        maxRows={3}
         placeholder={placeholder}
-        maxRows={3} 
-        onChange={handleChange} 
-        value={titleValue} 
-        className={styles.textarea} 
-        id='task-title' 
-        required/>
-        <Button onClick={handleSubmit} title={'Dodaj'}/>
-      </form>
+        value={title}
+        className={styles.textarea}
+        autoFocus
+        onChange={handleChange}
+        onBlur={onBlur}
+        required />
+      <div className={styles.actions}>
+        <Button onClick={handleSubmit} title={'Dodaj'} />
+        <div style={{ marginRight: '1rem' }} />
+        <IconButton onClick={toggleState}><BsXLg /></IconButton>
+      </div>
+    </form>
   )
 }
 

@@ -3,7 +3,7 @@ import styles from './styles.module.scss'
 
 interface IconButtonProps {
   onClick?: () => void;
-  icon: string,
+  icon?: any,
   title?: string,
   padding?: string
 }
@@ -14,7 +14,9 @@ const IconButton: React.FC<IconButtonProps> = (props) => (
     onClick={props.onClick}
     // style={{ padding: props.padding }}
     type='button'
-  ><img src={props.icon}/>{props.title}</button>
+  >
+    {props.children}
+  </button>
 )
 
 export default IconButton
