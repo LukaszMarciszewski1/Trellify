@@ -28,6 +28,7 @@ const CardSchema = mongoose.Schema({
     type: Date,
     default: null,
   },
+  position: Number
 },
 {
   timestamps: true

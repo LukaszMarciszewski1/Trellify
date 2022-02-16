@@ -9,7 +9,7 @@ const BoardSchema = mongoose.Schema(
       type: Date,
       default: new Date(),
     },
-    listOrder: [String],
+    listOrder: [{ type: Schema.Types.ObjectId, ref: 'List' }],
     lists: [{ type: Schema.Types.ObjectId, ref: 'List' }],
     cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
   },

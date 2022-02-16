@@ -4,7 +4,7 @@ import List from '../models/List.js'
 import Card from '../models/Card.js'
 import Board from '../models/Board.js'
 import { Container } from 'typedi'
-
+const { Schema } = mongoose
 const router = express.Router()
 // .sort({sortIndex:0})
 export const getBoards = async (req, res) => {
@@ -30,7 +30,7 @@ export const getBoard = async (req, res) => {
       })
       // .exec()
       // .populate({path: 'lists'})
-      // .populate({ path: 'cards' })
+      .populate({ path: 'cards' })
       .exec()
     res.status(200).json(board)
   } catch (error) {

@@ -26,14 +26,18 @@ export const getCard = async (req, res) => {
 }
 
 export const createCard = async (req, res) => {
+  // const { id } = req.params
   const { title, listId, boardId } = req.body
   // const boardId = '61dddb69911985a8b66dbefe'
-  const newCard = new Card({ title, listId, boardId })
-  let parentBoard = await List.findById(listId)
+  const newCard = new Card({ title, listId, boardId})
+  let parentBoard = await Board.findById(boardId)
+  let parentList = await List.findById(listId)
   try {
     parentBoard.cards = [...parentBoard.cards, newCard]
-    await parentBoard.save()
-    await newCard.save()
+    parentList.cards = [...parentList.cards, newCard]
+    parentBoard.save()
+    parentList.save()
+    newCard.save()
     res.status(201).json(newCard)
   } catch (error) {
     res.status(409).json({ message: error.message })

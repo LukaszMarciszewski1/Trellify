@@ -155,154 +155,135 @@ const Board: React.FC = () => {
 
     if (board && lists) {
       if (type === 'list') {
-        let newBoard = { ...bar }
+        // let newBoard = { ...bar }
         let newList = [...columns]
 
         const [removed] = newList.splice(source.index, 1)
         newList.splice(destination.index, 0, removed)
 
-        newBoard.listOrder = newList.map(c => c._id)
-        newBoard.columns = newList
+        // newBoard.listOrder = newList.map(c => c._id)
+        // newBoard.columns = newList
 
         setColumns(newList)
-        setBar(newBoard)
+        // setBar(newBoard)
+        updateBoard({
+          id: boardID,
+          lists: newList
+        })
       }
 
       if (type === 'card' && data) {
-        // let newColumns = [...columns]
-        let newList = [...columns]
-        const dataBar = { ...bar }
-
-        const sourceColumn = dataBar.lists.find((list: { _id: string; }) => list._id === source.droppableId)
-        const destinationColumn = dataBar.lists.find((list: { _id: string; }) => list._id === destination.droppableId)
-
-        const start = newList.find(c => c._id === source.droppableId)
-        const finish = newList.find(c => c._id === destination.droppableId)
-
-        const startCards = [...start.cards]
-        const finishCards = [...finish.cards]
-
-        const [removed] = startCards.splice(source.index, 1)
-        const newStart = {
-          ...start,
-          cards: startCards
-        }
-        finishCards.splice(destination.index, 0, removed)
-        const newFinish = {
-          ...finish,
-          cards: finishCards
-        }
-        const updateDate = [newStart, newFinish]
-
-        const newDate = newList.map(obj => updateDate.find(o => o._id === obj._id) || obj);
-
-        setColumns(newDate)
-        console.log(startCards)
-
-        updateList({
-          id: source.droppableId,
-          cards: startCards
-        })
-        updateList({
-          id: destination.droppableId,
-          cards: finishCards
-        })
-
+        const newColumns = [...columns]
+        const sourceColumn = newColumns.find((list: { _id: string; }) => list._id === source.droppableId)
+        const destinationColumn = newColumns.find((list: { _id: string; }) => list._id === destination.droppableId)
 
         if (source.droppableId === destination.droppableId) {
+          const newCards = [...sourceColumn.cards]
+          const [removed] = newCards.splice(source.index, 1)
+          newCards.splice(destination.index, 0, removed)
 
-          // const newCards = [...car]
-          // const startColumn = [...sourceColumn.cards]
-          // const finishColumn = [...destinationColumn.cards]
+          const newColumn = {
+            ...sourceColumn,
+            cards: newCards
+          }
+          //replace the contents of the list
+          const newState = newColumns.map(obj => [newColumn].find(o => o._id === obj._id) || obj);
 
-          // const currentCard = sourceColumn.cards.find((card: { _id: string; }) => card._id === draggableId)
-
-          // const [removed] = startColumn.splice(source.index, 1)
-          // finishColumn.splice(destination.index, 0, removed)
+          setColumns(newState)
+          updateList({
+            id: source.droppableId,
+            cards: newCards
+          })
 
         }
         if (source.droppableId !== destination.droppableId) {
-          // const newCards = [...car]
-          // const startColumn = newCards.find((card: { listId: string; }) => card.listId === source.droppableId)
-          // const endColumn = newCards.find((card: { listId: string; }) => card.listId === destination.droppableId)
-          // const start = columns.find((list: { _id: string; }) => list._id === source.droppableId)
-          // const finish = columns.find((list: { _id: string; }) => list._id === destination.droppableId)
 
-          // let currentCard = newCards.find((card: { _id: string; }) => card._id === draggableId)
-          // const [removed] = newCards.splice(source.index, 1)
-          // newCards.splice(destination.index, 0, removed)
+          const startCards = [...sourceColumn.cards]
+          const finishCards = [...destinationColumn.cards]
 
-          // const newState = {
-          //   ...board,
-          //   cards: newCards
-          // }
-          // setCar(newCards)
-          // setBar(newState)
-          // updateList({
-          //   cards: newCards
-          // })
+          const [removed] = startCards.splice(source.index, 1)
+          const startState = {
+            ...sourceColumn,
+            cards: startCards
+          }
+
+          finishCards.splice(destination.index, 0, removed)
+          const finishState = {
+            ...destinationColumn,
+            cards: finishCards
+          }
+
+          //new letters converted to array
+          const updateCards = [startState, finishState]
+
+          //replace the contents of the lists
+          const newState = newColumns.map(obj => updateCards.find(o => o._id === obj._id) || obj);
+
+          setColumns(newState)
+
+          updateCard({
+            id: draggableId,
+            listId: destination.droppableId
+          })
+          updateList({
+            id: source.droppableId,
+            cards: startCards
+          })
+          updateList({
+            id: destination.droppableId,
+            cards: finishCards
+          })
         }
       }
     }
   }
-  const show = () => {
 
-    data.listOrder.map((listId: any, index: any) => {
-      const list = data.lists[listId];
-      // return <div list={list} key={listId} index={index} />;
-    })
-  }
-
-  show()
 
   if (isLoading) return <h2>Loading...</h2>
   if (error) return <h2>error</h2>
-  //  const sortedByCreationDate = lists?.slice().sort( (a, b) => (b.index) - (a.index) );
 
   return (
-    <div>
-      {/* <h2>{board.title}</h2> */}
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className={styles.container}>
-          <Droppable droppableId="all-list" direction="horizontal" type="list">
-            {provided => (
-              <div className={styles.listContainer}
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {
-                  columns?.map((list: any, index: number) => (
-                    <TasksList
-                      index={index}
-                      boardId={list.boardId}
-                      key={list._id}
-                      id={list._id}
-                      title={list.title}
-                      cards={list.cards}
-                      onClickDelete={() => {
-                        deleteTask(list._id)
-                      }}
-                    />
-                  ))
-                }
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-          <div>
-            {toogleForm ?
-              <TaskForm
-                handleChange={handleChangeTaskValue}
-                handleSubmit={handleSubmitTaskForm}
-                titleValue={listTitle}
-                placeholder={'dodaj listę zadań'}
-              />
-              : null}
-            <TaskButton onClick={handleToogleTaskForm} />
-          </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className={styles.container}>
+        <Droppable droppableId="all-list" direction="horizontal" type="list">
+          {provided => (
+            <div className={styles.listContainer}
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {
+                columns?.map((list: any, index: number) => (
+                  <TasksList
+                    index={index}
+                    boardId={list.boardId}
+                    key={list._id}
+                    id={list._id}
+                    title={list.title}
+                    cards={list.cards}
+                    onClickDelete={() => {
+                      deleteTask(list._id)
+                    }}
+                  />
+                ))
+              }
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+        <div>
+          {toogleForm ?
+            <TaskForm
+              handleChange={handleChangeTaskValue}
+              handleSubmit={handleSubmitTaskForm}
+              titleValue={listTitle}
+              placeholder={'dodaj listę zadań'}
+            />
+            : null}
+          <TaskButton onClick={handleToogleTaskForm} />
         </div>
-      </DragDropContext>
-    </div>
+      </div>
+    </DragDropContext>
+
   )
 }
 
