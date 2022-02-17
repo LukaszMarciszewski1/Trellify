@@ -7,19 +7,22 @@ import { BsXLg } from "react-icons/bs";
 import IconButton from '../../Details/IconButton/IconButton';
 
 type Props = {
+  id: string
   handleSubmit: (value: any) => void
   handleChange: (value: any) => void
   toggleState?: () => void
   onBlur?: () => void
   title: string
-  placeholder: string
 }
 
-const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, toggleState, title, placeholder, onBlur }) => {
+const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, toggleState, title, onBlur, id }) => {
+
+  const placeholder = id === 'list' ? 'Dodaj listę zadań' : 'Dodaj nową kartę'
+
   return (
     <form className={styles.form}>
       <TextareaAutosize
-        id='task-title'
+        id={id}
         maxRows={3}
         placeholder={placeholder}
         value={title}

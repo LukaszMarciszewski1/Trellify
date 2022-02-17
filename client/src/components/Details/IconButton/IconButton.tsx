@@ -12,7 +12,6 @@ const IconButton: React.FC<IconButtonProps> = (props) => (
   <button
     className={styles.iconButton}
     onClick={props.onClick}
-    // style={{ padding: props.padding }}
     type='button'
   >
     {props.children}

@@ -53,8 +53,6 @@ const Board: React.FC = () => {
   const handleClickOutside = () => { setToggleForm(false); setListTitle('') }
   useOnClickOutside(ref, handleClickOutside)
 
-
-
   useEffect(() => {
     if (data) {
       const newBoard = { ...data }
@@ -68,10 +66,10 @@ const Board: React.FC = () => {
   }
 
   const handleChangeListValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (e.target.id === 'task-title') setListTitle(e.target.value)
+    if (e.target.id === 'list') setListTitle(e.target.value)
   }
 
-  const handleSubmitList = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddList = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (listTitle.length === 0) return
     addList({
@@ -207,10 +205,6 @@ const Board: React.FC = () => {
                     listId={list._id}
                     title={list.title}
                     cards={list.cards}
-                    onClickDelete={() => {
-                      deleteList(list._id);
-                      updateBoard({ id: boardId })
-                    }}
                   />
                 ))
               }
@@ -222,15 +216,15 @@ const Board: React.FC = () => {
           {toggleForm ?
             <div className={styles.formContainer} ref={ref}>
               <TaskForm
+                id='list'
                 handleChange={handleChangeListValue}
-                handleSubmit={handleSubmitList}
+                handleSubmit={handleAddList}
                 toggleState={() => setToggleForm(false)}
                 onBlur={handleBlur}
                 title={listTitle}
-                placeholder={'dodaj listę zadań'}
               />
             </div>
-            : <TaskButton onClick={handleToggleTaskForm} />
+            : <TaskButton id={'list'} onClick={handleToggleTaskForm} />
           }
         </div>
       </div>

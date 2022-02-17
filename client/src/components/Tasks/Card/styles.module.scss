@@ -7,8 +7,13 @@
   box-shadow: $box-shadow;
   background-color: #ffffff;
   border-radius: 3px;
-  &:hover{
+  &:hover {
     // background-color: fade(#fdfdfd, 0.2);
     background-color: #f8f8f8;
+  }
+  h3 {
+    font-size: 1rem;
+    color: rgb(24, 24, 24);
+    font-weight: normal;
   }
 }

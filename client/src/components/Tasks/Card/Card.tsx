@@ -6,22 +6,22 @@ type Props = {
   title: string
   listId?: string
   // boardId: string
-  id: string
+  cardId: string
   index: number
   updateDate?: Date
   onClickDelete?: () => void
 }
 
-const Card: React.FC<Props> = ({ title, listId, id, index, onClickDelete, updateDate }) => {
+const Card: React.FC<Props> = ({ title, cardId, index, onClickDelete}) => {
   return (
-    <Draggable draggableId={String(id)} index={index}>
+    <Draggable draggableId={String(cardId)} index={index}>
       {provided => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
           <div className={styles.card}>
-            <h4>{title}</h4>
-            <p>listId: {listId}</p>
+            <h3>{title}</h3>
+            {/* <p>listId: {listId}</p>
             <p>cardId: {id}</p>
-            <p>{updateDate}</p>
+            <p>{updateDate}</p> */}
             <button onClick={onClickDelete}>X</button>
           </div>
         </div>

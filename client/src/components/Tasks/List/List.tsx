@@ -37,34 +37,46 @@ import useOnClickOutside from '../../../hooks/useOnClickOutside';
 
 type Props = {
   listId: string
-  title?: string
+  title: string
   index: number
   boardId: string
-  cards?: []
+  cards: []
   onClickDelete?: () => void
-  changeIndex?: () => void
+  onChangeTitle?: (value: any) => void
 }
-const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDelete }) => {
+const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDelete, onChangeTitle }) => {
   const ref = useRef(null)
   const [addCard] = useAddCardMutation()
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
   const [updateList] = useUpdateTaskMutation()
+  const [deleteList] = useDeleteTaskMutation()
 
+  const [listTitle, setListTitle] = useState<string | undefined>(title)
   const [cardTitle, setCardTitle] = useState<string>('')
   const [toggleForm, setToggleForm] = useState<boolean>(false)
-  // console.log(toggleForm)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [updateCards, setUpdateCards] = useState(cards)
+
 
   const handleToggleTaskForm = () => {
     setToggleForm(form => !form)
   }
 
-  const handleChangeTaskValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setCardTitle(e.target.value)
+  const handleChangeCardValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    if (e.target.id === 'card') setCardTitle(e.target.value)
   }
 
-  const handleAddCard = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string): void => {
+  const handleEditListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    if (e.target.id === 'list') setListTitle(e.target.value)
+    updateList({
+      id: listId,
+      title: e.target.value
+    })
+  }
+
+  const handleAddCard = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     if (cardTitle.length === 0) return
     addCard({
@@ -78,28 +90,39 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDe
     setCardTitle('')
   }
 
-  const handleClickOutside = () => {setToggleForm(false); setCardTitle('')}
+  const handleClickOutside = () => { setToggleForm(false); setCardTitle(''); setIsOpen(false) }
   useOnClickOutside(ref, handleClickOutside)
 
   const handleBlur = () => {
     // setToggleForm(false)
     // setCardTitle('')
   }
+  // const selectAllText = (e: { target: { select: () => void; }; }) => {
+  //   e.target.select();
+  // };
 
   return (
     <div>
       <Draggable draggableId={String(listId)} index={index}>
         {provided => (
           <div className={styles.container} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
-            <div className={styles.listHeader}>
-              <TextareaAutosize
-                autoFocus={true}
-                value={title}
-                className={styles.textarea}
-                id='task-title'
-                required
-              />
-              <IconButton onClick={onClickDelete} title={''} ><BsThreeDots style={{ fontSize: "1.3em" }} /></IconButton>
+            <div className={styles.listHeader} onClick={() => setIsOpen(true)} ref={ref}>
+              {
+                !isOpen ? <h2>{listTitle}</h2> :
+                  <TextareaAutosize
+                    id='list'
+                    autoFocus={true}
+                    value={listTitle}
+                    className={styles.textarea}
+                    onChange={handleEditListTitle}
+                    onFocus={(e) => e.target.select()}
+                    required
+                  />
+              }
+              <IconButton onClick={() => {
+                deleteList(listId);
+                updateBoard({ id: boardId })
+              }}><BsThreeDots style={{ fontSize: "1.3em" }} /></IconButton>
             </div>
             <Droppable droppableId={String(listId)} type="card">
               {provided => (
@@ -112,7 +135,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDe
                       <Card
                         index={index}
                         key={card._id}
-                        id={card._id}
+                        cardId={card._id}
                         title={card.title}
                         updateDate={card.updateDate}
                         // listId={listId}
@@ -131,15 +154,15 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDe
               {toggleForm ?
                 <div ref={ref}>
                   <TaskForm
-                    handleChange={handleChangeTaskValue}
-                    handleSubmit={(e) => handleAddCard(e, listId)}
+                    id={'card'}
+                    handleChange={handleChangeCardValue}
+                    handleSubmit={handleAddCard}
                     toggleState={() => setToggleForm(false)}
                     title={cardTitle}
-                    placeholder={'Dodaj listę zadań'}
                     onBlur={handleBlur}
                   />
                 </div>
-                : <TaskButton onClick={handleToggleTaskForm} />
+                : <TaskButton id={'card'} onClick={handleToggleTaskForm} />
               }
             </div>
           </div>
