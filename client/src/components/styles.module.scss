@@ -1,34 +1,23 @@
 @import '../scss/utils.scss';
 
-.container {
+.layout {
   width: 100%;
+  max-width: 100%;
+  height: 100vh;
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: 230px minmax(400px, 1fr);
-  grid-template-rows: 60px auto;
-  background-color: $light-grey;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
-
-.sidebarContainer {
-  grid-column: 1/2;
-  grid-row: 2/-1;
-}
-
-.topbarContainer {
-  grid-column: 1/-1;
-  grid-row: 1/2;
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
 }
 
 .pagesContainer {
-  grid-column: 2/-1;
-  grid-row: 2/-1;
+  overflow: hidden;
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  // padding: 2rem;
-}
-
-.historyContainer {
-  grid-column: 3/-1;
-  grid-row: 2/-1;
+  height: 100%;
 }

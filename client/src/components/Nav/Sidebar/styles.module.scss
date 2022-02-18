@@ -1,9 +1,14 @@
-.container {
+.sidebar {
   position: relative;
-  flex-grow: 1;
-  height: 100%;
-  // background-color: #fcfcfc;
+  width: 300px;
+  min-height: 100%;
+  background-color: #fcfcfc;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
+  transition: 0.1s ease-in-out;
+}
+
+.sidebarHide {
+  width: 70px;
 }
 
 .logo {
@@ -23,11 +28,16 @@
   align-items: center;
   justify-content: center;
   right: -15px;
-  top: 2rem;
+  top: 20px;
   background-color: rgb(230, 230, 230);
   border: 1px solid rgb(155, 155, 155);
   padding: 0.3rem;
   border-radius: 50%;
+  transition: 0.1s;
+}
+
+.navButtonHide {
+  transform: rotate(180deg);
 }
 
 .linksContainer {
@@ -37,10 +47,8 @@
 
 .navItem {
   position: relative;
-  // padding: 1rem;
   font-size: 1.1rem;
   margin-bottom: 1rem;
-  // text-align: right;
 }
 
 .navLink {
@@ -48,15 +56,15 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  text-align: right;
   font-weight: medium;
   padding: 0.5rem;
-  // opacity: 0.9;
   .icon {
-    margin-right: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  p {
+    margin-left: 1rem;
   }
 }
 
@@ -70,8 +78,5 @@
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    // width: 1.2rem;
-    // height: 3px;
-    // background-color: grey;
   }
 }

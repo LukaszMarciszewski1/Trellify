@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './styles.module.scss'
 
-const Topbar: React.FC = () => {
+const Appbar: React.FC = () => {
   return <div className={styles.container}></div>
 }
 
-export default Topbar
+export default Appbar
