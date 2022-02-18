@@ -30,7 +30,6 @@ dotenv.config()
       const dbInstance = getDB()
       console.log(dbInstance)
     })
-  // console.log(getDB())
     app.listen(process.env.PORT, () => {
       console.log('server is running')
     })

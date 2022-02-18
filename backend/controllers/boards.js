@@ -6,12 +6,9 @@ import Board from '../models/Board.js'
 import { Container } from 'typedi'
 const { Schema } = mongoose
 const router = express.Router()
-// .sort({sortIndex:0})
 export const getBoards = async (req, res) => {
   try {
     const boards = await Board.find()
-    // .exec()
-    // .sort('sortIndex')
     res.status(200).json(boards)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -28,7 +25,6 @@ export const getBoard = async (req, res) => {
           path: 'cards',
         },
       })
-      // .populate({ path: 'cards' })
       .exec()
     res.status(200).json(board)
   } catch (error) {
@@ -49,7 +45,6 @@ export const createBoard = async (req, res) => {
 
 export const updateBoard = async (req, res) => {
   const { id } = req.params
-  const { sourceIndex, destinationIndex, sortIndex, title, lists } = req.body
   try {
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(404).send(`No card with id: ${id}`)
@@ -60,8 +55,6 @@ export const updateBoard = async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: error.message })
   }
-  // if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No list with id: ${id}`);
-  // const updateBoard = await Board.findByIdAndUpdate(id, req.body, {new: true})
 }
 
 export default router

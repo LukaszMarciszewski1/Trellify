@@ -8,7 +8,7 @@ const router = express.Router()
 // .sort({sortIndex:0})
 export const getLists = async (req, res) => {
   try {
-    const lists = await List.find()
+    const lists = await List.find().sort( { timestamp : -1 } )
     // .populate({
     //   path: 'cards',
     // })
@@ -83,15 +83,9 @@ export const getUpdateList = async (req, res) => {
 
 export const getUpdateCards = async (req, res) => {
   const { id, index, sourceIndex, destinationIndex } = req.params
-  // const newItems = [...items];
-  // const [removed] = newItems.splice(source.index, 1);
-  // newItems.splice(destination.index, 0, removed);
-  // setItems(newItems)
-  // const list = await List.get(id);
   try {
     const lists = await List.find()
     const updateList = await List.findById(id)
-    // const newLists = [...lists]
     const newEl = [...lists]
     const [list] = newEl.splice(sourceIndex, 1)
     newEl.splice(destinationIndex, 0, list)

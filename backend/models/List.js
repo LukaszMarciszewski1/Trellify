@@ -60,7 +60,6 @@ ListSchema.statics.removeCard = (id, removedCardId) => {
   })
 }
 
-// ListSchema.virtual('id').get(() => this._id)
 const List = mongoose.model('List', ListSchema)
 
 export default List

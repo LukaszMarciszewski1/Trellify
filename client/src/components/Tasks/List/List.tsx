@@ -7,10 +7,6 @@ import TaskButton from '../TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton'
 import { BsThreeDots } from "react-icons/bs";
 
-
-
-
-
 import {
   useGetAllTasksQuery,
   // useAddTaskMutation,
@@ -31,9 +27,7 @@ import {
 } from "../../../store/api/cardsReducer";
 import Card from '../Card/Card';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
-
-
-
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   listId: string
@@ -44,7 +38,7 @@ type Props = {
   onClickDelete?: () => void
   onChangeTitle?: (value: any) => void
 }
-const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDelete, onChangeTitle }) => {
+const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const ref = useRef(null)
   const [addCard] = useAddCardMutation()
   const [deleteCard] = useDeleteCardMutation()
@@ -56,9 +50,8 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDe
   const [listTitle, setListTitle] = useState<string | undefined>(title)
   const [cardTitle, setCardTitle] = useState<string>('')
   const [toggleForm, setToggleForm] = useState<boolean>(false)
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [updateCards, setUpdateCards] = useState(cards)
-
+  const [toggleTitleList, setToggleTitleList] = useState<boolean>(false)
+  const [tasks, setTasks] = useState(cards)
 
   const handleToggleTaskForm = () => {
     setToggleForm(form => !form)
@@ -86,16 +79,18 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDe
     updateBoard({
       id: boardId,
     })
+
     setToggleForm(false)
     setCardTitle('')
   }
 
-  const handleClickOutside = () => { setToggleForm(false); setCardTitle(''); setIsOpen(false) }
+  const handleClickOutside = () => { setToggleForm(false); setCardTitle(''); }
   useOnClickOutside(ref, handleClickOutside)
 
   const handleBlur = () => {
     // setToggleForm(false)
     // setCardTitle('')
+    setToggleTitleList(false)
   }
   // const selectAllText = (e: { target: { select: () => void; }; }) => {
   //   e.target.select();
@@ -106,9 +101,9 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDe
       <Draggable draggableId={String(listId)} index={index}>
         {provided => (
           <div className={styles.container} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
-            <div className={styles.listHeader} onClick={() => setIsOpen(true)} ref={ref}>
+            <div className={styles.listHeader} onClick={() => setToggleTitleList(true)} ref={ref}>
               {
-                !isOpen ? <h2>{listTitle}</h2> :
+                toggleTitleList ?
                   <TextareaAutosize
                     id='list'
                     autoFocus={true}
@@ -116,8 +111,10 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDe
                     className={styles.textarea}
                     onChange={handleEditListTitle}
                     onFocus={(e) => e.target.select()}
+                    onBlur={handleBlur}
                     required
                   />
+                  : <h2>{listTitle}</h2>
               }
               <IconButton onClick={() => {
                 deleteList(listId);
@@ -126,7 +123,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDe
             </div>
             <Droppable droppableId={String(listId)} type="card">
               {provided => (
-                <div
+                <div className={styles.cardsContainer}
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
@@ -162,7 +159,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, onClickDe
                     onBlur={handleBlur}
                   />
                 </div>
-                : <TaskButton id={'card'} onClick={handleToggleTaskForm} />
+                : <TaskButton onClick={handleToggleTaskForm} name={'Dodaj nową kartę'} />
               }
             </div>
           </div>

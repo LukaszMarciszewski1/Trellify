@@ -14,11 +14,7 @@ export const connectDB = async () => {
   .then((res) => {
     console.log('connected to mongoDB')
     dbInstance = res.connection
-    // console.log(res.connection.collection('boards').insertOne({
-    //   title: 'new Board'
-    // }))
     const el = getDB()
-    // console.log(dbInstance)
   })
   .catch((error) => {
     console.log(`${error} did not connect`)

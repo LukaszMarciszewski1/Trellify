@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import Sidebar from './Sidebar/Sidebar'
+import Sidebar from './Nav/Sidebar/Sidebar'
 import Topbar from './Topbar/Topbar'
 import Notes from './Notes/Notes'
 

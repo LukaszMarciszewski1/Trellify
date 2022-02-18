@@ -24,16 +24,17 @@ import {
   useDeleteAllMutation,
 } from "../../../store/api/cardsReducer";
 
+import BoardHeader from '../BoardHeader/BoardHeader';
 import List from '../List/List'
 import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import TaskCard from '../Card/Card';
 import { setSourceMapRange } from 'typescript';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
-
+import { v4 as uuidv4 } from 'uuid';
 const Board: React.FC = () => {
 
-  const boardId = '620b88e199b7a598ce7b7187'
+  const boardId = '620e84aefbfd82dab66a83ed'
   const { data, error, isLoading } = useGetBoardQuery(boardId);
   // const { data: lists } = useGetAllTasksQuery();
   // const { data: cards } = useGetAllCardsQuery();
@@ -79,13 +80,20 @@ const Board: React.FC = () => {
     updateBoard({
       id: boardId,
     })
+
+    //adding an object faster by rendering
+    const newList = {
+      title: listTitle,
+      _id: uuidv4(),
+    }
+    const newState = [...lists, newList]
+    setLists(newState)
+    /////
     setListTitle('')
     setToggleForm(false)
   }
 
-
   if (isEmpty(board)) return <div>no data</div>
-
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type, draggableId } = result
     if (!destination) return;
@@ -106,7 +114,7 @@ const Board: React.FC = () => {
         })
       }
 
-      if (type === 'card' && data) {
+      if (type === 'card') {
         const newLists = [...lists]
         const sourceList = newLists.find((list: { _id: string; }) => list._id === source.droppableId)
         const destinationList = newLists.find((list: { _id: string; }) => list._id === destination.droppableId)
@@ -155,14 +163,16 @@ const Board: React.FC = () => {
 
           setLists(newState)
 
-          // updateCard({
-          //   id: draggableId,
-          //   listId: destination.droppableId
-          // })
+          updateCard({
+            id: draggableId,
+            listId: destination.droppableId
+          })
+          // update source list
           updateList({
             id: source.droppableId,
             cards: startCards
           })
+          //update destination list
           updateList({
             id: destination.droppableId,
             cards: finishCards
@@ -172,64 +182,60 @@ const Board: React.FC = () => {
     }
   }
 
-  const handleBlur = () => {
-
-    // setToggleForm(false)
-    // setListTitle('')
-  }
-
   if (isLoading) return <h2>Loading...</h2>
   if (error) return <h2>error</h2>
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className={styles.container}
-        style={{
-          backgroundImage: `url("https://s1.1zoom.me/big0/590/Germany_Morning_Mountains_Lake_Bavaria_Alps_597796_1280x650.jpg")`,
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-        }}>
-        <Droppable droppableId="all-list" direction="horizontal" type="list">
-          {provided => (
-            <div className={styles.listContainer}
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {
-                lists?.map((list: any, index: number) => (
-                  <List
-                    index={index}
-                    boardId={list.boardId}
-                    key={list._id}
-                    listId={list._id}
-                    title={list.title}
-                    cards={list.cards}
-                  />
-                ))
-              }
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-        <div >
-          {toggleForm ?
-            <div className={styles.formContainer} ref={ref}>
-              <TaskForm
-                id='list'
-                handleChange={handleChangeListValue}
-                handleSubmit={handleAddList}
-                toggleState={() => setToggleForm(false)}
-                onBlur={handleBlur}
-                title={listTitle}
-              />
-            </div>
-            : <TaskButton id={'list'} onClick={handleToggleTaskForm} />
-          }
+    <div className={styles.board}
+      style={{
+        backgroundImage: `url("https://s1.1zoom.me/big0/590/Germany_Morning_Mountains_Lake_Bavaria_Alps_597796_1280x650.jpg")`,
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+      }}
+    >
+      <BoardHeader />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className={styles.container}>
+          <Droppable droppableId="all-list" direction="horizontal" type="list">
+            {provided => (
+              <div className={styles.listContainer}
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {
+                  lists?.map((list: any, index: number) => (
+                    <List
+                      index={index}
+                      boardId={list.boardId}
+                      key={list._id}
+                      listId={list._id}
+                      title={list.title}
+                      cards={list.cards}
+                    />
+                  ))
+                }
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <div className={styles.actions}>
+            {toggleForm ?
+              <div className={styles.formContainer} ref={ref}>
+                <TaskForm
+                  id='list'
+                  handleChange={handleChangeListValue}
+                  handleSubmit={handleAddList}
+                  toggleState={() => setToggleForm(false)}
+                  title={listTitle}
+                />
+              </div>
+              : <TaskButton onClick={handleToggleTaskForm} name={'Dodaj listę zadań'} />
+            }
+          </div>
         </div>
-      </div>
-    </DragDropContext>
-
+      </DragDropContext>
+    </div>
   )
 }
 

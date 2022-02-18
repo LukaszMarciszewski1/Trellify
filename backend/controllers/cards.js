@@ -5,10 +5,9 @@ import List from '../models/List.js'
 import Board from '../models/Board.js'
 
 const router = express.Router()
-// .sort('sortIndex')
 export const getCards = async (req, res) => {
   try {
-    const card = await Card.find().sort('sortIndex')
+    const card = await Card.find().sort( { timestamp : -1 } )
     res.status(200).json(card)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -26,16 +25,11 @@ export const getCard = async (req, res) => {
 }
 
 export const createCard = async (req, res) => {
-  // const { id } = req.params
-  const { title, listId, boardId } = req.body
-  // const boardId = '61dddb69911985a8b66dbefe'
-  const newCard = new Card({ title, listId, boardId})
-  // let parentBoard = await Board.findById(boardId)
+  const { title, listId } = req.body
+  const newCard = new Card({ title, listId})
   let parentList = await List.findById(listId)
   try {
-    // parentBoard.cards = [...parentBoard.cards, newCard]
     parentList.cards = [...parentList.cards, newCard]
-    // parentBoard.save()
     parentList.save()
     newCard.save()
     res.status(201).json(newCard)
