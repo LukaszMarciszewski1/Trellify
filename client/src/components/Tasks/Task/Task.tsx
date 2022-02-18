@@ -17,7 +17,7 @@ import IconButton from '../../Details/IconButton/IconButton'
 import {
   useDeleteTaskMutation,
   useUpdateTaskMutation
-} from "../../../store/api/listsReducer";
+} from "../../../store/reducers/listsReducer";
 interface TaskProps {
   title: string
   description: string

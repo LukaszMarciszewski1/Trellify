@@ -5,16 +5,17 @@ import { cardsApi } from './cardsReducer'
 interface Board {
   _id: string
   title: string
-  lists: [],
-  cards: [],
-  listOrder: string[],
+  background: string
+  lists: []
+  cards: []
+  listOrder: string[]
 }
 
 type BoardResponse = Board[]
 
 export const boardApi = createApi({
   reducerPath: 'boardApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/'}),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/' }),
   tagTypes: ['Board'],
   endpoints: (builder) => ({
     getAllBoards: builder.query<BoardResponse, void>({

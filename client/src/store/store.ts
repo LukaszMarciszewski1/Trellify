@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 // import counterReducer from '../reducers/reducer'
-import { boardApi } from './api/boardsReducer'
-import { listApi } from './api/listsReducer'
-import { cardsApi } from './api/cardsReducer'
+import { boardApi } from './reducers/boardsReducer'
+import { listApi } from './reducers/listsReducer'
+import { cardsApi } from './reducers/cardsReducer'
 
 export const store = configureStore({
   reducer: {

@@ -13,21 +13,23 @@ import {
   useDeleteTaskMutation,
   useUpdateTaskMutation,
   // useAddCardMutation,
-} from "../../../store/api/listsReducer";
+} from "../../../store/reducers/listsReducer";
 import {
   useGetAllBoardsQuery,
   useGetBoardQuery,
   useUpdateBoardMutation,
-} from '../../../store/api/boardsReducer'
+} from '../../../store/reducers/boardsReducer'
 import {
   useGetAllCardsQuery,
   useAddCardMutation,
   useDeleteCardMutation,
   useUpdateCardMutation,
-} from "../../../store/api/cardsReducer";
+} from "../../../store/reducers/cardsReducer";
 import Card from '../Card/Card';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import { v4 as uuidv4 } from 'uuid';
+// import { MdOutlineAdd } from "react-icons/md";
+import { GrAdd } from "react-icons/gr";
 
 type Props = {
   listId: string
@@ -159,7 +161,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                     onBlur={handleBlur}
                   />
                 </div>
-                : <TaskButton onClick={handleToggleTaskForm} name={'Dodaj nową kartę'} />
+                : <TaskButton openForm={handleToggleTaskForm} name={'Dodaj nową kartę'} icon={<GrAdd />} />
               }
             </div>
           </div>

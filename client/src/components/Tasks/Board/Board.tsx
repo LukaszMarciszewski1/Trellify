@@ -7,7 +7,7 @@ import {
   useGetAllBoardsQuery,
   useGetBoardQuery,
   useUpdateBoardMutation,
-} from '../../../store/api/boardsReducer'
+} from '../../../store/reducers/boardsReducer'
 import {
   useGetAllTasksQuery,
   useAddTaskMutation,
@@ -15,29 +15,36 @@ import {
   useUpdateTaskMutation,
   useGetTaskQuery,
   useGetCardsQuery,
-} from "../../../store/api/listsReducer";
+} from "../../../store/reducers/listsReducer";
 import {
   useGetAllCardsQuery,
   useAddCardMutation,
   useDeleteCardMutation,
   useUpdateCardMutation,
   useDeleteAllMutation,
-} from "../../../store/api/cardsReducer";
+} from "../../../store/reducers/cardsReducer";
 
 import BoardHeader from '../BoardHeader/BoardHeader';
 import List from '../List/List'
 import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import TaskCard from '../Card/Card';
+import SideMenu from '../SideMenu/SideMenu';
+
+import { defaultBackground } from './localData';
+
 import { setSourceMapRange } from 'typescript';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import { v4 as uuidv4 } from 'uuid';
-const Board: React.FC = () => {
 
+
+import { GrAdd } from "react-icons/gr";
+import { BsCardImage } from "react-icons/bs";
+
+
+const Board: React.FC = () => {
   const boardId = '620e84aefbfd82dab66a83ed'
   const { data, error, isLoading } = useGetBoardQuery(boardId);
-  // const { data: lists } = useGetAllTasksQuery();
-  // const { data: cards } = useGetAllCardsQuery();
   const [addList] = useAddTaskMutation()
   const [deleteList] = useDeleteTaskMutation()
   const [updateList] = useUpdateTaskMutation()
@@ -45,26 +52,29 @@ const Board: React.FC = () => {
   const [updateBoard] = useUpdateBoardMutation()
 
   const [listTitle, setListTitle] = useState<string>('');
-  const [toggleForm, setToggleForm] = useState<boolean>(false)
+  const [openForm, setOpenForm] = useState<boolean>(false)
+  const [openMenu, setOpenMenu] = useState<boolean>(false)
+  const [backgroundUrl, setBackgroundUrl] = useState<string>('')
 
   const [board, setBoard] = useState({} as any)
   const [lists, setLists] = useState([] as any)
 
   const ref = useRef(null)
-  const handleClickOutside = () => { setToggleForm(false); setListTitle('') }
-  useOnClickOutside(ref, handleClickOutside)
+  const closeForm = () => { setOpenForm(false); setListTitle('') }
+  useOnClickOutside(ref, closeForm)
+
+  const handleToggleTaskForm = () => setOpenForm(true)
 
   useEffect(() => {
     if (data) {
       const newBoard = { ...data }
+      const boardBG = newBoard.background === '' ? defaultBackground : newBoard.background
       setBoard(newBoard)
       setLists(newBoard.lists)
+      setBackgroundUrl(boardBG)
     }
   }, [data]);
 
-  const handleToggleTaskForm = () => {
-    setToggleForm(form => !form)
-  }
 
   const handleChangeListValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
@@ -82,15 +92,15 @@ const Board: React.FC = () => {
     })
 
     //adding an object faster by rendering
-    const newList = {
-      title: listTitle,
-      _id: uuidv4(),
-    }
-    const newState = [...lists, newList]
-    setLists(newState)
+    // const newList = {
+    //   title: listTitle,
+    //   _id: uuidv4(),
+    // }
+    // const newState = [...lists, newList]
+    // setLists(newState)
     /////
     setListTitle('')
-    setToggleForm(false)
+    setOpenForm(false)
   }
 
   if (isEmpty(board)) return <div>no data</div>
@@ -182,19 +192,34 @@ const Board: React.FC = () => {
     }
   }
 
+  const boardBackgroundStyle = {
+    backgroundColor: backgroundUrl,
+    backgroundImage: `url(${backgroundUrl})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center'
+  }
+
   if (isLoading) return <h2>Loading...</h2>
   if (error) return <h2>error</h2>
 
   return (
     <div className={styles.board}
-      style={{
-        backgroundImage: `url("https://s1.1zoom.me/big0/590/Germany_Morning_Mountains_Lake_Bavaria_Alps_597796_1280x650.jpg")`,
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-      }}
+      style={boardBackgroundStyle}
     >
-      <BoardHeader />
+      <BoardHeader
+        name={'Zmień tło'}
+        icon={<BsCardImage />}
+        onClick={() => setOpenMenu(true)}
+      />
+      {
+        openMenu ?
+          <SideMenu
+            boardId={boardId}
+            setBackgroundUrl={setBackgroundUrl}
+            closeMenu={() => setOpenMenu(false)}
+          /> : null
+      }
       <DragDropContext onDragEnd={onDragEnd}>
         <div className={styles.container}>
           <Droppable droppableId="all-list" direction="horizontal" type="list">
@@ -220,17 +245,17 @@ const Board: React.FC = () => {
             )}
           </Droppable>
           <div className={styles.actions}>
-            {toggleForm ?
+            {openForm ?
               <div className={styles.formContainer} ref={ref}>
                 <TaskForm
                   id='list'
                   handleChange={handleChangeListValue}
                   handleSubmit={handleAddList}
-                  toggleState={() => setToggleForm(false)}
+                  toggleState={() => setOpenForm(false)}
                   title={listTitle}
                 />
               </div>
-              : <TaskButton onClick={handleToggleTaskForm} name={'Dodaj listę zadań'} />
+              : <TaskButton openForm={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GrAdd />} />
             }
           </div>
         </div>

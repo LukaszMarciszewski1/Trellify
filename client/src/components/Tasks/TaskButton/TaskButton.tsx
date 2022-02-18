@@ -2,17 +2,17 @@ import React from 'react'
 import styles from './styles.module.scss'
 
 type ButtonProps = {
-  // id?: string
+  icon?: any
   name: string
-  onClick: () => void
+  openForm: () => void
 }
 
-const TaskButton: React.FC<ButtonProps> = ({onClick, name}) => {
+const TaskButton: React.FC<ButtonProps> = ({ openForm, name, icon }) => {
 
   // const name = id === 'list' ? 'Dodaj listę zadań' : 'Dodaj nową kartę'
   return (
-    <button className={styles.taskButton} onClick={onClick}>
-      +
+    <button className={styles.taskButton} onClick={openForm}>
+      <div className={styles.icon}>{icon}</div>
       {name}
     </button>
   )
