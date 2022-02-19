@@ -8,7 +8,9 @@ const boardId = '620b88e199b7a598ce7b7187'
 
 const TasksPage: React.FC = () => {
   return (
-    < Board />
+    <>
+      < Board />
+    </>
   )
 }
 

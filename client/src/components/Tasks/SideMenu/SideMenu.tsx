@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import * as FaIcons from 'react-icons/fa';
-import * as AiIcons from 'react-icons/ai';
-import { Link } from 'react-router-dom';
+// import * as FaIcons from 'react-icons/fa';
+// import * as AiIcons from 'react-icons/ai';
+// import { Link } from 'react-router-dom';
 import styles from './styles.module.scss'
 
 import getImages from '../../../store/api/imageApi';
@@ -23,20 +23,18 @@ type SideMenuProps = {
 
 const SideMenu: React.FC<SideMenuProps> = ({ closeMenu, setBackgroundUrl, boardId }) => {
   const [updateBoard] = useUpdateBoardMutation()
-  const [optionColors, setOptionsColors] = useState(false)
-  const [optionImages, setOptionsImages] = useState(false)
+  const [optionColors, setOptionsColors] = useState<boolean>(false)
+  const [optionImages, setOptionsImages] = useState<boolean>(false)
   const [images, setImages] = useState<any>([])
 
   const getListOfImages = async () => {
     const listOfImages = await getImages()
     setImages(listOfImages)
-    console.log(listOfImages)
   }
 
   useEffect(() => {
     getListOfImages()
   }, [])
-
 
   return (
     <div className={styles.sideMenu}>

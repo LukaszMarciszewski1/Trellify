@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef, PropsWithoutRef } from 'react'
+import React, { useState, useRef } from 'react'
 import styles from './styles.module.scss'
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -8,26 +8,26 @@ import IconButton from '../../Details/IconButton/IconButton'
 import { BsThreeDots } from "react-icons/bs";
 
 import {
-  useGetAllTasksQuery,
+  // useGetAllTasksQuery,
   // useAddTaskMutation,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
   // useAddCardMutation,
 } from "../../../store/reducers/listsReducer";
 import {
-  useGetAllBoardsQuery,
-  useGetBoardQuery,
+  // useGetAllBoardsQuery,
+  // useGetBoardQuery,
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 import {
-  useGetAllCardsQuery,
+  // useGetAllCardsQuery,
   useAddCardMutation,
   useDeleteCardMutation,
   useUpdateCardMutation,
 } from "../../../store/reducers/cardsReducer";
 import Card from '../Card/Card';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 // import { MdOutlineAdd } from "react-icons/md";
 import { GrAdd } from "react-icons/gr";
 
@@ -39,8 +39,9 @@ type Props = {
   cards: []
   onClickDelete?: () => void
   onChangeTitle?: (value: any) => void
+  openCardDetails: (value: boolean) => void
 }
-const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
+const List: React.FC<Props> = ({ title, listId, index, cards, boardId, openCardDetails }) => {
   const ref = useRef(null)
   const [addCard] = useAddCardMutation()
   const [deleteCard] = useDeleteCardMutation()
@@ -128,6 +129,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                         title={card.title}
                         updateDate={card.updateDate}
                         // listId={listId}
+                        openCardDetails={() => openCardDetails(true)}
                         onClickDelete={() => {
                           deleteCard(card._id);
                           updateBoard({ id: boardId })
@@ -148,7 +150,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                     handleSubmit={handleAddCard}
                     closeForm={() => setOpenCardForm(false)}
                     title={cardTitle}
-                    // onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   />
                 </div>
                 : <TaskButton openForm={() => setOpenCardForm(true)} name={'Dodaj nową kartę'} icon={<GrAdd />} />

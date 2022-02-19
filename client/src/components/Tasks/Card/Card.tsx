@@ -1,27 +1,25 @@
 import React from 'react'
-import TextareaAutosize from 'react-textarea-autosize';
+// import TextareaAutosize from 'react-textarea-autosize';
 import styles from './styles.module.scss'
 import { Draggable } from 'react-beautiful-dnd';
+
 type Props = {
   title: string
   listId?: string
-  // boardId: string
   cardId: string
   index: number
   updateDate?: Date
-  onClickDelete?: () => void
+  onClickDelete: () => void
+  openCardDetails: () => void
 }
 
-const Card: React.FC<Props> = ({ title, cardId, index, onClickDelete}) => {
+const Card: React.FC<Props> = ({ title, cardId, index, onClickDelete, openCardDetails }) => {
   return (
     <Draggable draggableId={String(cardId)} index={index}>
       {provided => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-          <div className={styles.card}>
+          <div className={styles.card} onClick={openCardDetails}>
             <h3>{title}</h3>
-            {/* <p>listId: {listId}</p>
-            <p>cardId: {id}</p>
-            <p>{updateDate}</p> */}
             <button onClick={onClickDelete}>X</button>
           </div>
         </div>

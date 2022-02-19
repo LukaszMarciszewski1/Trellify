@@ -1,32 +1,32 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react'
 import styles from './styles.module.scss'
-import TextareaAutosize from 'react-textarea-autosize';
-import dayjs from 'dayjs';
-import { nowDate } from '../../../hooks/nowDate';
-import deleteIcon from '../../../assets/icons/close.svg'
-import editIcon from '../../../assets/icons/mode.svg'
-import doneIcon from '../../../assets/icons/done.svg'
-import dots from '../../../assets/icons/dots.svg'
-import showMoreBtn from '../../../assets/icons/chevron-down.svg'
-import showLessBtn from '../../../assets/icons/chevron-up.svg'
-import moveIcon from '../../../assets/icons/move.svg'
-import useOnClickOutside from '../../../hooks/useOnClickOutside';
-import Button from '../../Details/Button/Button'
-import IconButton from '../../Details/IconButton/IconButton'
+// import TextareaAutosize from 'react-textarea-autosize';
+// import dayjs from 'dayjs';
+// import { nowDate } from '../../../hooks/nowDate';
+// import deleteIcon from '../../../assets/icons/close.svg'
+// import editIcon from '../../../assets/icons/mode.svg'
+// import doneIcon from '../../../assets/icons/done.svg'
+// import dots from '../../../assets/icons/dots.svg'
+// import showMoreBtn from '../../../assets/icons/chevron-down.svg'
+// import showLessBtn from '../../../assets/icons/chevron-up.svg'
+// import moveIcon from '../../../assets/icons/move.svg'
+// import useOnClickOutside from '../../../hooks/useOnClickOutside';
+// import Button from '../../Details/Button/Button'
+// import IconButton from '../../Details/IconButton/IconButton'
 
-import {
-  useDeleteTaskMutation,
-  useUpdateTaskMutation
-} from "../../../store/reducers/listsReducer";
-interface TaskProps {
-  title: string
-  description: string
-  completed: number
-  deadline: string
-  taskID: string
-  createdDate?: Date
-  // nowDate?: Date
-}
+// import {
+//   useDeleteTaskMutation,
+//   useUpdateTaskMutation
+// } from "../../../store/reducers/listsReducer";
+// interface TaskProps {
+//   title: string
+//   description: string
+//   completed: number
+//   deadline: string
+//   taskID: string
+//   createdDate?: Date
+//   // nowDate?: Date
+// }
 
 const SAVE_LABEL = 'zapisz'
 

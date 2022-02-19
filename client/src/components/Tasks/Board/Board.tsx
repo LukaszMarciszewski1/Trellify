@@ -1,41 +1,43 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react'
-import { isEmpty, cloneDeep } from 'lodash'
+import React, { useEffect, useState, useRef } from 'react'
+// import { isEmpty, cloneDeep } from 'lodash'
 import styles from './styles.module.scss'
 import { DragDropContext, Droppable, Draggable, DropResult, resetServerContext } from 'react-beautiful-dnd'
-import { renderToString } from 'react-dom/server';
+// import { renderToString } from 'react-dom/server';
 import {
-  useGetAllBoardsQuery,
+  // useGetAllBoardsQuery,
   useGetBoardQuery,
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 import {
-  useGetAllTasksQuery,
+  // useGetAllTasksQuery,
   useAddTaskMutation,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
-  useGetTaskQuery,
-  useGetCardsQuery,
+  // useGetTaskQuery,
+  // useGetCardsQuery,
 } from "../../../store/reducers/listsReducer";
 import {
-  useGetAllCardsQuery,
-  useAddCardMutation,
-  useDeleteCardMutation,
+  // useGetAllCardsQuery,
+  // useAddCardMutation,
+  // useDeleteCardMutation,
   useUpdateCardMutation,
-  useDeleteAllMutation,
+  // useDeleteAllMutation,
 } from "../../../store/reducers/cardsReducer";
 
 import BoardHeader from '../BoardHeader/BoardHeader';
 import List from '../List/List'
 import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
-import TaskCard from '../Card/Card';
+// import TaskCard from '../Card/Card';
 import SideMenu from '../SideMenu/SideMenu';
+import CardDetails from '../CardDetails/CardDetails';
+// import CardModal from '../CardDetails/CardModal/CardModal';
 
 import { defaultBackground } from '../localData';
 
-import { setSourceMapRange } from 'typescript';
+// import { setSourceMapRange } from 'typescript';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 
 
 import { GrAdd } from "react-icons/gr";
@@ -47,23 +49,29 @@ import { BsCardImage } from "react-icons/bs";
 const Board: React.FC = () => {
   const boardId = '620e84aefbfd82dab66a83ed'
   const { data, error, isLoading } = useGetBoardQuery(boardId);
+
   const [addList] = useAddTaskMutation()
   const [deleteList] = useDeleteTaskMutation()
   const [updateList] = useUpdateTaskMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
-  const ref = useRef(null)
 
+  const refForm = useRef(null)
+  const refCardModal = useRef(null)
+
+  const [backgroundUrl, setBackgroundUrl] = useState<string>('')
   const [listTitle, setListTitle] = useState<string>('');
   const [openForm, setOpenForm] = useState<boolean>(false)
   const [openMenu, setOpenMenu] = useState<boolean>(false)
-  const [backgroundUrl, setBackgroundUrl] = useState<string>('')
+  const [openCardDetails, setOpenCardDetails] = useState<boolean>(false)
+
+  console.log(openCardDetails)
 
   const [board, setBoard] = useState({} as any)
   const [lists, setLists] = useState([] as any)
 
   const closeForm = () => { setOpenForm(false); setListTitle('') }
-  useOnClickOutside(ref, closeForm)
+  useOnClickOutside(refForm, closeForm)
 
   useEffect(() => {
     if (data) {
@@ -220,6 +228,9 @@ const Board: React.FC = () => {
             closeMenu={() => setOpenMenu(false)}
           /> : null
       }
+      {
+        openCardDetails ? <CardDetails setOpenCardDetails={() => setOpenCardDetails(false)} /> : null
+      }
       <DragDropContext onDragEnd={onDragEnd}>
         <div className={styles.container}>
           <Droppable droppableId="all-list" direction="horizontal" type="list">
@@ -237,6 +248,7 @@ const Board: React.FC = () => {
                       listId={list._id}
                       title={list.title}
                       cards={list.cards}
+                      openCardDetails={setOpenCardDetails}
                     />
                   ))
                 }
@@ -246,7 +258,7 @@ const Board: React.FC = () => {
           </Droppable>
           <div className={styles.actions}>
             {openForm ?
-              <div className={styles.formContainer} ref={ref}>
+              <div className={styles.formContainer} ref={refForm}>
                 <TaskForm
                   id='list'
                   handleChange={handleChangeListValue}
