@@ -63,9 +63,7 @@ const Board: React.FC = () => {
   const [listTitle, setListTitle] = useState<string>('');
   const [openForm, setOpenForm] = useState<boolean>(false)
   const [openMenu, setOpenMenu] = useState<boolean>(false)
-  const [openCardDetails, setOpenCardDetails] = useState<boolean>(false)
-
-  console.log(openCardDetails)
+  const [openCardDetails, setOpenCardDetails] = useState(false)
 
   const [board, setBoard] = useState({} as any)
   const [lists, setLists] = useState([] as any)
@@ -109,6 +107,11 @@ const Board: React.FC = () => {
     /////
     setListTitle('')
     setOpenForm(false)
+  }
+
+  const onDragStart = () => {
+    console.log(openCardDetails)
+    if (!openCardDetails) return
   }
 
   // if (isEmpty(board)) return <div>no data</div>
@@ -228,10 +231,13 @@ const Board: React.FC = () => {
             closeMenu={() => setOpenMenu(false)}
           /> : null
       }
-      {
+      {/* {
         openCardDetails ? <CardDetails setOpenCardDetails={() => setOpenCardDetails(false)} /> : null
-      }
-      <DragDropContext onDragEnd={onDragEnd}>
+      } */}
+      <DragDropContext
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+      >
         <div className={styles.container}>
           <Droppable droppableId="all-list" direction="horizontal" type="list">
             {provided => (
@@ -248,7 +254,8 @@ const Board: React.FC = () => {
                       listId={list._id}
                       title={list.title}
                       cards={list.cards}
-                      openCardDetails={setOpenCardDetails}
+                    // cardIsOpen={openCardDetails}
+                    // openCardDetails={setOpenCardDetails}
                     />
                   ))
                 }

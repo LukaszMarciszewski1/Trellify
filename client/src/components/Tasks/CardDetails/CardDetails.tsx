@@ -8,10 +8,11 @@ import useOnClickOutside from '../../../hooks/useOnClickOutside'
 import { BsXLg } from 'react-icons/bs';
 
 type Props = {
+  title: string
   setOpenCardDetails: () => void
 }
 
-const CardDetails: React.FC<Props> = ({ setOpenCardDetails }) => {
+const CardDetails: React.FC<Props> = ({ title, setOpenCardDetails }) => {
   const ref = useRef(null)
 
 
@@ -25,7 +26,7 @@ const CardDetails: React.FC<Props> = ({ setOpenCardDetails }) => {
           <TextareaAutosize
             id='list'
             autoFocus={true}
-            value={'sfdsfsdf'}
+            value={title}
             className={styles.textarea}
             onChange={() => console.log('change title')}
             onFocus={(e) => e.target.select()}

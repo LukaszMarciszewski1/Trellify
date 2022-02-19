@@ -39,9 +39,9 @@ type Props = {
   cards: []
   onClickDelete?: () => void
   onChangeTitle?: (value: any) => void
-  openCardDetails: (value: boolean) => void
+  // openCardDetails: (value: boolean) => void
 }
-const List: React.FC<Props> = ({ title, listId, index, cards, boardId, openCardDetails }) => {
+const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const ref = useRef(null)
   const [addCard] = useAddCardMutation()
   const [deleteCard] = useDeleteCardMutation()
@@ -54,6 +54,10 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, openCardD
   const [cardTitle, setCardTitle] = useState<string>('')
   const [openCardForm, setOpenCardForm] = useState<boolean>(false)
   const [openTitleForm, setOpenTitleForm] = useState<boolean>(false)
+
+  const [dragDisabled, setDragDisabled] = useState(false)
+
+  const [can, setCan] = useState(false)
 
   const handleChangeCardValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card') setCardTitle(e.target.value)
@@ -91,7 +95,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, openCardD
 
   return (
     <div>
-      <Draggable draggableId={String(listId)} index={index}>
+      <Draggable draggableId={String(listId)} index={index} isDragDisabled={dragDisabled}>
         {provided => (
           <div className={styles.container} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
             <div className={styles.listHeader} onClick={() => setOpenTitleForm(true)} ref={ref}>
@@ -128,8 +132,9 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId, openCardD
                         cardId={card._id}
                         title={card.title}
                         updateDate={card.updateDate}
+                        dragDisabled={setDragDisabled}
                         // listId={listId}
-                        openCardDetails={() => openCardDetails(true)}
+                        // openCardDetails={() => openCardDetails(true)}
                         onClickDelete={() => {
                           deleteCard(card._id);
                           updateBoard({ id: boardId })
