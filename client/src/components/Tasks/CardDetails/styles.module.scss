@@ -1,7 +1,11 @@
 @import '../../../scss/utils.scss';
 
+.window {
+  // padding: 4rem;
+}
+
 .overlay {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   width: 100%;
@@ -9,12 +13,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
   padding: 1rem;
 }
 
 .container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 600px;
   max-width: 600px;
   height: 600px;
@@ -22,6 +30,10 @@
   background-color: white;
   border-radius: 0.5rem;
   overflow: hidden;
+  z-index: 11;
+  @media (max-width: 768px) {
+    max-width: 400px;
+  }
 }
 
 .cardHeader {

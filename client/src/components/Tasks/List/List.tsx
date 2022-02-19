@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styles from './styles.module.scss'
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -54,10 +54,9 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const [cardTitle, setCardTitle] = useState<string>('')
   const [openCardForm, setOpenCardForm] = useState<boolean>(false)
   const [openTitleForm, setOpenTitleForm] = useState<boolean>(false)
+  const [dragDisabled, setDragDisabled] = useState<boolean>(false)
 
-  const [dragDisabled, setDragDisabled] = useState(false)
 
-  const [can, setCan] = useState(false)
 
   const handleChangeCardValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card') setCardTitle(e.target.value)
@@ -69,6 +68,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
       id: listId,
       title: e.target.value
     })
+    
   }
 
   const handleAddCard = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -92,6 +92,9 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   // const selectAllText = (e: { target: { select: () => void; }; }) => {
   //   e.target.select();
   // };
+  useEffect(() => {
+    console.log(cardTitle)
+  }, [cardTitle])
 
   return (
     <div>
@@ -130,11 +133,12 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                         index={index}
                         key={card._id}
                         cardId={card._id}
+                        boardId={boardId}
                         title={card.title}
                         updateDate={card.updateDate}
+                        nameList={listTitle}
                         dragDisabled={setDragDisabled}
                         // listId={listId}
-                        // openCardDetails={() => openCardDetails(true)}
                         onClickDelete={() => {
                           deleteCard(card._id);
                           updateBoard({ id: boardId })

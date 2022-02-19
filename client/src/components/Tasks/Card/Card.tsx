@@ -5,7 +5,15 @@ import { Draggable } from 'react-beautiful-dnd';
 
 import CardDetails from '../CardDetails/CardDetails';
 
+import {
+  // useGetAllCardsQuery,
+  useAddCardMutation,
+  useDeleteCardMutation,
+  useUpdateCardMutation,
+} from "../../../store/reducers/cardsReducer";
+
 type Props = {
+  boardId: string
   title: string
   listId?: string
   cardId: string
@@ -13,20 +21,18 @@ type Props = {
   updateDate?: Date
   onClickDelete: () => void
   dragDisabled: (value: boolean) => void
+  nameList: string | undefined
   // setOpenCardDetails: () => void
   // openCardDetails: () => void
 }
 
-const Card: React.FC<Props> = ({ title, cardId, index, onClickDelete, dragDisabled }) => {
+const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, dragDisabled, nameList }) => {
   const [openCardDetails, setOpenCardDetails] = useState<boolean>(false)
-
-  const handleOpenCardDetails = () => setOpenCardDetails(true)
-
 
   return (
     <div>
       {
-        openCardDetails ? <CardDetails title={title} setOpenCardDetails={() => {
+        openCardDetails ? <CardDetails nameList={nameList} cardId={cardId} title={title} boardId={boardId} setOpenCardDetails={() => {
           setOpenCardDetails(false)
           dragDisabled(false)
         }} /> : null
