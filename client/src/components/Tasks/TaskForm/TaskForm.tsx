@@ -10,12 +10,12 @@ type Props = {
   id: string
   handleSubmit: (value: any) => void
   handleChange: (value: any) => void
-  toggleState?: () => void
-  onBlur?: () => void
+  closeForm?: () => void
+  // onBlur?: () => void
   title: string
 }
 
-const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, toggleState, title, onBlur, id }) => {
+const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, closeForm, title, id }) => {
 
   const placeholder = id === 'list' ? 'Dodaj listę zadań' : 'Dodaj nową kartę'
 
@@ -29,12 +29,12 @@ const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, toggleState, ti
         className={styles.textarea}
         autoFocus
         onChange={handleChange}
-        onBlur={onBlur}
+        // onBlur={onBlur}
         required />
       <div className={styles.actions}>
         <Button onClick={handleSubmit} title={'Dodaj'} />
         <div style={{ marginRight: '1rem' }} />
-        <IconButton onClick={toggleState}><BsXLg /></IconButton>
+        <IconButton onClick={closeForm}><BsXLg /></IconButton>
       </div>
     </form>
   )

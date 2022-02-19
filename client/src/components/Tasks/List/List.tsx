@@ -51,13 +51,8 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
 
   const [listTitle, setListTitle] = useState<string | undefined>(title)
   const [cardTitle, setCardTitle] = useState<string>('')
-  const [toggleForm, setToggleForm] = useState<boolean>(false)
-  const [toggleTitleList, setToggleTitleList] = useState<boolean>(false)
-  const [tasks, setTasks] = useState(cards)
-
-  const handleToggleTaskForm = () => {
-    setToggleForm(form => !form)
-  }
+  const [openCardForm, setOpenCardForm] = useState<boolean>(false)
+  const [openTitleForm, setOpenTitleForm] = useState<boolean>(false)
 
   const handleChangeCardValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card') setCardTitle(e.target.value)
@@ -82,18 +77,13 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
       id: boardId,
     })
 
-    setToggleForm(false)
+    setOpenCardForm(false)
     setCardTitle('')
   }
 
-  const handleClickOutside = () => { setToggleForm(false); setCardTitle(''); }
-  useOnClickOutside(ref, handleClickOutside)
+  const handleCloseForm = () => { setOpenCardForm(false); setCardTitle(''); }
+  useOnClickOutside(ref, handleCloseForm)
 
-  const handleBlur = () => {
-    // setToggleForm(false)
-    // setCardTitle('')
-    setToggleTitleList(false)
-  }
   // const selectAllText = (e: { target: { select: () => void; }; }) => {
   //   e.target.select();
   // };
@@ -103,9 +93,9 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
       <Draggable draggableId={String(listId)} index={index}>
         {provided => (
           <div className={styles.container} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
-            <div className={styles.listHeader} onClick={() => setToggleTitleList(true)} ref={ref}>
+            <div className={styles.listHeader} onClick={() => setOpenTitleForm(true)} ref={ref}>
               {
-                toggleTitleList ?
+                openTitleForm ?
                   <TextareaAutosize
                     id='list'
                     autoFocus={true}
@@ -113,7 +103,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                     className={styles.textarea}
                     onChange={handleEditListTitle}
                     onFocus={(e) => e.target.select()}
-                    onBlur={handleBlur}
+                    onBlur={() => setOpenTitleForm(false)}
                     required
                   />
                   : <h2>{listTitle}</h2>
@@ -150,18 +140,18 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
               )}
             </Droppable>
             <div className={styles.actionsList}>
-              {toggleForm ?
+              {openCardForm ?
                 <div ref={ref}>
                   <TaskForm
                     id={'card'}
                     handleChange={handleChangeCardValue}
                     handleSubmit={handleAddCard}
-                    toggleState={() => setToggleForm(false)}
+                    closeForm={() => setOpenCardForm(false)}
                     title={cardTitle}
-                    onBlur={handleBlur}
+                    // onBlur={handleBlur}
                   />
                 </div>
-                : <TaskButton openForm={handleToggleTaskForm} name={'Dodaj nową kartę'} icon={<GrAdd />} />
+                : <TaskButton openForm={() => setOpenCardForm(true)} name={'Dodaj nową kartę'} icon={<GrAdd />} />
               }
             </div>
           </div>

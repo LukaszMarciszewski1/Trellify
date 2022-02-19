@@ -22,7 +22,7 @@ export const boardApi = createApi({
       query: () => `boards`,
       providesTags: ['Board'],
     }),
-    getBoard: builder.query({
+    getBoard: builder.query<Board, any>({
       query: (id) => `boards/${id}`,
       providesTags: ['Board'],
     }),

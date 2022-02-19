@@ -31,7 +31,7 @@ import TaskForm from '../TaskForm/TaskForm'
 import TaskCard from '../Card/Card';
 import SideMenu from '../SideMenu/SideMenu';
 
-import { defaultBackground } from './localData';
+import { defaultBackground } from '../localData';
 
 import { setSourceMapRange } from 'typescript';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
@@ -42,6 +42,8 @@ import { GrAdd } from "react-icons/gr";
 import { BsCardImage } from "react-icons/bs";
 
 
+
+
 const Board: React.FC = () => {
   const boardId = '620e84aefbfd82dab66a83ed'
   const { data, error, isLoading } = useGetBoardQuery(boardId);
@@ -50,6 +52,7 @@ const Board: React.FC = () => {
   const [updateList] = useUpdateTaskMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
+  const ref = useRef(null)
 
   const [listTitle, setListTitle] = useState<string>('');
   const [openForm, setOpenForm] = useState<boolean>(false)
@@ -59,11 +62,8 @@ const Board: React.FC = () => {
   const [board, setBoard] = useState({} as any)
   const [lists, setLists] = useState([] as any)
 
-  const ref = useRef(null)
   const closeForm = () => { setOpenForm(false); setListTitle('') }
   useOnClickOutside(ref, closeForm)
-
-  const handleToggleTaskForm = () => setOpenForm(true)
 
   useEffect(() => {
     if (data) {
@@ -103,7 +103,7 @@ const Board: React.FC = () => {
     setOpenForm(false)
   }
 
-  if (isEmpty(board)) return <div>no data</div>
+  // if (isEmpty(board)) return <div>no data</div>
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type, draggableId } = result
     if (!destination) return;
@@ -251,7 +251,7 @@ const Board: React.FC = () => {
                   id='list'
                   handleChange={handleChangeListValue}
                   handleSubmit={handleAddList}
-                  toggleState={() => setOpenForm(false)}
+                  closeForm={() => setOpenForm(false)}
                   title={listTitle}
                 />
               </div>
