@@ -3,7 +3,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #e4e4e4;
+  // background-color: #e4e4e4;
 }
 
 .textarea {
@@ -16,12 +16,12 @@
   border: none;
   -webkit-box-shadow: $box-shadow;
   box-shadow: $box-shadow;
-  &:focus{
+  &:focus {
     outline: none;
   }
 }
 
-.actions {
+.actionsForm {
   display: flex;
   margin-top: 0.5rem;
   overflow: hidden;

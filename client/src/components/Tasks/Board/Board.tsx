@@ -271,10 +271,10 @@ const Board: React.FC = () => {
                   handleChange={handleChangeListValue}
                   handleSubmit={handleAddList}
                   closeForm={() => setOpenForm(false)}
-                  title={listTitle}
+                  value={listTitle}
                 />
               </div>
-              : <TaskButton openForm={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GrAdd />} />
+              : <TaskButton openForm={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GrAdd style={{ margin: '.4rem 0' }} />} />
             }
           </div>
         </div>

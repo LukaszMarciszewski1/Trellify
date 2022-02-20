@@ -37,8 +37,6 @@ const Sidebar: React.FC = () => {
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  console.log(sidebarOpen)
-
   return (
     <nav
       // className={styles.container}

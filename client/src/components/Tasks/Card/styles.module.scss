@@ -1,6 +1,7 @@
 @import '../../../scss/utils.scss';
 .card {
   width: 100%;
+  height: auto;
   padding: 1rem;
   margin-bottom: 8px;
   -webkit-box-shadow: $box-shadow;
@@ -16,5 +17,20 @@
     font-size: 1rem;
     color: rgb(24, 24, 24);
     font-weight: normal;
+    overflow-wrap: break-word;
   }
+}
+
+.textarea {
+  min-height: 30px;
+  width: 100%;
+  resize: none;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 1.2rem;
+  padding: 0.3rem;
+  background-color: transparent;
+  border: none;
+  margin-right: 2rem;
+  color: rgb(61, 61, 61);
 }

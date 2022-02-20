@@ -30,6 +30,7 @@ import useOnClickOutside from '../../../hooks/useOnClickOutside';
 // import { v4 as uuidv4 } from 'uuid';
 // import { MdOutlineAdd } from "react-icons/md";
 import { GrAdd } from "react-icons/gr";
+import { dangerouslyDisableDefaultSrc } from 'helmet/dist/middlewares/content-security-policy';
 
 type Props = {
   listId: string
@@ -37,8 +38,7 @@ type Props = {
   index: number
   boardId: string
   cards: []
-  onClickDelete?: () => void
-  onChangeTitle?: (value: any) => void
+
   // openCardDetails: (value: boolean) => void
 }
 const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
@@ -68,7 +68,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
       id: listId,
       title: e.target.value
     })
-    
+
   }
 
   const handleAddCard = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -92,9 +92,6 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   // const selectAllText = (e: { target: { select: () => void; }; }) => {
   //   e.target.select();
   // };
-  useEffect(() => {
-    console.log(cardTitle)
-  }, [cardTitle])
 
   return (
     <div>
@@ -104,17 +101,19 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
             <div className={styles.listHeader} onClick={() => setOpenTitleForm(true)} ref={ref}>
               {
                 openTitleForm ?
-                  <TextareaAutosize
-                    id='list'
-                    autoFocus={true}
-                    value={listTitle}
-                    className={styles.textarea}
-                    onChange={handleEditListTitle}
-                    onFocus={(e) => e.target.select()}
-                    onBlur={() => setOpenTitleForm(false)}
-                    required
-                  />
-                  : <h2>{listTitle}</h2>
+                  <div className={styles.textWrapper}>
+                    <TextareaAutosize
+                      id='list'
+                      autoFocus={true}
+                      value={listTitle}
+                      className={styles.textarea}
+                      onChange={handleEditListTitle}
+                      onFocus={(e) => e.target.select()}
+                      onBlur={() => setOpenTitleForm(false)}
+                      required
+                    />
+                  </div>
+                  : <div className={styles.textWrapper}><h2>{listTitle}</h2></div>
               }
               <IconButton onClick={() => {
                 deleteList(listId);
@@ -128,13 +127,14 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                   ref={provided.innerRef}
                 >
                   {
-                    cards?.map((card: { listId: string; _id: string; title: string; updateDate: Date }, index: number) => (
+                    cards?.map((card: { listId: string; _id: string; title: string; updateDate: Date, description: string }, index: number) => (
                       <Card
                         index={index}
                         key={card._id}
                         cardId={card._id}
                         boardId={boardId}
                         title={card.title}
+                        description={card.description}
                         updateDate={card.updateDate}
                         nameList={listTitle}
                         dragDisabled={setDragDisabled}
@@ -158,7 +158,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                     handleChange={handleChangeCardValue}
                     handleSubmit={handleAddCard}
                     closeForm={() => setOpenCardForm(false)}
-                    title={cardTitle}
+                    value={cardTitle}
                   // onBlur={handleBlur}
                   />
                 </div>

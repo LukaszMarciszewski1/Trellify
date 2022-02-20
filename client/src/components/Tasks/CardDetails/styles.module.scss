@@ -1,6 +1,6 @@
 @import '../../../scss/utils.scss';
 
-.window {
+.windowCard {
   // padding: 4rem;
 }
 
@@ -18,17 +18,18 @@
   padding: 1rem;
 }
 
-.container {
+.cardWindow {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 600px;
   max-width: 600px;
-  height: 600px;
+  height: auto;
   padding: 1rem;
   background-color: white;
   border-radius: 0.5rem;
+  // overflow-wrap: break-word;
   overflow: hidden;
   z-index: 11;
   @media (max-width: 768px) {
@@ -38,14 +39,14 @@
 
 .cardHeader {
   width: 100%;
-  height: 50px;
+  // max-height: 150px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 0 0 1rem;
   border-bottom: 1px solid rgb(179, 179, 179);
 }
 
-.textarea {
+.textareaTitle {
   min-height: 30px;
   width: 100%;
   resize: none;
@@ -57,4 +58,85 @@
   border: none;
   margin-right: 2rem;
   color: rgb(61, 61, 61);
+}
+
+.cardContainer {
+  width: 100%;
+  height: auto;
+  display: flex;
+  padding: 1rem 0;
+}
+
+.cardMain {
+  flex-grow: 1;
+  p {
+    color: rgb(149, 149, 149);
+    font-size: 0.9rem;
+  }
+}
+
+.cardDescription {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(248, 248, 248);
+  padding: 1.5rem 1rem;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+}
+.cardDescriptionHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.textareaDescription {
+  width: 100%;
+  min-height: 60px;
+  resize: none;
+  font-weight: normal;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+
+  border: none;
+  color: rgb(61, 61, 61);
+  cursor: pointer;
+  &:hover {
+    // background-color: rgb(238, 238, 238);
+  }
+  &:focus {
+    border: none;
+    // outline: 1px solid rgb(195, 195, 195);
+    // background-color: rgb(248, 248, 248);
+    cursor: text;
+    // background-color: transparent;
+  }
+}
+
+.actionsForm {
+  display: flex;
+  margin-top: 0.5rem;
+  // overflow: hidden;
+  &:last-child {
+    margin-right: 1rem;
+  }
+}
+
+.cardSidebar {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  height: 100%;
+  padding: 1rem;
+  background-color: rgb(226, 226, 226);
+  margin-left: 1rem;
+}
+
+.formContainer {
+  cursor: pointer;
+  padding: .5rem;
+  border-radius: 3px;
+  &:hover {
+    background-color: rgb(246, 246, 246);
+  }
 }

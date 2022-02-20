@@ -4,7 +4,7 @@ import styles from './styles.module.scss'
 import { Draggable } from 'react-beautiful-dnd';
 
 import CardDetails from '../CardDetails/CardDetails';
-
+import TextareaAutosize from 'react-textarea-autosize';
 import {
   // useGetAllCardsQuery,
   useAddCardMutation,
@@ -15,6 +15,7 @@ import {
 type Props = {
   boardId: string
   title: string
+  description: string
   listId?: string
   cardId: string
   index: number
@@ -26,13 +27,19 @@ type Props = {
   // openCardDetails: () => void
 }
 
-const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, dragDisabled, nameList }) => {
+const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, dragDisabled, nameList, description }) => {
   const [openCardDetails, setOpenCardDetails] = useState<boolean>(false)
 
   return (
     <div>
       {
-        openCardDetails ? <CardDetails nameList={nameList} cardId={cardId} title={title} boardId={boardId} setOpenCardDetails={() => {
+        openCardDetails ? <CardDetails 
+        nameList={nameList} 
+        cardId={cardId} 
+        title={title} 
+        description={description}
+        boardId={boardId} 
+        setOpenCardDetails={() => {
           setOpenCardDetails(false)
           dragDisabled(false)
         }} /> : null
@@ -45,6 +52,14 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
               dragDisabled(true)
             }}>
               <h3>{title}</h3>
+              {/* <TextareaAutosize
+                id='card'
+                className={styles.textarea}
+                autoFocus={false}
+                value={title}
+                // onBlur={() => console.log('close')}
+                required
+              /> */}
               <button onClick={onClickDelete}>X</button>
             </div>
           </div>
