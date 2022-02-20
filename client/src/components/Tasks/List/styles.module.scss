@@ -3,7 +3,7 @@
 .container {
   width: 272px;
   // position: relative;
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 5px;
   background-color: #e4e4e4;
   display: flex;
   flex-direction: column;
@@ -21,36 +21,45 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin: 0.3rem 0;
+
+  // margin: 0.3rem 0;
 }
 .textWrapper {
   box-sizing: border-box;
+  justify-self: center;
   width: 220px;
-  height: auto;
   overflow-wrap: break-word;
-  // margin-right: 1rem;
   h2 {
-    font-size: .9rem;
+    padding: 0.3rem;
+    font-size: 0.9rem;
     overflow-wrap: break-word;
-    // margin-right: 2rem;
+    font-weight: bold;
     color: rgb(61, 61, 61);
+    outline: 2px solid transparent;
+    line-height: normal;
   }
 }
 
 .cardsContainer {
-  padding: 0.3rem 0;
+  padding-bottom: 0.3rem;
 }
 
 .textarea {
-  min-height: 30px;
+  // box-sizing: border-box;
   width: 100%;
   resize: none;
   font-weight: bold;
   border-radius: 3px;
   font-size: 0.9rem;
   padding: 0.3rem;
+  margin: 0;
   background-color: transparent;
   border: none;
+  outline: none;
+  outline: 2px solid rgb(38, 99, 149);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }
 .actionsList {
   width: 100%;

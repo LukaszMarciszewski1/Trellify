@@ -1,5 +1,4 @@
-
-.iconButton{
+.iconButton {
   width: 30px;
   height: 30px;
   background-color: transparent;
@@ -8,10 +7,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: .3rem;
+  padding: 0.3rem;
   border-radius: 3px;
   max-height: 100%;
-  &:hover{
-    background-color: #F7F8FA;
+  margin: 0.2rem;
+  &:hover {
+    background-color: #eeeeee;
   }
 }

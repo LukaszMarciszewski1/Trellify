@@ -11,7 +11,7 @@ import { nowDate } from '../../hooks/nowDate';
 // import Tasks from '../../components/Tasks/Tasks';
 import Tabs from '../../components/Tabs/Tabs'
 import TabsContent from '../../components/Tabs/TabsContent/TabsContent'
-import Form from '../../components/Form/Form'
+import Form from '../../components/Details/Form/Form'
 import IconButton from '../../components/Details/IconButton/IconButton';
 import addTaskIcon from '../../assets/icons/plus-circle.svg'
 

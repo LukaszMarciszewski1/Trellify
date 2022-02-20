@@ -212,7 +212,7 @@ const Board: React.FC = () => {
   }
 
   if (isLoading) return <h2>Loading...</h2>
-  if (error) return <h2>error</h2>
+  if (error) return <h2>Brak połączenia</h2>
 
   return (
     <div className={styles.board}
@@ -270,11 +270,11 @@ const Board: React.FC = () => {
                   id='list'
                   handleChange={handleChangeListValue}
                   handleSubmit={handleAddList}
-                  closeForm={() => setOpenForm(false)}
+                  closeForm={() => { setOpenForm(false); setListTitle('') }}
                   value={listTitle}
                 />
               </div>
-              : <TaskButton openForm={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GrAdd style={{ margin: '.4rem 0' }} />} />
+              : <TaskButton openForm={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GrAdd style={{ margin: '.3rem 0' }} />} />
             }
           </div>
         </div>

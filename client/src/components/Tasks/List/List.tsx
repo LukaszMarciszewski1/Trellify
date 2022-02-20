@@ -100,7 +100,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
           <div className={styles.container} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
             <div className={styles.listHeader} onClick={() => setOpenTitleForm(true)} ref={ref}>
               {
-                openTitleForm ?
+                 openTitleForm ?
                   <div className={styles.textWrapper}>
                     <TextareaAutosize
                       id='list'
@@ -139,10 +139,10 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                         nameList={listTitle}
                         dragDisabled={setDragDisabled}
                         // listId={listId}
-                        onClickDelete={() => {
-                          deleteCard(card._id);
-                          updateBoard({ id: boardId })
-                        }}
+                        // onClickDelete={() => {
+                        //   deleteCard(card._id);
+                        //   updateBoard({ id: boardId })
+                        // }}
                       />
                     ))
                   }
@@ -157,7 +157,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                     id={'card'}
                     handleChange={handleChangeCardValue}
                     handleSubmit={handleAddCard}
-                    closeForm={() => setOpenCardForm(false)}
+                    closeForm={() => { setOpenCardForm(false); setCardTitle('') }}
                     value={cardTitle}
                   // onBlur={handleBlur}
                   />

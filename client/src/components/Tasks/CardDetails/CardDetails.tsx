@@ -8,6 +8,7 @@ import Button from '../../Details/Button/Button';
 import IconButton from '../../Details/IconButton/IconButton';
 import useOnClickOutside from '../../../hooks/useOnClickOutside'
 import { BsXLg } from 'react-icons/bs';
+import { BsPencil } from 'react-icons/bs';
 
 import {
   useUpdateBoardMutation,
@@ -51,7 +52,8 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
   }
 
   const handleEditCardDescription = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (e.target.id === 'card-description') setCardDescription(e.target.value)
+    if (e.target.id === 'card-description')
+      setCardDescription(e.target.value)
   }
 
   const handleUpdateCard = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -63,44 +65,48 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
     updateBoard({
       id: boardId
     })
-    setFormIsOpen(false)  
+    setFormIsOpen(false)
   }
 
   useOnClickOutside(ref, setOpenCardDetails)
- 
+  console.log(cardDescription)
+
   return (
     <>
       <div className={styles.overlay} onClick={setOpenCardDetails}></div>
       <div ref={ref} className={styles.cardWindow} >
         <div className={styles.cardHeader}>
-          <TextareaAutosize
-            id='card'
-            autoFocus={false}
-            value={cardTitle}
-            className={styles.textareaTitle}
-            onChange={handleEditCardTitle}
-            onFocus={(e) => e.target.select()}
-            // onBlur={() => console.log('close')}
-            required
-          />
+          <div className={styles.cardHeaderText}>
+            <TextareaAutosize
+              id='card'
+              autoFocus={false}
+              value={cardTitle}
+              className={styles.textareaTitle}
+              onChange={handleEditCardTitle}
+              onFocus={(e) => e.target.select()}
+              rows={20}
+              // onBlur={() => console.log('close')}
+              required
+            />
+            <p>Na liscie: <strong>{nameList}</strong></p>
+          </div>
           <IconButton onClick={setOpenCardDetails}><BsXLg /></IconButton>
         </div>
         <div className={styles.cardContainer}>
           <div className={styles.cardMain}>
-            <p>Na liscie: <strong>{nameList}</strong></p>
             <div className={styles.cardDescription}>
               <div className={styles.cardDescriptionHeader}>
                 <h4>Opis</h4>
                 <div style={{ maxWidth: '100px', marginLeft: '1rem' }}>
                   {
-                    !formIsOpen && description !== '' ? (
+                    !formIsOpen && cardDescription !== '' ? (
                       <TaskButton openForm={() => setFormIsOpen(true)} name={'Edytuj'} icon={<BsXLg />} />
                     ) : null
                   }
                 </div>
               </div>
               {
-                !formIsOpen && description === '' ? (
+                !formIsOpen && cardDescription === '' ? (
                   <TaskButton openForm={() => setFormIsOpen(true)} name={'Dodaj opis...'} icon={<BsXLg />} />
                 ) : null
               }
@@ -110,14 +116,23 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
                     id={'card-description'}
                     handleChange={handleEditCardDescription}
                     handleSubmit={handleUpdateCard}
-                    closeForm={() => setFormIsOpen(false)}
+                    closeForm={() => { setFormIsOpen(false); setCardDescription(description) }}
                     value={cardDescription}
+                    onFocus={(e) => e.target.select()}
                   // onBlur={() => setFormIsOpen(false)}
-                  /> : <div className={styles.formContainer} onClick={() => setFormIsOpen(true)}><p>{cardDescription}</p></div>
+                  /> : <div className={styles.formContainer} onClick={() => setFormIsOpen(true)}>
+                    {description !== '' ? <p>{description}</p> : 'Dodaj opis...'}
+                  </div>
+                //  <TaskButton openForm={() => setFormIsOpen(true)} name={cardDescription !== '' ? cardDescription : 'Dodaj opis...'}  />
+
               }
             </div>
           </div>
-          <div className={styles.cardSidebar}></div>
+          <div className={styles.cardSidebar}>
+            <TaskButton openForm={() => setFormIsOpen(true)} name={'Etykiety'} icon={<BsPencil />} />
+            <TaskButton openForm={() => setFormIsOpen(true)} name={'Data'} icon={<BsXLg />} />
+            <TaskButton openForm={() => setFormIsOpen(true)} name={'Załącznik'} icon={<BsXLg />} />
+          </div>
         </div>
       </div>
     </>

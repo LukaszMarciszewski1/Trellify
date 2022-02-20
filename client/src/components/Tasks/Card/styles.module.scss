@@ -1,18 +1,26 @@
 @import '../../../scss/utils.scss';
 .card {
+  display: flex;
+  align-items: flex-start;
   width: 100%;
-  height: auto;
-  padding: 1rem;
-  margin-bottom: 8px;
+  margin-top: 8px;
   -webkit-box-shadow: $box-shadow;
   box-shadow: $box-shadow;
   background-color: #ffffff;
   border-radius: 3px;
   user-select: none;
   &:hover {
-    // background-color: fade(#fdfdfd, 0.2);
     background-color: #f8f8f8;
   }
+}
+.cardContainer {
+  padding: 1rem .3rem 1rem 1rem;
+  max-width: 260px;
+  flex-grow: 1;
+  z-index: 10;
+  overflow-wrap: break-word;
+  word-break: break-all;
+
   h3 {
     font-size: 1rem;
     color: rgb(24, 24, 24);
