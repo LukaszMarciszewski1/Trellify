@@ -1,23 +1,24 @@
 @import '../../../scss/utils.scss';
 .card {
+  position: relative;
   display: flex;
   align-items: flex-start;
   width: 100%;
   margin-top: 8px;
   -webkit-box-shadow: $box-shadow;
   box-shadow: $box-shadow;
-  background-color: #ffffff;
+  background-color: #fcfcfc;
   border-radius: 3px;
   user-select: none;
+  cursor: pointer;
   &:hover {
     background-color: #f8f8f8;
   }
 }
 .cardContainer {
-  padding: 1rem .3rem 1rem 1rem;
+  padding: .8rem;
   max-width: 260px;
   flex-grow: 1;
-  z-index: 10;
   overflow-wrap: break-word;
   word-break: break-all;
 
@@ -41,4 +42,12 @@
   border: none;
   margin-right: 2rem;
   color: rgb(61, 61, 61);
+}
+
+.btnContainer {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background-color: #f8f8f8d5;
+  z-index: 100;
 }

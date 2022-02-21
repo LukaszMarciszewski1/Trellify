@@ -41,6 +41,7 @@ import useOnClickOutside from '../../../hooks/useOnClickOutside';
 
 
 import { GrAdd } from "react-icons/gr";
+import { GoPlus } from "react-icons/go";
 import { BsCardImage } from "react-icons/bs";
 
 
@@ -56,7 +57,7 @@ const Board: React.FC = () => {
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
-  const refForm = useRef(null)
+  const formRef = useRef(null)
   const refCardModal = useRef(null)
 
   const [backgroundUrl, setBackgroundUrl] = useState<string>('')
@@ -69,7 +70,7 @@ const Board: React.FC = () => {
   const [lists, setLists] = useState([] as any)
 
   const closeForm = () => { setOpenForm(false); setListTitle('') }
-  useOnClickOutside(refForm, closeForm)
+  useOnClickOutside(formRef, closeForm)
 
   useEffect(() => {
     if (data) {
@@ -220,7 +221,7 @@ const Board: React.FC = () => {
     >
       <BoardHeader
         name={'Zmień tło'}
-        icon={<BsCardImage />}
+        
         onClick={() => setOpenMenu(true)}
       />
       {
@@ -263,9 +264,9 @@ const Board: React.FC = () => {
               </div>
             )}
           </Droppable>
-          <div className={styles.actions}>
+          <div className={styles.actionsForm}>
             {openForm ?
-              <div className={styles.formContainer} ref={refForm}>
+              <div className={styles.formContainer} ref={formRef}>
                 <TaskForm
                   id='list'
                   handleChange={handleChangeListValue}
@@ -274,7 +275,7 @@ const Board: React.FC = () => {
                   value={listTitle}
                 />
               </div>
-              : <TaskButton openForm={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GrAdd style={{ margin: '.3rem 0' }} />} />
+              : <TaskButton openForm={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
             }
           </div>
         </div>

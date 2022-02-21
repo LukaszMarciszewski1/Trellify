@@ -13,7 +13,7 @@ type Props = {
   onFocus?: (value: any) => void
   closeForm: () => void
   onBlur?: () => void
-  value: string
+  value: string | undefined
 }
 
 const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, closeForm, value, id, onBlur, onFocus }) => {

@@ -9,17 +9,24 @@ import { AiOutlineHome } from "react-icons/ai";
 import { GiDeliveryDrone } from "react-icons/gi";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { IoLogoJavascript } from "react-icons/io";
+import { CgComponents } from "react-icons/cg";
+import { GrTask } from "react-icons/gr";
 
 const menuItems = [
   {
     name: 'Zadania',
     path: '/',
-    icon: <AiOutlineHome />
+    icon: <GrTask />
   },
   {
-    name: 'Magazyn',
-    path: '/View-2',
+    name: 'Kalkulator',
+    path: '/calculator',
     icon: <CgCalculator />
+  },
+  {
+    name: 'Materiały',
+    path: '/View-2',
+    icon: <CgComponents />
   },
   {
     name: 'Dostawcy',

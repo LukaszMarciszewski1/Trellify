@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  h4 {
+    font-size: 0.9rem;
+    color: grey;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.boxColor {
+  width: 150px;
+  height: 30px;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}

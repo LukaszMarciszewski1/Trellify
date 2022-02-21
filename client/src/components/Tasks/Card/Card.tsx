@@ -48,43 +48,61 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
   const [openCardDetails, setOpenCardDetails] = useState<boolean>(false)
-  console.log(description)
+
+  const [showText, setShowText] = useState(false)
+  const handleMouseEnter = () => {
+    setShowText(true)
+  }
+  const handleMouseLeave = () => {
+    setShowText(false)
+  }
+
   return (
-    <div>
+    <>
       {
-        openCardDetails ? <CardDetails
-          nameList={nameList}
-          cardId={cardId}
-          title={title}
-          description={description}
-          boardId={boardId}
-          setOpenCardDetails={() => {
-            setOpenCardDetails(false)
-            dragDisabled(false)
-          }} /> : null
+        openCardDetails ?
+          <CardDetails
+            nameList={nameList}
+            cardId={cardId}
+            title={title}
+            description={description}
+            boardId={boardId}
+            setOpenCardDetails={() => {
+              setOpenCardDetails(false)
+              dragDisabled(false)
+            }}
+          /> : null
       }
       <Draggable draggableId={String(cardId)} index={index} >
         {provided => (
           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-            <div className={styles.card} onClick={() => {
-              setOpenCardDetails(true)
-              dragDisabled(true)
-            }}>
-              <div className={styles.cardContainer}>
+            <div className={styles.card}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+            >
+              <div className={styles.cardContainer} onClick={() => {
+                setOpenCardDetails(true)
+                dragDisabled(true)
+              }}>
                 <h3>{title}</h3>
               </div>
-              <IconButton onClick={() => {
-                deleteCard(cardId);
-                setOpenCardDetails(false)
-                updateBoard({ id: boardId })
-              }}>
-                <BsPencil />
-              </IconButton>
+              <div className={styles.btnContainer}>
+                {
+                  showText ? <IconButton onClick={() => {
+                    console.log('close')
+                    deleteCard(cardId);
+                    updateBoard({ id: boardId })
+                  }}>
+                    <BsPencil />
+                  </IconButton> : null
+                }
+  
+              </div>
             </div>
           </div>
         )}
       </Draggable>
-    </div>
+    </>
   )
 }
 

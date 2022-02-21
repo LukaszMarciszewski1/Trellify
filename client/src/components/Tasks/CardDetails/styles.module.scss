@@ -13,9 +13,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 10;
   padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 199;
 }
 
 .cardWindow {
@@ -25,11 +25,10 @@
   transform: translate(-50%, -50%);
   width: 600px;
   padding: 1rem;
-  background-color: white;
+  background-color: #fcfcfc;
   border-radius: 0.5rem;
-  // overflow-wrap: break-word;
-  overflow: hidden;
-  z-index: 11;
+  // overflow: hidden;
+  z-index: 200;
   @media (max-width: 768px) {
     max-width: 400px;
   }
@@ -63,11 +62,14 @@
   border-radius: 3px;
   font-size: 1.4rem;
   padding: 0.3rem;
-  background-color: transparent;
+  background-color: #fcfcfc;
   border: none;
   margin-right: 2rem;
   margin-left: -0.3rem;
   color: rgb(61, 61, 61);
+  &:hover {
+    background-color: rgb(248, 248, 248);
+  }
 }
 
 .cardContainer {
@@ -78,14 +80,10 @@
 }
 
 .cardMain {
-  flex-grow: 1;
-  p {
-    color: rgb(149, 149, 149);
-    font-size: 0.9rem;
-  }
 }
 
 .cardDescription {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   background-color: rgb(248, 248, 248);
@@ -131,7 +129,26 @@
   }
 }
 
+
+.innerTextWrapper {
+  max-width: 100%;
+  height: auto;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 3px;
+  // background-color: rgb(241, 241, 241);
+  overflow-wrap: break-word;
+  word-break: break-all;
+  p {
+    overflow-wrap: break-word;
+  }
+  &:hover {
+    background-color: rgb(241, 241, 241);
+    // background-color: rgb(246, 246, 246);
+  }
+}
 .cardSidebar {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -142,23 +159,11 @@
   margin-left: 1rem;
 }
 
-.formContainer {
-  max-width: 100%;
-  height: auto;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 3px;
-  background-color: yellow;
-  overflow-wrap: break-word;
-  word-break: break-all;
-  p {
-    overflow-wrap: break-word;
-  }
-  &:hover {
-    background-color: rgb(246, 246, 246);
-  }
+.divider {
+  margin: 1rem 0;
+  border-bottom: 1px solid rgb(173, 173, 173);
 }
 
-.divider {
-  margin-bottom: 0.5rem;
+.btn {
+  position: relative;
 }

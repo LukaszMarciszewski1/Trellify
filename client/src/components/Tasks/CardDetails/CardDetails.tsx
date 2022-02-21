@@ -9,6 +9,14 @@ import IconButton from '../../Details/IconButton/IconButton';
 import useOnClickOutside from '../../../hooks/useOnClickOutside'
 import { BsXLg } from 'react-icons/bs';
 import { BsPencil } from 'react-icons/bs';
+import { BiTask } from 'react-icons/bi';
+import { GrAttachment } from 'react-icons/gr';
+import { BsStopwatch } from 'react-icons/bs';
+import { MdOutlineLabel } from 'react-icons/md';
+import { CgArrowRight } from 'react-icons/cg';
+import { IoMdAdd } from 'react-icons/io';
+import { RiDeleteBinLine } from 'react-icons/ri';
+import { SwatchesPicker } from 'react-color';
 
 import {
   useUpdateBoardMutation,
@@ -22,6 +30,8 @@ import {
 } from "../../../store/reducers/cardsReducer";
 import { GrAdd } from 'react-icons/gr';
 import TaskButton from '../TaskButton/TaskButton';
+import Popup from '../../Details/Popup/Popup';
+import Labels from './CardOptions/Labels';
 
 type Props = {
   cardId: string
@@ -37,8 +47,10 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
   const [updateBoard] = useUpdateBoardMutation()
   const ref = useRef(null)
   const [cardTitle, setCardTitle] = useState<string>(title)
-  const [cardDescription, setCardDescription] = useState<string>(description)
+  const [cardDescription, setCardDescription] = useState<string | undefined>(description)
   const [formIsOpen, setFormIsOpen] = useState(false)
+
+  const [labels, setLabels] = useState(false)
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card') setCardTitle(e.target.value)
@@ -69,7 +81,6 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
   }
 
   useOnClickOutside(ref, setOpenCardDetails)
-  console.log(cardDescription)
 
   return (
     <>
@@ -93,45 +104,46 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
           <IconButton onClick={setOpenCardDetails}><BsXLg /></IconButton>
         </div>
         <div className={styles.cardContainer}>
-          <div className={styles.cardMain}>
-            <div className={styles.cardDescription}>
-              <div className={styles.cardDescriptionHeader}>
-                <h4>Opis</h4>
-                <div style={{ maxWidth: '100px', marginLeft: '1rem' }}>
-                  {
-                    !formIsOpen && cardDescription !== '' ? (
-                      <TaskButton openForm={() => setFormIsOpen(true)} name={'Edytuj'} icon={<BsXLg />} />
-                    ) : null
-                  }
-                </div>
+          <div className={styles.cardDescription}>
+            <div className={styles.cardDescriptionHeader}>
+              <h4>Opis</h4>
+              <div style={{ maxWidth: '100px', marginLeft: '1rem' }}>
+                {
+                  !formIsOpen && cardDescription !== undefined && cardDescription !== '' ? (
+                    <TaskButton openForm={() => setFormIsOpen(true)} name={'Edytuj'} icon={<BsPencil />} />
+                  ) : null
+                }
               </div>
-              {
-                !formIsOpen && cardDescription === '' ? (
-                  <TaskButton openForm={() => setFormIsOpen(true)} name={'Dodaj opis...'} icon={<BsXLg />} />
-                ) : null
-              }
-              {
-                formIsOpen ?
-                  <TaskForm
-                    id={'card-description'}
-                    handleChange={handleEditCardDescription}
-                    handleSubmit={handleUpdateCard}
-                    closeForm={() => { setFormIsOpen(false); setCardDescription(description) }}
-                    value={cardDescription}
-                    onFocus={(e) => e.target.select()}
-                  // onBlur={() => setFormIsOpen(false)}
-                  /> : <div className={styles.formContainer} onClick={() => setFormIsOpen(true)}>
-                    {description !== '' ? <p>{description}</p> : 'Dodaj opis...'}
-                  </div>
-                //  <TaskButton openForm={() => setFormIsOpen(true)} name={cardDescription !== '' ? cardDescription : 'Dodaj opis...'}  />
-
-              }
             </div>
+            {
+              formIsOpen ?
+                <TaskForm
+                  id={'card-description'}
+                  handleChange={handleEditCardDescription}
+                  handleSubmit={handleUpdateCard}
+                  closeForm={() => { setFormIsOpen(false); setCardDescription(description) }}
+                  value={cardDescription}
+                  onFocus={(e) => e.target.select()}
+                // onBlur={() => setFormIsOpen(false)}
+                /> :
+                <div className={styles.innerTextWrapper} >
+                  {cardDescription !== '' && cardDescription !== undefined ? <p onClick={() => setFormIsOpen(true)}>{cardDescription}</p> :
+                    <TaskButton openForm={() => setFormIsOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
+                </div>
+            }
           </div>
           <div className={styles.cardSidebar}>
-            <TaskButton openForm={() => setFormIsOpen(true)} name={'Etykiety'} icon={<BsPencil />} />
-            <TaskButton openForm={() => setFormIsOpen(true)} name={'Data'} icon={<BsXLg />} />
-            <TaskButton openForm={() => setFormIsOpen(true)} name={'Załącznik'} icon={<BsXLg />} />
+            {/* ref for popup */}
+            <div>
+              <Popup title={'Dodaj etykietę'} trigger={labels} colosePopup={() => setLabels(false)}><Labels /></Popup>
+            </div>
+            <TaskButton openForm={() => setLabels(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
+            <TaskButton openForm={() => setFormIsOpen(true)} name={'Data'} icon={<BsStopwatch />} />
+            <TaskButton openForm={() => setFormIsOpen(true)} name={'Załącznik'} icon={<GrAttachment />} />
+            <TaskButton openForm={() => setFormIsOpen(true)} name={'Lista zadań'} icon={<BiTask />} />
+            <div className={styles.divider}></div>
+            <TaskButton openForm={() => setFormIsOpen(true)} name={'Przenieś'} icon={<CgArrowRight />} />
+            <TaskButton openForm={() => setFormIsOpen(true)} name={'Usuń'} icon={<RiDeleteBinLine />} />
           </div>
         </div>
       </div>

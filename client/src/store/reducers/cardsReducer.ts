@@ -6,7 +6,7 @@ interface Cards {
   listId: string
   title: string
   description: string
-  deadline: string
+  deadline: Date
   completed: number
   createdAt: Date
   updateDate: Date

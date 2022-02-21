@@ -29,7 +29,7 @@ import Card from '../Card/Card';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 // import { v4 as uuidv4 } from 'uuid';
 // import { MdOutlineAdd } from "react-icons/md";
-import { GrAdd } from "react-icons/gr";
+import { GoPlus } from "react-icons/go";
 import { dangerouslyDisableDefaultSrc } from 'helmet/dist/middlewares/content-security-policy';
 
 type Props = {
@@ -162,7 +162,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                   // onBlur={handleBlur}
                   />
                 </div>
-                : <TaskButton openForm={() => setOpenCardForm(true)} name={'Dodaj nową kartę'} icon={<GrAdd />} />
+                : <TaskButton openForm={() => setOpenCardForm(true)} name={'Dodaj kartę'} icon={<GoPlus />} />
               }
             </div>
           </div>

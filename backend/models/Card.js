@@ -4,7 +4,7 @@ const { Schema } = mongoose
 const CardSchema = mongoose.Schema({
   title: String,
   description: String,
-  deadline: String,
+  deadline: Date,
   sourceIndex: Number,
   destinationIndex: Number,
   sortIndex: Number,
