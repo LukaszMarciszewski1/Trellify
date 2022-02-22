@@ -39,8 +39,6 @@ type Props = {
   onClickDelete?: () => void
   dragDisabled: (value: boolean) => void
   nameList: string | undefined
-  // setOpenCardDetails: () => void
-  // openCardDetails: () => void
 }
 
 const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, dragDisabled, nameList, description }) => {
@@ -77,8 +75,8 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
         {provided => (
           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
             <div className={styles.card}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               <div className={styles.cardContainer} onClick={() => {
                 setOpenCardDetails(true)
@@ -96,7 +94,6 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
                     <BsPencil />
                   </IconButton> : null
                 }
-  
               </div>
             </div>
           </div>

@@ -10,11 +10,12 @@ interface Cards {
   completed: number
   createdAt: Date
   updateDate: Date
-  text: string,
+  text: string
   sourceIndex: number
   destinationIndex: number
   sortIndex: number
   position: number
+  labels: []
 }
 
 type CardsResponse = Cards[]
@@ -26,6 +27,10 @@ export const cardsApi = createApi({
   endpoints: (builder) => ({
     getAllCards: builder.query<CardsResponse, void>({
       query: () => `cards`,
+      providesTags: ['Cards'],
+    }),
+    getCard: builder.query({
+      query: (id) => `cards/${id}`,
       providesTags: ['Cards'],
     }),
     addCard: builder.mutation<Cards, Partial<Cards>>({
@@ -63,6 +68,7 @@ export const cardsApi = createApi({
 
 export const {
   useGetAllCardsQuery,
+  useGetCardQuery,
   useAddCardMutation,
   useDeleteCardMutation,
   useUpdateCardMutation,

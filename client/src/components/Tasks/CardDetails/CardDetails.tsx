@@ -50,7 +50,7 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
   const [cardDescription, setCardDescription] = useState<string | undefined>(description)
   const [formIsOpen, setFormIsOpen] = useState(false)
 
-  const [labels, setLabels] = useState(false)
+  const [labelsTrigger, setLabelsTrigger] = useState(false)
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card') setCardTitle(e.target.value)
@@ -135,9 +135,17 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
           <div className={styles.cardSidebar}>
             {/* ref for popup */}
             <div>
-              <Popup title={'Dodaj etykietę'} trigger={labels} colosePopup={() => setLabels(false)}><Labels /></Popup>
+              <Popup
+                title={'Dodaj etykietę'}
+                trigger={labelsTrigger}
+                colosePopup={() => setLabelsTrigger(false)}>
+                <Labels
+                  boardId={boardId}
+                  cardId={cardId}
+                />
+              </Popup>
             </div>
-            <TaskButton openForm={() => setLabels(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
+            <TaskButton openForm={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
             <TaskButton openForm={() => setFormIsOpen(true)} name={'Data'} icon={<BsStopwatch />} />
             <TaskButton openForm={() => setFormIsOpen(true)} name={'Załącznik'} icon={<GrAttachment />} />
             <TaskButton openForm={() => setFormIsOpen(true)} name={'Lista zadań'} icon={<BiTask />} />
