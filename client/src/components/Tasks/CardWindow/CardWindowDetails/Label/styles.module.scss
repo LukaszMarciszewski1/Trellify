@@ -1,11 +1,13 @@
 .container {
   display: flex;
-  flex-direction: column;
-  h4 {
-    font-size: 0.9rem;
-    color: grey;
-    margin-bottom: 0.5rem;
-  }
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  // h4 {
+  //   font-size: 0.9rem;
+  //   color: grey;
+  //   margin-bottom: 0.5rem;
+  // }
 }
 
 .boxColor {
@@ -14,8 +16,9 @@
   padding: 0.5rem;
   width: 200px;
   height: 35px;
+  margin-right: .3rem;
+  margin-bottom: .3rem;
   line-height: 19px;
-  margin-bottom: 0.5rem;
   border-radius: 0.2rem;
   cursor: pointer;
   vertical-align: middle;

@@ -1,42 +1,50 @@
 import mongoose from 'mongoose'
 const { Schema } = mongoose
 
-const CardSchema = mongoose.Schema({
-  title: String,
-  description: String,
-  deadline: Date,
-  sourceIndex: Number,
-  destinationIndex: Number,
-  sortIndex: Number,
-  listId: {
-    type: Schema.Types.ObjectId,
-    ref: 'List',
+const CardSchema = mongoose.Schema(
+  {
+    title: String,
+    description: String,
+    deadline: Date,
+    sourceIndex: Number,
+    destinationIndex: Number,
+    sortIndex: Number,
+    listId: {
+      type: Schema.Types.ObjectId,
+      ref: 'List',
+    },
+    boardId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Board',
+    },
+    completed: {
+      type: Number,
+      default: 0,
+    },
+    createdAt: {
+      type: Date,
+      default: new Date(),
+    },
+    updateDate: {
+      type: Date,
+      default: null,
+    },
+    position: Number,
+    labels: [
+      {
+        color: String,
+        title: String,
+        active: Boolean,
+      },
+    ],
   },
-  boardId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Board',
-  },
-  completed: {
-    type: Number,
-    default: 0,
-  },
-  createdAt: {
-    type: Date,
-    default: new Date(),
-  },
-  updateDate: {
-    type: Date,
-    default: null,
-  },
-  position: Number,
-  labels: []
-},
-{
-  timestamps: true
-})
+  {
+    timestamps: true,
+  }
+)
 
 CardSchema.statics.updateOne = (id, data) => {
-  return Card.findByIdAndUpdate(id, data);
+  return Card.findByIdAndUpdate(id, data)
 }
 
 const Card = mongoose.model('Card', CardSchema)

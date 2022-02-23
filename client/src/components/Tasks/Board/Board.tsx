@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 // import { isEmpty, cloneDeep } from 'lodash'
 import styles from './styles.module.scss'
-import { DragDropContext, Droppable, Draggable, DropResult, resetServerContext } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable, DropResult} from 'react-beautiful-dnd'
 // import { renderToString } from 'react-dom/server';
 import {
   // useGetAllBoardsQuery,
@@ -11,7 +11,7 @@ import {
 import {
   // useGetAllTasksQuery,
   useAddTaskMutation,
-  useDeleteTaskMutation,
+  // useDeleteTaskMutation,
   useUpdateTaskMutation,
   // useGetTaskQuery,
   // useGetCardsQuery,
@@ -30,7 +30,7 @@ import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 // import TaskCard from '../Card/Card';
 import SideMenu from '../SideMenu/SideMenu';
-import CardDetails from '../CardDetails/CardDetails';
+// import CardDetails from '../CardDetails/CardDetails';
 // import CardModal from '../CardDetails/CardModal/CardModal';
 
 import { defaultBackground } from '../localData';
@@ -39,32 +39,27 @@ import { defaultBackground } from '../localData';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 // import { v4 as uuidv4 } from 'uuid';
 
-
-import { GrAdd } from "react-icons/gr";
+// import { GrAdd } from "react-icons/gr";
 import { GoPlus } from "react-icons/go";
-import { BsCardImage } from "react-icons/bs";
-
-
-
+// import { BsCardImage } from "react-icons/bs";
 
 const Board: React.FC = () => {
   const boardId = '620e84aefbfd82dab66a83ed'
   const { data, error, isLoading } = useGetBoardQuery(boardId);
 
   const [addList] = useAddTaskMutation()
-  const [deleteList] = useDeleteTaskMutation()
+  // const [deleteList] = useDeleteTaskMutation()
   const [updateList] = useUpdateTaskMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
   const formRef = useRef(null)
-  const refCardModal = useRef(null)
+  // const refCardModal = useRef(null)
 
   const [backgroundUrl, setBackgroundUrl] = useState<string>('')
   const [listTitle, setListTitle] = useState<string>('');
   const [openForm, setOpenForm] = useState<boolean>(false)
-  const [openMenu, setOpenMenu] = useState<boolean>(false)
-  const [openCardDetails, setOpenCardDetails] = useState(false)
+  const [openSideMenu, setOpenSideMenu] = useState<boolean>(false)
 
   const [board, setBoard] = useState({} as any)
   const [lists, setLists] = useState([] as any)
@@ -83,7 +78,7 @@ const Board: React.FC = () => {
   }, [data]);
 
 
-  const handleChangeListValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
   }
 
@@ -98,21 +93,8 @@ const Board: React.FC = () => {
       id: boardId,
     })
 
-    //adding an object faster by rendering
-    // const newList = {
-    //   title: listTitle,
-    //   _id: uuidv4(),
-    // }
-    // const newState = [...lists, newList]
-    // setLists(newState)
-    /////
     setListTitle('')
     setOpenForm(false)
-  }
-
-  const onDragStart = () => {
-    console.log(openCardDetails)
-    if (!openCardDetails) return
   }
 
   // if (isEmpty(board)) return <div>no data</div>
@@ -120,15 +102,14 @@ const Board: React.FC = () => {
     const { destination, source, type, draggableId } = result
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+    const newLists = [...lists]
 
     if (board) {
       if (type === 'list') {
-        let newLists = [...lists]
 
         const [removed] = newLists.splice(source.index, 1)
         newLists.splice(destination.index, 0, removed)
-        // newBoard.listOrder = newList.map(c => c._id)
-        // newBoard.columns = newList
+
         setLists(newLists)
         updateBoard({
           id: boardId,
@@ -137,21 +118,23 @@ const Board: React.FC = () => {
       }
 
       if (type === 'card') {
-        const newLists = [...lists]
+        // const newLists = [...lists]
         const sourceList = newLists.find((list: { _id: string; }) => list._id === source.droppableId)
         const destinationList = newLists.find((list: { _id: string; }) => list._id === destination.droppableId)
 
         if (source.droppableId === destination.droppableId) {
           const newCards = [...sourceList.cards]
+          
           const [removed] = newCards.splice(source.index, 1)
           newCards.splice(destination.index, 0, removed)
 
-          const updateCards = {
+          const updateState = {
             ...sourceList,
             cards: newCards
           }
+
           //replace the contents of the list
-          const newState = newLists.map(obj => [updateCards].find(o => o._id === obj._id) || obj);
+          const newState = newLists.map(obj => [updateState].find(o => o._id === obj._id) || obj);
 
           setLists(newState)
           updateList({
@@ -160,8 +143,8 @@ const Board: React.FC = () => {
           })
 
         }
-        if (source.droppableId !== destination.droppableId) {
 
+        if (source.droppableId !== destination.droppableId) {
           const startCards = [...sourceList.cards]
           const finishCards = [...destinationList.cards]
 
@@ -177,11 +160,11 @@ const Board: React.FC = () => {
             cards: finishCards
           }
 
-          //new letters converted to array
-          const updateCards = [startState, finishState]
+          //converted to array
+          const newCards = [startState, finishState]
 
           //replace the contents of the lists
-          const newState = newLists.map(obj => updateCards.find(o => o._id === obj._id) || obj);
+          const newState = newLists.map(obj => newCards.find(o => o._id === obj._id) || obj);
 
           setLists(newState)
 
@@ -221,24 +204,17 @@ const Board: React.FC = () => {
     >
       <BoardHeader
         name={'Zmień tło'}
-        
-        onClick={() => setOpenMenu(true)}
+        onClick={() => setOpenSideMenu(true)}
       />
       {
-        openMenu ?
+        openSideMenu ?
           <SideMenu
             boardId={boardId}
             setBackgroundUrl={setBackgroundUrl}
-            closeMenu={() => setOpenMenu(false)}
+            closeMenu={() => setOpenSideMenu(false)}
           /> : null
       }
-      {/* {
-        openCardDetails ? <CardDetails setOpenCardDetails={() => setOpenCardDetails(false)} /> : null
-      } */}
-      <DragDropContext
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-      >
+      <DragDropContext onDragEnd={onDragEnd} >
         <div className={styles.container}>
           <Droppable droppableId="all-list" direction="horizontal" type="list">
             {provided => (
@@ -255,8 +231,6 @@ const Board: React.FC = () => {
                       listId={list._id}
                       title={list.title}
                       cards={list.cards}
-                    // cardIsOpen={openCardDetails}
-                    // openCardDetails={setOpenCardDetails}
                     />
                   ))
                 }
@@ -269,7 +243,7 @@ const Board: React.FC = () => {
               <div className={styles.formContainer} ref={formRef}>
                 <TaskForm
                   id='list'
-                  handleChange={handleChangeListValue}
+                  handleChange={handleChangeListTitle}
                   handleSubmit={handleAddList}
                   closeForm={() => { setOpenForm(false); setListTitle('') }}
                   value={listTitle}

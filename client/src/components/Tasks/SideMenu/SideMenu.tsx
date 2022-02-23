@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react'
-// import * as FaIcons from 'react-icons/fa';
-// import * as AiIcons from 'react-icons/ai';
-// import { Link } from 'react-router-dom';
 import styles from './styles.module.scss'
-
 import getImages from '../../../store/api/imageApi';
-
 import { BsXLg } from "react-icons/bs";
 import IconButton from '../../Details/IconButton/IconButton';
-
 import { colors, defaultBackground, defaultColor } from '../localData';
-
 import {
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
@@ -64,10 +57,6 @@ const SideMenu: React.FC<SideMenuProps> = ({ closeMenu, setBackgroundUrl, boardI
             backgroundSize: 'cover',
           }}
         ><p>Kolory</p></div>
-        {/* <div className={styles.description}>
-          <p>Zdjęcia</p>
-          <p>Kolory</p>
-        </div> */}
       </div>
 
       <div className={styles.optionsContainer}>

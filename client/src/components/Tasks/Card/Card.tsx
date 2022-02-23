@@ -3,13 +3,13 @@ import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import { Draggable } from 'react-beautiful-dnd';
 
-import CardDetails from '../CardDetails/CardDetails';
-import TextareaAutosize from 'react-textarea-autosize';
+import CardWindow from '../CardWindow/CardWindow';
+// import TextareaAutosize from 'react-textarea-autosize';
 import {
   // useGetAllTasksQuery,
   // useAddTaskMutation,
-  useDeleteTaskMutation,
-  useUpdateTaskMutation,
+  // useDeleteTaskMutation,
+  // useUpdateTaskMutation,
   // useAddCardMutation,
 } from "../../../store/reducers/listsReducer";
 import {
@@ -18,14 +18,14 @@ import {
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 import {
-  // useGetAllCardsQuery,
-  useAddCardMutation,
+  // useGetCardQuery,
+  // useAddCardMutation,
   useDeleteCardMutation,
   useUpdateCardMutation,
 } from "../../../store/reducers/cardsReducer";
 
 import { BsPencil } from 'react-icons/bs';
-import TaskButton from '../TaskButton/TaskButton';
+// import TaskButton from '../TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton';
 
 type Props = {
@@ -36,15 +36,17 @@ type Props = {
   cardId: string
   index: number
   updateDate?: Date
+  cardLabels: []
   onClickDelete?: () => void
   dragDisabled: (value: boolean) => void
   nameList: string | undefined
 }
 
-const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, dragDisabled, nameList, description }) => {
+const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, dragDisabled, nameList, description, cardLabels }) => {
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
+
   const [openCardDetails, setOpenCardDetails] = useState<boolean>(false)
 
   const [showText, setShowText] = useState(false)
@@ -59,12 +61,13 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
     <>
       {
         openCardDetails ?
-          <CardDetails
+          <CardWindow
             nameList={nameList}
             cardId={cardId}
             title={title}
             description={description}
             boardId={boardId}
+            cardLabels={cardLabels}
             setOpenCardDetails={() => {
               setOpenCardDetails(false)
               dragDisabled(false)
@@ -82,12 +85,18 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
                 setOpenCardDetails(true)
                 dragDisabled(true)
               }}>
-                <h3>{title}</h3>
+                <div className={styles.cardLabels}>
+                  {
+                    cardLabels.map((label: { active: any; color: any; _id: string; title: string }) => (
+                      label.active ? <div title={`${label.title}`}  key={label._id} className={styles.cardLabel} style={{backgroundColor: `${label.color}`}}></div> : null
+                    ))
+                  }
+                </div>
+                <span >{title}</span>
               </div>
               <div className={styles.btnContainer}>
                 {
                   showText ? <IconButton onClick={() => {
-                    console.log('close')
                     deleteCard(cardId);
                     updateBoard({ id: boardId })
                   }}>

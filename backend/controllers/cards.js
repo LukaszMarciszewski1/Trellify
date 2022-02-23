@@ -25,8 +25,8 @@ export const getCard = async (req, res) => {
 }
 
 export const createCard = async (req, res) => {
-  const { title, listId } = req.body
-  const newCard = new Card({ title, listId})
+  const { title, labels, listId } = req.body
+  const newCard = new Card({ title, labels, listId})
   let parentList = await List.findById(listId)
   try {
     parentList.cards = [...parentList.cards, newCard]

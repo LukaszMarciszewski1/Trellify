@@ -11,11 +11,11 @@ interface Cards {
   createdAt: Date
   updateDate: Date
   text: string
-  sourceIndex: number
-  destinationIndex: number
-  sortIndex: number
-  position: number
-  labels: []
+  labels: {
+    color: string
+    title: string
+    active: boolean
+  }[]
 }
 
 type CardsResponse = Cards[]

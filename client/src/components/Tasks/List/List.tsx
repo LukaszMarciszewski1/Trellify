@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import styles from './styles.module.scss'
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -6,6 +6,8 @@ import TaskForm from '../TaskForm/TaskForm';
 import TaskButton from '../TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton'
 import { BsThreeDots } from "react-icons/bs";
+
+import { labelItems } from '../localData';
 
 import {
   // useGetAllTasksQuery,
@@ -22,15 +24,15 @@ import {
 import {
   // useGetAllCardsQuery,
   useAddCardMutation,
-  useDeleteCardMutation,
-  useUpdateCardMutation,
+  // useDeleteCardMutation,
+  // useUpdateCardMutation,
 } from "../../../store/reducers/cardsReducer";
 import Card from '../Card/Card';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 // import { v4 as uuidv4 } from 'uuid';
 // import { MdOutlineAdd } from "react-icons/md";
 import { GoPlus } from "react-icons/go";
-import { dangerouslyDisableDefaultSrc } from 'helmet/dist/middlewares/content-security-policy';
+// import { dangerouslyDisableDefaultSrc } from 'helmet/dist/middlewares/content-security-policy';
 
 type Props = {
   listId: string
@@ -44,8 +46,8 @@ type Props = {
 const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const ref = useRef(null)
   const [addCard] = useAddCardMutation()
-  const [deleteCard] = useDeleteCardMutation()
-  const [updateCard] = useUpdateCardMutation()
+  // const [deleteCard] = useDeleteCardMutation()
+  // const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
   const [updateList] = useUpdateTaskMutation()
   const [deleteList] = useDeleteTaskMutation()
@@ -55,7 +57,6 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const [openCardForm, setOpenCardForm] = useState<boolean>(false)
   const [openTitleForm, setOpenTitleForm] = useState<boolean>(false)
   const [dragDisabled, setDragDisabled] = useState<boolean>(false)
-
 
 
   const handleChangeCardValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -77,6 +78,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
     addCard({
       listId: listId,
       title: cardTitle,
+      labels: labelItems
     })
     updateBoard({
       id: boardId,
@@ -127,7 +129,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                   ref={provided.innerRef}
                 >
                   {
-                    cards?.map((card: { listId: string; _id: string; title: string; updateDate: Date, description: string }, index: number) => (
+                    cards?.map((card: { listId: string; _id: string; title: string; updateDate: Date, labels: [], description: string }, index: number) => (
                       <Card
                         index={index}
                         key={card._id}
@@ -136,13 +138,9 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                         title={card.title}
                         description={card.description}
                         updateDate={card.updateDate}
+                        cardLabels={card.labels}
                         nameList={listTitle}
                         dragDisabled={setDragDisabled}
-                        // listId={listId}
-                        // onClickDelete={() => {
-                        //   deleteCard(card._id);
-                        //   updateBoard({ id: boardId })
-                        // }}
                       />
                     ))
                   }

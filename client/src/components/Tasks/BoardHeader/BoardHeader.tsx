@@ -4,12 +4,11 @@ import TaskButton from '../TaskButton/TaskButton'
 import { BsImage } from "react-icons/bs";
 
 type BoardHeaderProps = {
-  icon?: any
   name: string
   onClick: () => void
 }
 
-const BoardHeader: React.FC<BoardHeaderProps> = ({ icon, name, onClick }) => {
+const BoardHeader: React.FC<BoardHeaderProps> = ({ name, onClick }) => {
   return (
     <div className={styles.container}>
       <div style={{ width: '130px' }}>

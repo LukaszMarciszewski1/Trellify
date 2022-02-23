@@ -1,7 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { v4 as uuidv4 } from 'uuid'
-import { cardsApi } from './cardsReducer'
-
 interface List {
   _id: string
   title: string
@@ -59,22 +56,6 @@ export const listApi = createApi({
       query: (id) => `lists/${id}`,
       providesTags: ['List'],
     }),
-    // addCard: builder.mutation({
-    //   query: ( {id , ...cards}) => ({
-    //     url: `lists/${id}`,
-    //     method: 'PUT',
-    //     body: cards,
-    //   }),
-    //   invalidatesTags: ['List'],
-    // }),
-    // addCard: builder.mutation({
-    //   query: ({ id, ...patch }) => ({
-    //     url: `lists/${id}`,
-    //     method: 'PUT',
-    //     body: patch,
-    //   }),
-    //   invalidatesTags: ['List'],
-    // }),
   }),
 })
 

@@ -9,8 +9,8 @@ import {
 import { nowDate } from '../../hooks/nowDate';
 // import Task from '../../components/Tasks/Task/Task'
 // import Tasks from '../../components/Tasks/Tasks';
-import Tabs from '../../components/Tabs/Tabs'
-import TabsContent from '../../components/Tabs/TabsContent/TabsContent'
+import Tabs from '../../components/Details/Tabs/Tabs'
+import TabsContent from '../../components/Details/Tabs/TabsContent/TabsContent'
 import Form from '../../components/Details/Form/Form'
 import IconButton from '../../components/Details/IconButton/IconButton';
 import addTaskIcon from '../../assets/icons/plus-circle.svg'

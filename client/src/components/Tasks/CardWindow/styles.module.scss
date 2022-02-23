@@ -27,7 +27,6 @@
   padding: 1rem;
   background-color: #fcfcfc;
   border-radius: 0.5rem;
-  // overflow: hidden;
   z-index: 200;
   @media (max-width: 768px) {
     max-width: 400px;
@@ -79,10 +78,7 @@
   padding: 1rem 0;
 }
 
-.cardMain {
-}
-
-.cardDescription {
+.windowMain {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -91,7 +87,7 @@
   margin-top: 1rem;
   border-radius: 0.5rem;
 }
-.cardDescriptionHeader {
+.descriptionHeader {
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
@@ -129,11 +125,10 @@
   }
 }
 
-
 .innerTextWrapper {
   max-width: 100%;
   height: auto;
-  cursor: pointer;
+  cursor: text;
   padding: 0.5rem;
   border-radius: 3px;
   // background-color: rgb(241, 241, 241);
@@ -166,4 +161,44 @@
 
 .btn {
   position: relative;
+}
+
+.labels {
+  display: flex;
+  flex-direction: column;
+}
+
+.labelsWrap {
+  display: flex;
+}
+
+.label {
+  max-width: 200px;
+  min-width: 40px;
+  border-radius: 5px;
+  color: #fcfcfc;
+  margin-right: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  span {
+    line-height: 20px;
+    padding: 8px;
+    font-size: 14px;
+  }
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.textareaLabelTitle {
+  width: 100%;
+  font-size: 14px;
+  color: grey;
+  resize: none;
+  border-radius: 3px;
+  padding: 0.3rem;
+  background-color: #fcfcfc;
+  border: 1px solid grey;
 }

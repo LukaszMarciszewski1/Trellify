@@ -1,7 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { v4 as uuidv4 } from 'uuid'
-import { cardsApi } from './cardsReducer'
-
 interface Board {
   _id: string
   title: string

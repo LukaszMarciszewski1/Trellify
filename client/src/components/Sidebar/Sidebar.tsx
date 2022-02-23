@@ -3,9 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import styles from './styles.module.scss'
 
 import { MdArrowForwardIos } from "react-icons/md";
-import { BsThreeDots } from "react-icons/bs";
 import { CgCalculator } from "react-icons/cg";
-import { AiOutlineHome } from "react-icons/ai";
 import { GiDeliveryDrone } from "react-icons/gi";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { IoLogoJavascript } from "react-icons/io";

@@ -15,4 +15,32 @@ export const colors = [
   '#FFDAB9',
   '#FAF9F9',
   '#3f3c3c'
+];
+
+export const labelItems = [
+  {
+    color: '#61bd4f',
+    title: '',
+    active: false
+  },
+  {
+    color: '#9575cd',
+    title: '',
+    active: false
+  },
+  {
+    color: '#ff9f1a',
+    title: '',
+    active: false
+  },
+  {
+    color: '#EA4746',
+    title: '',
+    active: false
+  },
+  {
+    color: '#0079bf',
+    title: '',
+    active: false
+  },
 ]
