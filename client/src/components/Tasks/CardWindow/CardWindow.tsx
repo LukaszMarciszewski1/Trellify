@@ -36,6 +36,7 @@ import Label from './CardWindowDetails/Label/Label';
 
 import ItemsContainer from './CardWindowDetails/ItemsContainer/ItemsContainer'
 import LabelForm from './CardWindowDetails/LabelForm/LabelForm'
+import e from 'express';
 
 type Props = {
   cardId: string
@@ -92,17 +93,17 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
     setFormIsOpen(false)
   }
 
-  const handleEditLabelTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleChangeLabelTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'label-title') setCurrentLabelTitle(e.target.value)
   }
 
-  const handleSaveLabelTitle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+  const handleSaveLabelEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     const newLabels = [...labels]
     if (labels) {
       const newState = newLabels.map((label: any) => {
         if (label._id !== currentLabelId) return label;
-        return { ...label, title: currentLabelTitle };
+        return { ...label, title: currentLabelTitle, color: currentLabelColor };
       });
       setLabels(newState)
       updateCard({
@@ -112,6 +113,7 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
       updateBoard({
         id: boardId
       })
+      setIsOpenLabelEditWindow(false)
     }
   }
 
@@ -131,6 +133,20 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
         id: boardId
       })
     }
+  }
+
+  const handleDeleteLabel = () => {
+    const newLabels = [...labels]
+    const newState = newLabels.filter((label) => label._id !== currentLabelId);
+    setLabels(newState)
+    updateCard({
+      id: cardId,
+      labels: newState
+    })
+    updateBoard({
+      id: boardId
+    })
+    setIsOpenLabelEditWindow(false)
   }
 
   const handleGetCurrentEditLabel = (id: string) => {
@@ -240,13 +256,14 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
                     </>
                   ) : (
                     <LabelForm
-                      id={'label-title'}
-                      handleChange={handleEditLabelTitle}
-                      handleSubmit={handleSaveLabelTitle}
-                      deleteLabel={() => { setFormIsOpen(false); setCardDescription(description) }}
+                      formId={'label-title'}
+                      handleChange={handleChangeLabelTitle}
+                      handleSubmit={handleSaveLabelEdit}
+                      deleteLabel={handleDeleteLabel}
                       value={currentLabelTitle}
                       onFocus={(e) => e.target.select()}
-                      currentLabelColor={currentLabelColor}
+                      selectColor={currentLabelColor}
+                      setSelectColor={setCurrentLabelColor}
                     />
                   )
                 }

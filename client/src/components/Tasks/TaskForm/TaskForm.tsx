@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import TextareaAutosize from 'react-textarea-autosize';
 import styles from './styles.module.scss'
 
@@ -17,11 +17,10 @@ type Props = {
 }
 
 const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, closeForm, value, id, onBlur, onFocus }) => {
-
   const placeholder = id === 'list' ? 'Dodaj listę zadań' : 'Dodaj nową kartę'
 
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <TextareaAutosize
         id={id}
         maxRows={20}

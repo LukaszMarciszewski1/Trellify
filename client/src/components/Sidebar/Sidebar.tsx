@@ -10,6 +10,13 @@ import { IoLogoJavascript } from "react-icons/io";
 import { CgComponents } from "react-icons/cg";
 import { GrTask } from "react-icons/gr";
 
+import { labelItems } from '../../components/Tasks/localData'
+import { defaultBackground } from '../../components/Tasks/localData'
+
+import {
+  useCreateBoardMutation,
+} from '../../store/reducers/boardsReducer'
+
 const menuItems = [
   {
     name: 'Zadania',
@@ -39,8 +46,11 @@ const menuItems = [
 ]
 
 const Sidebar: React.FC = () => {
+  const [createBoard] = useCreateBoardMutation()
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+
 
   return (
     <nav
@@ -52,7 +62,10 @@ const Sidebar: React.FC = () => {
         onClick={() => setSidebarOpen((p) => !p)}>
         <MdArrowForwardIos />
       </button>
-      <div className={styles.logo}><IoLogoJavascript /></div>
+      <div className={styles.logo} onClick={() => createBoard({
+        labels: labelItems,
+        background: defaultBackground
+      })}><IoLogoJavascript /></div>
       <ul className={styles.linksContainer}>
         {menuItems.map((item) => (
           <li key={item.name}

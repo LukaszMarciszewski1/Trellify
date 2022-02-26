@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styles from './styles.module.scss'
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -18,7 +18,7 @@ import {
 } from "../../../store/reducers/listsReducer";
 import {
   // useGetAllBoardsQuery,
-  // useGetBoardQuery,
+  useGetBoardQuery,
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 import {
@@ -44,6 +44,7 @@ type Props = {
   // openCardDetails: (value: boolean) => void
 }
 const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
+  const { data: board, error, isLoading } = useGetBoardQuery(boardId);
   const ref = useRef(null)
   const [addCard] = useAddCardMutation()
   // const [deleteCard] = useDeleteCardMutation()
@@ -57,6 +58,13 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const [openCardForm, setOpenCardForm] = useState<boolean>(false)
   const [openTitleForm, setOpenTitleForm] = useState<boolean>(false)
   const [dragDisabled, setDragDisabled] = useState<boolean>(false)
+  const [labels, setLabels] = useState([] as any)
+
+  useEffect(() => {
+    if (board) {
+      setLabels(board.labels)
+    }
+  }, [board])
 
 
   const handleChangeCardValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -78,7 +86,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
     addCard({
       listId: listId,
       title: cardTitle,
-      labels: labelItems
+      labels: labels
     })
     updateBoard({
       id: boardId,
@@ -91,10 +99,6 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const handleCloseForm = () => { setOpenCardForm(false); setCardTitle(''); }
   useOnClickOutside(ref, handleCloseForm)
 
-  // const selectAllText = (e: { target: { select: () => void; }; }) => {
-  //   e.target.select();
-  // };
-
   return (
     <div>
       <Draggable draggableId={String(listId)} index={index} isDragDisabled={dragDisabled}>
@@ -102,7 +106,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
           <div className={styles.container} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
             <div className={styles.listHeader} onClick={() => setOpenTitleForm(true)} ref={ref}>
               {
-                 openTitleForm ?
+                openTitleForm ?
                   <div className={styles.textWrapper}>
                     <TextareaAutosize
                       id='list'

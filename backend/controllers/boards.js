@@ -34,7 +34,6 @@ export const getBoard = async (req, res) => {
 
 export const createBoard = async (req, res) => {
   const board = req.body
-  const { id } = req.params
   try {
     const newBoard = await new Board(board).save()
     res.status(201).json(newBoard)

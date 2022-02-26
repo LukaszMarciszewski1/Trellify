@@ -12,6 +12,19 @@ const BoardSchema = mongoose.Schema(
     background: String,
     lists: [{ type: Schema.Types.ObjectId, ref: 'List' }],
     cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
+    labels: [
+      {
+        color: {
+          type: String,
+          default: '#61bd4f',
+        },
+        title: String,
+        active: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

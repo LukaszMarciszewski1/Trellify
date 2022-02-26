@@ -44,7 +44,7 @@ import { GoPlus } from "react-icons/go";
 // import { BsCardImage } from "react-icons/bs";
 
 const Board: React.FC = () => {
-  const boardId = '620e84aefbfd82dab66a83ed'
+  const boardId = '621a598fca190e362b0dd18b'
   const { data, error, isLoading } = useGetBoardQuery(boardId);
 
   const [addList] = useAddTaskMutation()

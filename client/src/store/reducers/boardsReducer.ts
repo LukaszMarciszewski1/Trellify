@@ -5,7 +5,11 @@ interface Board {
   background: string
   lists: []
   cards: []
-  listOrder: string[]
+  labels: {
+    color: string
+    title: string
+    active: boolean
+  }[]
 }
 
 type BoardResponse = Board[]
@@ -23,6 +27,14 @@ export const boardApi = createApi({
       query: (id) => `boards/${id}`,
       providesTags: ['Board'],
     }),
+    createBoard: builder.mutation({
+      query: (body: {}) => ({
+        url: 'boards',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Board'],
+    }),
     updateBoard: builder.mutation({
       query: ({ id, ...patch }) => ({
         url: `boards/${id}`,
@@ -37,5 +49,6 @@ export const boardApi = createApi({
 export const {
   useGetAllBoardsQuery,
   useGetBoardQuery,
+  useCreateBoardMutation,
   useUpdateBoardMutation,
 } = boardApi

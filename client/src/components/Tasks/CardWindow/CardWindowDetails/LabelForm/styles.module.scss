@@ -29,7 +29,8 @@
 }
 
 .reactColorful {
-  width: 100%;
+  min-width: 100%;
+  width: auto;
   padding: 16px;
   border-radius: 10px;
   box-shadow: 0 3px 10px rgba(153, 153, 153, 0.404);
