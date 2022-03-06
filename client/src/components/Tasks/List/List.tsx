@@ -77,7 +77,6 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
       id: listId,
       title: e.target.value
     })
-
   }
 
   const handleAddCard = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -86,7 +85,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
     addCard({
       listId: listId,
       title: cardTitle,
-      labels: labels
+      // labels: labels
     })
     updateBoard({
       id: boardId,
@@ -142,7 +141,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                         title={card.title}
                         description={card.description}
                         updateDate={card.updateDate}
-                        cardLabels={card.labels}
+                        labels={card.labels}
                         nameList={listTitle}
                         dragDisabled={setDragDisabled}
                       />

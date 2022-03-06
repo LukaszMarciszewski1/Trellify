@@ -13,14 +13,14 @@ const ItemsContainer: React.FC<Props> = ({ children, title, data }) => {
   return (
     <>
       {
-        activeList.length ? (
-          <div className={styles.container}>
-            <p>{title}</p>
-            <div className={styles.items}>
-              {children}
-            </div>
+        // activeList.length ? (
+        <div className={styles.container}>
+          <p>{title}</p>
+          <div className={styles.items}>
+            {children}
           </div>
-        ) : null
+        </div>
+        // ) : null
       }
     </>
   )

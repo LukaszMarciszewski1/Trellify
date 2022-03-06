@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import styles from './styles.module.scss'
 
 import TextareaAutosize from 'react-textarea-autosize';
@@ -19,6 +19,7 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 // import { SwatchesPicker } from 'react-color';
 
 import {
+  useGetBoardQuery,
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 
@@ -32,11 +33,11 @@ import {
 import TaskButton from '../TaskButton/TaskButton';
 import Popup from '../../Details/Popup/Popup';
 import Label from './CardWindowDetails/Label/Label';
+import { BiCheck } from 'react-icons/bi';
 // import { labelItems } from '../localData';
 
 import ItemsContainer from './CardWindowDetails/ItemsContainer/ItemsContainer'
 import LabelForm from './CardWindowDetails/LabelForm/LabelForm'
-import e from 'express';
 
 type Props = {
   cardId: string
@@ -46,24 +47,50 @@ type Props = {
   nameList: string | undefined
   setOpenCardDetails: () => void
   cardLabels: any
+  setCardLabels: (value: any) => void
+  settingsLabel: []
+  setSettingsLabel: (value: any) => void
 }
 
-const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, boardId, nameList, description, cardLabels }) => {
-
+const CardDetails: React.FC<Props> = ({
+  cardId,
+  title,
+  setOpenCardDetails,
+  boardId,
+  nameList,
+  description,
+  cardLabels,
+  setCardLabels,
+  settingsLabel,
+  setSettingsLabel
+}) => {
+  const { data: board, error, isLoading } = useGetBoardQuery(boardId);
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
   const ref = useRef(null)
-
   const [cardTitle, setCardTitle] = useState<string>(title)
   const [cardDescription, setCardDescription] = useState<string | undefined>(description)
-  const [labels, setLabels] = useState(cardLabels)
+  const [labels, setLabels] = useState([] as any)
   const [formIsOpen, setFormIsOpen] = useState(false)
   const [labelsTrigger, setLabelsTrigger] = useState<boolean>(false)
   const [isOpenLabelEditWindow, setIsOpenLabelEditWindow] = useState<boolean>(false)
   const [currentLabelTitle, setCurrentLabelTitle] = useState<string>('')
   const [currentLabelId, setCurrentLabelId] = useState<string>('')
   const [currentLabelColor, setCurrentLabelColor] = useState<string>('')
+
+
+
+  useEffect(() => {
+    if (board) {
+      setLabels(board.labels)
+      // updateCard({
+      //   id: cardId,
+      //   labels: cardLabels
+      // })
+    }
+  }, [cardLabels])
+
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-title') setCardTitle(e.target.value)
@@ -100,39 +127,45 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
   const handleSaveLabelEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     const newLabels = [...labels]
+    const newCardLabels = [...cardLabels]
     if (labels) {
-      const newState = newLabels.map((label: any) => {
+      const newLabelState = newLabels.map((label: any) => {
         if (label._id !== currentLabelId) return label;
         return { ...label, title: currentLabelTitle, color: currentLabelColor };
       });
-      setLabels(newState)
-      updateCard({
-        id: cardId,
-        labels: newState
+
+      const newCardLabelState = newCardLabels.map((label: any) => {
+        if (label._id !== currentLabelId) return label;
+        return { ...label, title: currentLabelTitle, color: currentLabelColor };
       })
+
+      setCardLabels(newCardLabelState)
+      setLabels(newLabelState)
+      // updateCard({
+      //   id: cardId,
+      //   labels: newState
+      // })
       updateBoard({
-        id: boardId
+        id: boardId,
+        labels: newLabelState
       })
       setIsOpenLabelEditWindow(false)
     }
   }
 
   const handleCheckedLabel = (item: any) => {
-    const newLabels = [...labels]
-    if (labels) {
-      const newState = newLabels.map((label: any) => {
-        if (label._id !== item._id) return label;
-        return { ...label, active: !label.active };
-      });
-      setLabels(newState)
-      updateCard({
-        id: cardId,
-        labels: newState
-      })
-      updateBoard({
-        id: boardId
-      })
+    const copyCardLabels = [...cardLabels]
+    const newLabel = { ...item, active: !item.active };
+    const existLabel = copyCardLabels.find((label: { _id: string; }) => label._id === newLabel._id)
+
+    if (existLabel) {
+      const newLabels = copyCardLabels.filter((label: { _id: string; }) => label._id !== existLabel._id)
+      setCardLabels(newLabels)
+    } else {
+      setCardLabels([...copyCardLabels, newLabel])
     }
+
+    console.log(copyCardLabels)
   }
 
   const handleDeleteLabel = () => {
@@ -183,19 +216,19 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
         </div>
         <div className={styles.cardContainer}>
           <div className={styles.windowMain}>
-            <ItemsContainer data={labels} title={'Etykiety'}>
+            <ItemsContainer data={cardLabels} title={'Etykiety'}>
               {
-                labels.map((label: { title: string; active: any; color: any; _id: string }) => (
-                  label.active ? (
-                    <div
-                      key={label._id}
-                      style={{ backgroundColor: `${label.color}` }}
-                      className={styles.label}
-                      onClick={() => console.log('click')}
-                    >
-                      <span>{label.title}</span>
-                    </div>
-                  ) : null
+                cardLabels.map((label: { title: string; active: any; color: any; _id: string }) => (
+                  // label.active ? (
+                  <div
+                    key={label._id}
+                    style={{ backgroundColor: `${label.color}` }}
+                    className={styles.label}
+                    onClick={() => console.log('click')}
+                  >
+                    <span>{label.title}</span>
+                  </div>
+                  // ) : null
                 ))
               }
             </ItemsContainer>
@@ -241,15 +274,17 @@ const CardDetails: React.FC<Props> = ({ cardId, title, setOpenCardDetails, board
                         labels.map((label: any) => (
                           <Label
                             key={label._id}
+                            labelId={label._id}
                             title={label.title}
                             color={label.color}
-                            active={label.active}
+                            cardLabels={cardLabels}
                             openLabelEditWindow={() => {
                               setIsOpenLabelEditWindow(true)
                               handleGetCurrentEditLabel(label._id)
                             }}
                             checkedLabel={() => handleCheckedLabel(label)}
-                          />
+                          >
+                          </Label>
                         ))
                       }
                       <TaskButton openForm={() => console.log('add new label')} name={'Utwórz nową etykietę'} />

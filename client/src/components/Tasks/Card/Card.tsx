@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 // import TextareaAutosize from 'react-textarea-autosize';
 import styles from './styles.module.scss'
 import { Draggable } from 'react-beautiful-dnd';
@@ -14,7 +14,7 @@ import {
 } from "../../../store/reducers/listsReducer";
 import {
   // useGetAllBoardsQuery,
-  // useGetBoardQuery,
+  useGetBoardQuery,
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 import {
@@ -36,20 +36,29 @@ type Props = {
   cardId: string
   index: number
   updateDate?: Date
-  cardLabels: []
+  labels: []
   onClickDelete?: () => void
   dragDisabled: (value: boolean) => void
   nameList: string | undefined
 }
 
-const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, dragDisabled, nameList, description, cardLabels }) => {
+const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, dragDisabled, nameList, description, labels }) => {
+  const { data: board, error, isLoading } = useGetBoardQuery(boardId);
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
   const [openCardDetails, setOpenCardDetails] = useState<boolean>(false)
-
   const [showText, setShowText] = useState(false)
+  const [cardLabels, setCardLabels] = useState(labels)
+  const [settingsLabel, setSettingsLabel] = useState([] as any)
+
+  useEffect(() => {
+    if (board) {
+      setSettingsLabel(board.labels)
+    }
+  }, [board])
+
   const handleMouseEnter = () => {
     setShowText(true)
   }
@@ -68,6 +77,9 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
             description={description}
             boardId={boardId}
             cardLabels={cardLabels}
+            setCardLabels={setCardLabels}
+            settingsLabel={settingsLabel}
+            setSettingsLabel={setSettingsLabel}
             setOpenCardDetails={() => {
               setOpenCardDetails(false)
               dragDisabled(false)
@@ -88,7 +100,9 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
                 <div className={styles.cardLabels}>
                   {
                     cardLabels.map((label: { active: any; color: any; _id: string; title: string }) => (
-                      label.active ? <div title={`${label.title}`}  key={label._id} className={styles.cardLabel} style={{backgroundColor: `${label.color}`}}></div> : null
+                      // label.active ? 
+                      <div title={`${label.title}`} key={label._id} className={styles.cardLabel} style={{ backgroundColor: `${label.color}` }}></div>
+                      // : null
                     ))
                   }
                 </div>

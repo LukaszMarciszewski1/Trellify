@@ -6,19 +6,21 @@ import { BsPencil } from 'react-icons/bs';
 import LabelForm from '../LabelForm/LabelForm';
 
 type Props = {
+  labelId: string
   title: string
   color: string
-  active: boolean
+  cardLabels: []
   checkedLabel: (value: any) => void
   openLabelEditWindow: () => void
 }
 
-const Label: React.FC<Props> = ({ title, color, active, checkedLabel, openLabelEditWindow }) => {
+const Label: React.FC<Props> = ({ title, color, cardLabels, checkedLabel, openLabelEditWindow, labelId }) => {
+  const activeLabels = cardLabels.filter((label: { _id: string }) => label._id === labelId)
   return (
     <div className={styles.container}>
       <div onClick={checkedLabel} style={{ background: `${color}` }} className={styles.boxColor}>
         <p>{title}</p>
-        {active ? < BiCheck style={{ color: 'white' }} /> : null}
+        {activeLabels.length ? < BiCheck style={{ color: 'white' }} /> : null}
       </div>
       <IconButton onClick={openLabelEditWindow}><BsPencil /></IconButton>
     </div>
