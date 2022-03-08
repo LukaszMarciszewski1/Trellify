@@ -84,12 +84,8 @@ const CardDetails: React.FC<Props> = ({
   useEffect(() => {
     if (board) {
       setLabels(board.labels)
-      // updateCard({
-      //   id: cardId,
-      //   labels: cardLabels
-      // })
     }
-  }, [cardLabels])
+  }, [board])
 
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -141,10 +137,6 @@ const CardDetails: React.FC<Props> = ({
 
       setCardLabels(newCardLabelState)
       setLabels(newLabelState)
-      // updateCard({
-      //   id: cardId,
-      //   labels: newState
-      // })
       updateBoard({
         id: boardId,
         labels: newLabelState
@@ -161,20 +153,33 @@ const CardDetails: React.FC<Props> = ({
     if (existLabel) {
       const newLabels = copyCardLabels.filter((label: { _id: string; }) => label._id !== existLabel._id)
       setCardLabels(newLabels)
+      updateCard({
+        id: cardId,
+        labels: newLabels
+      })
     } else {
-      setCardLabels([...copyCardLabels, newLabel])
+      const newLabels = [...copyCardLabels, newLabel]
+      setCardLabels(newLabels)
+      updateCard({
+        id: cardId,
+        labels: newLabels
+      })
     }
-
-    console.log(copyCardLabels)
+    updateBoard({
+      id: boardId,
+    })
   }
 
   const handleDeleteLabel = () => {
     const newLabels = [...labels]
-    const newState = newLabels.filter((label) => label._id !== currentLabelId);
-    setLabels(newState)
+    const newCardLabels = [...cardLabels]
+    const newLabelsState = newLabels.filter((label) => label._id !== currentLabelId);
+    const newCardLabelsState = newCardLabels.filter((label) => label._id !== currentLabelId);
+    setLabels(newLabelsState)
+    setCardLabels(newCardLabelsState)
     updateCard({
       id: cardId,
-      labels: newState
+      labels: newCardLabelsState
     })
     updateBoard({
       id: boardId
@@ -287,7 +292,7 @@ const CardDetails: React.FC<Props> = ({
                           </Label>
                         ))
                       }
-                      <TaskButton openForm={() => console.log('add new label')} name={'Utwórz nową etykietę'} />
+                      <TaskButton openForm={() => setIsOpenLabelEditWindow(true)} name={'Utwórz nową etykietę'} />
                     </>
                   ) : (
                     <LabelForm

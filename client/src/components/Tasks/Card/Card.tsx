@@ -53,11 +53,11 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
   const [cardLabels, setCardLabels] = useState(labels)
   const [settingsLabel, setSettingsLabel] = useState([] as any)
 
-  useEffect(() => {
-    if (board) {
-      setSettingsLabel(board.labels)
-    }
-  }, [board])
+  // useEffect(() => {
+  //   if (board) {
+  //     setSettingsLabel(board.labels)
+  //   }
+  // }, [cardLabels])
 
   const handleMouseEnter = () => {
     setShowText(true)
