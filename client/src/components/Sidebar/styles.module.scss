@@ -1,47 +1,85 @@
-.container{
-  flex-grow: 1;
-  height: 100%;
-  // background-color: #fcfcfc;
+.sidebar {
+  position: relative;
+  width: 300px;
+  min-height: 100%;
+  background-color: #fcfcfc;
+  // background-color: #fbfbfb;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
+  transition: 0.1s ease-in-out;
+  z-index: 300;
 }
 
-.logo{
+.sidebarHide {
+  width: 69px;
+}
+
+.logo {
   width: 100%;
-  height: 100px;
+  height: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  background-color: rgb(241, 241, 241);
-  h1{
-    
+}
+
+.navButton {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: -15px;
+  top: 20px;
+  background-color: #ebecf0;
+  border: 1px solid #cdced1;
+  padding: 0.3rem;
+  border-radius: 50%;
+  transition: 0.1s;
+}
+
+.navButtonHide {
+  transform: rotate(180deg);
+}
+
+.linksContainer {
+  width: 100%;
+  padding: 1.4rem 1rem 1rem;
+}
+
+.navItem {
+  position: relative;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.navLink {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: medium;
+  padding: 0.5rem;
+
+  p {
+    margin-left: 1rem;
   }
 }
-
-.listLinks{
-  width: 100%;
-  padding: 1rem;
-}
-
-.navItem{
-  position: relative;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  font-weight: bold;
-  text-align: right;
-  opacity: .5;
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .active {
   opacity: 1;
-  &::before{
-    content:'';
+  background-color: #ebecf0;
+  border-radius: 0.5rem;
+  &::before {
+    content: '';
     position: absolute;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 1.2rem;
-    height: 3px;
-    background-color: grey;
   }
 }

@@ -1,0 +1,66 @@
+@import '../../../scss/utils.scss';
+.card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 8px;
+  -webkit-box-shadow: $box-shadow;
+  box-shadow: $box-shadow;
+  background-color: #fcfcfc;
+  border-radius: 3px;
+  user-select: none;
+  cursor: pointer;
+  &:hover {
+    background-color: #f8f8f8;
+  }
+}
+.cardContainer {
+  padding: 0.8rem;
+  max-width: 260px;
+  flex-grow: 1;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  span {
+    font-size: 14px;
+    color: rgb(24, 24, 24);
+    font-weight: normal;
+    overflow-wrap: break-word;
+  }
+}
+
+.textarea {
+  min-height: 30px;
+  width: 100%;
+  resize: none;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 1.2rem;
+  padding: 0.3rem;
+  background-color: transparent;
+  border: none;
+  margin-right: 2rem;
+  color: rgb(61, 61, 61);
+}
+
+.btnContainer {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background-color: #f8f8f8d5;
+  z-index: 100;
+}
+
+.cardLabels {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cardLabel {
+  width: 40px;
+  height: 8px;
+  border-radius: 5px;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}

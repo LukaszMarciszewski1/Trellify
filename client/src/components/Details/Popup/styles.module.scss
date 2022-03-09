@@ -1,0 +1,30 @@
+.popup {
+  min-width: 200px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0.5rem 1rem 1rem;
+  background-color: #fcfcfc;
+  border: 1px solid #cdced1;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  z-index: 200;
+}
+
+.menuHeader {
+  min-width: 250px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgb(175, 175, 175);
+  margin-bottom: 0.7rem;
+  h3 {
+    width: 100%;
+    font-size: 0.8rem;
+    text-align: center;
+    color: gray;
+  }
+}
+
+.popupContent {
+  margin-top: 0.5rem;
+}

@@ -2,17 +2,20 @@ import React from 'react'
 import styles from './styles.module.scss'
 
 interface IconButtonProps {
-  onClick: () => void;
-  icon: string
+  onClick?: () => void;
+  icon?: any,
+  title?: string,
+  padding?: string
 }
 
-const IconButton:React.FC<IconButtonProps> = (props) => (
+const IconButton: React.FC<IconButtonProps> = (props) => (
   <button
-   className={styles.iconButton}
-   onClick={props.onClick}
-   style={{backgroundImage: `url(${props.icon})`, width: '1.rem', height: '1.5rem'}}
-   type='button'
-  />
+    className={styles.iconButton}
+    onClick={props.onClick}
+    type='button'
+  >
+    {props.children}
+  </button>
 )
-    
+
 export default IconButton

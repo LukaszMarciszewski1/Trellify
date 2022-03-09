@@ -1,0 +1,202 @@
+@import '../../../scss/utils.scss';
+
+.windowCard {
+  // padding: 4rem;
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 199;
+}
+
+.cardWindow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  padding: 1rem;
+  background-color: #fcfcfc;
+  border-radius: 0.5rem;
+  z-index: 200;
+  @media (max-width: 768px) {
+    max-width: 400px;
+  }
+}
+
+.cardHeader {
+  width: 100%;
+  // max-height: 150px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 0 0.5rem;
+  border-bottom: 1px solid rgb(179, 179, 179);
+}
+.cardHeaderText {
+  flex-grow: 1;
+  max-width: 95%;
+  height: auto;
+  p {
+    color: grey;
+    font-size: 0.9rem;
+  }
+}
+
+.textareaTitle {
+  width: 100%;
+  resize: none;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 1.4rem;
+  padding: 0.3rem;
+  background-color: #fcfcfc;
+  border: none;
+  margin-right: 2rem;
+  margin-left: -0.3rem;
+  color: rgb(61, 61, 61);
+  &:hover {
+    background-color: rgb(248, 248, 248);
+  }
+}
+
+.cardContainer {
+  width: 100%;
+  height: auto;
+  display: flex;
+  padding: 1rem 0;
+}
+
+.windowMain {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(248, 248, 248);
+  padding: 1rem 1rem;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+}
+.descriptionHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.textareaDescription {
+  width: 100%;
+  resize: none;
+  font-weight: normal;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+
+  border: none;
+  color: rgb(61, 61, 61);
+  cursor: pointer;
+  &:hover {
+    // background-color: rgb(238, 238, 238);
+  }
+  &:focus {
+    border: none;
+    // outline: 1px solid rgb(195, 195, 195);
+    // background-color: rgb(248, 248, 248);
+    cursor: text;
+    // background-color: transparent;
+  }
+}
+
+.actionsForm {
+  display: flex;
+  margin-top: 0.5rem;
+  // overflow: hidden;
+  &:last-child {
+    margin-right: 1rem;
+  }
+}
+
+.innerTextWrapper {
+  max-width: 100%;
+  height: auto;
+  cursor: text;
+  padding: 0.5rem;
+  border-radius: 3px;
+  // background-color: rgb(241, 241, 241);
+  overflow-wrap: break-word;
+  word-break: break-all;
+  p {
+    overflow-wrap: break-word;
+  }
+  &:hover {
+    background-color: rgb(241, 241, 241);
+    // background-color: rgb(246, 246, 246);
+  }
+}
+.cardSidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-width: 150px;
+  height: 100%;
+  padding: 1rem;
+  // background-color: rgb(226, 226, 226);
+  margin-left: 1rem;
+}
+
+.divider {
+  margin: 1rem 0;
+  border-bottom: 1px solid rgb(173, 173, 173);
+}
+
+.btn {
+  position: relative;
+}
+
+.labels {
+  display: flex;
+  flex-direction: column;
+}
+
+.labelsWrap {
+  display: flex;
+}
+
+.label {
+  max-width: 200px;
+  min-width: 40px;
+  border-radius: 5px;
+  color: #fcfcfc;
+  margin-right: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  span {
+    line-height: 20px;
+    padding: 8px;
+    font-size: 14px;
+  }
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.textareaLabelTitle {
+  width: 100%;
+  font-size: 14px;
+  color: grey;
+  resize: none;
+  border-radius: 3px;
+  padding: 0.3rem;
+  background-color: #fcfcfc;
+  border: 1px solid grey;
+}
