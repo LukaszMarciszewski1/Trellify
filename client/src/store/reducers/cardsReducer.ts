@@ -18,11 +18,13 @@ interface Cards {
   }[]
 }
 
+const url = 'http://localhost:5000/'
+
 type CardsResponse = Cards[]
 
 export const cardsApi = createApi({
   reducerPath: 'cardsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000' }),
+  baseQuery: fetchBaseQuery({ baseUrl: url }),
   tagTypes: ['Cards'],
   endpoints: (builder) => ({
     getAllCards: builder.query<CardsResponse, void>({

@@ -13,7 +13,7 @@ import { BiTask } from 'react-icons/bi';
 import { GrAttachment } from 'react-icons/gr';
 import { BsStopwatch } from 'react-icons/bs';
 import { MdOutlineLabel } from 'react-icons/md';
-import { CgArrowRight } from 'react-icons/cg';
+import { CgArrowRight, CgChevronDoubleLeft } from 'react-icons/cg';
 import { IoMdAdd } from 'react-icons/io';
 import { RiDeleteBinLine } from 'react-icons/ri';
 // import { SwatchesPicker } from 'react-color';
@@ -68,16 +68,18 @@ const CardDetails: React.FC<Props> = ({
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
-  const ref = useRef(null)
+  const refWindow = useRef(null)
   const [cardTitle, setCardTitle] = useState<string>(title)
   const [cardDescription, setCardDescription] = useState<string | undefined>(description)
   const [labels, setLabels] = useState([] as any)
   const [formIsOpen, setFormIsOpen] = useState(false)
   const [labelsTrigger, setLabelsTrigger] = useState<boolean>(false)
   const [isOpenLabelEditWindow, setIsOpenLabelEditWindow] = useState<boolean>(false)
+  const [isOpenAddNewLabelWindow, setIsOpenAddNewLabelWindow] = useState<boolean>(false)
   const [currentLabelTitle, setCurrentLabelTitle] = useState<string>('')
   const [currentLabelId, setCurrentLabelId] = useState<string>('')
   const [currentLabelColor, setCurrentLabelColor] = useState<string>('')
+  const [labelTitle, setLabelTitle] = useState<string>('')
 
 
 
@@ -117,7 +119,9 @@ const CardDetails: React.FC<Props> = ({
   }
 
   const handleChangeLabelTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (e.target.id === 'label-title') setCurrentLabelTitle(e.target.value)
+    if (e.target.id === 'label-title-edit') setCurrentLabelTitle(e.target.value)
+    if (e.target.id === 'label-title-add') setLabelTitle(e.target.value)
+    console.log(labelTitle)
   }
 
   const handleSaveLabelEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -143,6 +147,16 @@ const CardDetails: React.FC<Props> = ({
       })
       setIsOpenLabelEditWindow(false)
     }
+  }
+
+  const handleAddNewLabel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    e.preventDefault()
+    const newLabels = [...labels, { color: currentLabelColor, title: labelTitle, active: false }]
+    updateBoard({
+      id: boardId,
+      labels: newLabels
+    })
+    setIsOpenAddNewLabelWindow(false)
   }
 
   const handleCheckedLabel = (item: any) => {
@@ -182,7 +196,8 @@ const CardDetails: React.FC<Props> = ({
       labels: newCardLabelsState
     })
     updateBoard({
-      id: boardId
+      id: boardId,
+      labels: newLabelsState
     })
     setIsOpenLabelEditWindow(false)
   }
@@ -197,12 +212,12 @@ const CardDetails: React.FC<Props> = ({
     setCurrentLabelId(id)
   }
 
-  useOnClickOutside(ref, setOpenCardDetails)
+  useOnClickOutside(refWindow, setOpenCardDetails)
 
   return (
     <>
       <div className={styles.overlay} onClick={setOpenCardDetails}></div>
-      <div ref={ref} className={styles.cardWindow} >
+      <div ref={refWindow} className={styles.cardWindow}>
         <div className={styles.cardHeader}>
           <div className={styles.cardHeaderText}>
             <TextareaAutosize
@@ -263,53 +278,68 @@ const CardDetails: React.FC<Props> = ({
                 </div>
             }
           </div>
-          <div className={styles.cardSidebar}>
+          <div className={styles.cardSidebar} >
             <Popup
-              title={isOpenLabelEditWindow ? 'Edytuj etykietę' : 'Etykiety'}
+              title={isOpenLabelEditWindow ? 'Edytuj etykietę' : isOpenAddNewLabelWindow ? 'Dodaj Etykietę' : 'Etykiety'}
               trigger={labelsTrigger}
-              closePopup={() => { setLabelsTrigger(false); setIsOpenLabelEditWindow(false) }}
-              editWindow={isOpenLabelEditWindow}
-              backToMainWindow={() => setIsOpenLabelEditWindow(false)}
+              closePopup={() => { setLabelsTrigger(false); setIsOpenLabelEditWindow(false); setIsOpenAddNewLabelWindow(false) }}
+              editWindow={isOpenLabelEditWindow || isOpenAddNewLabelWindow}
+              backToMainWindow={() => { setIsOpenLabelEditWindow(false); setIsOpenAddNewLabelWindow(false) }}
             >
               <div className={styles.labels}>
                 {
-                  !isOpenLabelEditWindow ? (
+                  !isOpenLabelEditWindow &&
+                    !isOpenAddNewLabelWindow ? (
                     <>
-                      {
-                        labels.map((label: any) => (
-                          <Label
-                            key={label._id}
-                            labelId={label._id}
-                            title={label.title}
-                            color={label.color}
-                            cardLabels={cardLabels}
-                            openLabelEditWindow={() => {
-                              setIsOpenLabelEditWindow(true)
-                              handleGetCurrentEditLabel(label._id)
-                            }}
-                            checkedLabel={() => handleCheckedLabel(label)}
-                          >
-                          </Label>
-                        ))
-                      }
-                      <TaskButton openForm={() => setIsOpenLabelEditWindow(true)} name={'Utwórz nową etykietę'} />
+                      <div className={styles.labelsList}>
+                        {
+                          labels.map((label: any) => (
+                            <Label
+                              key={label._id}
+                              labelId={label._id}
+                              title={label.title}
+                              color={label.color}
+                              cardLabels={cardLabels}
+                              openLabelEditWindow={() => {
+                                setIsOpenLabelEditWindow(true)
+                                handleGetCurrentEditLabel(label._id)
+                              }}
+                              checkedLabel={() => handleCheckedLabel(label)}
+                            >
+                            </Label>
+                          ))
+                        }
+                      </div>
+                      <TaskButton openForm={() => setIsOpenAddNewLabelWindow(true)} name={'Utwórz nową etykietę'} />
                     </>
                   ) : (
-                    <LabelForm
-                      formId={'label-title'}
-                      handleChange={handleChangeLabelTitle}
-                      handleSubmit={handleSaveLabelEdit}
-                      deleteLabel={handleDeleteLabel}
-                      value={currentLabelTitle}
-                      onFocus={(e) => e.target.select()}
-                      selectColor={currentLabelColor}
-                      setSelectColor={setCurrentLabelColor}
-                    />
+                    isOpenLabelEditWindow ? (
+                      <LabelForm
+                        formId={'label-title-edit'}
+                        handleChange={handleChangeLabelTitle}
+                        handleSubmit={handleSaveLabelEdit}
+                        deleteLabel={handleDeleteLabel}
+                        value={currentLabelTitle}
+                        onFocus={(e) => e.target.select()}
+                        selectColor={currentLabelColor}
+                        setSelectColor={setCurrentLabelColor}
+                      />
+                    ) : isOpenAddNewLabelWindow ? (
+                      <LabelForm
+                        formId={'label-title-add'}
+                        handleChange={handleChangeLabelTitle}
+                        handleSubmit={handleAddNewLabel}
+                        deleteLabel={handleDeleteLabel}
+                        value={labelTitle}
+                        onFocus={(e) => e.target.select()}
+                        selectColor={currentLabelColor}
+                        setSelectColor={setCurrentLabelColor}
+                      />
+                    ) : null
                   )
                 }
               </div>
             </Popup>
-            {/* </div> */}
             <TaskButton openForm={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
             <TaskButton openForm={() => setFormIsOpen(true)} name={'Data'} icon={<BsStopwatch />} />
             <TaskButton openForm={() => setFormIsOpen(true)} name={'Załącznik'} icon={<GrAttachment />} />

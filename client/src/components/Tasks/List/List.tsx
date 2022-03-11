@@ -85,7 +85,6 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
     addCard({
       listId: listId,
       title: cardTitle,
-      // labels: labels
     })
     updateBoard({
       id: boardId,

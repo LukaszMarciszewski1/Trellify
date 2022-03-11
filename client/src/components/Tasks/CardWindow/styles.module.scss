@@ -166,6 +166,11 @@
   flex-direction: column;
 }
 
+.labelsList {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
 .labelsWrap {
   display: flex;
 }

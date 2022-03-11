@@ -63,7 +63,7 @@ const Sidebar: React.FC = () => {
         <MdArrowForwardIos />
       </button>
       <div className={styles.logo} onClick={() => createBoard({
-        labels: labelItems,
+        labels: [],
         background: defaultBackground
       })}><IoLogoJavascript /></div>
       <ul className={styles.linksContainer}>

@@ -11,12 +11,13 @@ interface Board {
     active: boolean
   }[]
 }
+const url = 'http://localhost:5000/'
 
 type BoardResponse = Board[]
 
 export const boardApi = createApi({
   reducerPath: 'boardApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: url }),
   tagTypes: ['Board'],
   endpoints: (builder) => ({
     getAllBoards: builder.query<BoardResponse, void>({

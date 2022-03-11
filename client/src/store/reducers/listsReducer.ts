@@ -12,10 +12,11 @@ interface List {
 }
 
 type ListResponse = List[]
+const url = 'http://localhost:5000/'
 
 export const listApi = createApi({
   reducerPath: 'listApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: url }),
   tagTypes: ['List'],
   endpoints: (builder) => ({
     getAllTasks: builder.query<ListResponse, void>({
