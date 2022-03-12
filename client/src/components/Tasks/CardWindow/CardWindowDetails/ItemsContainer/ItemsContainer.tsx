@@ -2,25 +2,25 @@ import React from 'react'
 import styles from './styles.module.scss'
 
 type Props = {
+  data: any
   children: any
   title: string
-  data: []
 }
 
 const ItemsContainer: React.FC<Props> = ({ children, title, data }) => {
-  const activeList = data.filter((item: { active: boolean }) => item.active === true)
+  const isDataExist = Array.isArray(data) ? (data.length ? true : false) : (data === null || data === undefined ? false : true)
 
   return (
     <>
       {
-        // activeList.length ? (
-        <div className={styles.container}>
-          <p>{title}</p>
-          <div className={styles.items}>
-            {children}
+        isDataExist ? (
+          <div className={styles.container}>
+            <p>{title}</p>
+            <div className={styles.items}>
+              {children}
+            </div>
           </div>
-        </div>
-        // ) : null
+        ) : null
       }
     </>
   )

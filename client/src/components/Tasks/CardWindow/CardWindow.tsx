@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import styles from './styles.module.scss'
-
+import dayjs from 'dayjs';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import TaskForm from '../TaskForm/TaskForm'
 import IconButton from '../../Details/IconButton/IconButton';
 import useOnClickOutside from '../../../hooks/useOnClickOutside'
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { BsXLg } from 'react-icons/bs';
 import { BsPencil } from 'react-icons/bs';
@@ -38,6 +41,7 @@ import { BiCheck } from 'react-icons/bi';
 
 import ItemsContainer from './CardWindowDetails/ItemsContainer/ItemsContainer'
 import LabelForm from './CardWindowDetails/LabelForm/LabelForm'
+import Button from '../../Details/Button/Button';
 
 type Props = {
   cardId: string
@@ -45,6 +49,7 @@ type Props = {
   description: string
   boardId: string
   nameList: string | undefined
+  deadline: Date | null
   setOpenCardDetails: () => void
   cardLabels: any
   setCardLabels: (value: any) => void
@@ -60,6 +65,7 @@ const CardDetails: React.FC<Props> = ({
   nameList,
   description,
   cardLabels,
+  deadline,
   setCardLabels,
   settingsLabel,
   setSettingsLabel
@@ -74,6 +80,7 @@ const CardDetails: React.FC<Props> = ({
   const [labels, setLabels] = useState([] as any)
   const [formIsOpen, setFormIsOpen] = useState(false)
   const [labelsTrigger, setLabelsTrigger] = useState<boolean>(false)
+  const [dateTrigger, setDateTrigger] = useState<boolean>(false)
   const [isOpenLabelEditWindow, setIsOpenLabelEditWindow] = useState<boolean>(false)
   const [isOpenAddNewLabelWindow, setIsOpenAddNewLabelWindow] = useState<boolean>(false)
   const [currentLabelTitle, setCurrentLabelTitle] = useState<string>('')
@@ -81,6 +88,9 @@ const CardDetails: React.FC<Props> = ({
   const [currentLabelColor, setCurrentLabelColor] = useState<string>('')
   const [labelTitle, setLabelTitle] = useState<string>('')
 
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [deadlineCard, setDeadlineCard] = useState<Date | null>(deadline)
+  const maxDate = new Date()
 
 
   useEffect(() => {
@@ -121,7 +131,6 @@ const CardDetails: React.FC<Props> = ({
   const handleChangeLabelTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'label-title-edit') setCurrentLabelTitle(e.target.value)
     if (e.target.id === 'label-title-add') setLabelTitle(e.target.value)
-    console.log(labelTitle)
   }
 
   const handleSaveLabelEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -212,7 +221,31 @@ const CardDetails: React.FC<Props> = ({
     setCurrentLabelId(id)
   }
 
+  const handleSaveDeadline = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    e.preventDefault()
+    setDeadlineCard(startDate)
+    updateCard({
+      id: cardId,
+      deadline: startDate
+    })
+    updateBoard({ id: boardId })
+    setDateTrigger(false)
+  }
+
+  const handleDeleteDeadline = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    e.preventDefault()
+    setDeadlineCard(null)
+    updateCard({
+      id: cardId,
+      deadline: null
+    })
+    updateBoard({ id: boardId })
+    setDateTrigger(false)
+  }
+
   useOnClickOutside(refWindow, setOpenCardDetails)
+
+  console.log(deadlineCard)
 
   return (
     <>
@@ -239,17 +272,34 @@ const CardDetails: React.FC<Props> = ({
             <ItemsContainer data={cardLabels} title={'Etykiety'}>
               {
                 cardLabels.map((label: { title: string; active: any; color: any; _id: string }) => (
-                  // label.active ? (
                   <div
                     key={label._id}
                     style={{ backgroundColor: `${label.color}` }}
                     className={styles.label}
-                    onClick={() => console.log('click')}
+                    onClick={() => setLabelsTrigger(true)}
                   >
                     <span>{label.title}</span>
                   </div>
-                  // ) : null
                 ))
+              }
+            </ItemsContainer>
+            <ItemsContainer data={deadlineCard} title={'Termin'}>
+              {
+                deadlineCard ? (
+                  <>
+                    <input
+                      onChange={() => console.log('checked')}
+                      type="checkbox"
+                      style={{ height: '100%', width: '1rem' }} />
+                    <button onClick={() => setDateTrigger(true)}
+                      style={{ maxWidth: '250px', padding: '8px', backgroundColor: '#ebecf0', marginLeft: '10px' }}>
+                      <span>{dayjs(deadlineCard).format('DD-MM-YYYY HH:mm')}</span>
+                      <span style={{ backgroundColor: deadlineCard < maxDate ? 'red' : 'green', color: 'white' }}>
+                        {deadlineCard < maxDate ? 'termin przekroczony' : ''}
+                      </span>
+                    </button>
+                  </>
+                ) : null
               }
             </ItemsContainer>
             <div className={styles.descriptionHeader}>
@@ -272,7 +322,7 @@ const CardDetails: React.FC<Props> = ({
                   value={cardDescription}
                   onFocus={(e) => e.target.select()}
                 /> :
-                <div className={styles.innerTextWrapper} >
+                <div>
                   {cardDescription !== '' && cardDescription !== undefined ? <p onClick={() => setFormIsOpen(true)}>{cardDescription}</p> :
                     <TaskButton openForm={() => setFormIsOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
                 </div>
@@ -313,35 +363,48 @@ const CardDetails: React.FC<Props> = ({
                       <TaskButton openForm={() => setIsOpenAddNewLabelWindow(true)} name={'Utwórz nową etykietę'} />
                     </>
                   ) : (
-                    isOpenLabelEditWindow ? (
-                      <LabelForm
-                        formId={'label-title-edit'}
-                        handleChange={handleChangeLabelTitle}
-                        handleSubmit={handleSaveLabelEdit}
-                        deleteLabel={handleDeleteLabel}
-                        value={currentLabelTitle}
-                        onFocus={(e) => e.target.select()}
-                        selectColor={currentLabelColor}
-                        setSelectColor={setCurrentLabelColor}
-                      />
-                    ) : isOpenAddNewLabelWindow ? (
-                      <LabelForm
-                        formId={'label-title-add'}
-                        handleChange={handleChangeLabelTitle}
-                        handleSubmit={handleAddNewLabel}
-                        deleteLabel={handleDeleteLabel}
-                        value={labelTitle}
-                        onFocus={(e) => e.target.select()}
-                        selectColor={currentLabelColor}
-                        setSelectColor={setCurrentLabelColor}
-                      />
-                    ) : null
+                    <LabelForm
+                      formId={isOpenLabelEditWindow ? 'label-title-edit' : isOpenAddNewLabelWindow ? 'label-title-add' : ''}
+                      handleChange={handleChangeLabelTitle}
+                      handleSubmit={isOpenLabelEditWindow ? handleSaveLabelEdit : isOpenAddNewLabelWindow ? handleAddNewLabel : () => console.log('label does not exist')}
+                      deleteLabel={handleDeleteLabel}
+                      value={isOpenLabelEditWindow ? currentLabelTitle : isOpenAddNewLabelWindow ? labelTitle : ''}
+                      onFocus={(e) => e.target.select()}
+                      selectColor={currentLabelColor}
+                      setSelectColor={setCurrentLabelColor}
+                    />
                   )
                 }
               </div>
             </Popup>
+            <Popup
+              title={'data'}
+              trigger={dateTrigger}
+              closePopup={() => setDateTrigger(false)}
+              editWindow={false}
+              backToMainWindow={() => setDateTrigger(false)}
+            >
+              <DatePicker
+                dateFormat={'DD-MM-YYYYTHH:mm'}
+                // selected={deadlineCard}
+                onChange={(date: Date) => setStartDate(date)}
+                inline
+                showTimeInput
+              // isClearable
+              />
+              <label>Termin <br></br>
+                <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(startDate).format('DD/MM/YYYY')} />
+                <input style={{ maxWidth: '100px' }} placeholder={dayjs(startDate).format('HH:mm')} />
+              </label>
+              <div className={styles.actionsForm}>
+                <Button onClick={handleSaveDeadline} title={'Zapisz'} />
+                <div style={{ marginRight: '1rem' }} />
+                <Button onClick={handleDeleteDeadline} title={'Usuń'} bgColor={'#EA4746'} />
+              </div>
+            </Popup>
+
             <TaskButton openForm={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
-            <TaskButton openForm={() => setFormIsOpen(true)} name={'Data'} icon={<BsStopwatch />} />
+            <TaskButton openForm={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
             <TaskButton openForm={() => setFormIsOpen(true)} name={'Załącznik'} icon={<GrAttachment />} />
             <TaskButton openForm={() => setFormIsOpen(true)} name={'Lista zadań'} icon={<BiTask />} />
             <div className={styles.divider}></div>

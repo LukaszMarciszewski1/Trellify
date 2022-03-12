@@ -25,6 +25,7 @@ import {
 } from "../../../store/reducers/cardsReducer";
 
 import { BsPencil } from 'react-icons/bs';
+import { GrTextAlignFull } from 'react-icons/gr';
 // import TaskButton from '../TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton';
 
@@ -35,6 +36,7 @@ type Props = {
   listId?: string
   cardId: string
   index: number
+  deadline: Date | null
   updateDate?: Date
   labels: []
   onClickDelete?: () => void
@@ -42,8 +44,18 @@ type Props = {
   nameList: string | undefined
 }
 
-const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, dragDisabled, nameList, description, labels }) => {
-  const { data: board, error, isLoading } = useGetBoardQuery(boardId);
+const Card: React.FC<Props> = ({
+  cardId,
+  boardId,
+  title,
+  index,
+  onClickDelete,
+  dragDisabled,
+  nameList,
+  description,
+  labels,
+  deadline
+}) => {
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
@@ -52,12 +64,6 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
   const [showText, setShowText] = useState(false)
   const [cardLabels, setCardLabels] = useState(labels)
   const [settingsLabel, setSettingsLabel] = useState([] as any)
-
-  // useEffect(() => {
-  //   if (board) {
-  //     setSettingsLabel(board.labels)
-  //   }
-  // }, [cardLabels])
 
   const handleMouseEnter = () => {
     setShowText(true)
@@ -77,6 +83,7 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
             description={description}
             boardId={boardId}
             cardLabels={cardLabels}
+            deadline={deadline}
             setCardLabels={setCardLabels}
             settingsLabel={settingsLabel}
             setSettingsLabel={setSettingsLabel}
@@ -107,6 +114,7 @@ const Card: React.FC<Props> = ({ cardId, boardId, title, index, onClickDelete, d
                   }
                 </div>
                 <span >{title}</span>
+                <div>{description ? <GrTextAlignFull style={{ fontSize: '.9rem', color: 'grey', marginTop: '5px' }} /> : null}</div>
               </div>
               <div className={styles.btnContainer}>
                 {

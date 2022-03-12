@@ -88,7 +88,8 @@
 .descriptionHeader {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.8rem;
 }
 
 .textareaDescription {
@@ -204,4 +205,9 @@
   padding: 0.3rem;
   background-color: #fcfcfc;
   border: 1px solid grey;
+}
+
+.datapickerWrapper {
+  display: flex;
+  width: 700px;
 }

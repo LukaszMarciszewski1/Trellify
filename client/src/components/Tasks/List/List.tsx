@@ -131,13 +131,14 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                   ref={provided.innerRef}
                 >
                   {
-                    cards?.map((card: { listId: string; _id: string; title: string; updateDate: Date, labels: [], description: string }, index: number) => (
+                    cards?.map((card: { listId: string; _id: string; title: string; updateDate: Date, labels: [], description: string, deadline: Date }, index: number) => (
                       <Card
                         index={index}
                         key={card._id}
                         cardId={card._id}
                         boardId={boardId}
                         title={card.title}
+                        deadline={card.deadline}
                         description={card.description}
                         updateDate={card.updateDate}
                         labels={card.labels}

@@ -5,7 +5,6 @@ const CardSchema = mongoose.Schema(
   {
     title: String,
     description: String,
-    deadline: Date,
     sourceIndex: Number,
     destinationIndex: Number,
     sortIndex: Number,
@@ -21,6 +20,7 @@ const CardSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    deadline: Date,
     createdAt: {
       type: Date,
       default: new Date(),
