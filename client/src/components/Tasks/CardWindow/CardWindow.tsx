@@ -7,7 +7,9 @@ import TaskForm from '../TaskForm/TaskForm'
 import IconButton from '../../Details/IconButton/IconButton';
 import useOnClickOutside from '../../../hooks/useOnClickOutside'
 
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
+import { parseISO, format } from 'date-fns'
+import { pl } from 'date-fns/locale'
 import "react-datepicker/dist/react-datepicker.css";
 
 import { BsXLg } from 'react-icons/bs';
@@ -88,12 +90,14 @@ const CardDetails: React.FC<Props> = ({
   const [currentLabelColor, setCurrentLabelColor] = useState<string>('')
   const [labelTitle, setLabelTitle] = useState<string>('')
 
-  const [startDate, setStartDate] = useState<Date>(new Date());
   const [deadlineCard, setDeadlineCard] = useState<Date | null>(deadline)
+  const [checked, setChecked] = React.useState(false);
   const maxDate = new Date()
 
 
+
   useEffect(() => {
+    registerLocale("pl", pl);
     if (board) {
       setLabels(board.labels)
     }
@@ -223,10 +227,9 @@ const CardDetails: React.FC<Props> = ({
 
   const handleSaveDeadline = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
-    setDeadlineCard(startDate)
     updateCard({
       id: cardId,
-      deadline: startDate
+      deadline: deadlineCard
     })
     updateBoard({ id: boardId })
     setDateTrigger(false)
@@ -243,9 +246,12 @@ const CardDetails: React.FC<Props> = ({
     setDateTrigger(false)
   }
 
-  useOnClickOutside(refWindow, setOpenCardDetails)
+  const handleChange = () => {
+    setChecked(!checked);
+  };
+  console.log(checked)
 
-  console.log(deadlineCard)
+  useOnClickOutside(refWindow, setOpenCardDetails)
 
   return (
     <>
@@ -288,16 +294,24 @@ const CardDetails: React.FC<Props> = ({
                 deadlineCard ? (
                   <>
                     <input
-                      onChange={() => console.log('checked')}
                       type="checkbox"
-                      style={{ height: '100%', width: '1rem' }} />
+                      checked={checked}
+                      onChange={handleChange}
+                      style={{ height: '100%', width: '1rem', marginRight: '8px' }} />
                     <button onClick={() => setDateTrigger(true)}
-                      style={{ maxWidth: '250px', padding: '8px', backgroundColor: '#ebecf0', marginLeft: '10px' }}>
+                      style={{ maxWidth: '250px', padding: '8px', backgroundColor: '#ebecf0' }}>
                       <span>{dayjs(deadlineCard).format('DD-MM-YYYY HH:mm')}</span>
-                      <span style={{ backgroundColor: deadlineCard < maxDate ? 'red' : 'green', color: 'white' }}>
+                      <span style={{ backgroundColor: deadlineCard < maxDate ? 'red' : 'green', color: 'white', marginLeft: '5px', borderRadius: '4px' }}>
                         {deadlineCard < maxDate ? 'termin przekroczony' : ''}
                       </span>
+                      {
+                        checked ? (
+                          <span style={{ backgroundColor: 'green', color: 'white', padding: '.2rem', marginLeft: '5px', borderRadius: '4px' }}>zrealizowany</span>
+                        ) : null
+                      }
+
                     </button>
+                    {/* <TaskButton openForm={() => setFormIsOpen(true)} name={'Usuń'} icon={<RiDeleteBinLine />} /> */}
                   </>
                 ) : null
               }
@@ -385,16 +399,18 @@ const CardDetails: React.FC<Props> = ({
               backToMainWindow={() => setDateTrigger(false)}
             >
               <DatePicker
-                dateFormat={'DD-MM-YYYYTHH:mm'}
-                // selected={deadlineCard}
-                onChange={(date: Date) => setStartDate(date)}
+                // locale={'pl'}
+                dateFormat='DD/MM/YYYY'
+                timeFormat="hh:mm"
+                selected={deadlineCard ? new Date(deadlineCard) : null}
+                onChange={(date: Date) => setDeadlineCard(date)}
                 inline
                 showTimeInput
               // isClearable
               />
               <label>Termin <br></br>
-                <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(startDate).format('DD/MM/YYYY')} />
-                <input style={{ maxWidth: '100px' }} placeholder={dayjs(startDate).format('HH:mm')} />
+                <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(deadlineCard).format('DD/MM/YYYY')} />
+                <input style={{ maxWidth: '100px' }} placeholder={dayjs(deadlineCard).format('HH:mm')} />
               </label>
               <div className={styles.actionsForm}>
                 <Button onClick={handleSaveDeadline} title={'Zapisz'} />

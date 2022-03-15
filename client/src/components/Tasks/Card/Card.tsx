@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 // import TextareaAutosize from 'react-textarea-autosize';
 import styles from './styles.module.scss'
 import { Draggable } from 'react-beautiful-dnd';
-
+import dayjs from 'dayjs';
+import 'dayjs/locale/pl';
 import CardWindow from '../CardWindow/CardWindow';
 // import TextareaAutosize from 'react-textarea-autosize';
 import {
@@ -26,8 +27,10 @@ import {
 
 import { BsPencil } from 'react-icons/bs';
 import { GrTextAlignFull } from 'react-icons/gr';
+import { BsStopwatch } from 'react-icons/bs';
 // import TaskButton from '../TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton';
+import TaskButton from '../TaskButton/TaskButton';
 
 type Props = {
   boardId: string
@@ -56,6 +59,7 @@ const Card: React.FC<Props> = ({
   labels,
   deadline
 }) => {
+  dayjs.locale('pl');
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
@@ -64,6 +68,7 @@ const Card: React.FC<Props> = ({
   const [showText, setShowText] = useState(false)
   const [cardLabels, setCardLabels] = useState(labels)
   const [settingsLabel, setSettingsLabel] = useState([] as any)
+  const [checkedDeadline, setCheckedDeadline] = React.useState(false);
 
   const handleMouseEnter = () => {
     setShowText(true)
@@ -114,7 +119,11 @@ const Card: React.FC<Props> = ({
                   }
                 </div>
                 <span >{title}</span>
-                <div>{description ? <GrTextAlignFull style={{ fontSize: '.9rem', color: 'grey', marginTop: '5px' }} /> : null}</div>
+                <div className={styles.iconsContainer}>
+                  {description ? <GrTextAlignFull style={{ fontSize: '.9rem', color: 'grey', marginTop: '5px' }} /> : null}
+                  {deadline ? <span style={{ fontSize: '.9rem', color: 'grey', marginTop: '5px', display: 'flex', alignItems: 'center' }}><BsStopwatch style={{ marginRight: '5px' }} />{dayjs(deadline).format('DD/MMMM')}</span> : null}
+                  {/* <TaskButton openForm={() => console.log('okk')} name={'Usuń'} icon={<BsStopwatch />} /> */}
+                </div>
               </div>
               <div className={styles.btnContainer}>
                 {

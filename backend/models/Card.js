@@ -20,7 +20,7 @@ const CardSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    deadline: Date,
+    deadline: Date | null,
     createdAt: {
       type: Date,
       default: new Date(),
@@ -37,10 +37,10 @@ const CardSchema = mongoose.Schema(
         active: Boolean,
       },
     ],
-  },
-  {
-    timestamps: true,
   }
+  // {
+  //   timestamps: true,
+  // }
 )
 
 CardSchema.statics.updateOne = (id, data) => {
