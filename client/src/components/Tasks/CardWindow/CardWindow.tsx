@@ -1,6 +1,14 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import styles from './styles.module.scss'
 import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isToday from 'dayjs/plugin/isToday';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import minMax from 'dayjs/plugin/minMax';
+import updateLocale from 'dayjs/plugin/updateLocale'
+import duration from 'dayjs/plugin/duration'
+
+
 import TextareaAutosize from 'react-textarea-autosize';
 
 import TaskForm from '../TaskForm/TaskForm'
@@ -31,7 +39,7 @@ import {
 import {
   // useGetCardQuery,
   // useAddCardMutation,
-  // useDeleteCardMutation,
+  useDeleteCardMutation,
   useUpdateCardMutation,
 } from "../../../store/reducers/cardsReducer";
 // import { GrAdd } from 'react-icons/gr';
@@ -51,29 +59,45 @@ type Props = {
   description: string
   boardId: string
   nameList: string | undefined
-  deadline: Date | null
-  setOpenCardDetails: () => void
+  deadlineCard: Date | null
   cardLabels: any
+  cardCompleted: boolean
+  dateIsSameOrBefore: boolean
+  deadlineIsSoon: boolean
+  cardDateDisplay: {
+    style: {
+      backgroundColor: string
+    },
+    title: string
+    name: string
+  }
+  setIsCardWindowOpen: () => void
+  setCardCompleted: (value: any) => void
+  setDeadlineCard: (value: any) => void
   setCardLabels: (value: any) => void
-  settingsLabel: []
-  setSettingsLabel: (value: any) => void
 }
 
-const CardDetails: React.FC<Props> = ({
+const CardWindow: React.FC<Props> = ({
   cardId,
   title,
-  setOpenCardDetails,
   boardId,
   nameList,
   description,
   cardLabels,
-  deadline,
+  deadlineCard,
+  cardCompleted,
+  setDeadlineCard,
+  setCardCompleted,
+  setIsCardWindowOpen,
   setCardLabels,
-  settingsLabel,
-  setSettingsLabel
+  dateIsSameOrBefore,
+  deadlineIsSoon,
+  cardDateDisplay,
+
 }) => {
   const { data: board, error, isLoading } = useGetBoardQuery(boardId);
   const [updateCard] = useUpdateCardMutation()
+  const [deleteCard] = useDeleteCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
   const refWindow = useRef(null)
@@ -90,19 +114,12 @@ const CardDetails: React.FC<Props> = ({
   const [currentLabelColor, setCurrentLabelColor] = useState<string>('')
   const [labelTitle, setLabelTitle] = useState<string>('')
 
-  const [deadlineCard, setDeadlineCard] = useState<Date | null>(deadline)
-  const [checked, setChecked] = React.useState(false);
-  const maxDate = new Date()
-
-
-
   useEffect(() => {
     registerLocale("pl", pl);
     if (board) {
       setLabels(board.labels)
     }
   }, [board])
-
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-title') setCardTitle(e.target.value)
@@ -246,16 +263,22 @@ const CardDetails: React.FC<Props> = ({
     setDateTrigger(false)
   }
 
-  const handleChange = () => {
-    setChecked(!checked);
+  const handleChangeCompleted = () => {
+    setCardCompleted(!cardCompleted);
+    updateCard({
+      id: cardId,
+      completed: !cardCompleted
+    })
+    updateBoard({
+      id: boardId
+    })
   };
-  console.log(checked)
 
-  useOnClickOutside(refWindow, setOpenCardDetails)
+  useOnClickOutside(refWindow, setIsCardWindowOpen)
 
   return (
     <>
-      <div className={styles.overlay} onClick={setOpenCardDetails}></div>
+      <div className={styles.overlay} onClick={setIsCardWindowOpen}></div>
       <div ref={refWindow} className={styles.cardWindow}>
         <div className={styles.cardHeader}>
           <div className={styles.cardHeaderText}>
@@ -271,7 +294,7 @@ const CardDetails: React.FC<Props> = ({
             />
             <p>Na liscie: <strong>{nameList}</strong></p>
           </div>
-          <IconButton onClick={setOpenCardDetails}><BsXLg /></IconButton>
+          <IconButton onClick={setIsCardWindowOpen}><BsXLg /></IconButton>
         </div>
         <div className={styles.cardContainer}>
           <div className={styles.windowMain}>
@@ -295,23 +318,41 @@ const CardDetails: React.FC<Props> = ({
                   <>
                     <input
                       type="checkbox"
-                      checked={checked}
-                      onChange={handleChange}
+                      checked={cardCompleted}
+                      onChange={handleChangeCompleted}
                       style={{ height: '100%', width: '1rem', marginRight: '8px' }} />
                     <button onClick={() => setDateTrigger(true)}
-                      style={{ maxWidth: '250px', padding: '8px', backgroundColor: '#ebecf0' }}>
+                      className={styles.selectedDateBtn}>
                       <span>{dayjs(deadlineCard).format('DD-MM-YYYY HH:mm')}</span>
-                      <span style={{ backgroundColor: deadlineCard < maxDate ? 'red' : 'green', color: 'white', marginLeft: '5px', borderRadius: '4px' }}>
-                        {deadlineCard < maxDate ? 'termin przekroczony' : ''}
-                      </span>
                       {
-                        checked ? (
-                          <span style={{ backgroundColor: 'green', color: 'white', padding: '.2rem', marginLeft: '5px', borderRadius: '4px' }}>zrealizowany</span>
+                        dateIsSameOrBefore && !cardCompleted ? (
+                          <span
+                            title={cardDateDisplay.title}
+                            style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.datedateNotificationSpan}>
+                            {cardDateDisplay.name}
+                          </span>
+                        ) : null
+                      }
+                      {
+                        deadlineIsSoon && !cardCompleted ? (
+                          <span
+                            title={cardDateDisplay.title}
+                            style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.datedateNotificationSpan}>
+                            {cardDateDisplay.name}
+                          </span>
+                        ) : null
+                      }
+                      {
+                        cardCompleted ? (
+                          <span
+                            title={cardDateDisplay.title}
+                            style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.datedateNotificationSpan}>
+                            {cardDateDisplay.name}
+                          </span>
                         ) : null
                       }
 
                     </button>
-                    {/* <TaskButton openForm={() => setFormIsOpen(true)} name={'Usuń'} icon={<RiDeleteBinLine />} /> */}
                   </>
                 ) : null
               }
@@ -321,7 +362,7 @@ const CardDetails: React.FC<Props> = ({
               <div style={{ maxWidth: '100px', marginLeft: '1rem' }}>
                 {
                   !formIsOpen && cardDescription !== undefined && cardDescription !== '' ? (
-                    <TaskButton openForm={() => setFormIsOpen(true)} name={'Edytuj'} icon={<BsPencil />} />
+                    <TaskButton onClick={() => setFormIsOpen(true)} name={'Edytuj'} icon={<BsPencil />} />
                   ) : null
                 }
               </div>
@@ -338,7 +379,7 @@ const CardDetails: React.FC<Props> = ({
                 /> :
                 <div>
                   {cardDescription !== '' && cardDescription !== undefined ? <p onClick={() => setFormIsOpen(true)}>{cardDescription}</p> :
-                    <TaskButton openForm={() => setFormIsOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
+                    <TaskButton onClick={() => setFormIsOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
                 </div>
             }
           </div>
@@ -374,7 +415,7 @@ const CardDetails: React.FC<Props> = ({
                           ))
                         }
                       </div>
-                      <TaskButton openForm={() => setIsOpenAddNewLabelWindow(true)} name={'Utwórz nową etykietę'} />
+                      <TaskButton onClick={() => setIsOpenAddNewLabelWindow(true)} name={'Utwórz nową etykietę'} />
                     </>
                   ) : (
                     <LabelForm
@@ -399,14 +440,12 @@ const CardDetails: React.FC<Props> = ({
               backToMainWindow={() => setDateTrigger(false)}
             >
               <DatePicker
-                // locale={'pl'}
                 dateFormat='DD/MM/YYYY'
                 timeFormat="hh:mm"
                 selected={deadlineCard ? new Date(deadlineCard) : null}
                 onChange={(date: Date) => setDeadlineCard(date)}
                 inline
                 showTimeInput
-              // isClearable
               />
               <label>Termin <br></br>
                 <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(deadlineCard).format('DD/MM/YYYY')} />
@@ -419,13 +458,16 @@ const CardDetails: React.FC<Props> = ({
               </div>
             </Popup>
 
-            <TaskButton openForm={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
-            <TaskButton openForm={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
-            <TaskButton openForm={() => setFormIsOpen(true)} name={'Załącznik'} icon={<GrAttachment />} />
-            <TaskButton openForm={() => setFormIsOpen(true)} name={'Lista zadań'} icon={<BiTask />} />
+            <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
+            <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
+            <TaskButton onClick={() => setFormIsOpen(true)} name={'Załącznik'} icon={<GrAttachment />} />
+            <TaskButton onClick={() => setFormIsOpen(true)} name={'Lista zadań'} icon={<BiTask />} />
             <div className={styles.divider}></div>
-            <TaskButton openForm={() => setFormIsOpen(true)} name={'Przenieś'} icon={<CgArrowRight />} />
-            <TaskButton openForm={() => setFormIsOpen(true)} name={'Usuń'} icon={<RiDeleteBinLine />} />
+            <TaskButton onClick={() => setFormIsOpen(true)} name={'Przenieś'} icon={<CgArrowRight />} />
+            <TaskButton onClick={() => {
+              deleteCard(cardId);
+              updateBoard({ id: boardId })
+            }} name={'Usuń'} icon={<RiDeleteBinLine />} />
           </div>
         </div>
       </div>
@@ -434,4 +476,4 @@ const CardDetails: React.FC<Props> = ({
   )
 }
 
-export default CardDetails
+export default CardWindow

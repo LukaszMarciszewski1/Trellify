@@ -11,12 +11,13 @@
   border-radius: 3px;
   user-select: none;
   cursor: pointer;
+  z-index: 1;
   &:hover {
     background-color: #f8f8f8;
   }
 }
 .cardContainer {
-  padding: 0.8rem;
+  padding: 0.5rem;
   max-width: 260px;
   flex-grow: 1;
   overflow-wrap: break-word;
@@ -27,6 +28,15 @@
     font-weight: normal;
     overflow-wrap: break-word;
   }
+}
+
+.cardClickableArea {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
 .textarea {
@@ -41,6 +51,7 @@
   border: none;
   margin-right: 2rem;
   color: rgb(61, 61, 61);
+  z-index: 0;
 }
 
 .btnContainer {
@@ -55,6 +66,7 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  z-index: 0;
 }
 
 .cardLabel {
@@ -63,4 +75,49 @@
   border-radius: 5px;
   margin-right: 4px;
   margin-bottom: 4px;
+  z-index: 2;
+}
+
+.iconsContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.dateContainer {
+  display: 'inline-block';
+  border-radius: '3px';
+  margin-top: '5px';
+  position: 'absolute';
+  left: 0;
+  top: 0;
+  margin-right: 10px;
+  z-index: 2;
+}
+
+.dateBtn {
+  position: relative;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-radius: 3px;
+  margin-right: 8px;
+  z-index: 3;
+  overflow: hidden;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #31313125;
+    transform: translateY(-100%);
+    z-index: -1;
+  }
+  &:hover::after {
+    transform: translateY(0);
+  }
 }

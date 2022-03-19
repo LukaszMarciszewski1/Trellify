@@ -17,8 +17,8 @@ const CardSchema = mongoose.Schema(
       ref: 'Board',
     },
     completed: {
-      type: Number,
-      default: 0,
+      type: Boolean,
+      default: false,
     },
     deadline: Date | null,
     createdAt: {

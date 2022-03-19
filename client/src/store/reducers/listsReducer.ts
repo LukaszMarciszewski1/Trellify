@@ -35,10 +35,7 @@ export const listApi = createApi({
       }),
       invalidatesTags: ['List'],
     }),
-    deleteTask: builder.mutation<
-      { success: boolean; id: string | number },
-      string
-    >({
+    deleteTask: builder.mutation<{ success: boolean; id: string | number }, string>({
       query: (id) => ({
         url: `lists/${id}`,
         method: 'DELETE',

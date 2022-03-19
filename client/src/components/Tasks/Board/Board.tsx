@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 // import { isEmpty, cloneDeep } from 'lodash'
 import styles from './styles.module.scss'
-import { DragDropContext, Droppable, DropResult} from 'react-beautiful-dnd'
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 // import { renderToString } from 'react-dom/server';
 import {
   // useGetAllBoardsQuery,
@@ -124,7 +124,7 @@ const Board: React.FC = () => {
 
         if (source.droppableId === destination.droppableId) {
           const newCards = [...sourceList.cards]
-          
+
           const [removed] = newCards.splice(source.index, 1)
           newCards.splice(destination.index, 0, removed)
 
@@ -249,7 +249,7 @@ const Board: React.FC = () => {
                   value={listTitle}
                 />
               </div>
-              : <TaskButton openForm={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
+              : <TaskButton onClick={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
             }
           </div>
         </div>

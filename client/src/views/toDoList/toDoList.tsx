@@ -6,7 +6,7 @@ import {
   useGetAllTasksQuery,
   useAddTaskMutation,
 } from "../../store/reducers/listsReducer";
-import { nowDate } from '../../hooks/nowDate';
+// import { nowDate } from '../../hooks/nowDate';
 // import Task from '../../components/Tasks/Task/Task'
 // import Tasks from '../../components/Tasks/Tasks';
 import Tabs from '../../components/Details/Tabs/Tabs'

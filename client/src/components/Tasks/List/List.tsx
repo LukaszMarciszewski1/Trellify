@@ -131,7 +131,17 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                   ref={provided.innerRef}
                 >
                   {
-                    cards?.map((card: { listId: string; _id: string; title: string; updateDate: Date, labels: [], description: string, deadline: Date }, index: number) => (
+                    cards?.map((card: {
+                      listId: string;
+                      _id: string;
+                      title: string;
+                      updateDate: Date,
+                      labels: [],
+                      description: string,
+                      deadline: Date,
+                      completed: boolean
+                    },
+                      index: number) => (
                       <Card
                         index={index}
                         key={card._id}
@@ -139,6 +149,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                         boardId={boardId}
                         title={card.title}
                         deadline={card.deadline}
+                        completed={card.completed}
                         description={card.description}
                         updateDate={card.updateDate}
                         labels={card.labels}
@@ -163,7 +174,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                   // onBlur={handleBlur}
                   />
                 </div>
-                : <TaskButton openForm={() => setOpenCardForm(true)} name={'Dodaj kartę'} icon={<GoPlus />} />
+                : <TaskButton onClick={() => setOpenCardForm(true)} name={'Dodaj kartę'} icon={<GoPlus />} />
               }
             </div>
           </div>

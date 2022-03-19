@@ -7,7 +7,7 @@ interface Cards {
   title: string
   description: string
   deadline: Date
-  completed: number
+  completed: boolean
   createdAt: Date
   updateDate: Date
   text: string
