@@ -11,6 +11,13 @@ interface Cards {
   createdAt: Date
   updateDate: Date
   text: string
+  // files: {
+  //   type: string
+  //   name: string
+  //   size: number
+  //   lastModifiedDate: Date
+  // }[]
+  files: string
   labels: {
     color: string
     title: string
@@ -42,6 +49,18 @@ export const cardsApi = createApi({
         body,
       }),
       invalidatesTags: ['Cards'],
+    }),
+    uploadFilesCard: builder.mutation({
+      query: ({ id, ...post }) => ({
+        url: `cards/${id}/files`,
+        method: 'POST',
+        body: post,
+      }),
+      invalidatesTags: ['Cards'],
+    }),
+    getCardFiles: builder.query({
+      query: (id) => `cards/${id}/files`,
+      providesTags: ['Cards'],
     }),
     deleteCard: builder.mutation<{ success: boolean; id: string }, string>({
       query: (id) => ({
@@ -75,4 +94,6 @@ export const {
   useDeleteCardMutation,
   useUpdateCardMutation,
   useDeleteAllMutation,
+  useUploadFilesCardMutation,
+  useGetCardFilesQuery,
 } = cardsApi

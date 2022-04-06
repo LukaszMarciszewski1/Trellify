@@ -10,17 +10,17 @@ import './App.css';
 
 const App: React.FC = () => {
   return (
-      <Router>
-        <Layout>
-          <Switch>
-            <Route exact path='/' component={TasksPage} />
-            <Route path='/calculator' component={Calculator} />
-            <Route path='/View-2' component={View2} />
-            <Route path='/View-3' component={View3} />
-            <Route path='/View-4' component={View4} />
-          </Switch>
-        </Layout>
-      </Router>
+    <Router>
+      <Layout>
+        <Switch>
+          <Route exact path='/' component={TasksPage} />
+          <Route path='/calculator' component={Calculator} />
+          <Route path='/View-2' component={View2} />
+          <Route path='/View-3' component={View3} />
+          <Route path='/View-4' component={View4} />
+        </Switch>
+      </Layout>
+    </Router>
   );
 }
 

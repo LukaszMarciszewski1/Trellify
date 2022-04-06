@@ -5,9 +5,7 @@ const CardSchema = mongoose.Schema(
   {
     title: String,
     description: String,
-    sourceIndex: Number,
-    destinationIndex: Number,
-    sortIndex: Number,
+    deadline: Date | null,
     listId: {
       type: Schema.Types.ObjectId,
       ref: 'List',
@@ -20,7 +18,6 @@ const CardSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    deadline: Date | null,
     createdAt: {
       type: Date,
       default: new Date(),
@@ -29,7 +26,10 @@ const CardSchema = mongoose.Schema(
       type: Date,
       default: null,
     },
-    position: Number,
+    files: {
+      type: Schema.Types.ObjectId,
+      ref: 'Files',
+    },
     labels: [
       {
         color: String,
@@ -37,10 +37,10 @@ const CardSchema = mongoose.Schema(
         active: Boolean,
       },
     ],
+  },
+  {
+    timestamps: true,
   }
-  // {
-  //   timestamps: true,
-  // }
 )
 
 CardSchema.statics.updateOne = (id, data) => {

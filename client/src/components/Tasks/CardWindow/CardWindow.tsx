@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
+import axios from 'axios';
 import styles from './styles.module.scss'
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -7,6 +8,10 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import minMax from 'dayjs/plugin/minMax';
 import updateLocale from 'dayjs/plugin/updateLocale'
 import duration from 'dayjs/plugin/duration'
+import Dropzone from 'react-dropzone'
+import { useDropzone } from 'react-dropzone'
+import storage from '../../../config/firebase';
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 
 import TextareaAutosize from 'react-textarea-autosize';
@@ -38,9 +43,10 @@ import {
 
 import {
   // useGetCardQuery,
-  // useAddCardMutation,
+  useGetCardFilesQuery,
   useDeleteCardMutation,
   useUpdateCardMutation,
+  useUploadFilesCardMutation
 } from "../../../store/reducers/cardsReducer";
 // import { GrAdd } from 'react-icons/gr';
 import TaskButton from '../TaskButton/TaskButton';
@@ -52,6 +58,8 @@ import { BiCheck } from 'react-icons/bi';
 import ItemsContainer from './CardWindowDetails/ItemsContainer/ItemsContainer'
 import LabelForm from './CardWindowDetails/LabelForm/LabelForm'
 import Button from '../../Details/Button/Button';
+
+import FileForm from './CardWindowDetails/FileForm/FileForm'
 
 type Props = {
   cardId: string
@@ -96,9 +104,11 @@ const CardWindow: React.FC<Props> = ({
 
 }) => {
   const { data: board, error, isLoading } = useGetBoardQuery(boardId);
-  const [updateCard] = useUpdateCardMutation()
-  const [deleteCard] = useDeleteCardMutation()
-  const [updateBoard] = useUpdateBoardMutation()
+  // const { data: cardFiles } = useGetCardFilesQuery(cardId);
+  const [updateCard] = useUpdateCardMutation();
+  const [deleteCard] = useDeleteCardMutation();
+  const [updateBoard] = useUpdateBoardMutation();
+  const [uploadFiles] = useUploadFilesCardMutation();
 
   const refWindow = useRef(null)
   const [cardTitle, setCardTitle] = useState<string>(title)
@@ -107,6 +117,7 @@ const CardWindow: React.FC<Props> = ({
   const [formIsOpen, setFormIsOpen] = useState(false)
   const [labelsTrigger, setLabelsTrigger] = useState<boolean>(false)
   const [dateTrigger, setDateTrigger] = useState<boolean>(false)
+  const [fileTrigger, setFileTrigger] = useState<boolean>(false)
   const [isOpenLabelEditWindow, setIsOpenLabelEditWindow] = useState<boolean>(false)
   const [isOpenAddNewLabelWindow, setIsOpenAddNewLabelWindow] = useState<boolean>(false)
   const [currentLabelTitle, setCurrentLabelTitle] = useState<string>('')
@@ -114,12 +125,31 @@ const CardWindow: React.FC<Props> = ({
   const [currentLabelColor, setCurrentLabelColor] = useState<string>('')
   const [labelTitle, setLabelTitle] = useState<string>('')
 
+  const [file, setFile] = useState<any>(null);
+  const [inputContainsFile, setInputContainsFile] = useState(false);
+  const [imageId, setImageId] = useState(null);
+  const [progress, setProgress] = useState(0);
+
   useEffect(() => {
     registerLocale("pl", pl);
     if (board) {
       setLabels(board.labels)
     }
   }, [board])
+
+  const getAllSongs = async () => {
+    // try {
+    //   const { data } = await axios.get()
+    //   setFile(data.data)
+    // } catch (error) {
+    //   console.log(error)
+    // }
+    console.log(process.env.REACT_APP_API_URL)
+  }
+
+  useEffect(() => {
+    getAllSongs()
+  }, [])
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-title') setCardTitle(e.target.value)
@@ -274,6 +304,57 @@ const CardWindow: React.FC<Props> = ({
     })
   };
 
+  const handleUploadImage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.currentTarget.files !== null) {
+        const file = e.currentTarget.files[0];
+        setFile(file)
+        console.log(file)
+      }
+    },
+    [],
+  );
+
+  const handleSubmitFile = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    e.preventDefault()
+    // const data = new FormData()
+    // data.append("image", file, file.name)
+    // axios.post(`http://localhost:5000/files/upload`, data, {
+    //   onUploadProgress: (progressEvent) => {
+    //     console.log(progressEvent)
+    //   }
+    // })
+    //   .then(({ data }) => {
+    //     console.log(data)
+    //     setImageId(data)
+    //     setFile(null)
+    //     setInputContainsFile(false)
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //   })
+    // setProgressShow(true);
+    if (!file) return;
+    const sotrageRef = ref(storage, `files/${file.name}`);
+    const uploadTask = uploadBytesResumable(sotrageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const prog = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(prog);
+      },
+      (error) => console.log(error),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+        });
+      }
+    );
+  }
+
   useOnClickOutside(refWindow, setIsCardWindowOpen)
 
   return (
@@ -367,6 +448,9 @@ const CardWindow: React.FC<Props> = ({
                 }
               </div>
             </div>
+            <div>
+              <img src={file ? file.name : ''} alt={file}></img>
+            </div>
             {
               formIsOpen ?
                 <TaskForm
@@ -436,7 +520,6 @@ const CardWindow: React.FC<Props> = ({
               title={'data'}
               trigger={dateTrigger}
               closePopup={() => setDateTrigger(false)}
-              editWindow={false}
               backToMainWindow={() => setDateTrigger(false)}
             >
               <DatePicker
@@ -457,10 +540,23 @@ const CardWindow: React.FC<Props> = ({
                 <Button onClick={handleDeleteDeadline} title={'Usuń'} bgColor={'#EA4746'} />
               </div>
             </Popup>
+            <Popup
+              title={'załącznik'}
+              trigger={fileTrigger}
+              closePopup={() => setFileTrigger(false)}
+              backToMainWindow={() => setFileTrigger(false)}
+            >
+              <form >
+                <h1>React File Upload</h1>
+                <FileForm name={'file'} size={0} label={'file'} type={'file'} value={''} handleInputState={handleUploadImage} />
+                <button type="submit" onClick={handleSubmitFile}>Upload</button>
+              </form>
+            </Popup>
+
 
             <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
             <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
-            <TaskButton onClick={() => setFormIsOpen(true)} name={'Załącznik'} icon={<GrAttachment />} />
+            <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />
             <TaskButton onClick={() => setFormIsOpen(true)} name={'Lista zadań'} icon={<BiTask />} />
             <div className={styles.divider}></div>
             <TaskButton onClick={() => setFormIsOpen(true)} name={'Przenieś'} icon={<CgArrowRight />} />

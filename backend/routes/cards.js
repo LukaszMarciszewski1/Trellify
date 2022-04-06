@@ -8,14 +8,17 @@ import {
   deleteCard,
   updateCard,
   deleteAllCardsOfList,
-  updateAllCards,
+  // getCardFiles,
+  uploadFilesCard,
 } from '../controllers/cards.js'
 
 router.get('/', getCards)
 router.post('/', createCard)
 router.get('/:id', getCard)
 router.patch('/:id', updateCard)
-router.put('/', updateAllCards)
+router.post('/:id/files', uploadFilesCard)
+// router.get('/:id/files', getCardFiles)
+// router.put('/', updateAllCards)
 router.delete('/:id', deleteCard)
 router.delete('/', deleteAllCardsOfList)
 

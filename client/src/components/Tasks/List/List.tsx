@@ -139,7 +139,8 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                       labels: [],
                       description: string,
                       deadline: Date,
-                      completed: boolean
+                      completed: boolean,
+                      files: []
                     },
                       index: number) => (
                       <Card
@@ -153,6 +154,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                         description={card.description}
                         updateDate={card.updateDate}
                         labels={card.labels}
+                        files={card.files}
                         nameList={listTitle}
                         dragDisabled={setDragDisabled}
                       />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
-import getImages from '../../../store/api/imageApi';
+import getImages from '../../../store/api/unsplashApi';
 import { BsXLg } from "react-icons/bs";
 import IconButton from '../../Details/IconButton/IconButton';
 import { colors, defaultBackground, defaultColor } from '../localData';

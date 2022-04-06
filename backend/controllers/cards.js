@@ -1,5 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
+import cors from 'cors'
+import multer from 'multer'
 import Card from '../models/Card.js'
 import List from '../models/List.js'
 import Board from '../models/Board.js'
@@ -7,7 +9,7 @@ import Board from '../models/Board.js'
 const router = express.Router()
 export const getCards = async (req, res) => {
   try {
-    const card = await Card.find().sort( { timestamp : -1 } )
+    const card = await Card.find().sort({ timestamp: -1 })
     res.status(200).json(card)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -26,7 +28,7 @@ export const getCard = async (req, res) => {
 
 export const createCard = async (req, res) => {
   const { title, labels, listId } = req.body
-  const newCard = new Card({ title, labels, listId})
+  const newCard = new Card(req.body)
   let parentList = await List.findById(listId)
   try {
     parentList.cards = [...parentList.cards, newCard]
@@ -42,7 +44,7 @@ export const updateCard = async (req, res) => {
   const { id } = req.params
   try {
     if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`No card with id: ${id}`)
+      return res.status(404).send(`No card with id: ${id}`)
     const updateCard = await Card.findByIdAndUpdate(id, req.body, { new: true })
     res.json(updateCard)
   } catch (error) {
@@ -50,9 +52,73 @@ export const updateCard = async (req, res) => {
   }
 }
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // cb(null, `cards/${req.params.id}/files`);
+    cb(null, `public`)
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  },
+})
+
+const upload = multer({ storage })
+
+export const uploadFilesCard = async (req, res) => {
+  const { id } = req.params
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id))
+    upload.single('file')
+    res.json(req.body)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+
+  // upload.single('file')
+  // console.log(req.body, req.files);
+  // res.send('ok');
+}
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, '../public')
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.originalname)
+//   },
+// })
+
+// const upload = multer({ storage: storage }).single('file')
+
+// export const uploadFilesCard = async (req, res) => {
+//   const { id } = req.params
+//   try {
+//     if (!mongoose.Types.ObjectId.isValid(id))
+//       upload(req, res, (err) => {
+//         if (err) {
+//           return res.status(500).json(err)
+//         }
+//         return res.status(200).send(req.files)
+//       })
+//     res.json(updateCard)
+//   } catch (error) {
+//     res.status(404).json({ message: error.message })
+//   }
+// }
+
+export const getCardFiles = async (req, res) => {
+  const { id } = req.params
+  try {
+    const card = await Card.findById(id)
+    res.status(200).json(card)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
 export const deleteCard = async (req, res) => {
   const { id } = req.params
-  const {boardId} = req.body
+  const { boardId } = req.body
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No card with id: ${id}`)
 

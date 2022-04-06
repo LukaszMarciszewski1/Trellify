@@ -56,6 +56,7 @@ type Props = {
   completed: boolean
   updateDate?: Date
   labels: []
+  files: []
   onClickDelete?: () => void
   dragDisabled: (value: boolean) => void
   nameList: string | undefined
@@ -71,7 +72,8 @@ const Card: React.FC<Props> = ({
   description,
   completed,
   labels,
-  deadline
+  deadline,
+  files
 }) => {
   dayjs.locale('pl');
   const [deleteCard] = useDeleteCardMutation()
@@ -138,7 +140,7 @@ const Card: React.FC<Props> = ({
     },
     title: cardCompleted ? 'Ta karta została ukończona' :
       dateIsSameOrBefore ? 'Ta karta jest przeterminowana' :
-        deadlineIsSoon ? `Deadline za ${dayjs(deadlineCard).fromNow()}` : 'Karta jest na później',
+        deadlineIsSoon ? `Deadline ${dayjs(deadlineCard).fromNow()}` : 'Karta jest na później',
     name: cardCompleted ? 'zrealizowany' :
       dateIsSameOrBefore ? 'termin przekroczony' :
         deadlineIsSoon ? `wkrótce` : '',
@@ -198,11 +200,12 @@ const Card: React.FC<Props> = ({
                   {
                     deadline ? (
                       <button
+                        ref={hoverRef}
                         className={styles.dateBtn}
                         onClick={handleChangeCompleted}
                         style={cardDateDisplay.style}
                         title={cardDateDisplay.title}
-                        ref={hoverRef}
+
                       >
                         {isHover ? (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />) : <BsStopwatch style={cardDateDisplay.iconStyle} />}
                         {dayjs(deadline).format('DD MMM')}
