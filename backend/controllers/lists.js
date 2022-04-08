@@ -35,7 +35,6 @@ export const createList = async (req, res) => {
     const newList = new List({ title, boardId })
     let parentBoard = await Board.findById(boardId)
     parentBoard.lists = [...parentBoard.lists, newList]
-    // parentBoard.listOrder = [...parentBoard.listOrder, newList._id]
     await parentBoard.save()
     await newList.save()
     res.status(201).json(newList)

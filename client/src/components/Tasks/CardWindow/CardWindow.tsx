@@ -46,7 +46,8 @@ import {
   useGetCardFilesQuery,
   useDeleteCardMutation,
   useUpdateCardMutation,
-  useUploadFilesCardMutation
+  useUploadFilesCardMutation,
+  useDeleteFileMutation,
 } from "../../../store/reducers/cardsReducer";
 // import { GrAdd } from 'react-icons/gr';
 import TaskButton from '../TaskButton/TaskButton';
@@ -60,6 +61,7 @@ import LabelForm from './CardWindowDetails/LabelForm/LabelForm'
 import Button from '../../Details/Button/Button';
 
 import FileForm from './CardWindowDetails/FileForm/FileForm'
+import Files from './CardWindowDetails/Files/Files';
 
 type Props = {
   cardId: string
@@ -104,11 +106,12 @@ const CardWindow: React.FC<Props> = ({
 
 }) => {
   const { data: board, error, isLoading } = useGetBoardQuery(boardId);
-  // const { data: cardFiles } = useGetCardFilesQuery(cardId);
+  const { data: cardFiles } = useGetCardFilesQuery(cardId);
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
   const [updateBoard] = useUpdateBoardMutation();
   const [uploadFiles] = useUploadFilesCardMutation();
+  const [deleteFile] = useDeleteFileMutation();
 
   const refWindow = useRef(null)
   const [cardTitle, setCardTitle] = useState<string>(title)
@@ -125,31 +128,25 @@ const CardWindow: React.FC<Props> = ({
   const [currentLabelColor, setCurrentLabelColor] = useState<string>('')
   const [labelTitle, setLabelTitle] = useState<string>('')
 
-  const [file, setFile] = useState<any>(null);
+  const [selectFiles, setSelectFiles] = useState<any>('');
   const [inputContainsFile, setInputContainsFile] = useState(false);
   const [imageId, setImageId] = useState(null);
   const [progress, setProgress] = useState(0);
+
+  const [files, setFiles] = useState([] as any)
 
   useEffect(() => {
     registerLocale("pl", pl);
     if (board) {
       setLabels(board.labels)
     }
-  }, [board])
+    if (cardFiles) {
+      setFiles(cardFiles.files)
+    }
+  }, [board, cardFiles])
 
-  const getAllSongs = async () => {
-    // try {
-    //   const { data } = await axios.get()
-    //   setFile(data.data)
-    // } catch (error) {
-    //   console.log(error)
-    // }
-    console.log(process.env.REACT_APP_API_URL)
-  }
 
-  useEffect(() => {
-    getAllSongs()
-  }, [])
+
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-title') setCardTitle(e.target.value)
@@ -307,9 +304,8 @@ const CardWindow: React.FC<Props> = ({
   const handleUploadImage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.currentTarget.files !== null) {
-        const file = e.currentTarget.files[0];
-        setFile(file)
-        console.log(file)
+        // const file = e.currentTarget.files;
+        setSelectFiles(e.currentTarget.files)
       }
     },
     [],
@@ -317,45 +313,33 @@ const CardWindow: React.FC<Props> = ({
 
   const handleSubmitFile = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
-    // const data = new FormData()
-    // data.append("image", file, file.name)
-    // axios.post(`http://localhost:5000/files/upload`, data, {
-    //   onUploadProgress: (progressEvent) => {
-    //     console.log(progressEvent)
-    //   }
-    // })
-    //   .then(({ data }) => {
-    //     console.log(data)
-    //     setImageId(data)
-    //     setFile(null)
-    //     setInputContainsFile(false)
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
-    // setProgressShow(true);
-    if (!file) return;
-    const sotrageRef = ref(storage, `files/${file.name}`);
-    const uploadTask = uploadBytesResumable(sotrageRef, file);
+    const formData = new FormData();
+    for (let i = 0; i < selectFiles.length; i++) {
+      formData.append('files', selectFiles[i]);
+    }
+    axios.post(`http://localhost:5000/cards/${cardId}/files`, formData)
+      .then(res => console.log(res))
+      .catch((error) => {
+        console.log(error)
+      })
+    updateCard({
+      id: cardId,
+      files: files
+    })
+  }
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const prog = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setProgress(prog);
-      },
-      (error) => console.log(error),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-        });
-      }
-    );
+  const handleDeleteFile = () => {
+    deleteFile(cardId)
+    updateCard({
+      id: cardId,
+      files: files
+    })
   }
 
   useOnClickOutside(refWindow, setIsCardWindowOpen)
+
+
+  console.log(files)
 
   return (
     <>
@@ -448,8 +432,18 @@ const CardWindow: React.FC<Props> = ({
                 }
               </div>
             </div>
-            <div>
-              <img src={file ? file.name : ''} alt={file}></img>
+            <div className={styles.filesContainer}>
+              {
+                files?.map((file: { _id: React.Key | null | undefined; fileName: string; createdAt: string; filePath: any; }) => (
+                  <Files
+                    key={file._id}
+                    title={file.fileName}
+                    created={`Dodano ${dayjs(file.createdAt).format('DD MMM')} o ${dayjs(file.createdAt).format('HH:mm')}`}
+                    src={`http://localhost:5000/${file.filePath}`}
+                    deleteFile={handleDeleteFile}
+                  />
+                ))
+              }
             </div>
             {
               formIsOpen ?
@@ -546,9 +540,12 @@ const CardWindow: React.FC<Props> = ({
               closePopup={() => setFileTrigger(false)}
               backToMainWindow={() => setFileTrigger(false)}
             >
-              <form >
+              <form
+                method='POST'
+                encType='multipart/form-data'
+              >
                 <h1>React File Upload</h1>
-                <FileForm name={'file'} size={0} label={'file'} type={'file'} value={''} handleInputState={handleUploadImage} />
+                <FileForm name={'files'} size={0} label={'files'} type={'file'} handleInputState={handleUploadImage} />
                 <button type="submit" onClick={handleSubmitFile}>Upload</button>
               </form>
             </Popup>

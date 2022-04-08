@@ -1,22 +1,28 @@
 import mongoose from 'mongoose'
 const { Schema } = mongoose
 
-const FileSchema = mongoose.Schema(
-  {
-    name: {
-      type: String,
-      require: true,
+const FileSchema = new Schema({
+    cardId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Card',
     },
-    size: Number,
-    lastModifiedDate: {
-      type: Date,
-      default: new Date
+    fileName: {
+        type: String,
+        required: true
+    },
+    filePath: {
+        type: String,
+        required: true
+    },
+    fileType: {
+        type: String,
+        required: true
+    },
+    fileSize: {
+        type: String,
+        required: true
     }
-  },
-  {
-    timestamps: true,
-  }
-)
+}, {timestamps: true});
 
 const File  = mongoose.model('File', FileSchema)
 

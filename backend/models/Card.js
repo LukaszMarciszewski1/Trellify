@@ -26,10 +26,12 @@ const CardSchema = mongoose.Schema(
       type: Date,
       default: null,
     },
-    files: {
-      type: Schema.Types.ObjectId,
-      ref: 'Files',
-    },
+    files: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'File',
+      },
+    ],
     labels: [
       {
         color: String,
@@ -42,10 +44,6 @@ const CardSchema = mongoose.Schema(
     timestamps: true,
   }
 )
-
-CardSchema.statics.updateOne = (id, data) => {
-  return Card.findByIdAndUpdate(id, data)
-}
 
 const Card = mongoose.model('Card', CardSchema)
 

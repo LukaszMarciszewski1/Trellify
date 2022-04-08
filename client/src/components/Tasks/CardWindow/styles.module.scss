@@ -228,3 +228,8 @@
     background-color: darken(#ebecf0, 3%);
   }
 }
+
+.filesContainer{
+  max-height: 300px;
+  overflow-y: auto;
+}

@@ -62,6 +62,13 @@ export const cardsApi = createApi({
       query: (id) => `cards/${id}/files`,
       providesTags: ['Cards'],
     }),
+    deleteFile: builder.mutation<{ success: boolean; id: string }, string>({
+      query: (id) => ({
+        url: `cards/${id}/files`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Cards'],
+    }),
     deleteCard: builder.mutation<{ success: boolean; id: string }, string>({
       query: (id) => ({
         url: `cards/${id}`,
@@ -94,6 +101,7 @@ export const {
   useDeleteCardMutation,
   useUpdateCardMutation,
   useDeleteAllMutation,
+  useDeleteFileMutation,
   useUploadFilesCardMutation,
   useGetCardFilesQuery,
 } = cardsApi

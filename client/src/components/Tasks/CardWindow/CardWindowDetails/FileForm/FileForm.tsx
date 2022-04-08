@@ -8,11 +8,11 @@ type Props = {
   size: number
   label: string
   type: string
-  value: string
+  // value: string
   handleInputState: (value: any) => void
 }
 
-const FileForm: React.FC<Props> = ({ name, size, label, value, type, handleInputState, ...rest }) => {
+const FileForm: React.FC<Props> = ({ name, size, label, type, handleInputState, ...rest }) => {
   const inputRef = useRef()
   const [progress, setProgress] = useState<number>(0)
   const [progressShow, setProgressShow] = useState<boolean>(false)
@@ -36,10 +36,9 @@ const FileForm: React.FC<Props> = ({ name, size, label, value, type, handleInput
       <input
         type={type}
         name={name}
-        value={value}
-        // ref={inputRef}
-        // ref={inputRef ? inputRef : undefined}
+        // value={value}
         onChange={handleInputState}
+        multiple
         {...rest}
       />
       <button
