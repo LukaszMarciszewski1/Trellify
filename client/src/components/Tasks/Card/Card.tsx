@@ -27,7 +27,7 @@ import {
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 import {
-  // useGetCardQuery,
+  useGetCardQuery,
   // useAddCardMutation,
   useDeleteCardMutation,
   useUpdateCardMutation,
@@ -38,6 +38,7 @@ import { GrTextAlignFull } from 'react-icons/gr';
 import { BsStopwatch } from 'react-icons/bs';
 import { ImCheckboxUnchecked } from 'react-icons/im';
 import { ImCheckboxChecked } from 'react-icons/im';
+import { GrAttachment } from 'react-icons/gr';
 // import TaskButton from '../TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton';
 import TaskButton from '../TaskButton/TaskButton';
@@ -57,9 +58,9 @@ type Props = {
   updateDate?: Date
   labels: []
   files: []
+  nameList: string | undefined
   onClickDelete?: () => void
   dragDisabled: (value: boolean) => void
-  nameList: string | undefined
 }
 
 const Card: React.FC<Props> = ({
@@ -67,29 +68,27 @@ const Card: React.FC<Props> = ({
   boardId,
   title,
   index,
-  dragDisabled,
   nameList,
   description,
   completed,
   labels,
   deadline,
-  files
+  dragDisabled,
 }) => {
-  dayjs.locale('pl');
+  const { data: card, error, isLoading } = useGetCardQuery(cardId);
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
   const [isCardWindowOpen, setIsCardWindowOpen] = useState<boolean>(false)
-  const [showText, setShowText] = useState(false)
+  const [showText, setShowText] = useState<boolean>(false)
   const [cardLabels, setCardLabels] = useState(labels)
-  const [cardCompleted, setCardCompleted] = useState(completed)
+  const [cardCompleted, setCardCompleted] = useState<boolean>(completed)
   const [deadlineCard, setDeadlineCard] = useState<Date | null>(deadline)
-  const [isShowChecked, setShowChecked] = useState<boolean>(false)
   const [nowDate, setNowDate] = useState(Date.now())
+  const [files, setFiles] = useState([] as any)
 
-  // const ref = useRef(null);
-
+  dayjs.locale('pl');
   dayjs.extend(isSameOrBefore)
   dayjs.extend(duration)
   dayjs.extend(relativeTime)
@@ -98,6 +97,12 @@ const Card: React.FC<Props> = ({
     const intervalIsSameOrBefore = setInterval(() => setNowDate(Date.now()), 10000)
     return () => clearInterval(intervalIsSameOrBefore)
   }, [])
+
+  useEffect(() => {
+     if(card){
+       setFiles(card.files)
+     }
+  }, [card])
 
   const handleMouseEnter = () => {
     setShowText(true)
@@ -173,6 +178,7 @@ const Card: React.FC<Props> = ({
             dateIsSameOrBefore={dateIsSameOrBefore}
             deadlineIsSoon={deadlineIsSoon}
             cardDateDisplay={cardDateDisplay}
+            cardFiles={files}
           /> : null
       }
       <Draggable draggableId={String(cardId)} index={index} >
@@ -212,7 +218,8 @@ const Card: React.FC<Props> = ({
                       </button>
                     ) : null
                   }
-                  {description ? <GrTextAlignFull onClick={handleOpenCardWindow} style={{ fontSize: '.9rem', color: 'grey', zIndex: 2 }} title="Ta karta ma opis." /> : null}
+                  {description ? <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardWindow} /></div> : null}
+                  {/* {attachment.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{attachment.length}</span></div> : null} */}
                 </div>
               </div>
               <div className={styles.btnContainer}>

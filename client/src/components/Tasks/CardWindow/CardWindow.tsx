@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import axios from 'axios';
 import styles from './styles.module.scss'
 import dayjs from 'dayjs';
+import fileDownload from 'js-file-download'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isToday from 'dayjs/plugin/isToday';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -42,13 +43,21 @@ import {
 } from '../../../store/reducers/boardsReducer'
 
 import {
-  // useGetCardQuery,
+  useGetCardQuery,
   useGetCardFilesQuery,
   useDeleteCardMutation,
   useUpdateCardMutation,
   useUploadFilesCardMutation,
-  useDeleteFileMutation,
+  // useDeleteFileMutation,
 } from "../../../store/reducers/cardsReducer";
+
+import {
+  useGetAllFilesQuery,
+  useGetFileQuery,
+  useUploadFileMutation,
+  useDeleteFileMutation,
+} from '../../../store/reducers/filesReducer'
+
 // import { GrAdd } from 'react-icons/gr';
 import TaskButton from '../TaskButton/TaskButton';
 import Popup from '../../Details/Popup/Popup';
@@ -71,6 +80,7 @@ type Props = {
   nameList: string | undefined
   deadlineCard: Date | null
   cardLabels: any
+  cardFiles: any
   cardCompleted: boolean
   dateIsSameOrBefore: boolean
   deadlineIsSoon: boolean
@@ -103,14 +113,18 @@ const CardWindow: React.FC<Props> = ({
   dateIsSameOrBefore,
   deadlineIsSoon,
   cardDateDisplay,
+  cardFiles
 
 }) => {
+  dayjs.locale('pl');
   const { data: board, error, isLoading } = useGetBoardQuery(boardId);
-  const { data: cardFiles } = useGetCardFilesQuery(cardId);
+  const { data: card } = useGetCardQuery(cardId)
+  // const { data: cardFiles } = useGetCardFilesQuery(cardId);
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
   const [updateBoard] = useUpdateBoardMutation();
-  const [uploadFiles] = useUploadFilesCardMutation();
+  // const [uploadFiles] = useUploadFilesCardMutation();
+  const [uploadFiles] = useUploadFileMutation();
   const [deleteFile] = useDeleteFileMutation();
 
   const refWindow = useRef(null)
@@ -125,6 +139,7 @@ const CardWindow: React.FC<Props> = ({
   const [isOpenAddNewLabelWindow, setIsOpenAddNewLabelWindow] = useState<boolean>(false)
   const [currentLabelTitle, setCurrentLabelTitle] = useState<string>('')
   const [currentLabelId, setCurrentLabelId] = useState<string>('')
+  const [currentFileId, setCurrentFileId] = useState<string>('')
   const [currentLabelColor, setCurrentLabelColor] = useState<string>('')
   const [labelTitle, setLabelTitle] = useState<string>('')
 
@@ -133,18 +148,20 @@ const CardWindow: React.FC<Props> = ({
   const [imageId, setImageId] = useState(null);
   const [progress, setProgress] = useState(0);
 
-  const [files, setFiles] = useState([] as any)
+  const [files, setFiles] = useState(cardFiles)
 
   useEffect(() => {
-    registerLocale("pl", pl);
+    // registerLocale("pl", pl); //?????????????????
     if (board) {
       setLabels(board.labels)
+      // setFiles(card.files)
     }
-    if (cardFiles) {
-      setFiles(cardFiles.files)
-    }
-  }, [board, cardFiles])
-
+  }, [board])
+  // useEffect(() => {
+  //   if (card) {
+  //     setAttachment(card.files)
+  //   }
+  // }, [card])
 
 
 
@@ -304,7 +321,6 @@ const CardWindow: React.FC<Props> = ({
   const handleUploadImage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.currentTarget.files !== null) {
-        // const file = e.currentTarget.files;
         setSelectFiles(e.currentTarget.files)
       }
     },
@@ -314,32 +330,58 @@ const CardWindow: React.FC<Props> = ({
   const handleSubmitFile = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     const formData = new FormData();
+    formData.append('cardId', cardId)
     for (let i = 0; i < selectFiles.length; i++) {
       formData.append('files', selectFiles[i]);
     }
-    axios.post(`http://localhost:5000/cards/${cardId}/files`, formData)
-      .then(res => console.log(res))
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    }
+    axios.post(`http://localhost:5000/files`, formData, config)
+      .then(res => {
+        console.log(res)
+      })
       .catch((error) => {
         console.log(error)
       })
     updateCard({
       id: cardId,
-      files: files
+      files: cardFiles
     })
+    console.log(cardFiles)
   }
 
-  const handleDeleteFile = () => {
-    deleteFile(cardId)
+
+
+  const handleDeleteFile = (fileId: string) => {
+    // setCurrentFileId(fileId)
+    // console.log(e.currentTarget.id)
+    deleteFile(fileId)
     updateCard({
       id: cardId,
-      files: files
+      files: cardFiles
     })
+    updateBoard({
+      id: boardId
+    })
+    console.log(cardFiles)
+  }
+
+  const handleDownloadFile = (filePath: string) => {
+    axios.get(`http://localhost:5000/${filePath}`, {
+      responseType: 'blob',
+    }).then((res) => {
+      let filename = filePath.replace(/^.*[\\\/]/, '')
+      let fileExtension;
+      fileExtension = filePath.split('.');
+      fileExtension = fileExtension[fileExtension.length - 1];
+      fileDownload(res.data, `${filename}.${fileExtension}`);
+    });
   }
 
   useOnClickOutside(refWindow, setIsCardWindowOpen)
-
-
-  console.log(files)
 
   return (
     <>
@@ -434,13 +476,14 @@ const CardWindow: React.FC<Props> = ({
             </div>
             <div className={styles.filesContainer}>
               {
-                files?.map((file: { _id: React.Key | null | undefined; fileName: string; createdAt: string; filePath: any; }) => (
+                cardFiles?.map((file: { _id: string; fileName: string; createdAt: string; filePath: string; }) => (
                   <Files
                     key={file._id}
                     title={file.fileName}
                     created={`Dodano ${dayjs(file.createdAt).format('DD MMM')} o ${dayjs(file.createdAt).format('HH:mm')}`}
                     src={`http://localhost:5000/${file.filePath}`}
-                    deleteFile={handleDeleteFile}
+                    deleteFile={() => handleDeleteFile(file._id)}
+                    downloadFile={() => handleDownloadFile(file.filePath)}
                   />
                 ))
               }
@@ -541,8 +584,8 @@ const CardWindow: React.FC<Props> = ({
               backToMainWindow={() => setFileTrigger(false)}
             >
               <form
-                method='POST'
-                encType='multipart/form-data'
+              // method='POST'
+              // encType='multipart/form-data'
               >
                 <h1>React File Upload</h1>
                 <FileForm name={'files'} size={0} label={'files'} type={'file'} handleInputState={handleUploadImage} />

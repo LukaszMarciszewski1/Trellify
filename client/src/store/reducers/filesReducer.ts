@@ -1,8 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 interface File {
-  name: string
-  size: number
-  lastModifiedDate: Date
+  cardId: string,
+  fileName: string,
+  filePath: string,
+  fileType: string,
+  fileSize: string
 }
 
 type FilesResponse = File[]
@@ -21,18 +23,15 @@ export const filesApi = createApi({
       query: (id) => `files/${id}`,
       providesTags: ['Files'],
     }),
-    addFile: builder.mutation({
+    uploadFile: builder.mutation({
       query: (body: {}) => ({
-        url: 'files',
+        url: `files`,
         method: 'POST',
-        body,
+        body
       }),
       invalidatesTags: ['Files'],
     }),
-    deleteFile: builder.mutation<
-      { success: boolean; id: string | number },
-      string
-    >({
+    deleteFile: builder.mutation<{ success: boolean; id: string | number }, string>({
       query: (id) => ({
         url: `files/${id}`,
         method: 'DELETE',
@@ -45,6 +44,6 @@ export const filesApi = createApi({
 export const {
   useGetAllFilesQuery,
   useGetFileQuery,
-  useAddFileMutation,
+  useUploadFileMutation,
   useDeleteFileMutation,
 } = filesApi

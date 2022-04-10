@@ -7,9 +7,10 @@ type Props = {
   src: string,
   created: string,
   deleteFile: () => void
+  downloadFile: () => void
 }
 
-const Files: React.FC<Props> = ({ created, title, src, deleteFile }) => {
+const Files: React.FC<Props> = ({ created, title, src, deleteFile, downloadFile }) => {
   return (
     <div className={styles.conatiner}>
       <div className={styles.fileImg}>
@@ -18,8 +19,9 @@ const Files: React.FC<Props> = ({ created, title, src, deleteFile }) => {
       <div className={styles.fileDetails}>
         <h4>{title}</h4>
         <span>{created}</span>
-        <div className={styles.fileButton}>
-          <TaskButton onClick={deleteFile} name={'Skasuj'} />
+        <div className={styles.fileButtons}>
+          <TaskButton height={'25px'} margin={'0 8px 0 0'} onClick={deleteFile} name={'Skasuj'} />
+          <TaskButton height={'25px'} margin={'0'} onClick={downloadFile} name={'Pobierz'} />
         </div>
       </div>
     </div>

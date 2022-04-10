@@ -58,13 +58,13 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const [openCardForm, setOpenCardForm] = useState<boolean>(false)
   const [openTitleForm, setOpenTitleForm] = useState<boolean>(false)
   const [dragDisabled, setDragDisabled] = useState<boolean>(false)
-  const [labels, setLabels] = useState([] as any)
+  // const [labels, setLabels] = useState([] as any)
 
-  useEffect(() => {
-    if (board) {
-      setLabels(board.labels)
-    }
-  }, [board])
+  // useEffect(() => {
+  //   if (board) {
+  //     setLabels(board.labels)
+  //   }
+  // }, [board])
 
 
   const handleChangeCardValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {

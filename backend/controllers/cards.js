@@ -19,6 +19,10 @@ export const getCard = async (req, res) => {
   const { id } = req.params
   try {
     const card = await Card.findById(id)
+      .populate({
+        path: 'files',
+      })
+      .exec()
     res.status(200).json(card)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -112,29 +116,44 @@ export const getFiles = async (req, res, next) => {
   }
 }
 
-export const deleteFile = async (req, res, next) => {
+export const downloadFiles = async (req, res, next) => {
   const { id } = req.params
+
   try {
     const files = await File.find()
     const currentFile = files.find(
       (file) => mongoose.Types.ObjectId(file.cardId).toString() === id
     )
     await File.findByIdAndRemove(currentFile)
-
-    const path = currentFile.filePath
-    if (path) {
-      fs.unlink(path, (err) => {
-        if (err) {
-          console.error(err)
-          return
-        }
-      })
-    }
+    console.log(currentFile)
 
     res.status(200).send(files)
   } catch (error) {
     res.status(400).send(error.message)
   }
+}
+
+export const deleteFile = async (req, res, next) => {
+  // const { id } = req.params
+  // try {
+  //   const files = await File.find()
+  //   const currentFile = files.find(
+  //     (file) => mongoose.Types.ObjectId(file.cardId).toString() === id
+  //   )
+  //   await File.findByIdAndRemove(currentFile)
+  //   const path = currentFile.filePath
+  //   if (path) {
+  //     fs.unlink(path, (err) => {
+  //       if (err) {
+  //         console.error(err)
+  //         return
+  //       }
+  //     })
+  //   }
+  //   res.status(200).send(files)
+  // } catch (error) {
+  //   res.status(400).send(error.message)
+  // }
 }
 
 const fileSizeFormatter = (bytes, decimal) => {

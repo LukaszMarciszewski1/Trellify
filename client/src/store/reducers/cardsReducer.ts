@@ -11,13 +11,12 @@ interface Cards {
   createdAt: Date
   updateDate: Date
   text: string
-  // files: {
-  //   type: string
-  //   name: string
-  //   size: number
-  //   lastModifiedDate: Date
-  // }[]
-  files: string
+  files: {
+    fileName: string,
+    filePath: string,
+    fileType: string,
+    fileSize: string,
+  }[]
   labels: {
     color: string
     title: string

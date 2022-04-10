@@ -21,14 +21,17 @@
 
 .fileDetails {
   padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   h4 {
-    margin-bottom: 5px;
     font-size: 14px;
   }
   span {
     font-size: 14px;
   }
 }
-.fileButton {
-  max-width: 80px;
+.fileButtons {
+  display: flex;
+  // max-width: 80px;
 }

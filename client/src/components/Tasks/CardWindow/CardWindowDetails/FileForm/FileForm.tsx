@@ -36,6 +36,7 @@ const FileForm: React.FC<Props> = ({ name, size, label, type, handleInputState, 
       <input
         type={type}
         name={name}
+        accept="image/*,.pdf, .doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         // value={value}
         onChange={handleInputState}
         multiple
