@@ -42,9 +42,9 @@ const LabelForm: React.FC<Props> = ({
       <p style={{ marginBottom: '5px' }}>Wybierz kolor</p>
       <HexColorPicker className={styles.reactColorful} color={selectColor} onChange={setSelectColor} />
       <div className={styles.actionsForm}>
-        <Button onClick={handleSubmit} title={'Zapisz'} />
+        <Button onClick={handleSubmit} title={'Zapisz'} type={'submit'}/>
         <div style={{ marginRight: '1rem' }} />
-        <Button onClick={deleteLabel} title={'Usuń'} bgColor={'#EA4746'} />
+        <Button onClick={deleteLabel} title={'Usuń'} bgColor={'#EA4746'} type={'button'}/>
       </div>
     </form>
   )

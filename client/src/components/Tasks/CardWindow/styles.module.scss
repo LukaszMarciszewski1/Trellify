@@ -23,7 +23,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 700px;
+  width: 800px;
   padding: 1rem;
   background-color: #fcfcfc;
   border-radius: 0.5rem;
@@ -73,23 +73,32 @@
   width: 100%;
   height: auto;
   display: flex;
-  padding: 1rem 0;
+  padding-top: 1.5rem ;
 }
 
 .windowMain {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  background-color: rgb(248, 248, 248);
+  background-color: rgb(247, 247, 247);
   padding: 1rem 1rem;
-  margin-top: 1rem;
+  // margin-top: 1rem;
   border-radius: 0.5rem;
 }
+
+.descriptionContainer{
+  margin-bottom: 2rem;
+}
+
 .descriptionHeader {
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
-  margin-top: 0.8rem;
+  margin: 0.5rem 0;
+  h4 {
+    font-size: 16px;
+    color: grey;
+    margin-bottom: 8px;
+  }
 }
 
 .textareaDescription {
@@ -146,11 +155,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  min-width: 150px;
+  min-width: 160px;
   height: 100%;
-  padding: 1rem;
+  padding-left: 1rem;
   // background-color: rgb(226, 226, 226);
-  margin-left: 1rem;
+  // margin-left: 1rem;
 }
 
 .divider {
@@ -230,6 +239,7 @@
 }
 
 .filesContainer{
+  width: 100%;
   max-height: 300px;
   overflow-y: auto;
 }

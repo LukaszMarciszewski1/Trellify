@@ -25,6 +25,7 @@ interface Cards {
 }
 
 const url = 'http://localhost:5000/'
+// const url = 'https://lukas-backend.herokuapp.com/'
 
 type CardsResponse = Cards[]
 

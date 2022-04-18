@@ -9,19 +9,19 @@ const FileSchema = new Schema(
     },
     fileName: {
       type: String,
-      required: true,
+      // required: true,
     },
     filePath: {
       type: String,
-      required: true,
+      // required: true,
     },
     fileType: {
       type: String,
-      required: true,
+      // required: true,
     },
     fileSize: {
       type: String,
-      required: true,
+      // required: true,
     },
   },
   { timestamps: true }

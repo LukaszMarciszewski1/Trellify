@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
-import GridFsStorage from 'multer-gridfs-storage'
 dotenv.config()
 
 let dbInstance = null

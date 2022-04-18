@@ -94,14 +94,14 @@ const Card: React.FC<Props> = ({
   dayjs.extend(relativeTime)
 
   useEffect(() => {
-    const intervalIsSameOrBefore = setInterval(() => setNowDate(Date.now()), 10000)
+    const intervalIsSameOrBefore = setInterval(() => setNowDate(Date.now()), 100000)
     return () => clearInterval(intervalIsSameOrBefore)
   }, [])
 
   useEffect(() => {
-     if(card){
-       setFiles(card.files)
-     }
+    if (card) {
+      setFiles(card.files)
+    }
   }, [card])
 
   const handleMouseEnter = () => {
@@ -203,23 +203,24 @@ const Card: React.FC<Props> = ({
                 }
                 <span >{title}</span>
                 <div className={styles.iconsContainer}>
-                  {
-                    deadline ? (
-                      <button
-                        ref={hoverRef}
-                        className={styles.dateBtn}
-                        onClick={handleChangeCompleted}
-                        style={cardDateDisplay.style}
-                        title={cardDateDisplay.title}
+                  <div ref={hoverRef}>
+                    {
+                      deadline ? (
+                        <button
+                          className={styles.dateBtn}
+                          onClick={handleChangeCompleted}
+                          style={cardDateDisplay.style}
+                          title={cardDateDisplay.title}
 
-                      >
-                        {isHover ? (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />) : <BsStopwatch style={cardDateDisplay.iconStyle} />}
-                        {dayjs(deadline).format('DD MMM')}
-                      </button>
-                    ) : null
-                  }
+                        >
+                          {isHover ? (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />) : <BsStopwatch style={cardDateDisplay.iconStyle} />}
+                          {dayjs(deadline).format('DD MMM')}
+                        </button>
+                      ) : null
+                    }
+                  </div>
                   {description ? <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardWindow} /></div> : null}
-                  {/* {attachment.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{attachment.length}</span></div> : null} */}
+                  {files.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{files.length}</span></div> : null}
                 </div>
               </div>
               <div className={styles.btnContainer}>

@@ -173,6 +173,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                     handleSubmit={handleAddCard}
                     closeForm={() => { setOpenCardForm(false); setCardTitle('') }}
                     value={cardTitle}
+                    titleBtn={'Dodaj Kartę'}
                   // onBlur={handleBlur}
                   />
                 </div>

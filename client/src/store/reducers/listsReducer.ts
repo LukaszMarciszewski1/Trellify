@@ -13,6 +13,7 @@ interface List {
 
 type ListResponse = List[]
 const url = 'http://localhost:5000/'
+// const url = 'https://lukas-backend.herokuapp.com/'
 
 export const listApi = createApi({
   reducerPath: 'listApi',

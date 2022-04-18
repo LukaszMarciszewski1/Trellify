@@ -71,6 +71,7 @@ import Button from '../../Details/Button/Button';
 
 import FileForm from './CardWindowDetails/FileForm/FileForm'
 import Files from './CardWindowDetails/Files/Files';
+import { promises } from 'dns';
 
 type Props = {
   cardId: string
@@ -118,8 +119,6 @@ const CardWindow: React.FC<Props> = ({
 }) => {
   dayjs.locale('pl');
   const { data: board, error, isLoading } = useGetBoardQuery(boardId);
-  const { data: card } = useGetCardQuery(cardId)
-  // const { data: cardFiles } = useGetCardFilesQuery(cardId);
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
   const [updateBoard] = useUpdateBoardMutation();
@@ -139,31 +138,19 @@ const CardWindow: React.FC<Props> = ({
   const [isOpenAddNewLabelWindow, setIsOpenAddNewLabelWindow] = useState<boolean>(false)
   const [currentLabelTitle, setCurrentLabelTitle] = useState<string>('')
   const [currentLabelId, setCurrentLabelId] = useState<string>('')
-  const [currentFileId, setCurrentFileId] = useState<string>('')
   const [currentLabelColor, setCurrentLabelColor] = useState<string>('')
   const [labelTitle, setLabelTitle] = useState<string>('')
 
-  const [selectFiles, setSelectFiles] = useState<any>('');
-  const [inputContainsFile, setInputContainsFile] = useState(false);
-  const [imageId, setImageId] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState<any>('');
+  const [selectedNameFiles, setSelectedNameFiles] = useState<string[]>([]);
+  // const []
   const [progress, setProgress] = useState(0);
 
-  const [files, setFiles] = useState(cardFiles)
-
   useEffect(() => {
-    // registerLocale("pl", pl); //?????????????????
     if (board) {
       setLabels(board.labels)
-      // setFiles(card.files)
     }
   }, [board])
-  // useEffect(() => {
-  //   if (card) {
-  //     setAttachment(card.files)
-  //   }
-  // }, [card])
-
-
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-title') setCardTitle(e.target.value)
@@ -318,55 +305,54 @@ const CardWindow: React.FC<Props> = ({
     })
   };
 
-  const handleUploadImage = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.currentTarget.files !== null) {
-        setSelectFiles(e.currentTarget.files)
+  const handleUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.files !== null) {
+      setSelectedFiles(e.currentTarget.files)
+      const arr = []
+      for (let i = 0; i < e.currentTarget.files.length; i++) {
+        arr.push(e.currentTarget.files[i].name)
+        setSelectedNameFiles(arr)
       }
-    },
+    }
+  },
     [],
   );
 
-  const handleSubmitFile = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+
+  const handleSubmitFile = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
+    if (!selectedFiles.length) return;
     const formData = new FormData();
     formData.append('cardId', cardId)
-    for (let i = 0; i < selectFiles.length; i++) {
-      formData.append('files', selectFiles[i]);
+    for (let i = 0; i < selectedFiles.length; i++) {
+      formData.append('files', selectedFiles[i]);
     }
     const config = {
       headers: {
         'content-type': 'multipart/form-data'
       }
     }
-    axios.post(`http://localhost:5000/files`, formData, config)
+    updateCard({
+      id: cardId,
+      files: cardFiles
+    })
+    await axios.post(`http://localhost:5000/files`, formData, config)
       .then(res => {
         console.log(res)
       })
       .catch((error) => {
         console.log(error)
       })
-    updateCard({
-      id: cardId,
-      files: cardFiles
-    })
-    console.log(cardFiles)
+    setSelectedNameFiles([])
+    setFileTrigger(false)
   }
 
-
-
   const handleDeleteFile = (fileId: string) => {
-    // setCurrentFileId(fileId)
-    // console.log(e.currentTarget.id)
     deleteFile(fileId)
     updateCard({
       id: cardId,
       files: cardFiles
     })
-    updateBoard({
-      id: boardId
-    })
-    console.log(cardFiles)
   }
 
   const handleDownloadFile = (filePath: string) => {
@@ -382,6 +368,8 @@ const CardWindow: React.FC<Props> = ({
   }
 
   useOnClickOutside(refWindow, setIsCardWindowOpen)
+
+
 
   return (
     <>
@@ -464,45 +452,51 @@ const CardWindow: React.FC<Props> = ({
                 ) : null
               }
             </ItemsContainer>
-            <div className={styles.descriptionHeader}>
-              <h4>Opis</h4>
-              <div style={{ maxWidth: '100px', marginLeft: '1rem' }}>
-                {
-                  !formIsOpen && cardDescription !== undefined && cardDescription !== '' ? (
-                    <TaskButton onClick={() => setFormIsOpen(true)} name={'Edytuj'} icon={<BsPencil />} />
-                  ) : null
-                }
+            <div className={styles.descriptionContainer}>
+              <div className={styles.descriptionHeader}>
+                <h4>Opis</h4>
+                <div style={{ maxWidth: '100px', marginLeft: '1rem' }}>
+                  {
+                    !formIsOpen && cardDescription !== undefined && cardDescription !== '' ? (
+                      <TaskButton onClick={() => setFormIsOpen(true)} name={'Edytuj'} icon={<BsPencil />} />
+                    ) : null
+                  }
+                </div>
               </div>
-            </div>
-            <div className={styles.filesContainer}>
               {
-                cardFiles?.map((file: { _id: string; fileName: string; createdAt: string; filePath: string; }) => (
-                  <Files
-                    key={file._id}
-                    title={file.fileName}
-                    created={`Dodano ${dayjs(file.createdAt).format('DD MMM')} o ${dayjs(file.createdAt).format('HH:mm')}`}
-                    src={`http://localhost:5000/${file.filePath}`}
-                    deleteFile={() => handleDeleteFile(file._id)}
-                    downloadFile={() => handleDownloadFile(file.filePath)}
-                  />
-                ))
+                formIsOpen ?
+                  <TaskForm
+                    id={'card-description'}
+                    handleChange={handleEditCardDescription}
+                    handleSubmit={handleSaveCardDescription}
+                    closeForm={() => { setFormIsOpen(false); setCardDescription(description) }}
+                    value={cardDescription}
+                    onFocus={(e) => e.target.select()}
+                    titleBtn={'Zapisz'}
+                  /> :
+                  <div>
+                    {cardDescription !== '' && cardDescription !== undefined ? <p onClick={() => setFormIsOpen(true)}>{cardDescription}</p> :
+                      <TaskButton onClick={() => setFormIsOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
+                  </div>
               }
             </div>
-            {
-              formIsOpen ?
-                <TaskForm
-                  id={'card-description'}
-                  handleChange={handleEditCardDescription}
-                  handleSubmit={handleSaveCardDescription}
-                  closeForm={() => { setFormIsOpen(false); setCardDescription(description) }}
-                  value={cardDescription}
-                  onFocus={(e) => e.target.select()}
-                /> :
-                <div>
-                  {cardDescription !== '' && cardDescription !== undefined ? <p onClick={() => setFormIsOpen(true)}>{cardDescription}</p> :
-                    <TaskButton onClick={() => setFormIsOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
-                </div>
-            }
+            <ItemsContainer data={cardFiles} title={'Załącznik'}>
+              <div className={styles.filesContainer}>
+                {
+                  cardFiles?.map((file: { _id: string; fileName: string; createdAt: string; filePath: string; }) => (
+                    <Files
+                      key={file._id}
+                      title={file.fileName}
+                      created={`Dodano ${dayjs(file.createdAt).format('DD MMM')} o ${dayjs(file.createdAt).format('HH:mm')}`}
+                      // src={`http://localhost:5000/${file.filePath}`}
+                      src={`http://localhost:5000/${file.filePath}`}
+                      deleteFile={() => handleDeleteFile(file._id)}
+                      downloadFile={() => handleDownloadFile(file.filePath)}
+                    />
+                  ))
+                }
+              </div>
+            </ItemsContainer>
           </div>
           <div className={styles.cardSidebar} >
             <Popup
@@ -572,9 +566,9 @@ const CardWindow: React.FC<Props> = ({
                 <input style={{ maxWidth: '100px' }} placeholder={dayjs(deadlineCard).format('HH:mm')} />
               </label>
               <div className={styles.actionsForm}>
-                <Button onClick={handleSaveDeadline} title={'Zapisz'} />
+                <Button onClick={handleSaveDeadline} title={'Zapisz'} type={'button'} />
                 <div style={{ marginRight: '1rem' }} />
-                <Button onClick={handleDeleteDeadline} title={'Usuń'} bgColor={'#EA4746'} />
+                <Button onClick={handleDeleteDeadline} title={'Usuń'} bgColor={'#EA4746'} type={'button'} />
               </div>
             </Popup>
             <Popup
@@ -583,17 +577,14 @@ const CardWindow: React.FC<Props> = ({
               closePopup={() => setFileTrigger(false)}
               backToMainWindow={() => setFileTrigger(false)}
             >
-              <form
-              // method='POST'
-              // encType='multipart/form-data'
-              >
-                <h1>React File Upload</h1>
-                <FileForm name={'files'} size={0} label={'files'} type={'file'} handleInputState={handleUploadImage} />
-                <button type="submit" onClick={handleSubmitFile}>Upload</button>
-              </form>
+              <FileForm
+                name={'załącznik'}
+                size={0}
+                label={'załącznik'}
+                type={'file'}
+                nameFiles={selectedNameFiles}
+                handleInputState={handleUploadImage} handleSubmitFile={handleSubmitFile} />
             </Popup>
-
-
             <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
             <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
             <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />

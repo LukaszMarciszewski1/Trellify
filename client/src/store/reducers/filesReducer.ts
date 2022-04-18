@@ -9,6 +9,7 @@ interface File {
 
 type FilesResponse = File[]
 const url = 'http://localhost:5000/'
+// const url = 'https://lukas-backend.herokuapp.com/'
 
 export const filesApi = createApi({
   reducerPath: 'filesApi',

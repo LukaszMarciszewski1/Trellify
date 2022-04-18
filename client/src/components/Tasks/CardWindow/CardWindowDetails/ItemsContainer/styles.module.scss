@@ -2,9 +2,9 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-bottom: 0.5rem;
-  p {
-    font-size: 14px;
+  margin-bottom: 0.8rem;
+  h4 {
+    font-size: 16px;
     color: grey;
     margin-bottom: 8px;
   }
@@ -14,7 +14,7 @@
   max-width: 100%;
   display: flex;
   flex-wrap: wrap;
-  div {
-    margin-bottom: 5px;
-  }
+  // div {
+  //   margin-bottom: 0.8rem;
+  // }
 }

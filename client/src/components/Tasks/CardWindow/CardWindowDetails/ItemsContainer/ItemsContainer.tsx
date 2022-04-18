@@ -15,7 +15,7 @@ const ItemsContainer: React.FC<Props> = ({ children, title, data }) => {
       {
         isDataExist ? (
           <div className={styles.container}>
-            <p>{title}</p>
+            <h4>{title}</h4>
             <div className={styles.items}>
               {children}
             </div>

@@ -1,10 +1,7 @@
 .conatiner {
-  // max-height: 300px;
   width: 100%;
   display: flex;
-  // align-items: center;
-  margin-bottom: 5px;
-  padding: 5px;
+  margin-bottom: 20px;
 }
 
 .fileImg {
@@ -24,14 +21,17 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin: 0;
   h4 {
     font-size: 14px;
+    margin: 0;
   }
   span {
     font-size: 14px;
   }
 }
 .fileButtons {
+  max-width: 160px;
   display: flex;
-  // max-width: 80px;
+  margin: 0;
 }

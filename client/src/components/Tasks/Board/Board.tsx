@@ -247,6 +247,7 @@ const Board: React.FC = () => {
                   handleSubmit={handleAddList}
                   closeForm={() => { setOpenForm(false); setListTitle('') }}
                   value={listTitle}
+                  titleBtn={'Dodaj Listę'}
                 />
               </div>
               : <TaskButton onClick={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
