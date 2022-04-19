@@ -1,8 +1,10 @@
-import dotenv from 'dotenv'
 import multer from 'multer'
+import dotenv from 'dotenv'
 import multerS3 from 'multer-s3'
 import aws from 'aws-sdk'
+
 dotenv.config()
+
 const s3 = new aws.S3({
   accessKeyId: process.env.S3_ACCESS_KEY,
   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
@@ -21,6 +23,16 @@ const storage = multerS3({
   },
 })
 
+export const deleteFileS3 = function (params) {
+  s3.deleteObject(params, function (err, data) {
+    if (err) {
+      console.log(err, err.stack)
+    } else {
+      console.log(data)
+    }
+  })
+}
+
 const fileFilter = (req, file, cb) => {
   if (
     !file.originalname.match(/\.(jpeg|jpg|png|webp|pdf|doc|docx|xlsx|xls)$/)
@@ -37,16 +49,8 @@ const fileFilter = (req, file, cb) => {
 export const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 1000000000, files: 10 },
+  limits: { fileSize: 10000000, files: 10 },
 })
-
-
-
-
-
-
-
-
 
 // const storage = multer.diskStorage({
 //   destination: (req, file, cb) => {

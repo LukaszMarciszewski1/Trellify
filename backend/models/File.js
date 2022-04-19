@@ -23,6 +23,8 @@ const FileSchema = new Schema(
       type: String,
       // required: true,
     },
+    fileUrl: String,
+    fileKey: String
   },
   { timestamps: true }
 )

@@ -119,6 +119,7 @@ const CardWindow: React.FC<Props> = ({
 }) => {
   dayjs.locale('pl');
   const { data: board, error, isLoading } = useGetBoardQuery(boardId);
+
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
   const [updateBoard] = useUpdateBoardMutation();
@@ -151,6 +152,7 @@ const CardWindow: React.FC<Props> = ({
       setLabels(board.labels)
     }
   }, [board])
+
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-title') setCardTitle(e.target.value)
@@ -317,7 +319,7 @@ const CardWindow: React.FC<Props> = ({
   },
     [],
   );
-
+  const url = 'http://localhost:5000/'
 
   const handleSubmitFile = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -332,13 +334,13 @@ const CardWindow: React.FC<Props> = ({
         'content-type': 'multipart/form-data'
       }
     }
-    updateCard({
-      id: cardId,
-      files: cardFiles
-    })
-    await axios.post(`http://localhost:5000/files`, formData, config)
+
+    await axios.post(`${url}files`, formData, config)
       .then(res => {
         console.log(res)
+          updateCard({
+            id: cardId,
+          })
       })
       .catch((error) => {
         console.log(error)
@@ -346,6 +348,7 @@ const CardWindow: React.FC<Props> = ({
     setSelectedNameFiles([])
     setFileTrigger(false)
   }
+
 
   const handleDeleteFile = (fileId: string) => {
     deleteFile(fileId)
@@ -355,13 +358,13 @@ const CardWindow: React.FC<Props> = ({
     })
   }
 
-  const handleDownloadFile = (filePath: string) => {
-    axios.get(`http://localhost:5000/${filePath}`, {
+  const handleDownloadFile = (fileUrl: string) => {
+    axios.get(`${fileUrl}`, {
       responseType: 'blob',
     }).then((res) => {
-      let filename = filePath.replace(/^.*[\\\/]/, '')
+      let filename = fileUrl.replace(/^.*[\\\/]/, '')
       let fileExtension;
-      fileExtension = filePath.split('.');
+      fileExtension = fileUrl.split('.');
       fileExtension = fileExtension[fileExtension.length - 1];
       fileDownload(res.data, `${filename}.${fileExtension}`);
     });
@@ -483,15 +486,15 @@ const CardWindow: React.FC<Props> = ({
             <ItemsContainer data={cardFiles} title={'Załącznik'}>
               <div className={styles.filesContainer}>
                 {
-                  cardFiles?.map((file: { _id: string; fileName: string; createdAt: string; filePath: string; }) => (
+                  cardFiles?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; }) => (
                     <Files
                       key={file._id}
                       title={file.fileName}
                       created={`Dodano ${dayjs(file.createdAt).format('DD MMM')} o ${dayjs(file.createdAt).format('HH:mm')}`}
                       // src={`http://localhost:5000/${file.filePath}`}
-                      src={`http://localhost:5000/${file.filePath}`}
+                      src={`${file.fileUrl}`}
                       deleteFile={() => handleDeleteFile(file._id)}
-                      downloadFile={() => handleDownloadFile(file.filePath)}
+                      downloadFile={() => handleDownloadFile(file.fileUrl)}
                     />
                   ))
                 }

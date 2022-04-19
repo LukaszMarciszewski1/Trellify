@@ -3,6 +3,9 @@ import mongoose from 'mongoose'
 import Card from '../models/Card.js'
 import File from '../models/File.js'
 import fs from 'fs'
+import dotenv from 'dotenv'
+import { deleteFileS3 } from '../helpers/filehelper.js'
+dotenv.config()
 const router = express.Router()
 
 export const uploadFiles = async (req, res, next) => {
@@ -12,15 +15,15 @@ export const uploadFiles = async (req, res, next) => {
     req.files.map(async (element) => {
       const file = new File({
         cardId: cardId,
+        fileUrl: element.location,
         fileName: element.originalname,
-        filePath: element.path,
         fileType: element.mimetype,
+        fileKey: element.key,
         fileSize: fileSizeFormatter(element.size, 2),
       })
       parentCard.files.push(file)
       await file.save()
     })
-
     await parentCard.save()
     res.status(201).send('Files Uploaded Successfully')
   } catch (error) {
@@ -60,23 +63,20 @@ export const downloadFiles = async (req, res, next) => {
 
 export const deleteFile = async (req, res, next) => {
   const { id } = req.params
+
   try {
-    let currentFile = ''
     const files = await File.find()
-    currentFile = files.find((file) => mongoose.Types.ObjectId(file._id).toString() === id)
-
+    const currentFile = files.find(
+      (file) => mongoose.Types.ObjectId(file._id).toString() === id
+    )
     await File.findByIdAndRemove(id)
-
-    const path = currentFile.filePath
-    if (path) {
-      fs.unlink(path, (err) => {
-        if (err) {
-          console.error(err)
-          return
-        }
-      })
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: currentFile.fileKey,
     }
-    res.status(200).send(files)
+    deleteFileS3(params)
+    
+    res.status(200).send('Files Delete Successfully')
   } catch (error) {
     res.status(400).send(error.message)
   }
