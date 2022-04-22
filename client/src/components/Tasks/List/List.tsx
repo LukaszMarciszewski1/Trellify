@@ -36,19 +36,16 @@ import { GoPlus } from "react-icons/go";
 
 type Props = {
   listId: string
+  boardId: string
   title: string
   index: number
-  boardId: string
   cards: []
-
-  // openCardDetails: (value: boolean) => void
 }
+
 const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const { data: board, error, isLoading } = useGetBoardQuery(boardId);
   const ref = useRef(null)
   const [addCard] = useAddCardMutation()
-  // const [deleteCard] = useDeleteCardMutation()
-  // const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
   const [updateList] = useUpdateTaskMutation()
   const [deleteList] = useDeleteTaskMutation()
@@ -58,14 +55,6 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const [openCardForm, setOpenCardForm] = useState<boolean>(false)
   const [openTitleForm, setOpenTitleForm] = useState<boolean>(false)
   const [dragDisabled, setDragDisabled] = useState<boolean>(false)
-  // const [labels, setLabels] = useState([] as any)
-
-  // useEffect(() => {
-  //   if (board) {
-  //     setLabels(board.labels)
-  //   }
-  // }, [board])
-
 
   const handleChangeCardValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card') setCardTitle(e.target.value)
@@ -140,6 +129,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                       description: string,
                       deadline: Date,
                       completed: boolean,
+                      cover: string,
                       files: []
                     },
                       index: number) => (
@@ -155,6 +145,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                         updateDate={card.updateDate}
                         labels={card.labels}
                         files={card.files}
+                        cover={card.cover}
                         nameList={listTitle}
                         dragDisabled={setDragDisabled}
                       />
@@ -174,7 +165,6 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                     closeForm={() => { setOpenCardForm(false); setCardTitle('') }}
                     value={cardTitle}
                     titleBtn={'Dodaj Kartę'}
-                  // onBlur={handleBlur}
                   />
                 </div>
                 : <TaskButton onClick={() => setOpenCardForm(true)} name={'Dodaj kartę'} icon={<GoPlus />} />

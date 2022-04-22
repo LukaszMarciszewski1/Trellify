@@ -24,7 +24,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
   width: 800px;
-  padding: 1rem;
+  // padding: 1rem;
   background-color: #fcfcfc;
   border-radius: 0.5rem;
   z-index: 200;
@@ -33,19 +33,24 @@
   }
 }
 
+.cardWindowContent{
+  padding: 1rem;
+}
+
 .cardHeader {
   width: 100%;
   // max-height: 150px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  // display: flex;
+  // align-items: flex-start;
+  // justify-content: space-between;
   padding: 0 0 0.5rem;
   border-bottom: 1px solid rgb(179, 179, 179);
 }
 .cardHeaderText {
-  flex-grow: 1;
-  max-width: 95%;
+  // width: 100%;
+  // margin: 10px auto;
   height: auto;
+  margin-right: 40px;
   p {
     color: grey;
     font-size: 0.9rem;
@@ -61,8 +66,6 @@
   padding: 0.3rem;
   background-color: #fcfcfc;
   border: none;
-  margin-right: 2rem;
-  margin-left: -0.3rem;
   color: rgb(61, 61, 61);
   &:hover {
     background-color: rgb(248, 248, 248);
@@ -73,7 +76,7 @@
   width: 100%;
   height: auto;
   display: flex;
-  padding-top: 1.5rem ;
+  padding-top: 1.5rem;
 }
 
 .windowMain {
@@ -86,7 +89,7 @@
   border-radius: 0.5rem;
 }
 
-.descriptionContainer{
+.descriptionContainer {
   margin-bottom: 2rem;
 }
 
@@ -238,8 +241,31 @@
   }
 }
 
-.filesContainer{
+.filesContainer {
   width: 100%;
   max-height: 300px;
   overflow-y: auto;
+}
+
+.cardCover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #ebebeb;
+  border-radius: 3px;
+  overflow: hidden;
+  img{
+    height: 120px;
+    cursor: pointer;
+  }
+}
+
+.closeWindowBtn {
+  position: absolute;
+  right: 0.9rem;
+  top: 0.9rem;
+  z-index: 100;
+  background-color: #fcfcfc;
+  border-radius: 3px;
 }

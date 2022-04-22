@@ -4,10 +4,6 @@ const { Schema } = mongoose
 const ListSchema = mongoose.Schema(
   {
     title: String,
-    index: Number,
-    sourceIndex: Number,
-    destinationIndex: Number,
-    sortIndex: Number,
     boardId: {
       type: Schema.Types.ObjectId,
       ref: 'Board',

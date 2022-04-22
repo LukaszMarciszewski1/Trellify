@@ -45,6 +45,7 @@ import TaskButton from '../TaskButton/TaskButton';
 import Button from '../../Details/Button/Button';
 
 import useHover from '../../../hooks/useHover'
+import { isFileImage } from '../../../hooks/isFileImage'
 
 type Props = {
   boardId: string
@@ -56,6 +57,7 @@ type Props = {
   deadline: Date | null
   completed: boolean
   updateDate?: Date
+  cover: string
   labels: []
   files: []
   nameList: string | undefined
@@ -73,6 +75,7 @@ const Card: React.FC<Props> = ({
   completed,
   labels,
   deadline,
+  cover,
   dragDisabled,
 }) => {
   const { data: card, error, isLoading } = useGetCardQuery(cardId);
@@ -87,6 +90,8 @@ const Card: React.FC<Props> = ({
   const [deadlineCard, setDeadlineCard] = useState<Date | null>(deadline)
   const [nowDate, setNowDate] = useState(Date.now())
   const [files, setFiles] = useState([] as any)
+  const [cardCover, setCover] = useState<string | undefined>(cover)
+  const [cardFileIndex, setFileIndex] = useState<number>(0)
 
   dayjs.locale('pl');
   dayjs.extend(isSameOrBefore)
@@ -103,6 +108,25 @@ const Card: React.FC<Props> = ({
       setFiles(card.files)
     }
   }, [card])
+
+  useEffect(() => {
+    const filesOnlyImages = [...files]?.filter(file => isFileImage(file.fileUrl))
+    const selectedCover = filesOnlyImages.find((file: { fileUrl: string }) => file.fileUrl === cover)
+    let activeIndex = filesOnlyImages.indexOf(selectedCover);
+    
+    if (filesOnlyImages.length) {
+      if (activeIndex < 0) {
+        setCover(filesOnlyImages[0].fileUrl)
+        setFileIndex(0)
+      } else {
+        setCover(filesOnlyImages[activeIndex].fileUrl)
+        setFileIndex(activeIndex)
+      }
+    }
+    else {
+      setCover('')
+    }
+  }, [files])
 
   const handleMouseEnter = () => {
     setShowText(true)
@@ -155,8 +179,20 @@ const Card: React.FC<Props> = ({
     }
   }
 
+
+  const cardCoverStyle = {
+    backgroundColor: cardCover,
+    backgroundImage: `url(${cardCover})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center'
+  }
+
   const hoverRef = useRef(null)
   const isHover = useHover(hoverRef)
+
+  if (isLoading) return <p>...</p>
+  if (error) return <p>Brak połączenia</p>
 
   return (
     <>
@@ -179,6 +215,10 @@ const Card: React.FC<Props> = ({
             deadlineIsSoon={deadlineIsSoon}
             cardDateDisplay={cardDateDisplay}
             cardFiles={files}
+            cardCover={cardCover}
+            setFileIndex={setFileIndex}
+            cardFileIndex={cardFileIndex}
+            setCover={setCover}
           /> : null
       }
       <Draggable draggableId={String(cardId)} index={index} >
@@ -190,6 +230,12 @@ const Card: React.FC<Props> = ({
             >
               <div className={styles.cardContainer} >
                 <div className={styles.cardClickableArea} onClick={handleOpenCardWindow}></div>
+                {
+                  files.length ? (
+                    <div className={styles.cardCover} style={cardCoverStyle}>
+                    </div>
+                  ) : null
+                }
                 {
                   cardLabels.length ? (
                     <div className={styles.cardLabels} onClick={handleOpenCardWindow}>

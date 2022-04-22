@@ -26,6 +26,7 @@ const CardSchema = mongoose.Schema(
       type: Date,
       default: null,
     },
+    cover: String,
     files: [
       {
         type: Schema.Types.ObjectId,

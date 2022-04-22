@@ -1,27 +1,28 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-interface Board {
+import {List, ListResponse} from './listsReducer'
+export interface Board {
   _id: string
   title: string
   background: string
-  lists: []
-  cards: []
+  lists: ListResponse
   labels: {
     color: string
     title: string
     active: boolean
   }[]
 }
+
 const url = 'http://localhost:5000/'
 // const url = 'https://lukas-backend.herokuapp.com/'
 
-type BoardResponse = Board[]
+// export type BoardResponse = Board[]
 
 export const boardApi = createApi({
   reducerPath: 'boardApi',
   baseQuery: fetchBaseQuery({ baseUrl: url }),
   tagTypes: ['Board'],
   endpoints: (builder) => ({
-    getAllBoards: builder.query<BoardResponse, void>({
+    getAllBoards: builder.query<Board, void>({
       query: () => `boards`,
       providesTags: ['Board'],
     }),

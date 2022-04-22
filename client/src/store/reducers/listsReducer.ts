@@ -1,17 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-interface List {
+import {Card} from './cardsReducer'
+export interface List {
   _id: string
   title: string
   index: number
   boardId: string
-  sourceIndex: number
-  destinationIndex: number
-  sortIndex: number
-  cards: []
-  list: any
+  cards: Card[]
 }
 
-type ListResponse = List[]
+export type ListResponse = List[]
 const url = 'http://localhost:5000/'
 // const url = 'https://lukas-backend.herokuapp.com/'
 

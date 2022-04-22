@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-interface Cards {
-  _id: string
+export interface Card {
   boardId: string
   listId: string
   title: string
@@ -27,7 +26,7 @@ interface Cards {
 const url = 'http://localhost:5000/'
 // const url = 'https://lukas-backend.herokuapp.com/'
 
-type CardsResponse = Cards[]
+type CardsResponse = Card[]
 
 export const cardsApi = createApi({
   reducerPath: 'cardsApi',
@@ -42,7 +41,7 @@ export const cardsApi = createApi({
       query: (id) => `cards/${id}`,
       providesTags: ['Cards'],
     }),
-    addCard: builder.mutation<Cards, Partial<Cards>>({
+    addCard: builder.mutation<Card, Partial<Card>>({
       query: (body: {}) => ({
         url: 'cards',
         method: 'POST',

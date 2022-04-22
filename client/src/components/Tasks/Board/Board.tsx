@@ -1,68 +1,49 @@
 import React, { useEffect, useState, useRef } from 'react'
-// import { isEmpty, cloneDeep } from 'lodash'
+import { isEmpty, cloneDeep } from 'lodash'
 import styles from './styles.module.scss'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
-// import { renderToString } from 'react-dom/server';
 import {
-  // useGetAllBoardsQuery,
   useGetBoardQuery,
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 import {
-  // useGetAllTasksQuery,
   useAddTaskMutation,
-  // useDeleteTaskMutation,
   useUpdateTaskMutation,
-  // useGetTaskQuery,
-  // useGetCardsQuery,
 } from "../../../store/reducers/listsReducer";
 import {
-  // useGetAllCardsQuery,
-  // useAddCardMutation,
-  // useDeleteCardMutation,
   useUpdateCardMutation,
-  // useDeleteAllMutation,
 } from "../../../store/reducers/cardsReducer";
+import useOnClickOutside from '../../../hooks/useOnClickOutside';
+
+import { GoPlus } from "react-icons/go";
+import { defaultBackground } from '../localData';
 
 import BoardHeader from '../BoardHeader/BoardHeader';
 import List from '../List/List'
 import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
-// import TaskCard from '../Card/Card';
 import SideMenu from '../SideMenu/SideMenu';
-// import CardDetails from '../CardDetails/CardDetails';
-// import CardModal from '../CardDetails/CardModal/CardModal';
 
-import { defaultBackground } from '../localData';
-
-// import { setSourceMapRange } from 'typescript';
-import useOnClickOutside from '../../../hooks/useOnClickOutside';
-// import { v4 as uuidv4 } from 'uuid';
-
-// import { GrAdd } from "react-icons/gr";
-import { GoPlus } from "react-icons/go";
-// import { BsCardImage } from "react-icons/bs";
+import { Board as BoardInterface } from '../../../store/reducers/boardsReducer'
+import { List as ListInterface } from '../../../store/reducers/listsReducer'
 
 const Board: React.FC = () => {
   const boardId = '624f02f011fa05ce01907c07'
   const { data, error, isLoading } = useGetBoardQuery(boardId);
-
   const [addList] = useAddTaskMutation()
-  // const [deleteList] = useDeleteTaskMutation()
   const [updateList] = useUpdateTaskMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
   const formRef = useRef(null)
-  // const refCardModal = useRef(null)
 
   const [backgroundUrl, setBackgroundUrl] = useState<string>('')
   const [listTitle, setListTitle] = useState<string>('');
   const [openForm, setOpenForm] = useState<boolean>(false)
   const [openSideMenu, setOpenSideMenu] = useState<boolean>(false)
 
-  const [board, setBoard] = useState({} as any)
-  const [lists, setLists] = useState([] as any)
+  const [board, setBoard] = useState<BoardInterface>()
+  const [lists, setLists] = useState<ListInterface[]>([])
 
   const closeForm = () => { setOpenForm(false); setListTitle('') }
   useOnClickOutside(formRef, closeForm)
@@ -76,7 +57,6 @@ const Board: React.FC = () => {
       setBackgroundUrl(boardBG)
     }
   }, [data]);
-
 
   const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
@@ -97,16 +77,14 @@ const Board: React.FC = () => {
     setOpenForm(false)
   }
 
-  // if (isEmpty(board)) return <div>no data</div>
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type, draggableId } = result
+    const newLists = [...lists]
+    if (!board) return;
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-    const newLists = [...lists]
-
-    if (board) {
+    
       if (type === 'list') {
-
         const [removed] = newLists.splice(source.index, 1)
         newLists.splice(destination.index, 0, removed)
 
@@ -118,13 +96,11 @@ const Board: React.FC = () => {
       }
 
       if (type === 'card') {
-        // const newLists = [...lists]
-        const sourceList = newLists.find((list: { _id: string; }) => list._id === source.droppableId)
+        const sourceList = newLists.find((list: {_id: string}) => list._id === source.droppableId)
         const destinationList = newLists.find((list: { _id: string; }) => list._id === destination.droppableId)
 
-        if (source.droppableId === destination.droppableId) {
+        if (source.droppableId === destination.droppableId && sourceList) {
           const newCards = [...sourceList.cards]
-
           const [removed] = newCards.splice(source.index, 1)
           newCards.splice(destination.index, 0, removed)
 
@@ -144,7 +120,7 @@ const Board: React.FC = () => {
 
         }
 
-        if (source.droppableId !== destination.droppableId) {
+        if (source.droppableId !== destination.droppableId && sourceList && destinationList) {
           const startCards = [...sourceList.cards]
           const finishCards = [...destinationList.cards]
 
@@ -184,7 +160,6 @@ const Board: React.FC = () => {
           })
         }
       }
-    }
   }
 
   const boardBackgroundStyle = {

@@ -35,7 +35,7 @@ export const deleteFileS3 = function (params) {
 
 const fileFilter = (req, file, cb) => {
   if (
-    !file.originalname.match(/\.(jpeg|jpg|png|webp|pdf|doc|docx|xlsx|xls)$/)
+    !file.originalname.match(/\.(jpeg|jpg|gif|png|tiff|bmp|webp|pdf|doc|docx|xlsx|xls)$/)
   ) {
     return cb(
       new Error(

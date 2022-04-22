@@ -48,7 +48,7 @@ const menuItems = [
 const Sidebar: React.FC = () => {
   const [createBoard] = useCreateBoardMutation()
   const location = useLocation()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
 
 
 
