@@ -25,7 +25,7 @@ const fileExtension = type.split('/').pop();
           isFileImage(src) ? (
             <>
               <img src={src} className="card-img-top img-responsive" alt="img" />
-              <div className={styles.selectCover}>
+              <div className={styles.selectCover} title='ustaw okładkę'>
                 <input
                   type="checkbox"
                   checked={active === index ? true : false}

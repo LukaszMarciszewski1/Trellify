@@ -35,8 +35,8 @@ export const createCard = async (req, res) => {
   let parentList = await List.findById(listId)
   try {
     parentList.cards = [...parentList.cards, newCard]
-    parentList.save()
-    newCard.save()
+    await parentList.save()
+    await newCard.save()
     res.status(201).json(newCard)
   } catch (error) {
     res.status(409).json({ message: error.message })

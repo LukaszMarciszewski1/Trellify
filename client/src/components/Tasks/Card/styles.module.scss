@@ -1,4 +1,7 @@
 @import '../../../scss/utils.scss';
+.container {
+  position: relative;
+}
 .card {
   position: relative;
   display: flex;
@@ -22,11 +25,16 @@
   flex-grow: 1;
   overflow-wrap: break-word;
   word-break: break-all;
+  p {
+    font-size: 14px;
+    color: rgb(109, 109, 109);
+    font-weight: medium;
+    overflow-wrap: break-word;
+  }
   span {
     font-size: 14px;
     color: rgb(24, 24, 24);
     font-weight: normal;
-    overflow-wrap: break-word;
   }
 }
 
@@ -135,13 +143,25 @@
   }
 }
 
-.cardCover{
+.cardCover {
   width: 100%;
   height: 100px;
   overflow: hidden;
   margin-bottom: 10px;
   background-color: rgb(188, 188, 188);
-  img{
-
+  img {
   }
+}
+
+.actionsPopup {
+  user-select: none;
+  cursor:auto;
+  position: absolute;
+  right: -40px;
+  top: 15px;
+}
+.actionsPopupContent {
+  display: flex;
+  flex-direction: column;
+  // gap: 1px;
 }

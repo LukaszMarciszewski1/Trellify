@@ -6,7 +6,7 @@ import { MdOutlineArrowBackIos } from "react-icons/md";
 import useOnClickOutside from '../../../hooks/useOnClickOutside'
 
 type Props = {
-  trigger: boolean
+  trigger?: boolean
   title: string
   closePopup: () => void
   editWindow?: boolean

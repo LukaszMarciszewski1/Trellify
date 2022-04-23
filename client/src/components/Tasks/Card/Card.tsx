@@ -46,6 +46,9 @@ import Button from '../../Details/Button/Button';
 
 import useHover from '../../../hooks/useHover'
 import { isFileImage } from '../../../hooks/isFileImage'
+import Popup from '../../Details/Popup/Popup';
+import { MdOutlineLabel } from 'react-icons/md';
+import { RiDeleteBinLine } from 'react-icons/ri';
 
 type Props = {
   boardId: string
@@ -92,6 +95,7 @@ const Card: React.FC<Props> = ({
   const [files, setFiles] = useState([] as any)
   const [cardCover, setCover] = useState<string | undefined>(cover)
   const [cardFileIndex, setFileIndex] = useState<number>(0)
+  const [actionTrigger, setActionTrigger] = useState<boolean>(false)
 
   dayjs.locale('pl');
   dayjs.extend(isSameOrBefore)
@@ -110,21 +114,24 @@ const Card: React.FC<Props> = ({
   }, [card])
 
   useEffect(() => {
-    const filesOnlyImages = [...files]?.filter(file => isFileImage(file.fileUrl))
-    const selectedCover = filesOnlyImages.find((file: { fileUrl: string }) => file.fileUrl === cover)
-    let activeIndex = filesOnlyImages.indexOf(selectedCover);
-    
-    if (filesOnlyImages.length) {
-      if (activeIndex < 0) {
-        setCover(filesOnlyImages[0].fileUrl)
-        setFileIndex(0)
-      } else {
-        setCover(filesOnlyImages[activeIndex].fileUrl)
-        setFileIndex(activeIndex)
+    if (files) {
+      const newFiles = [...files]
+      const filesOnlyImages = newFiles.filter(file => isFileImage(file.fileUrl))
+      const selectedCover = filesOnlyImages.find((file: { fileUrl: string }) => file.fileUrl === cover)
+      let activeIndex = filesOnlyImages.indexOf(selectedCover);
+      const indexOnlyImages = newFiles.findIndex(el => isFileImage(el.fileUrl))
+      if (filesOnlyImages.length) {
+        if (activeIndex < 0) {
+          setCover(filesOnlyImages[0].fileUrl)
+          setFileIndex(indexOnlyImages)
+        } else {
+          setCover(filesOnlyImages[activeIndex].fileUrl)
+          setFileIndex(activeIndex)
+        }
       }
-    }
-    else {
-      setCover('')
+      else {
+        setCover('')
+      }
     }
   }, [files])
 
@@ -221,68 +228,93 @@ const Card: React.FC<Props> = ({
             setCover={setCover}
           /> : null
       }
-      <Draggable draggableId={String(cardId)} index={index} >
-        {provided => (
-          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-            <div className={styles.card}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              <div className={styles.cardContainer} >
-                <div className={styles.cardClickableArea} onClick={handleOpenCardWindow}></div>
-                {
-                  files.length ? (
-                    <div className={styles.cardCover} style={cardCoverStyle}>
-                    </div>
-                  ) : null
-                }
-                {
-                  cardLabels.length ? (
-                    <div className={styles.cardLabels} onClick={handleOpenCardWindow}>
+      <div className={styles.container}>
+        <Draggable draggableId={String(cardId)} index={index} >
+          {provided => (
+            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+              <div className={styles.card}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className={styles.cardContainer} >
+                  <div className={styles.cardClickableArea} onClick={handleOpenCardWindow}></div>
+                  {
+                    files.length ? (
+                      <div className={styles.cardCover} style={cardCoverStyle}>
+                      </div>
+                    ) : null
+                  }
+                  {
+                    cardLabels.length ? (
+                      <div className={styles.cardLabels} onClick={handleOpenCardWindow}>
+                        {
+                          cardLabels.map((label: { active: any; color: any; _id: string; title: string }) => (
+                            <div title={`${label.title}`} key={label._id} className={styles.cardLabel} style={{ backgroundColor: `${label.color}` }}></div>
+                          ))
+                        }
+                      </div>
+                    ) : null
+                  }
+                  <p >{title}</p>
+                  <div className={styles.iconsContainer}>
+                    <div ref={hoverRef}>
                       {
-                        cardLabels.map((label: { active: any; color: any; _id: string; title: string }) => (
-                          <div title={`${label.title}`} key={label._id} className={styles.cardLabel} style={{ backgroundColor: `${label.color}` }}></div>
-                        ))
+                        deadline ? (
+                          <button
+                            className={styles.dateBtn}
+                            onClick={handleChangeCompleted}
+                            style={cardDateDisplay.style}
+                            title={cardDateDisplay.title}
+
+                          >
+                            {isHover ? (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />) : <BsStopwatch style={cardDateDisplay.iconStyle} />}
+                            {dayjs(deadline).format('DD MMM')}
+                          </button>
+                        ) : null
                       }
                     </div>
-                  ) : null
-                }
-                <span >{title}</span>
-                <div className={styles.iconsContainer}>
-                  <div ref={hoverRef}>
-                    {
-                      deadline ? (
-                        <button
-                          className={styles.dateBtn}
-                          onClick={handleChangeCompleted}
-                          style={cardDateDisplay.style}
-                          title={cardDateDisplay.title}
-
-                        >
-                          {isHover ? (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />) : <BsStopwatch style={cardDateDisplay.iconStyle} />}
-                          {dayjs(deadline).format('DD MMM')}
-                        </button>
-                      ) : null
-                    }
+                    {description ? <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardWindow} /></div> : null}
+                    {files.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{files.length}</span></div> : null}
                   </div>
-                  {description ? <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardWindow} /></div> : null}
-                  {files.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{files.length}</span></div> : null}
+                </div>
+                <div className={styles.btnContainer}>
+                  {
+                  showText ? (<IconButton onClick={() => {
+                    setActionTrigger(true)
+                    dragDisabled(true)
+                    }}>
+                      <BsPencil />
+                    </IconButton>) : null
+                  }
                 </div>
               </div>
-              <div className={styles.btnContainer}>
-                {
-                  showText ? <IconButton onClick={() => {
-                    deleteCard(cardId);
-                    updateBoard({ id: boardId })
-                  }}>
-                    <BsPencil />
-                  </IconButton> : null
-                }
-              </div>
             </div>
-          </div>
-        )}
-      </Draggable>
+          )}
+        </Draggable>
+        {/* <div className={styles.actionsPopup}> */}
+          <Popup
+            title={'akcje karty'}
+            trigger={actionTrigger}
+            closePopup={() => {
+              setActionTrigger(false)
+              dragDisabled(false)
+            }}
+          // backToMainWindow={() => setFileTrigger(false)}
+          >
+            <div className={styles.actionsPopupContent}>
+              <TaskButton onClick={() => {
+                handleOpenCardWindow()
+                setActionTrigger(false)
+              }} name={'Otwórz kartę'} icon={<MdOutlineLabel />} />
+
+              <TaskButton onClick={() => {
+                deleteCard(cardId);
+                updateBoard({ id: boardId })
+              }} name={'Usuń'} icon={<RiDeleteBinLine />} />
+            </div>
+          </Popup>
+        {/* </div> */}
+      </div>
     </>
   )
 }

@@ -32,6 +32,9 @@ import useOnClickOutside from '../../../hooks/useOnClickOutside';
 // import { v4 as uuidv4 } from 'uuid';
 // import { MdOutlineAdd } from "react-icons/md";
 import { GoPlus } from "react-icons/go";
+import Popup from '../../Details/Popup/Popup';
+import { MdOutlineLabel } from 'react-icons/md';
+import { RiDeleteBinLine } from 'react-icons/ri';
 // import { dangerouslyDisableDefaultSrc } from 'helmet/dist/middlewares/content-security-policy';
 
 type Props = {
@@ -55,6 +58,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const [openCardForm, setOpenCardForm] = useState<boolean>(false)
   const [openTitleForm, setOpenTitleForm] = useState<boolean>(false)
   const [dragDisabled, setDragDisabled] = useState<boolean>(false)
+  const [actionTrigger, setActionTrigger] = useState<boolean>(false)
 
   const handleChangeCardValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card') setCardTitle(e.target.value)
@@ -78,19 +82,34 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
     updateBoard({
       id: boardId,
     })
-
     setOpenCardForm(false)
     setCardTitle('')
+  }
+
+  const handleDeleteAllCards = () => {
+    updateList({
+      id: listId,
+      cards: []
+    })
+    updateBoard({
+      id: boardId
+    })
+    setActionTrigger(false)
+  }
+
+  const handleDeleteList = () => {
+    deleteList(listId);
+    updateBoard({ id: boardId })
   }
 
   const handleCloseForm = () => { setOpenCardForm(false); setCardTitle(''); }
   useOnClickOutside(ref, handleCloseForm)
 
   return (
-    <div>
+    <div >
       <Draggable draggableId={String(listId)} index={index} isDragDisabled={dragDisabled}>
         {provided => (
-          <div className={styles.container} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
+          <div className={styles.list} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
             <div className={styles.listHeader} onClick={() => setOpenTitleForm(true)} ref={ref}>
               {
                 openTitleForm ?
@@ -109,9 +128,32 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                   : <div className={styles.textWrapper}><h2>{listTitle}</h2></div>
               }
               <IconButton onClick={() => {
-                deleteList(listId);
-                updateBoard({ id: boardId })
+                setActionTrigger(true)
+                // setOpenTitleForm(true)
+                // updateBoard({ id: boardId })
               }}><BsThreeDots style={{ fontSize: "1.3em" }} /></IconButton>
+              <div className={styles.actionsPopup} onBlur={() => setOpenTitleForm(false)}>
+                <Popup
+                  title={'Akcje listy'}
+                  trigger={actionTrigger}
+                  closePopup={() => {
+                    setActionTrigger(false)
+                  }}
+                >
+                  <div className={styles.actionsPopupContent}>
+                    <TaskButton
+                      onClick={handleDeleteAllCards}
+                      name={'Usuń wszystkie karty'}
+                      icon={<MdOutlineLabel />}
+                    />
+                    <TaskButton
+                      onClick={handleDeleteList}
+                      name={'Usuń listę'}
+                      icon={<RiDeleteBinLine />}
+                    />
+                  </div>
+                </Popup>
+              </div>
             </div>
             <Droppable droppableId={String(listId)} type="card">
               {provided => (

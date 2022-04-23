@@ -366,8 +366,7 @@ const CardWindow: React.FC<Props> = ({
           setUploadProgress(0)
           setSelectedNameFiles([])
           setFileTrigger(false)
-          // setCover(cardFiles[0].fileUrl)
-        }, 500)
+        }, 1000)
       })
       .catch((error) => {
         console.log(error)
@@ -407,7 +406,6 @@ const CardWindow: React.FC<Props> = ({
     // setSelected(id); 
     // const newWindow = window.open(`${cardCover}`, "_blank", 'noopener,noreferrer');
     // if (newWindow) newWindow.opener = null
-    console.log('open img')
   }
 
 
@@ -665,9 +663,9 @@ const CardWindow: React.FC<Props> = ({
               <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
               <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
               <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />
-              <TaskButton onClick={() => setFormIsOpen(true)} name={'Lista zadań'} icon={<BiTask />} />
+              <TaskButton onClick={() => setFormIsOpen(true)} name={'Marazyn'} icon={<BiTask />} />
               <div className={styles.divider}></div>
-              <TaskButton onClick={() => setFormIsOpen(true)} name={'Przenieś'} icon={<CgArrowRight />} />
+              {/* <TaskButton onClick={() => setFormIsOpen(true)} name={'Przenieś'} icon={<CgArrowRight />} /> */}
               <TaskButton onClick={() => {
                 deleteCard(cardId);
                 updateBoard({ id: boardId })

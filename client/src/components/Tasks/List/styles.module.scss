@@ -1,6 +1,8 @@
 @import '../../../scss/utils.scss';
-
 .container {
+  // position: relative;
+}
+.list {
   width: 272px;
   // position: relative;
   padding: 0.5rem 0.5rem 5px;
@@ -12,11 +14,12 @@
   -webkit-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.15);
   box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.15);
   user-select: none;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .listHeader {
   width: 100%;
+  position: relative;
   height: auto;
   display: flex;
   align-items: flex-start;
@@ -64,4 +67,18 @@
 }
 .actionsList {
   width: 100%;
+}
+
+.actionsPopup {
+  position: absolute;
+  right: -20px;
+  top: 5px;
+  user-select: none;
+  cursor: auto;
+  z-index: 200;
+}
+.actionsPopupContent {
+  display: flex;
+  flex-direction: column;
+  // gap: 1px;
 }
