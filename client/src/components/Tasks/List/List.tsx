@@ -46,7 +46,7 @@ type Props = {
 }
 
 const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
-  const { data: board, error, isLoading } = useGetBoardQuery(boardId);
+  // const { data: board, error, isLoading } = useGetBoardQuery(boardId);
   const ref = useRef(null)
   const [addCard] = useAddCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
@@ -102,6 +102,33 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
     updateBoard({ id: boardId })
   }
 
+  const handleSortCardsDateOfAdding = (cards: any[]) => {
+    const newCards = [...cards]
+    const sortedCards = newCards.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
+    updateList({
+      id: listId,
+      cards: sortedCards
+    })
+    updateBoard({
+      id: boardId
+    })
+    setActionTrigger(false)
+  }
+
+  const handleSortCardsDateOfDeadline = (cards: any[]) => {
+    const newCards = [...cards]
+    const sortedCards = newCards.sort((a, b) => +new Date(b.deadline) - +new Date(a.deadline))
+    updateList({
+      id: listId,
+      cards: sortedCards
+    })
+    updateBoard({
+      id: boardId
+    })
+    setActionTrigger(false)
+    console.log(sortedCards)
+  }
+
   const handleCloseForm = () => { setOpenCardForm(false); setCardTitle(''); }
   useOnClickOutside(ref, handleCloseForm)
 
@@ -129,31 +156,39 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
               }
               <IconButton onClick={() => {
                 setActionTrigger(true)
-                // setOpenTitleForm(true)
-                // updateBoard({ id: boardId })
               }}><BsThreeDots style={{ fontSize: "1.3em" }} /></IconButton>
-              <div className={styles.actionsPopup} onBlur={() => setOpenTitleForm(false)}>
-                <Popup
-                  title={'Akcje listy'}
-                  trigger={actionTrigger}
-                  closePopup={() => {
-                    setActionTrigger(false)
-                  }}
-                >
-                  <div className={styles.actionsPopupContent}>
-                    <TaskButton
-                      onClick={handleDeleteAllCards}
-                      name={'Usuń wszystkie karty'}
-                      icon={<MdOutlineLabel />}
-                    />
-                    <TaskButton
-                      onClick={handleDeleteList}
-                      name={'Usuń listę'}
-                      icon={<RiDeleteBinLine />}
-                    />
-                  </div>
-                </Popup>
-              </div>
+              {/* <div className={styles.actionsPopup}> */}
+              <Popup
+                title={'Akcje listy'}
+                trigger={actionTrigger}
+                closePopup={() => {
+                  setActionTrigger(false)
+                }}
+              >
+                <div className={styles.actionsPopupContent}>
+                  <TaskButton
+                    onClick={handleDeleteAllCards}
+                    name={'Usuń wszystkie karty'}
+                    icon={<MdOutlineLabel />}
+                  />
+                  <TaskButton
+                    onClick={handleDeleteList}
+                    name={'Usuń listę'}
+                    icon={<RiDeleteBinLine />}
+                  />
+                  <TaskButton
+                    onClick={() => handleSortCardsDateOfAdding(cards)}
+                    name={'Sortuj karty po dacie dodania'}
+                    icon={<RiDeleteBinLine />}
+                  />
+                  <TaskButton
+                    onClick={() => handleSortCardsDateOfDeadline(cards)}
+                    name={'Sortuj karty po terminie'}
+                    icon={<RiDeleteBinLine />}
+                  />
+                </div>
+              </Popup>
+              {/* </div> */}
             </div>
             <Droppable droppableId={String(listId)} type="card">
               {provided => (

@@ -57,7 +57,7 @@ type Props = {
   listId?: string
   cardId: string
   index: number
-  deadline: Date | null
+  deadline: Date
   completed: boolean
   updateDate?: Date
   cover: string
@@ -79,9 +79,10 @@ const Card: React.FC<Props> = ({
   labels,
   deadline,
   cover,
+  files,
   dragDisabled,
 }) => {
-  const { data: card, error, isLoading } = useGetCardQuery(cardId);
+  // const { data: card, error, isLoading } = useGetCardQuery(cardId);
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
@@ -92,7 +93,7 @@ const Card: React.FC<Props> = ({
   const [cardCompleted, setCardCompleted] = useState<boolean>(completed)
   const [deadlineCard, setDeadlineCard] = useState<Date | null>(deadline)
   const [nowDate, setNowDate] = useState(Date.now())
-  const [files, setFiles] = useState([] as any)
+  const [cardFiles, setFiles] = useState([] as any)
   const [cardCover, setCover] = useState<string | undefined>(cover)
   const [cardFileIndex, setFileIndex] = useState<number>(0)
   const [actionTrigger, setActionTrigger] = useState<boolean>(false)
@@ -108,14 +109,14 @@ const Card: React.FC<Props> = ({
   }, [])
 
   useEffect(() => {
-    if (card) {
-      setFiles(card.files)
+    if (files) {
+      setFiles(files)
     }
-  }, [card])
+  }, [files])
 
   useEffect(() => {
-    if (files) {
-      const newFiles = [...files]
+    if (cardFiles) {
+      const newFiles = [...cardFiles]
       const filesOnlyImages = newFiles.filter(file => isFileImage(file.fileUrl))
       const selectedCover = filesOnlyImages.find((file: { fileUrl: string }) => file.fileUrl === cover)
       let activeIndex = filesOnlyImages.indexOf(selectedCover);
@@ -133,7 +134,7 @@ const Card: React.FC<Props> = ({
         setCover('')
       }
     }
-  }, [files])
+  }, [cardFiles])
 
   const handleMouseEnter = () => {
     setShowText(true)
@@ -198,8 +199,8 @@ const Card: React.FC<Props> = ({
   const hoverRef = useRef(null)
   const isHover = useHover(hoverRef)
 
-  if (isLoading) return <p>...</p>
-  if (error) return <p>Brak połączenia</p>
+  // if (isLoading) return <p>...</p>
+  // if (error) return <p>Brak połączenia</p>
 
   return (
     <>
@@ -221,7 +222,7 @@ const Card: React.FC<Props> = ({
             dateIsSameOrBefore={dateIsSameOrBefore}
             deadlineIsSoon={deadlineIsSoon}
             cardDateDisplay={cardDateDisplay}
-            cardFiles={files}
+            cardFiles={cardFiles}
             cardCover={cardCover}
             setFileIndex={setFileIndex}
             cardFileIndex={cardFileIndex}
@@ -239,7 +240,7 @@ const Card: React.FC<Props> = ({
                 <div className={styles.cardContainer} >
                   <div className={styles.cardClickableArea} onClick={handleOpenCardWindow}></div>
                   {
-                    files.length ? (
+                    cardFiles.length ? (
                       <div className={styles.cardCover} style={cardCoverStyle}>
                       </div>
                     ) : null
@@ -274,14 +275,14 @@ const Card: React.FC<Props> = ({
                       }
                     </div>
                     {description ? <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardWindow} /></div> : null}
-                    {files.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{files.length}</span></div> : null}
+                    {cardFiles.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{cardFiles.length}</span></div> : null}
                   </div>
                 </div>
                 <div className={styles.btnContainer}>
                   {
-                  showText ? (<IconButton onClick={() => {
-                    setActionTrigger(true)
-                    dragDisabled(true)
+                    showText ? (<IconButton onClick={() => {
+                      setActionTrigger(true)
+                      dragDisabled(true)
                     }}>
                       <BsPencil />
                     </IconButton>) : null
@@ -292,27 +293,27 @@ const Card: React.FC<Props> = ({
           )}
         </Draggable>
         {/* <div className={styles.actionsPopup}> */}
-          <Popup
-            title={'akcje karty'}
-            trigger={actionTrigger}
-            closePopup={() => {
+        <Popup
+          title={'akcje karty'}
+          trigger={actionTrigger}
+          closePopup={() => {
+            setActionTrigger(false)
+            dragDisabled(false)
+          }}
+        // backToMainWindow={() => setFileTrigger(false)}
+        >
+          <div className={styles.actionsPopupContent}>
+            <TaskButton onClick={() => {
+              handleOpenCardWindow()
               setActionTrigger(false)
-              dragDisabled(false)
-            }}
-          // backToMainWindow={() => setFileTrigger(false)}
-          >
-            <div className={styles.actionsPopupContent}>
-              <TaskButton onClick={() => {
-                handleOpenCardWindow()
-                setActionTrigger(false)
-              }} name={'Otwórz kartę'} icon={<MdOutlineLabel />} />
+            }} name={'Otwórz kartę'} icon={<MdOutlineLabel />} />
 
-              <TaskButton onClick={() => {
-                deleteCard(cardId);
-                updateBoard({ id: boardId })
-              }} name={'Usuń'} icon={<RiDeleteBinLine />} />
-            </div>
-          </Popup>
+            <TaskButton onClick={() => {
+              deleteCard(cardId);
+              updateBoard({ id: boardId })
+            }} name={'Usuń'} icon={<RiDeleteBinLine />} />
+          </div>
+        </Popup>
         {/* </div> */}
       </div>
     </>

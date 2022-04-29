@@ -154,14 +154,10 @@ const CardWindow: React.FC<Props> = ({
   const [selectedNameFiles, setSelectedNameFiles] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<null | boolean>(null)
-  const [selectCardCover, setSelectCardCover] = useState('')
 
   const url = 'http://localhost:5000/'
+  // const url = 'https://lukas-backend.herokuapp.com/'
 
-
-
-  // if(cardCompleted.match(/\.(jpeg|jpg|png|webp|pdf|doc|docx|xlsx|xls)$/))
-  // console.log(cardCover.split('.').pop())
 
   useEffect(() => {
     if (board) {
@@ -361,6 +357,9 @@ const CardWindow: React.FC<Props> = ({
         updateCard({
           id: cardId,
         })
+        updateBoard({
+          id: boardId
+        })
         setUploadStatus(true)
         setTimeout(() => {
           setUploadProgress(0)
@@ -379,6 +378,9 @@ const CardWindow: React.FC<Props> = ({
     updateCard({
       id: cardId,
       files: cardFiles
+    })
+    updateBoard({
+      id: boardId
     })
     if (cardFiles.length) {
       setCover(cardFiles[0].fileUrl)

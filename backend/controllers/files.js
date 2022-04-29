@@ -35,10 +35,10 @@ export const getFiles = async (req, res, next) => {
   const { id } = req.params
   try {
     let files = await Card.findById(id)
-      .populate({
-        path: 'files',
-      })
-      .exec()
+      // .populate({
+      //   path: 'files',
+      // })
+      // .exec()
     res.status(200).send(files)
   } catch (error) {
     res.status(400).send(error.message)

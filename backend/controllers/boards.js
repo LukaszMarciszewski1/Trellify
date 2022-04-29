@@ -23,6 +23,9 @@ export const getBoard = async (req, res) => {
         path: 'lists',
         populate: {
           path: 'cards',
+          populate: {
+            path: 'files',
+          },
         },
       })
       .exec()
