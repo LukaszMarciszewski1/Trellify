@@ -13,10 +13,6 @@ const ListSchema = mongoose.Schema(
       type: Date,
       default: new Date(),
     },
-    updatedAt: {
-      type: Date,
-      default: null,
-    },
   },
   {
     timestamps: true,

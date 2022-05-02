@@ -24,8 +24,8 @@ import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import SideMenu from '../SideMenu/SideMenu';
 
-import { Board as BoardInterface } from '../../../store/reducers/boardsReducer'
-import { List as ListInterface } from '../../../store/reducers/listsReducer'
+import { Board as BoardResponse } from '../../../models/board'
+import { List as ListResponse } from '../../../models/list'
 
 const Board: React.FC = () => {
   const boardId = '624f02f011fa05ce01907c07'
@@ -37,13 +37,13 @@ const Board: React.FC = () => {
 
   const formRef = useRef(null)
 
-  const [backgroundUrl, setBackgroundUrl] = useState<string>('')
-  const [listTitle, setListTitle] = useState<string>('');
-  const [openForm, setOpenForm] = useState<boolean>(false)
-  const [openSideMenu, setOpenSideMenu] = useState<boolean>(false)
+  const [backgroundUrl, setBackgroundUrl] = useState('')
+  const [listTitle, setListTitle] = useState('');
+  const [openForm, setOpenForm] = useState(false)
+  const [openSideMenu, setOpenSideMenu] = useState(false)
 
-  const [board, setBoard] = useState<BoardInterface>()
-  const [lists, setLists] = useState<ListInterface[]>([])
+  const [board, setBoard] = useState<BoardResponse>()
+  const [lists, setLists] = useState<ListResponse[]>([])
 
   const closeForm = () => { setOpenForm(false); setListTitle('') }
   useOnClickOutside(formRef, closeForm)
@@ -70,7 +70,7 @@ const Board: React.FC = () => {
       boardId: boardId,
     })
     updateBoard({
-      id: boardId,
+      _id: boardId,
     })
 
     setListTitle('')
@@ -83,83 +83,83 @@ const Board: React.FC = () => {
     if (!board) return;
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-    
-      if (type === 'list') {
-        const [removed] = newLists.splice(source.index, 1)
-        newLists.splice(destination.index, 0, removed)
 
-        setLists(newLists)
-        updateBoard({
-          id: boardId,
-          lists: newLists
+    if (type === 'list') {
+      const [removed] = newLists.splice(source.index, 1)
+      newLists.splice(destination.index, 0, removed)
+
+      setLists(newLists)
+      updateBoard({
+        _id: boardId,
+        lists: newLists
+      })
+    }
+
+    if (type === 'card') {
+      const sourceList = newLists.find((list: { _id: string }) => list._id === source.droppableId)
+      const destinationList = newLists.find((list: { _id: string; }) => list._id === destination.droppableId)
+
+      if (source.droppableId === destination.droppableId && sourceList) {
+        const newCards = [...sourceList.cards]
+        const [removed] = newCards.splice(source.index, 1)
+        newCards.splice(destination.index, 0, removed)
+
+        const updateState = {
+          ...sourceList,
+          cards: newCards
+        }
+
+        //replace the contents of the list
+        const newState = newLists.map(obj => [updateState].find(o => o._id === obj._id) || obj);
+
+        setLists(newState)
+        updateList({
+          _id: source.droppableId,
+          cards: newCards
+        })
+
+      }
+
+      if (source.droppableId !== destination.droppableId && sourceList && destinationList) {
+        const startCards = [...sourceList.cards]
+        const finishCards = [...destinationList.cards]
+
+        const [removed] = startCards.splice(source.index, 1)
+        const startState = {
+          ...sourceList,
+          cards: startCards
+        }
+
+        finishCards.splice(destination.index, 0, removed)
+        const finishState = {
+          ...destinationList,
+          cards: finishCards
+        }
+
+        //converted to array
+        const newCards = [startState, finishState]
+
+        //replace the contents of the lists
+        const newState = newLists.map(obj => newCards.find(o => o._id === obj._id) || obj);
+
+        setLists(newState)
+
+        updateCard({
+          _id: draggableId,
+          listId: destination.droppableId
+        })
+        // update source list
+        updateList({
+          _id: source.droppableId,
+          cards: startCards
+        })
+        //update destination list
+        updateList({
+          _id: destination.droppableId,
+          cards: finishCards
         })
       }
-
-      if (type === 'card') {
-        const sourceList = newLists.find((list: {_id: string}) => list._id === source.droppableId)
-        const destinationList = newLists.find((list: { _id: string; }) => list._id === destination.droppableId)
-
-        if (source.droppableId === destination.droppableId && sourceList) {
-          const newCards = [...sourceList.cards]
-          const [removed] = newCards.splice(source.index, 1)
-          newCards.splice(destination.index, 0, removed)
-
-          const updateState = {
-            ...sourceList,
-            cards: newCards
-          }
-
-          //replace the contents of the list
-          const newState = newLists.map(obj => [updateState].find(o => o._id === obj._id) || obj);
-
-          setLists(newState)
-          updateList({
-            id: source.droppableId,
-            cards: newCards
-          })
-
-        }
-
-        if (source.droppableId !== destination.droppableId && sourceList && destinationList) {
-          const startCards = [...sourceList.cards]
-          const finishCards = [...destinationList.cards]
-
-          const [removed] = startCards.splice(source.index, 1)
-          const startState = {
-            ...sourceList,
-            cards: startCards
-          }
-
-          finishCards.splice(destination.index, 0, removed)
-          const finishState = {
-            ...destinationList,
-            cards: finishCards
-          }
-
-          //converted to array
-          const newCards = [startState, finishState]
-
-          //replace the contents of the lists
-          const newState = newLists.map(obj => newCards.find(o => o._id === obj._id) || obj);
-
-          setLists(newState)
-
-          updateCard({
-            id: draggableId,
-            listId: destination.droppableId
-          })
-          // update source list
-          updateList({
-            id: source.droppableId,
-            cards: startCards
-          })
-          //update destination list
-          updateList({
-            id: destination.droppableId,
-            cards: finishCards
-          })
-        }
-      }
+    }
   }
 
   const boardBackgroundStyle = {

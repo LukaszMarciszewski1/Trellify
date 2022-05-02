@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import styles from './styles.module.scss'
-import { isFileImage } from '../../../../../hooks/isFileImage'
-import TaskButton from '../../../TaskButton/TaskButton'
+import { isFileImage } from '../../../../../../hooks/isFileImage'
+import TaskButton from '../../../../TaskButton/TaskButton'
 
 type Props = {
   title: string,

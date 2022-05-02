@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import { BiCheck } from 'react-icons/bi';
-import IconButton from '../../../../Details/IconButton/IconButton'
+import IconButton from '../../../../../Details/IconButton/IconButton'
 import { BsPencil } from 'react-icons/bs';
 import LabelForm from '../LabelForm/LabelForm';
 

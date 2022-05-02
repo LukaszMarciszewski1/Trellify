@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
-import getImages from '../../../store/api/unsplashApi';
+import getImages from '../../../api/unsplashApi';
 import { BsXLg } from "react-icons/bs";
 import IconButton from '../../Details/IconButton/IconButton';
 import { colors, defaultBackground, defaultColor } from '../localData';
-import {
-  useUpdateBoardMutation,
-} from '../../../store/reducers/boardsReducer'
+import {useUpdateBoardMutation,} from '../../../store/reducers/boardsReducer'
 
 type SideMenuProps = {
   boardId: string
@@ -75,7 +73,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ closeMenu, setBackgroundUrl, boardI
                 onClick={() => {
                   setBackgroundUrl(photo.full)
                   updateBoard({
-                    id: boardId,
+                    _id: boardId,
                     background: photo.full
                   })
                 }}
@@ -95,7 +93,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ closeMenu, setBackgroundUrl, boardI
                 onClick={() => {
                   setBackgroundUrl(color)
                   updateBoard({
-                    id: boardId,
+                    _id: boardId,
                     background: color
                   })
                 }}

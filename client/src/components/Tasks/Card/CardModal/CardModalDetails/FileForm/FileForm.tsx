@@ -2,8 +2,8 @@ import React, { useCallback, useRef, useState } from 'react'
 import { Line } from 'rc-progress';
 import styles from './styles.module.scss'
 
-import storage from '../../../../../config/firebase'
-import Button from '../../../../Details/Button/Button'
+import storage from '../../../../../../config/firebase'
+import Button from '../../../../../Details/Button/Button'
 
 type Props = {
   name: string

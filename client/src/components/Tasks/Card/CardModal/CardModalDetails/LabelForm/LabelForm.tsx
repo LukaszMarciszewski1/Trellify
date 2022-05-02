@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import TextareaAutosize from 'react-textarea-autosize';
 import styles from './styles.module.scss'
-import Button from '../../../../Details/Button/Button'
+import Button from '../../../../../Details/Button/Button'
 import { HexColorPicker } from "react-colorful";
 
 type Props = {

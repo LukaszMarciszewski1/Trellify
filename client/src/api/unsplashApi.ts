@@ -1,10 +1,9 @@
 import axios from 'axios'
-import unsplash from '../../config/unsplash'
 
 const getImages = async () => {
   const page = Math.floor(Math.random() * 20 + 1)
   const numberPhotos = 14
-  const urlImages = `https://api.unsplash.com/search/photos?page=${page}&per_page=${numberPhotos}&query=Landscape&client_id=${unsplash.clientKey}`
+  const urlImages = `https://api.unsplash.com/search/photos?page=${page}&per_page=${numberPhotos}&query=Landscape&client_id=${process.env.REACT_APP_UNSPLASH_KEY}`
 
   const res = await axios.get(urlImages)
   const photos = res.data.results.map(

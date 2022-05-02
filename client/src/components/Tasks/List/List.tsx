@@ -8,7 +8,6 @@ import IconButton from '../../Details/IconButton/IconButton'
 import { BsThreeDots } from "react-icons/bs";
 
 import { labelItems } from '../localData';
-
 import {
   // useGetAllTasksQuery,
   // useAddTaskMutation,
@@ -36,8 +35,10 @@ import Popup from '../../Details/Popup/Popup';
 import { MdOutlineLabel } from 'react-icons/md';
 import { RiDeleteBinLine } from 'react-icons/ri';
 // import { dangerouslyDisableDefaultSrc } from 'helmet/dist/middlewares/content-security-policy';
+import { Card as CardResponse } from '../../../models/card'
+import { List as ListInterface } from '../../../models/list'
 
-type Props = {
+interface PropsList {
   listId: string
   boardId: string
   title: string
@@ -45,15 +46,14 @@ type Props = {
   cards: []
 }
 
-const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
-  // const { data: board, error, isLoading } = useGetBoardQuery(boardId);
+const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => {
   const ref = useRef(null)
   const [addCard] = useAddCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
   const [updateList] = useUpdateTaskMutation()
   const [deleteList] = useDeleteTaskMutation()
 
-  const [listTitle, setListTitle] = useState<string | undefined>(title)
+  const [listTitle, setListTitle] = useState(title)
   const [cardTitle, setCardTitle] = useState<string>('')
   const [openCardForm, setOpenCardForm] = useState<boolean>(false)
   const [openTitleForm, setOpenTitleForm] = useState<boolean>(false)
@@ -67,7 +67,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
   const handleEditListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
     updateList({
-      id: listId,
+      _id: listId,
       title: e.target.value
     })
   }
@@ -80,7 +80,7 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
       title: cardTitle,
     })
     updateBoard({
-      id: boardId,
+      _id: boardId,
     })
     setOpenCardForm(false)
     setCardTitle('')
@@ -88,29 +88,29 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
 
   const handleDeleteAllCards = () => {
     updateList({
-      id: listId,
+      _id: listId,
       cards: []
     })
     updateBoard({
-      id: boardId
+      _id: boardId
     })
     setActionTrigger(false)
   }
 
   const handleDeleteList = () => {
     deleteList(listId);
-    updateBoard({ id: boardId })
+    updateBoard({ _id: boardId })
   }
 
   const handleSortCardsDateOfAdding = (cards: any[]) => {
     const newCards = [...cards]
     const sortedCards = newCards.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
     updateList({
-      id: listId,
+      _id: listId,
       cards: sortedCards
     })
     updateBoard({
-      id: boardId
+      _id: boardId
     })
     setActionTrigger(false)
   }
@@ -119,11 +119,11 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
     const newCards = [...cards]
     const sortedCards = newCards.sort((a, b) => +new Date(b.deadline) - +new Date(a.deadline))
     updateList({
-      id: listId,
+      _id: listId,
       cards: sortedCards
     })
     updateBoard({
-      id: boardId
+      _id: boardId
     })
     setActionTrigger(false)
     console.log(sortedCards)
@@ -198,10 +198,9 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                 >
                   {
                     cards?.map((card: {
-                      listId: string;
                       _id: string;
+                      listId: string;
                       title: string;
-                      updateDate: Date,
                       labels: [],
                       description: string,
                       deadline: Date,
@@ -219,12 +218,11 @@ const List: React.FC<Props> = ({ title, listId, index, cards, boardId }) => {
                         deadline={card.deadline}
                         completed={card.completed}
                         description={card.description}
-                        updateDate={card.updateDate}
                         labels={card.labels}
                         files={card.files}
                         cover={card.cover}
                         nameList={listTitle}
-                        dragDisabled={setDragDisabled}
+                        setDragDisabled={setDragDisabled}
                       />
                     ))
                   }
