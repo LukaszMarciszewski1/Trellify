@@ -3,40 +3,21 @@ import axios from 'axios';
 import styles from './styles.module.scss'
 import dayjs from 'dayjs';
 import fileDownload from 'js-file-download'
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import isToday from 'dayjs/plugin/isToday';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import minMax from 'dayjs/plugin/minMax';
-import updateLocale from 'dayjs/plugin/updateLocale'
-import duration from 'dayjs/plugin/duration'
-import Dropzone from 'react-dropzone'
-import { useDropzone } from 'react-dropzone'
-import storage from '../../../../config/firebase';
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-
-
 import TextareaAutosize from 'react-textarea-autosize';
-
 import TaskForm from '../../TaskForm/TaskForm'
 import IconButton from '../../../Details/IconButton/IconButton';
 import useOnClickOutside from '../../../../hooks/useOnClickOutside'
 import { isFileImage } from '../../../../hooks/isFileImage'
-
-import DatePicker, { registerLocale } from "react-datepicker";
-import { parseISO, format } from 'date-fns'
-import { pl } from 'date-fns/locale'
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 import { BsXLg } from 'react-icons/bs';
 import { BsPencil } from 'react-icons/bs';
 import { BiTask } from 'react-icons/bi';
 import { GrAttachment } from 'react-icons/gr';
 import { BsStopwatch } from 'react-icons/bs';
 import { MdOutlineLabel } from 'react-icons/md';
-import { CgArrowRight, CgChevronDoubleLeft } from 'react-icons/cg';
 import { IoMdAdd } from 'react-icons/io';
 import { RiDeleteBinLine } from 'react-icons/ri';
-// import { SwatchesPicker } from 'react-color';
 
 import {
   useGetBoardQuery,
@@ -44,51 +25,31 @@ import {
 } from '../../../../store/reducers/boardsReducer'
 
 import {
-  useGetCardQuery,
-  // useGetCardFilesQuery,
   useDeleteCardMutation,
   useUpdateCardMutation,
-  // useUploadFilesCardMutation,
-  // useDeleteFileMutation,
 } from "../../../../store/reducers/cardsReducer";
 
 import {
-  useGetAllFilesQuery,
-  useGetFileQuery,
   useUploadFileMutation,
   useDeleteFileMutation,
 } from '../../../../store/reducers/filesReducer'
 
-// import { GrAdd } from 'react-icons/gr';
 import TaskButton from '../../TaskButton/TaskButton';
 import Popup from '../../../Details/Popup/Popup';
 import Label from './CardModalDetails/Label/Label';
-import { BiCheck } from 'react-icons/bi';
-// import { labelItems } from '../localData';
-
 import ItemsContainer from './CardModalDetails/ItemsContainer/ItemsContainer'
 import LabelForm from './CardModalDetails/LabelForm/LabelForm'
 import Button from '../../../Details/Button/Button';
-
 import FileForm from './CardModalDetails/FileForm/FileForm'
 import Files from './CardModalDetails/Files/Files';
 
 import { Line as ProgressLine } from 'rc-progress';
 import { File as FileResponse } from '../../../../models/file'
+import { Card as CardModel } from '../../../../models/card'
 
-type Props = {
-  cardId: string
-  title: string
-  description: string
-  boardId: string
-  nameList: string | undefined
-  cardDeadline: Date | null
-  cardLabels: any
-  cardFiles: any
-  cardCompleted: boolean
+interface CardModalProps extends CardModel {
   dateIsSameOrBefore: boolean
   deadlineIsSoon: boolean
-  cardCover: string | undefined
   cardFileIndex: number
   cardDateDisplay: {
     style: {
@@ -98,34 +59,34 @@ type Props = {
     name: string
   }
   setIsCardWindowOpen: () => void
-  setCardCompleted: (value: any) => void
-  setCardDeadline: (value: any) => void
+  setCardCompleted: (value: boolean) => void
+  setCardDeadline: (value: Date | null) => void
   setCardLabels: (value: any) => void
-  setCardCover: (value: any) => void
-  setCardFileIndex: (value: any) => void
+  setCardCover: (value: string) => void
+  setCardFileIndex: (value: number) => void
 }
 
-const CardModal: React.FC<Props> = ({
-  cardId,
-  title,
+const CardModal: React.FC<CardModalProps> = ({
+  _id,
   boardId,
-  nameList,
+  title,
   description,
-  cardLabels,
-  cardDeadline,
-  cardCompleted,
+  completed,
+  labels,
+  deadline,
+  cover,
+  files,
+  nameList,
+  dateIsSameOrBefore,
+  deadlineIsSoon,
+  cardDateDisplay,
+  cardFileIndex,
   setCardDeadline,
   setCardCompleted,
   setIsCardWindowOpen,
   setCardLabels,
-  dateIsSameOrBefore,
-  deadlineIsSoon,
-  cardDateDisplay,
-  cardFiles,
-  cardCover,
   setCardCover,
   setCardFileIndex,
-  cardFileIndex
 }) => {
   dayjs.locale('pl');
   const { data: board, error, isLoading } = useGetBoardQuery(boardId);
@@ -139,7 +100,7 @@ const CardModal: React.FC<Props> = ({
   const refWindow = useRef(null)
   const [cardTitle, setCardTitle] = useState<string>(title)
   const [cardDescription, setCardDescription] = useState<string>(description)
-  const [labels, setLabels] = useState([] as any)
+  const [boardLabels, setBoardLabels] = useState([] as any)
   const [labelTitle, setLabelTitle] = useState('')
 
   const [formIsOpen, setFormIsOpen] = useState(false)
@@ -160,23 +121,16 @@ const CardModal: React.FC<Props> = ({
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<boolean | null>(null)
 
-  const url = 'http://localhost:5000/'
-  // const url = 'https://lukas-backend.herokuapp.com/'
-
-
   useEffect(() => {
     if (board) {
-      setLabels(board.labels)
+      setBoardLabels(board.labels)
     }
   }, [board])
-
-  console.log(selectedFiles)
-
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-title') setCardTitle(e.target.value)
     updateCard({
-      _id: cardId,
+      _id: _id,
       title: e.target.value
     })
     updateBoard({
@@ -192,7 +146,7 @@ const CardModal: React.FC<Props> = ({
   const handleSaveCardDescription = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     updateCard({
-      _id: cardId,
+      _id: _id,
       description: cardDescription
     })
     updateBoard({
@@ -208,9 +162,9 @@ const CardModal: React.FC<Props> = ({
 
   const handleSaveLabelEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
-    const newLabels = [...labels]
-    const newCardLabels = [...cardLabels]
-    if (labels) {
+    const newLabels = [...boardLabels]
+    const newCardLabels = [...labels]
+    if (boardLabels) {
       const newLabelState = newLabels.map((label: any) => {
         if (label._id !== currentLabelId) return label;
         return { ...label, title: currentLabelTitle, color: currentLabelColor };
@@ -222,7 +176,7 @@ const CardModal: React.FC<Props> = ({
       })
 
       setCardLabels(newCardLabelState)
-      setLabels(newLabelState)
+      setBoardLabels(newLabelState)
       updateBoard({
         _id: boardId,
         labels: newLabelState
@@ -233,7 +187,7 @@ const CardModal: React.FC<Props> = ({
 
   const handleAddNewLabel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
-    const newLabels = [...labels, { color: currentLabelColor, title: labelTitle, active: false }]
+    const newLabels = [...boardLabels, { color: currentLabelColor, title: labelTitle, active: false }]
     updateBoard({
       _id: boardId,
       labels: newLabels
@@ -242,7 +196,7 @@ const CardModal: React.FC<Props> = ({
   }
 
   const handleCheckedLabel = (item: any) => {
-    const copyCardLabels = [...cardLabels]
+    const copyCardLabels = [...labels]
     const newLabel = { ...item, active: !item.active };
     const existLabel = copyCardLabels.find((label: { _id: string; }) => label._id === newLabel._id)
 
@@ -250,14 +204,14 @@ const CardModal: React.FC<Props> = ({
       const newLabels = copyCardLabels.filter((label: { _id: string; }) => label._id !== existLabel._id)
       setCardLabels(newLabels)
       updateCard({
-        _id: cardId,
+        _id: _id,
         labels: newLabels
       })
     } else {
       const newLabels = [...copyCardLabels, newLabel]
       setCardLabels(newLabels)
       updateCard({
-        _id: cardId,
+        _id: _id,
         labels: newLabels
       })
     }
@@ -267,14 +221,14 @@ const CardModal: React.FC<Props> = ({
   }
 
   const handleDeleteLabel = () => {
-    const newLabels = [...labels]
-    const newCardLabels = [...cardLabels]
+    const newLabels = [...boardLabels]
+    const newCardLabels = [...labels]
     const newLabelsState = newLabels.filter((label) => label._id !== currentLabelId);
     const newCardLabelsState = newCardLabels.filter((label) => label._id !== currentLabelId);
-    setLabels(newLabelsState)
+    setBoardLabels(newLabelsState)
     setCardLabels(newCardLabelsState)
     updateCard({
-      _id: cardId,
+      _id: _id,
       labels: newCardLabelsState
     })
     updateBoard({
@@ -285,7 +239,7 @@ const CardModal: React.FC<Props> = ({
   }
 
   const handleGetCurrentEditLabel = (id: string) => {
-    const newLabels = [...labels]
+    const newLabels = [...boardLabels]
     const activeLabel = newLabels.filter((label: { _id: string }) => label._id === id)
     const activeLabelTitle = activeLabel.map((label: { title: string }) => label.title).toString()
     const activeLabelColor = activeLabel.map((label: { color: string }) => label.color).toString()
@@ -297,8 +251,8 @@ const CardModal: React.FC<Props> = ({
   const handleSaveDeadline = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     updateCard({
-      _id: cardId,
-      deadline: cardDeadline
+      _id: _id,
+      deadline: deadline
     })
     updateBoard({ _id: boardId })
     setDateTrigger(false)
@@ -308,7 +262,7 @@ const CardModal: React.FC<Props> = ({
     e.preventDefault()
     setCardDeadline(null)
     updateCard({
-      _id: cardId,
+      _id: _id,
       deadline: null
     })
     updateBoard({ _id: boardId })
@@ -316,10 +270,10 @@ const CardModal: React.FC<Props> = ({
   }
 
   const handleChangeCompleted = () => {
-    setCardCompleted(!cardCompleted);
+    setCardCompleted(!completed);
     updateCard({
-      _id: cardId,
-      completed: !cardCompleted
+      _id: _id,
+      completed: !completed
     })
     updateBoard({
       _id: boardId
@@ -355,15 +309,15 @@ const CardModal: React.FC<Props> = ({
     e.preventDefault()
     if (!selectedFiles.length) return;
     const formData = new FormData();
-    formData.append('cardId', cardId)
+    formData.append('cardId', _id)
     for (let i = 0; i < selectedFiles.length; i++) {
       formData.append('files', selectedFiles[i]);
     }
 
-    await axios.post(`${url}files`, formData, uploadFileOptions)
+    await axios.post(`${process.env.REACT_APP_API_URL}files`, formData, uploadFileOptions)
       .then(res => {
         updateCard({
-          _id: cardId,
+          _id: _id,
         })
         updateBoard({
           _id: boardId
@@ -384,14 +338,14 @@ const CardModal: React.FC<Props> = ({
   const handleDeleteFile = (fileId: string) => {
     deleteFile(fileId)
     updateCard({
-      _id: cardId,
-      files: cardFiles
+      _id: _id,
+      files: files
     })
     updateBoard({
       _id: boardId
     })
-    if (cardFiles.length) {
-      setCardCover(cardFiles[0].fileUrl)
+    if (files.length) {
+      setCardCover(files[0].fileUrl)
     }
     else {
       setCardCover('')
@@ -422,10 +376,10 @@ const CardModal: React.FC<Props> = ({
 
   const handleSelectCover = (index: number) => {
     setCardFileIndex(index)
-    setCardCover(cardFiles[index].fileUrl)
+    setCardCover(files[index].fileUrl)
     updateCard({
-      _id: cardId,
-      cover: cardFiles[index].fileUrl
+      _id: _id,
+      cover: files[index].fileUrl
     })
     updateBoard({
       _id: boardId
@@ -437,9 +391,9 @@ const CardModal: React.FC<Props> = ({
       <div className={styles.overlay} onClick={setIsCardWindowOpen}></div>
       <div ref={refWindow} className={styles.cardWindow}>
         {
-          cardCover && isFileImage(cardCover) ? (
+          cover && isFileImage(cover) ? (
             <div className={styles.cardCover} >
-              <img onClick={onClickHandler} src={cardCover} alt={cardCover} />
+              <img onClick={onClickHandler} src={cover} alt={cover} />
             </div>
           ) : null
         }
@@ -465,9 +419,9 @@ const CardModal: React.FC<Props> = ({
           </div>
           <div className={styles.cardContainer}>
             <div className={styles.windowMain}>
-              <ItemsContainer data={cardLabels} title={'Etykiety'}>
+              <ItemsContainer data={labels} title={'Etykiety'}>
                 {
-                  cardLabels.map((label: { title: string; active: any; color: any; _id: string }) => (
+                  labels.map((label: { title: string; active: any; color: any; _id: string }) => (
                     <div
                       key={label._id}
                       style={{ backgroundColor: `${label.color}` }}
@@ -479,20 +433,20 @@ const CardModal: React.FC<Props> = ({
                   ))
                 }
               </ItemsContainer>
-              <ItemsContainer data={cardDeadline} title={'Termin'}>
+              <ItemsContainer data={deadline} title={'Termin'}>
                 {
-                  cardDeadline ? (
+                  deadline ? (
                     <>
                       <input
                         type="checkbox"
-                        checked={cardCompleted}
+                        checked={completed}
                         onChange={handleChangeCompleted}
                         style={{ height: '100%', width: '1rem', marginRight: '8px' }} />
                       <button onClick={() => setDateTrigger(true)}
                         className={styles.selectedDateBtn}>
-                        <span>{dayjs(cardDeadline).format('DD-MM-YYYY HH:mm')}</span>
+                        <span>{dayjs(deadline).format('DD-MM-YYYY HH:mm')}</span>
                         {
-                          dateIsSameOrBefore && !cardCompleted ? (
+                          dateIsSameOrBefore && !completed ? (
                             <span
                               title={cardDateDisplay.title}
                               style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.datedateNotificationSpan}>
@@ -501,7 +455,7 @@ const CardModal: React.FC<Props> = ({
                           ) : null
                         }
                         {
-                          deadlineIsSoon && !cardCompleted ? (
+                          deadlineIsSoon && !completed ? (
                             <span
                               title={cardDateDisplay.title}
                               style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.datedateNotificationSpan}>
@@ -510,7 +464,7 @@ const CardModal: React.FC<Props> = ({
                           ) : null
                         }
                         {
-                          cardCompleted ? (
+                          completed ? (
                             <span
                               title={cardDateDisplay.title}
                               style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.datedateNotificationSpan}>
@@ -552,10 +506,10 @@ const CardModal: React.FC<Props> = ({
                     </div>
                 }
               </div>
-              <ItemsContainer data={cardFiles} title={'Załącznik'}>
+              <ItemsContainer data={files} title={'Załącznik'}>
                 <div className={styles.filesContainer}>
                   {
-                    cardFiles?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
+                    files?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
                       <Files
                         key={file._id}
                         title={file.fileName}
@@ -588,13 +542,13 @@ const CardModal: React.FC<Props> = ({
                       <>
                         <div className={styles.labelsList}>
                           {
-                            labels.map((label: any) => (
+                            boardLabels.map((label: any) => (
                               <Label
                                 key={label._id}
                                 labelId={label._id}
                                 title={label.title}
                                 color={label.color}
-                                cardLabels={cardLabels}
+                                cardLabels={labels}
                                 openLabelEditWindow={() => {
                                   setIsOpenLabelEditWindow(true)
                                   handleGetCurrentEditLabel(label._id)
@@ -631,14 +585,14 @@ const CardModal: React.FC<Props> = ({
                 <DatePicker
                   dateFormat='DD/MM/YYYY'
                   timeFormat="hh:mm"
-                  selected={cardDeadline ? new Date(cardDeadline) : null}
+                  selected={deadline ? new Date(deadline) : null}
                   onChange={(date: Date) => setCardDeadline(date)}
                   inline
                   showTimeInput
                 />
                 <label>Termin <br></br>
-                  <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(cardDeadline).format('DD/MM/YYYY')} />
-                  <input style={{ maxWidth: '100px' }} placeholder={dayjs(cardDeadline).format('HH:mm')} />
+                  <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(deadline).format('DD/MM/YYYY')} />
+                  <input style={{ maxWidth: '100px' }} placeholder={dayjs(deadline).format('HH:mm')} />
                 </label>
                 <div className={styles.actionsForm}>
                   <Button onClick={handleSaveDeadline} title={'Zapisz'} type={'button'} />
@@ -676,7 +630,7 @@ const CardModal: React.FC<Props> = ({
               <TaskButton onClick={() => setFormIsOpen(true)} name={'Marazyn'} icon={<BiTask />} />
               <div className={styles.divider}></div>
               <TaskButton onClick={() => {
-                deleteCard(cardId);
+                deleteCard(_id);
                 updateBoard({ _id: boardId })
               }} name={'Usuń'} icon={<RiDeleteBinLine />} />
             </div>

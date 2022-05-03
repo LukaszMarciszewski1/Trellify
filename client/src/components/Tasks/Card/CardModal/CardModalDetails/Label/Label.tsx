@@ -9,7 +9,12 @@ type Props = {
   labelId: string
   title: string
   color: string
-  cardLabels: []
+  cardLabels: {
+    active: any
+    color: any
+    _id: string
+    title: string
+  }[]
   checkedLabel: (value: any) => void
   openLabelEditWindow: () => void
 }

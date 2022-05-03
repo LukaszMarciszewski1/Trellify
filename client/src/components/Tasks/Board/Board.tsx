@@ -39,13 +39,13 @@ const Board: React.FC = () => {
 
   const [backgroundUrl, setBackgroundUrl] = useState('')
   const [listTitle, setListTitle] = useState('');
-  const [openForm, setOpenForm] = useState(false)
+  const [isOpenForm, setIsOpenForm] = useState(false)
   const [openSideMenu, setOpenSideMenu] = useState(false)
 
-  const [board, setBoard] = useState<BoardResponse>()
-  const [lists, setLists] = useState<ListResponse[]>([])
+  const [board, setBoard] = useState<BoardResponse>({} as BoardResponse)
+  const [lists, setLists] = useState<ListResponse[]>([] as ListResponse[])
 
-  const closeForm = () => { setOpenForm(false); setListTitle('') }
+  const closeForm = () => { setIsOpenForm(false); setListTitle('') }
   useOnClickOutside(formRef, closeForm)
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const Board: React.FC = () => {
     })
 
     setListTitle('')
-    setOpenForm(false)
+    setIsOpenForm(false)
   }
 
   const onDragEnd = (result: DropResult) => {
@@ -198,12 +198,13 @@ const Board: React.FC = () => {
                 ref={provided.innerRef}
               >
                 {
-                  lists?.map((list: any, index: number) => (
+                  lists?.map((list, index: number) => (
                     <List
+                      _id={list._id}
                       index={index}
                       boardId={list.boardId}
                       key={list._id}
-                      listId={list._id}
+                      // listId={list._id}
                       title={list.title}
                       cards={list.cards}
                     />
@@ -214,18 +215,18 @@ const Board: React.FC = () => {
             )}
           </Droppable>
           <div className={styles.actionsForm}>
-            {openForm ?
+            {isOpenForm ?
               <div className={styles.formContainer} ref={formRef}>
                 <TaskForm
                   id='list'
                   handleChange={handleChangeListTitle}
                   handleSubmit={handleAddList}
-                  closeForm={() => { setOpenForm(false); setListTitle('') }}
+                  closeForm={() => { setIsOpenForm(false); setListTitle('') }}
                   value={listTitle}
                   titleBtn={'Dodaj Listę'}
                 />
               </div>
-              : <TaskButton onClick={() => setOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
+              : <TaskButton onClick={() => setIsOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
             }
           </div>
         </div>

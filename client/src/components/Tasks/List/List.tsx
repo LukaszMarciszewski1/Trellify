@@ -6,47 +6,34 @@ import TaskForm from '../TaskForm/TaskForm';
 import TaskButton from '../TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton'
 import { BsThreeDots } from "react-icons/bs";
-
-import { labelItems } from '../localData';
 import {
-  // useGetAllTasksQuery,
-  // useAddTaskMutation,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
-  // useAddCardMutation,
 } from "../../../store/reducers/listsReducer";
 import {
-  // useGetAllBoardsQuery,
-  useGetBoardQuery,
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 import {
-  // useGetAllCardsQuery,
   useAddCardMutation,
-  // useDeleteCardMutation,
-  // useUpdateCardMutation,
 } from "../../../store/reducers/cardsReducer";
 import Card from '../Card/Card';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
-// import { v4 as uuidv4 } from 'uuid';
-// import { MdOutlineAdd } from "react-icons/md";
 import { GoPlus } from "react-icons/go";
 import Popup from '../../Details/Popup/Popup';
 import { MdOutlineLabel } from 'react-icons/md';
 import { RiDeleteBinLine } from 'react-icons/ri';
-// import { dangerouslyDisableDefaultSrc } from 'helmet/dist/middlewares/content-security-policy';
 import { Card as CardResponse } from '../../../models/card'
 import { List as ListInterface } from '../../../models/list'
-
-interface PropsList {
-  listId: string
-  boardId: string
-  title: string
+import { CardProps } from '../Card/Card'
+interface PropsList extends ListInterface{
+  // listId: string
+  // boardId: string
+  // title: string
   index: number
-  cards: []
+  // cards: []
 }
 
-const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => {
+const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   const ref = useRef(null)
   const [addCard] = useAddCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
@@ -60,6 +47,8 @@ const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => 
   const [dragDisabled, setDragDisabled] = useState<boolean>(false)
   const [actionTrigger, setActionTrigger] = useState<boolean>(false)
 
+  // const [cardList, setCardList] = useState<CardResponse[]>([] as CardResponse)
+
   const handleChangeCardValue = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card') setCardTitle(e.target.value)
   }
@@ -67,7 +56,7 @@ const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => 
   const handleEditListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
     updateList({
-      _id: listId,
+      _id: _id,
       title: e.target.value
     })
   }
@@ -76,7 +65,7 @@ const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => 
     e.preventDefault()
     if (cardTitle.length === 0) return
     addCard({
-      listId: listId,
+      listId: _id,
       title: cardTitle,
     })
     updateBoard({
@@ -88,7 +77,7 @@ const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => 
 
   const handleDeleteAllCards = () => {
     updateList({
-      _id: listId,
+      _id: _id,
       cards: []
     })
     updateBoard({
@@ -98,7 +87,7 @@ const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => 
   }
 
   const handleDeleteList = () => {
-    deleteList(listId);
+    deleteList(_id);
     updateBoard({ _id: boardId })
   }
 
@@ -106,7 +95,7 @@ const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => 
     const newCards = [...cards]
     const sortedCards = newCards.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
     updateList({
-      _id: listId,
+      _id: _id,
       cards: sortedCards
     })
     updateBoard({
@@ -119,7 +108,7 @@ const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => 
     const newCards = [...cards]
     const sortedCards = newCards.sort((a, b) => +new Date(b.deadline) - +new Date(a.deadline))
     updateList({
-      _id: listId,
+      _id: _id,
       cards: sortedCards
     })
     updateBoard({
@@ -134,7 +123,7 @@ const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => 
 
   return (
     <div >
-      <Draggable draggableId={String(listId)} index={index} isDragDisabled={dragDisabled}>
+      <Draggable draggableId={String(_id)} index={index} isDragDisabled={dragDisabled}>
         {provided => (
           <div className={styles.list} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
             <div className={styles.listHeader} onClick={() => setOpenTitleForm(true)} ref={ref}>
@@ -190,29 +179,19 @@ const List: React.FC<PropsList> = ({ listId, boardId, title, index, cards }) => 
               </Popup>
               {/* </div> */}
             </div>
-            <Droppable droppableId={String(listId)} type="card">
+            <Droppable droppableId={String(_id)} type="card">
               {provided => (
                 <div className={styles.cardsContainer}
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
                   {
-                    cards?.map((card: {
-                      _id: string;
-                      listId: string;
-                      title: string;
-                      labels: [],
-                      description: string,
-                      deadline: Date,
-                      completed: boolean,
-                      cover: string,
-                      files: []
-                    },
-                      index: number) => (
+                    cards?.map((card, index: number) => (
                       <Card
+                        _id={card._id}
                         index={index}
                         key={card._id}
-                        cardId={card._id}
+                        // cardId={card._id}
                         boardId={boardId}
                         title={card.title}
                         deadline={card.deadline}

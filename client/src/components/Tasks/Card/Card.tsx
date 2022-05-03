@@ -14,15 +14,15 @@ import duration from 'dayjs/plugin/duration'
 import 'dayjs/locale/pl';
 import CardModal from './CardModal/CardModal';
 import {
-  useGetBoardQuery,
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 import {
-  useGetCardQuery,
   useDeleteCardMutation,
   useUpdateCardMutation,
 } from "../../../store/reducers/cardsReducer";
 
+import { MdOutlineLabel } from 'react-icons/md';
+import { RiDeleteBinLine } from 'react-icons/ri';
 import { BsPencil } from 'react-icons/bs';
 import { GrTextAlignFull } from 'react-icons/gr';
 import { BsStopwatch } from 'react-icons/bs';
@@ -31,31 +31,18 @@ import { ImCheckboxChecked } from 'react-icons/im';
 import { GrAttachment } from 'react-icons/gr';
 import IconButton from '../../Details/IconButton/IconButton';
 import TaskButton from '../TaskButton/TaskButton';
-import Button from '../../Details/Button/Button';
 import useHover from '../../../hooks/useHover'
 import { isFileImage } from '../../../hooks/isFileImage'
 import Popup from '../../Details/Popup/Popup';
-import { MdOutlineLabel } from 'react-icons/md';
-import { RiDeleteBinLine } from 'react-icons/ri';
-import { Card as CardInterface} from '../../../models/card' 
+import { Card as CardModel } from '../../../models/card'
 
-type Props = {
-  boardId: string
-  title: string
-  description: string
-  cardId: string
+export interface CardProps extends CardModel {
   index: number
-  deadline: Date
-  completed: boolean
-  cover: string
-  labels: []
-  files: []
-  nameList: string
   setDragDisabled: (value: boolean) => void
 }
 
-const Card: React.FC<Props> = ({
-  cardId,
+const Card: React.FC<CardProps> = ({
+  _id,
   boardId,
   title,
   index,
@@ -68,11 +55,12 @@ const Card: React.FC<Props> = ({
   files,
   setDragDisabled,
 }) => {
+
   const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
-  const [isOpenCardModal, setIsOpenCardModal] = useState(false)
+  const [isOpenCardModal, setIsOpenCardModal] = useState<boolean>(false)
   const [isDisplayEditIcon, setIsDisplayEditIcon] = useState(false)
   const [cardLabels, setCardLabels] = useState(labels)
   const [cardCompleted, setCardCompleted] = useState(completed)
@@ -98,6 +86,10 @@ const Card: React.FC<Props> = ({
       setCardFiles(files)
     }
   }, [files])
+  
+  useEffect(() => {
+    displayCover()
+  }, [cardFiles])
 
   const displayCover = () => {
     if (cardFiles) {
@@ -121,10 +113,6 @@ const Card: React.FC<Props> = ({
     }
   }
 
-  useEffect(() => {
-    displayCover()
-  }, [cardFiles])
-
   const handleMouseEnter = () => {
     setIsDisplayEditIcon(true)
   }
@@ -146,7 +134,7 @@ const Card: React.FC<Props> = ({
   const handleChangeCompleted = () => {
     setCardCompleted(!cardCompleted);
     updateCard({
-      _id: cardId,
+      _id: _id,
       completed: !cardCompleted
     })
     updateBoard({
@@ -192,30 +180,31 @@ const Card: React.FC<Props> = ({
       {
         isOpenCardModal ?
           <CardModal
+            _id={_id}
             nameList={nameList}
-            cardId={cardId}
+            // cardId={cardId}
             title={title}
             description={description}
             boardId={boardId}
-            cardDeadline={cardDeadline}
-            cardLabels={cardLabels}
-            cardCompleted={cardCompleted}
+            deadline={cardDeadline}
+            labels={cardLabels}
+            files={cardFiles}
+            cover={cardCover}
+            completed={cardCompleted}
+            cardFileIndex={cardFileIndex}
+            dateIsSameOrBefore={dateIsSameOrBefore}
+            deadlineIsSoon={deadlineIsSoon}
+            cardDateDisplay={cardDateDisplay}
             setCardLabels={setCardLabels}
             setCardDeadline={setCardDeadline}
             setCardCompleted={setCardCompleted}
             setIsCardWindowOpen={handleCloseCardModal}
-            dateIsSameOrBefore={dateIsSameOrBefore}
-            deadlineIsSoon={deadlineIsSoon}
-            cardDateDisplay={cardDateDisplay}
-            cardFiles={cardFiles}
-            cardCover={cardCover}
             setCardFileIndex={setCardFileIndex}
-            cardFileIndex={cardFileIndex}
             setCardCover={setCardCover}
           /> : null
       }
       <div className={styles.container}>
-        <Draggable draggableId={String(cardId)} index={index} >
+        <Draggable draggableId={_id} index={index} >
           {provided => (
             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
               <div className={styles.card}
@@ -293,7 +282,7 @@ const Card: React.FC<Props> = ({
             }} name={'Otwórz kartę'} icon={<MdOutlineLabel />} />
 
             <TaskButton onClick={() => {
-              deleteCard(cardId);
+              deleteCard(_id);
               updateBoard({ _id: boardId })
             }} name={'Usuń'} icon={<RiDeleteBinLine />} />
           </div>

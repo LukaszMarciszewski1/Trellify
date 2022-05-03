@@ -46,25 +46,6 @@ export const cardsApi = createApi({
       }),
       invalidatesTags: ['Cards'],
     }),
-        // uploadFilesCard: builder.mutation({
-    //   query: ({ id, ...post }) => ({
-    //     url: `cards/${id}/files`,
-    //     method: 'POST',
-    //     body: post,
-    //   }),
-    //   invalidatesTags: ['Cards'],
-    // }),
-    // getCardFiles: builder.query({
-    //   query: (id) => `cards/${id}/files`,
-    //   providesTags: ['Cards'],
-    // }),
-    // deleteFile: builder.mutation<{ success: boolean; id: string }, string>({
-    //   query: (id) => ({
-    //     url: `cards/${id}/files`,
-    //     method: 'DELETE',
-    //   }),
-    //   invalidatesTags: ['Cards'],
-    // }),
   }),
 })
 
@@ -75,7 +56,4 @@ export const {
   useDeleteCardMutation,
   useUpdateCardMutation,
   useDeleteAllMutation,
-  // useDeleteFileMutation,
-  // useUploadFilesCardMutation,
-  // useGetCardFilesQuery,
 } = cardsApi
