@@ -20,8 +20,15 @@ type Props = {
 const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, closeForm, value, id, onBlur, onFocus, titleBtn }) => {
   const placeholder = id === 'list' ? 'Dodaj listę zadań' : 'Dodaj nową kartę'
 
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
+    if (e.key === 'Enter' || e.code === "NumpadEnter") {
+      e.stopPropagation();
+      handleSubmit(e)
+  }
+}
+
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form}>
       <TextareaAutosize
         id={id}
         maxRows={20}
@@ -32,9 +39,10 @@ const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, closeForm, valu
         onChange={handleChange}
         onBlur={onBlur}
         onFocus={onFocus}
+        onKeyDown={onKeyDown}
         required />
       <div className={styles.actionsForm}>
-        <Button onClick={handleSubmit} title={titleBtn} type={'submit'}/>
+        <Button onClick={handleSubmit} title={titleBtn} type={'submit'} />
         <div style={{ marginRight: '1rem' }} />
         <IconButton onClick={closeForm}><BsXLg /></IconButton>
       </div>

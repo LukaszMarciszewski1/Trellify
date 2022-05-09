@@ -1,22 +1,29 @@
 .layout {
   width: 100%;
-  max-width: 100%;
   height: 100vh;
-  min-height: 100vh;
   position: relative;
   display: flex;
   flex-direction: column;
 }
 
-.container {
-  position: relative;
+.appbar {
+  height: 50px;
+}
+
+.content {
   width: 100%;
   height: 100%;
   display: flex;
+  height: calc(100% - 50px);
+  
 }
 
 .pagesContainer {
-  overflow: hidden;
   width: 100%;
+  overflow-x: hidden;
   height: 100%;
+  background-color: yellow;
+  // &::-webkit-scrollbar {
+  //   display: none;
+  // }
 }

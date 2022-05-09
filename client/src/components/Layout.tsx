@@ -6,8 +6,10 @@ import Appbar from './Appbar/Appbar'
 const Layout: React.FC = ({ children }) => {
   return (
     <div className={styles.layout}>
-      <Appbar />
-      <div className={styles.container}>
+      <div className={styles.appbar}>
+        <Appbar />
+      </div>
+      <div className={styles.content}>
         <Sidebar />
         <div className={styles.pagesContainer}>
           {children}

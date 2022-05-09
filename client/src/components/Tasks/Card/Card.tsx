@@ -5,10 +5,7 @@ import { Draggable } from 'react-beautiful-dnd';
 
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import isToday from 'dayjs/plugin/isToday';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import minMax from 'dayjs/plugin/minMax';
-import updateLocale from 'dayjs/plugin/updateLocale'
 import duration from 'dayjs/plugin/duration'
 
 import 'dayjs/locale/pl';
@@ -86,7 +83,7 @@ const Card: React.FC<CardProps> = ({
       setCardFiles(files)
     }
   }, [files])
-  
+
   useEffect(() => {
     displayCover()
   }, [cardFiles])
@@ -176,7 +173,7 @@ const Card: React.FC<CardProps> = ({
   const isHover = useHover(hoverRef)
 
   return (
-    <>
+    <div>
       {
         isOpenCardModal ?
           <CardModal
@@ -203,7 +200,7 @@ const Card: React.FC<CardProps> = ({
             setCardCover={setCardCover}
           /> : null
       }
-      <div className={styles.container}>
+      <div>
         <Draggable draggableId={_id} index={index} >
           {provided => (
             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
@@ -219,40 +216,42 @@ const Card: React.FC<CardProps> = ({
                       </div>
                     ) : null
                   }
-                  {
-                    cardLabels.length ? (
-                      <div className={styles.cardLabels} onClick={handleOpenCardModal}>
+                  <div className={styles.cardDetails}>
+                    {
+                      cardLabels.length ? (
+                        <div className={styles.cardLabels} onClick={handleOpenCardModal}>
+                          {
+                            cardLabels.map((label: { active: any; color: any; _id: string; title: string }) => (
+                              <div title={`${label.title}`} key={label._id} className={styles.cardLabel} style={{ backgroundColor: `${label.color}` }}></div>
+                            ))
+                          }
+                        </div>
+                      ) : null
+                    }
+                    <p >{title}</p>
+                    <div className={styles.iconsContainer}>
+                      <div ref={hoverRef}>
                         {
-                          cardLabels.map((label: { active: any; color: any; _id: string; title: string }) => (
-                            <div title={`${label.title}`} key={label._id} className={styles.cardLabel} style={{ backgroundColor: `${label.color}` }}></div>
-                          ))
+                          deadline ? (
+                            <button
+                              className={styles.dateBtn}
+                              onClick={handleChangeCompleted}
+                              style={cardDateDisplay.style}
+                              title={cardDateDisplay.title}
+
+                            >
+                              {isHover ? (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />) : <BsStopwatch style={cardDateDisplay.iconStyle} />}
+                              {dayjs(deadline).format('DD MMM')}
+                            </button>
+                          ) : null
                         }
                       </div>
-                    ) : null
-                  }
-                  <p >{title}</p>
-                  <div className={styles.iconsContainer}>
-                    <div ref={hoverRef}>
-                      {
-                        deadline ? (
-                          <button
-                            className={styles.dateBtn}
-                            onClick={handleChangeCompleted}
-                            style={cardDateDisplay.style}
-                            title={cardDateDisplay.title}
-
-                          >
-                            {isHover ? (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />) : <BsStopwatch style={cardDateDisplay.iconStyle} />}
-                            {dayjs(deadline).format('DD MMM')}
-                          </button>
-                        ) : null
-                      }
+                      {description ? <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardModal} /></div> : null}
+                      {cardFiles.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{cardFiles.length}</span></div> : null}
                     </div>
-                    {description ? <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardModal} /></div> : null}
-                    {cardFiles.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{cardFiles.length}</span></div> : null}
                   </div>
                 </div>
-                <div className={styles.btnContainer}>
+                {/* <div className={styles.btnContainer}>
                   {
                     isDisplayEditIcon ? (
                       <IconButton onClick={() => {
@@ -262,33 +261,13 @@ const Card: React.FC<CardProps> = ({
                         <BsPencil />
                       </IconButton>) : null
                   }
-                </div>
+                </div> */}
               </div>
             </div>
           )}
         </Draggable>
-        <Popup
-          title={'akcje karty'}
-          trigger={actionTrigger}
-          closePopup={() => {
-            setActionTrigger(false)
-            setDragDisabled(false)
-          }}
-        >
-          <div className={styles.actionsPopupContent}>
-            <TaskButton onClick={() => {
-              handleOpenCardModal()
-              setActionTrigger(false)
-            }} name={'Otwórz kartę'} icon={<MdOutlineLabel />} />
-
-            <TaskButton onClick={() => {
-              deleteCard(_id);
-              updateBoard({ _id: boardId })
-            }} name={'Usuń'} icon={<RiDeleteBinLine />} />
-          </div>
-        </Popup>
       </div>
-    </>
+    </div>
   )
 }
 

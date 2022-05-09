@@ -25,7 +25,7 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import { Card as CardResponse } from '../../../models/card'
 import { List as ListInterface } from '../../../models/list'
 import { CardProps } from '../Card/Card'
-interface PropsList extends ListInterface{
+interface PropsList extends ListInterface {
   // listId: string
   // boardId: string
   // title: string
@@ -53,16 +53,23 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
     if (e.target.id === 'card') setCardTitle(e.target.value)
   }
 
-  const handleEditListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
     updateList({
       _id: _id,
       title: e.target.value
     })
   }
+  const handleOnKeyDownListTitle = (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
+    if (e.key === 'Enter' || e.code === "NumpadEnter") {
+      e.stopPropagation();
+      setOpenTitleForm(false)
+    }
+  }
 
   const handleAddCard = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
+
     if (cardTitle.length === 0) return
     addCard({
       listId: _id,
@@ -118,35 +125,38 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
     console.log(sortedCards)
   }
 
+
   const handleCloseForm = () => { setOpenCardForm(false); setCardTitle(''); }
   useOnClickOutside(ref, handleCloseForm)
 
   return (
-    <div >
+    <div>
       <Draggable draggableId={String(_id)} index={index} isDragDisabled={dragDisabled}>
         {provided => (
           <div className={styles.list} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
-            <div className={styles.listHeader} onClick={() => setOpenTitleForm(true)} ref={ref}>
-              {
-                openTitleForm ?
-                  <div className={styles.textWrapper}>
-                    <TextareaAutosize
-                      id='list'
-                      autoFocus={true}
-                      value={listTitle}
-                      className={styles.textarea}
-                      onChange={handleEditListTitle}
-                      onFocus={(e) => e.target.select()}
-                      onBlur={() => setOpenTitleForm(false)}
-                      required
-                    />
-                  </div>
-                  : <div className={styles.textWrapper}><h2>{listTitle}</h2></div>
-              }
+            <div className={styles.listHeader}>
+              <div onClick={() => setOpenTitleForm(true)} ref={ref}>
+                {
+                  openTitleForm ?
+                    <div className={styles.textWrapper}>
+                      <TextareaAutosize
+                        id='list'
+                        autoFocus={true}
+                        value={listTitle}
+                        className={styles.textarea}
+                        onChange={handleChangeListTitle}
+                        onFocus={(e) => e.target.select()}
+                        onBlur={() => setOpenTitleForm(false)}
+                        onKeyDown={handleOnKeyDownListTitle}
+                        required
+                      />
+                    </div>
+                    : <div className={styles.textWrapper}><h2>{listTitle}</h2></div>
+                }
+              </div>
               <IconButton onClick={() => {
                 setActionTrigger(true)
               }}><BsThreeDots style={{ fontSize: "1.3em" }} /></IconButton>
-              {/* <div className={styles.actionsPopup}> */}
               <Popup
                 title={'Akcje listy'}
                 trigger={actionTrigger}
@@ -156,60 +166,54 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
               >
                 <div className={styles.actionsPopupContent}>
                   <TaskButton
-                    onClick={handleDeleteAllCards}
-                    name={'Usuń wszystkie karty'}
-                    icon={<MdOutlineLabel />}
-                  />
-                  <TaskButton
-                    onClick={handleDeleteList}
-                    name={'Usuń listę'}
-                    icon={<RiDeleteBinLine />}
-                  />
-                  <TaskButton
                     onClick={() => handleSortCardsDateOfAdding(cards)}
                     name={'Sortuj karty po dacie dodania'}
-                    icon={<RiDeleteBinLine />}
                   />
                   <TaskButton
                     onClick={() => handleSortCardsDateOfDeadline(cards)}
                     name={'Sortuj karty po terminie'}
-                    icon={<RiDeleteBinLine />}
+                  />
+                  <div className={styles.divider}></div>
+                  <TaskButton
+                    onClick={handleDeleteAllCards}
+                    name={'Usuń wszystkie karty'}
+                  />
+                  <TaskButton
+                    onClick={handleDeleteList}
+                    name={'Usuń listę'}
                   />
                 </div>
               </Popup>
-              {/* </div> */}
             </div>
             <Droppable droppableId={String(_id)} type="card">
               {provided => (
-                <div className={styles.cardsContainer}
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {
-                    cards?.map((card, index: number) => (
-                      <Card
-                        _id={card._id}
-                        index={index}
-                        key={card._id}
-                        // cardId={card._id}
-                        boardId={boardId}
-                        title={card.title}
-                        deadline={card.deadline}
-                        completed={card.completed}
-                        description={card.description}
-                        labels={card.labels}
-                        files={card.files}
-                        cover={card.cover}
-                        nameList={listTitle}
-                        setDragDisabled={setDragDisabled}
-                      />
-                    ))
-                  }
-                  {provided.placeholder}
+                <div {...provided.droppableProps} ref={provided.innerRef} className={styles.cards}>
+                  <div className={styles.cardsContainer}>
+                    {
+                      cards?.map((card, index: number) => (
+                        <Card
+                          _id={card._id}
+                          index={index}
+                          key={card._id}
+                          boardId={boardId}
+                          title={card.title}
+                          deadline={card.deadline}
+                          completed={card.completed}
+                          description={card.description}
+                          labels={card.labels}
+                          files={card.files}
+                          cover={card.cover}
+                          nameList={listTitle}
+                          setDragDisabled={setDragDisabled}
+                        />
+                      ))
+                    }
+                    {provided.placeholder}
+                  </div>
                 </div>
               )}
             </Droppable>
-            <div className={styles.actionsList}>
+            <div className={styles.cardForm}>
               {openCardForm ?
                 <div ref={ref}>
                   <TaskForm

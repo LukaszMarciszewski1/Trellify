@@ -1,3 +1,4 @@
+import { Labels } from './labels'
 export interface Card {
   _id: string
   // cardId: string
@@ -12,10 +13,5 @@ export interface Card {
   updateDate?: Date
   nameList: string
   files: any
-  labels: {
-    _id: string
-    active: any
-    color: any
-    title: string
-  }[]
+  labels: Labels[]
 }

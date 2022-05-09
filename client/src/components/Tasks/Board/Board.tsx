@@ -175,7 +175,7 @@ const Board: React.FC = () => {
 
   return (
     <div className={styles.board}
-      style={boardBackgroundStyle}
+      // style={boardBackgroundStyle}
     >
       <BoardHeader
         name={'Zmień tło'}

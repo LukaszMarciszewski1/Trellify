@@ -6,7 +6,7 @@ import View2 from './views/View2/View2';
 import View3 from './views/View3/View3';
 import View4 from './views/View4/View4';
 import Calculator from './views/Calculator/Calculator';
-import './App.css';
+import './App.scss';
 
 const App: React.FC = () => {
   return (

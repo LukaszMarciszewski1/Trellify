@@ -30,7 +30,6 @@ import {
 } from "../../../../store/reducers/cardsReducer";
 
 import {
-  useUploadFileMutation,
   useDeleteFileMutation,
 } from '../../../../store/reducers/filesReducer'
 
@@ -46,6 +45,7 @@ import Files from './CardModalDetails/Files/Files';
 import { Line as ProgressLine } from 'rc-progress';
 import { File as FileResponse } from '../../../../models/file'
 import { Card as CardModel } from '../../../../models/card'
+import { Labels as LabelsInterface } from '../../../../models/labels'
 
 interface CardModalProps extends CardModel {
   dateIsSameOrBefore: boolean
@@ -94,13 +94,12 @@ const CardModal: React.FC<CardModalProps> = ({
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
   const [updateBoard] = useUpdateBoardMutation();
-  const [uploadFiles] = useUploadFileMutation();
   const [deleteFile] = useDeleteFileMutation();
 
   const refWindow = useRef(null)
   const [cardTitle, setCardTitle] = useState<string>(title)
   const [cardDescription, setCardDescription] = useState<string>(description)
-  const [boardLabels, setBoardLabels] = useState([] as any)
+  const [boardLabels, setBoardLabels] = useState<LabelsInterface[]>([] as LabelsInterface[])
   const [labelTitle, setLabelTitle] = useState('')
 
   const [formIsOpen, setFormIsOpen] = useState(false)
@@ -165,12 +164,12 @@ const CardModal: React.FC<CardModalProps> = ({
     const newLabels = [...boardLabels]
     const newCardLabels = [...labels]
     if (boardLabels) {
-      const newLabelState = newLabels.map((label: any) => {
+      const newLabelState = newLabels.map((label) => {
         if (label._id !== currentLabelId) return label;
         return { ...label, title: currentLabelTitle, color: currentLabelColor };
       });
 
-      const newCardLabelState = newCardLabels.map((label: any) => {
+      const newCardLabelState = newCardLabels.map((label) => {
         if (label._id !== currentLabelId) return label;
         return { ...label, title: currentLabelTitle, color: currentLabelColor };
       })
@@ -187,7 +186,7 @@ const CardModal: React.FC<CardModalProps> = ({
 
   const handleAddNewLabel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
-    const newLabels = [...boardLabels, { color: currentLabelColor, title: labelTitle, active: false }]
+    const newLabels = [...boardLabels, { _id, color: currentLabelColor, title: labelTitle, active: false }]
     updateBoard({
       _id: boardId,
       labels: newLabels
@@ -542,7 +541,7 @@ const CardModal: React.FC<CardModalProps> = ({
                       <>
                         <div className={styles.labelsList}>
                           {
-                            boardLabels.map((label: any) => (
+                            boardLabels.map((label) => (
                               <Label
                                 key={label._id}
                                 labelId={label._id}
