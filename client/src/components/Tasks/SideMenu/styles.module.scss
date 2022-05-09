@@ -1,11 +1,11 @@
 @import '../../../scss/utils.scss';
 
 .sideMenu {
-  position: absolute;
+  position: fixed;
   right: 0;
-  top: 0;
+  top: 50px;
   width: 300px;
-  height: 100%;
+  height: calc(100% - 50px);
   padding: 1rem;
   background-color: #eeeeee;
   box-shadow: $box-shadow;

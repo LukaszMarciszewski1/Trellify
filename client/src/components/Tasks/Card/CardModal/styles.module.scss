@@ -4,8 +4,8 @@
   // padding: 4rem;
 }
 
-.overlay {
-  position: absolute;
+.modal {
+  position: fixed;
   left: 0;
   top: 0;
   width: 100%;
@@ -15,11 +15,11 @@
   justify-content: center;
   padding: 1rem;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 199;
+  z-index: 998;
 }
 
 .cardWindow {
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -27,7 +27,7 @@
   // padding: 1rem;
   background-color: #fcfcfc;
   border-radius: 0.5rem;
-  z-index: 200;
+  z-index: 999;
   @media (max-width: 768px) {
     max-width: 400px;
   }

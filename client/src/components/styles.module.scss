@@ -15,15 +15,15 @@
   height: 100%;
   display: flex;
   height: calc(100% - 50px);
-  
 }
 
 .pagesContainer {
   width: 100%;
-  overflow-x: hidden;
+  // overflow-x: hidden;
+  overflow: hidden;
   height: 100%;
   background-color: yellow;
-  // &::-webkit-scrollbar {
-  //   display: none;
-  // }
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
 }

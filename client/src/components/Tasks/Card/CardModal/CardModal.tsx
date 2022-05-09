@@ -387,7 +387,7 @@ const CardModal: React.FC<CardModalProps> = ({
 
   return (
     <>
-      <div className={styles.overlay} onClick={setIsCardWindowOpen}></div>
+      <div className={styles.modal} onClick={setIsCardWindowOpen}></div>
       <div ref={refWindow} className={styles.cardWindow}>
         {
           cover && isFileImage(cover) ? (
@@ -636,6 +636,7 @@ const CardModal: React.FC<CardModalProps> = ({
           </div>
         </div>
       </div>
+
     </>
 
   )

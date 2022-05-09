@@ -175,8 +175,9 @@ const Board: React.FC = () => {
 
   return (
     <div className={styles.board}
-      // style={boardBackgroundStyle}
+    style={boardBackgroundStyle}
     >
+      <div className={styles.container}>
       <BoardHeader
         name={'Zmień tło'}
         onClick={() => setOpenSideMenu(true)}
@@ -190,47 +191,46 @@ const Board: React.FC = () => {
           /> : null
       }
       <DragDropContext onDragEnd={onDragEnd} >
-        <div className={styles.container}>
-          <Droppable droppableId="all-list" direction="horizontal" type="list">
-            {provided => (
-              <div className={styles.listContainer}
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {
-                  lists?.map((list, index: number) => (
-                    <List
-                      _id={list._id}
-                      index={index}
-                      boardId={list.boardId}
-                      key={list._id}
-                      // listId={list._id}
-                      title={list.title}
-                      cards={list.cards}
-                    />
-                  ))
-                }
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-          <div className={styles.actionsForm}>
-            {isOpenForm ?
-              <div className={styles.formContainer} ref={formRef}>
-                <TaskForm
-                  id='list'
-                  handleChange={handleChangeListTitle}
-                  handleSubmit={handleAddList}
-                  closeForm={() => { setIsOpenForm(false); setListTitle('') }}
-                  value={listTitle}
-                  titleBtn={'Dodaj Listę'}
-                />
-              </div>
-              : <TaskButton onClick={() => setIsOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
-            }
-          </div>
+        <Droppable droppableId="all-list" direction="horizontal" type="list">
+          {provided => (
+            <div className={styles.listContainer}
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {
+                lists?.map((list, index: number) => (
+                  <List
+                    _id={list._id}
+                    index={index}
+                    boardId={list.boardId}
+                    key={list._id}
+                    // listId={list._id}
+                    title={list.title}
+                    cards={list.cards}
+                  />
+                ))
+              }
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+        <div className={styles.actionsForm}>
+          {isOpenForm ?
+            <div className={styles.formContainer} ref={formRef}>
+              <TaskForm
+                id='list'
+                handleChange={handleChangeListTitle}
+                handleSubmit={handleAddList}
+                closeForm={() => { setIsOpenForm(false); setListTitle('') }}
+                value={listTitle}
+                titleBtn={'Dodaj Listę'}
+              />
+            </div>
+            : <TaskButton onClick={() => setIsOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
+          }
         </div>
       </DragDropContext>
+      </div>
     </div>
   )
 }

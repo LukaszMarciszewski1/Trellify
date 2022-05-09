@@ -1,30 +1,37 @@
 .board {
   position: relative;
-  width: 100%;
+  min-width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
+  overflow-y: auto;
+  // min-height: 100%;
+  // overflow-y: auto;
+  // flex-direction: column;
+  padding: 0.5rem 2rem 1rem;
 }
 
 .container {
   // position: absolute;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  overflow-y: auto;
+  // width: 100%;
+  // height: 100%;
+  // max-height: 100%;
+  // margin-top: 50px;
+  
+  margin-top: 50px;
   display: flex;
-  flex-direction: row;
-  padding: 0.5rem 2rem 1rem;
-  background-color: rebeccapurple;
+  
+  // background-color: rebeccapurple;
+
   // height: 100%;
 }
 .listContainer {
   // position: absolute;
   display: flex;
   // height: 100%;
-  max-height: 100%;
+  // max-height: 100%;
   // overflow: hidden;
-  background-color: green;
+  height: 100%;
+  // background-color: green;
 }
 
 .actionsForm {
