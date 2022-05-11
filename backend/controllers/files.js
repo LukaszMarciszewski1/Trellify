@@ -5,6 +5,7 @@ import File from '../models/File.js'
 import fs from 'fs'
 import dotenv from 'dotenv'
 import { deleteFileS3 } from '../helpers/filehelper.js'
+
 dotenv.config()
 const router = express.Router()
 
@@ -63,7 +64,6 @@ export const downloadFiles = async (req, res, next) => {
 
 export const deleteFile = async (req, res, next) => {
   const { id } = req.params
-
   try {
     const files = await File.find()
     const currentFile = files.find(

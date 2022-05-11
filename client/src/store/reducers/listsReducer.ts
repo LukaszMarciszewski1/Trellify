@@ -32,6 +32,14 @@ export const listApi = createApi({
       }),
       invalidatesTags: ['List'],
     }),
+    deleteAllCardsOfList: builder.mutation<List, Partial<List>>({
+      query: ({ _id, ...patch }) => ({
+        url: `lists/${_id}/cards`,
+        method: 'PATCH',
+        body: patch,
+      }),
+      invalidatesTags: ['List'],
+    }),
     deleteTask: builder.mutation<{ success: boolean; id: string | number }, string>({
       query: (id) => ({
         url: `lists/${id}`,
@@ -48,4 +56,5 @@ export const {
   useAddTaskMutation,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
+  useDeleteAllCardsOfListMutation,
 } = listApi

@@ -19,7 +19,7 @@ import {
 } from "../../../store/reducers/cardsReducer";
 
 import { MdOutlineLabel } from 'react-icons/md';
-import { RiDeleteBinLine } from 'react-icons/ri';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 import { BsPencil } from 'react-icons/bs';
 import { GrTextAlignFull } from 'react-icons/gr';
 import { BsStopwatch } from 'react-icons/bs';
@@ -50,6 +50,7 @@ const Card: React.FC<CardProps> = ({
   deadline,
   cover,
   files,
+  createdAt,
   setDragDisabled,
 }) => {
 
@@ -179,7 +180,6 @@ const Card: React.FC<CardProps> = ({
           <CardModal
             _id={_id}
             nameList={nameList}
-            // cardId={cardId}
             title={title}
             description={description}
             boardId={boardId}
@@ -192,6 +192,7 @@ const Card: React.FC<CardProps> = ({
             dateIsSameOrBefore={dateIsSameOrBefore}
             deadlineIsSoon={deadlineIsSoon}
             cardDateDisplay={cardDateDisplay}
+            createdAt={createdAt}
             setCardLabels={setCardLabels}
             setCardDeadline={setCardDeadline}
             setCardCompleted={setCardCompleted}
@@ -251,16 +252,38 @@ const Card: React.FC<CardProps> = ({
                     </div>
                   </div>
                 </div>
-                {/* <div className={styles.btnContainer}>
+                <div className={styles.btnContainer}>
                   {
                     isDisplayEditIcon ? (
                       <IconButton onClick={() => {
                         setActionTrigger(true)
                         setDragDisabled(true)
                       }}>
-                        <BsPencil />
+                        <RiDeleteBin6Line />
                       </IconButton>) : null
                   }
+                </div>
+                {/* <div className={styles.actionsContainer}>
+                  <Popup
+                    title={'akcje karty'}
+                    trigger={actionTrigger}
+                    closePopup={() => {
+                      setActionTrigger(false)
+                      setDragDisabled(false)
+                    }}
+                  >
+                    <div className={styles.actionsPopupContent}>
+                      <TaskButton onClick={() => {
+                        handleOpenCardModal()
+                        setActionTrigger(false)
+                      }} name={'Otwórz kartę'} icon={<MdOutlineLabel />} />
+
+                      <TaskButton onClick={() => {
+                        deleteCard(_id);
+                        updateBoard({ _id: boardId })
+                      }} name={'Usuń'} icon={<RiDeleteBinLine />} />
+                    </div>
+                  </Popup>
                 </div> */}
               </div>
             </div>

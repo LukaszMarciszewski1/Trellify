@@ -17,7 +17,7 @@
   cursor: pointer;
   transition: 0.2s;
   &:hover {
-    background-color: #f2f3f7;
+    background-color: #f4f5f9;
   }
 }
 .cardContainer {
@@ -26,6 +26,7 @@
   flex-grow: 1;
   overflow-wrap: break-word;
   word-break: break-all;
+  position: relative;
 }
 
 .cardClickableArea {
@@ -73,6 +74,8 @@
   right: 3px;
   background-color: #f8f8f8d5;
   z-index: 100;
+  border-radius: 3px;
+  overflow: hidden;
 }
 
 .cardLabels {
@@ -156,6 +159,12 @@
   background-color: rgb(188, 188, 188);
   img {
   }
+}
+
+.actionsContainer {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .actionsPopup {

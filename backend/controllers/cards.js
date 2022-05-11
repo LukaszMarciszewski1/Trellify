@@ -4,6 +4,10 @@ import Card from '../models/Card.js'
 import File from '../models/File.js'
 import List from '../models/List.js'
 import fs from 'fs'
+import dotenv from 'dotenv'
+
+import { deleteFileS3 } from '../helpers/filehelper.js'
+dotenv.config()
 
 const router = express.Router()
 export const getCards = async (req, res) => {
@@ -45,29 +49,47 @@ export const createCard = async (req, res) => {
 
 export const updateCard = async (req, res) => {
   const { id } = req.params
-  try {
+  // try {
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(404).send(`No card with id: ${id}`)
     const updateCard = await Card.findByIdAndUpdate(id, req.body, { new: true })
     res.json(updateCard)
-  } catch (error) {
-    res.status(404).json({ message: error.message })
-  }
+  // } catch (error) {
+  //   res.status(404).json({ message: error.message })
+  // }
 }
 
 export const deleteCard = async (req, res) => {
   const { id } = req.params
-  const { boardId } = req.body
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`No card with id: ${id}`)
-
-  await Card.findByIdAndRemove(id)
-  res.json({ message: 'Card deleted successfully.' })
+  const files = await File.find()
+  const cardFiles = files.filter(file => mongoose.Types.ObjectId(file.cardId).toString() === id)
+  try {
+    cardFiles.map(file => {
+      const params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: file.fileKey,
+      }
+      deleteFileS3(params)
+    })
+    await Card.findByIdAndRemove(id)
+    await File.deleteMany({ cardId: id })
+    res.json({ message: 'Card deleted successfully.' })
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
 }
+  
 
 export const deleteAllCardsOfList = async (req, res) => {
-  await Card.remove({})
-  res.status(201).json('Card deleted successfully.')
+  const {listId} = req.body
+  try {
+    await Card.deleteMany({listId: listId});
+    res.json({ message: 'Cards deleted successfully.' })
+ } catch (error) {
+  res.status(404).json({ message: error.message })
+ }
+  // await Card.remove({})
+  // res.status(201).json('Card deleted successfully.')
 }
 
 export const updateAllCards = async (req, res) => {
@@ -133,28 +155,6 @@ export const downloadFiles = async (req, res, next) => {
   }
 }
 
-export const deleteFile = async (req, res, next) => {
-  // const { id } = req.params
-  // try {
-  //   const files = await File.find()
-  //   const currentFile = files.find(
-  //     (file) => mongoose.Types.ObjectId(file.cardId).toString() === id
-  //   )
-  //   await File.findByIdAndRemove(currentFile)
-  //   const path = currentFile.filePath
-  //   if (path) {
-  //     fs.unlink(path, (err) => {
-  //       if (err) {
-  //         console.error(err)
-  //         return
-  //       }
-  //     })
-  //   }
-  //   res.status(200).send(files)
-  // } catch (error) {
-  //   res.status(400).send(error.message)
-  // }
-}
 
 const fileSizeFormatter = (bytes, decimal) => {
   if (bytes === 0) {

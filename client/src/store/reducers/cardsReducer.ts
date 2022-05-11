@@ -39,13 +39,7 @@ export const cardsApi = createApi({
       }),
       invalidatesTags: ['Cards'],
     }),
-    deleteAll: builder.mutation({
-      query: () => ({
-        url: `cards`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['Cards'],
-    }),
+
   }),
 })
 
@@ -55,5 +49,5 @@ export const {
   useAddCardMutation,
   useDeleteCardMutation,
   useUpdateCardMutation,
-  useDeleteAllMutation,
+  // useDeleteAllMutation,
 } = cardsApi

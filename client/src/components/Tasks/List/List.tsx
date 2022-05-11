@@ -9,12 +9,14 @@ import { BsThreeDots } from "react-icons/bs";
 import {
   useDeleteTaskMutation,
   useUpdateTaskMutation,
+  useDeleteAllCardsOfListMutation,
 } from "../../../store/reducers/listsReducer";
 import {
   useUpdateBoardMutation,
 } from '../../../store/reducers/boardsReducer'
 import {
   useAddCardMutation,
+  useDeleteCardMutation,
 } from "../../../store/reducers/cardsReducer";
 import Card from '../Card/Card';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
@@ -22,7 +24,7 @@ import { GoPlus } from "react-icons/go";
 import Popup from '../../Details/Popup/Popup';
 import { MdOutlineLabel } from 'react-icons/md';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import { Card as CardResponse } from '../../../models/card'
+import { Card as CardDate } from '../../../models/card'
 import { List as ListInterface } from '../../../models/list'
 import { CardProps } from '../Card/Card'
 interface PropsList extends ListInterface {
@@ -39,6 +41,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   const [updateBoard] = useUpdateBoardMutation()
   const [updateList] = useUpdateTaskMutation()
   const [deleteList] = useDeleteTaskMutation()
+  const [deleteAllCards] = useDeleteAllCardsOfListMutation()
 
   const [listTitle, setListTitle] = useState(title)
   const [cardTitle, setCardTitle] = useState<string>('')
@@ -83,9 +86,11 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   }
 
   const handleDeleteAllCards = () => {
-    updateList({
+    const cardsFromList = [...cards].filter(card => card.listId === _id)
+    // const cardsFromList = newCards.filter(card => card.listId === _id)
+    const cardsId = cardsFromList?.map(c => c._id)
+    deleteAllCards({
       _id: _id,
-      cards: []
     })
     updateBoard({
       _id: boardId
@@ -98,9 +103,11 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
     updateBoard({ _id: boardId })
   }
 
-  const handleSortCardsDateOfAdding = (cards: any[]) => {
+  const handleSortCardsByDate = (order: string) => {
     const newCards = [...cards]
-    const sortedCards = newCards.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
+    let sortedCards
+    if (order === 'sort-from-oldest') sortedCards = newCards.sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
+    if (order === 'sort-from-newest') sortedCards = newCards.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
     updateList({
       _id: _id,
       cards: sortedCards
@@ -110,21 +117,6 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
     })
     setActionTrigger(false)
   }
-
-  const handleSortCardsDateOfDeadline = (cards: any[]) => {
-    const newCards = [...cards]
-    const sortedCards = newCards.sort((a, b) => +new Date(b.deadline) - +new Date(a.deadline))
-    updateList({
-      _id: _id,
-      cards: sortedCards
-    })
-    updateBoard({
-      _id: boardId
-    })
-    setActionTrigger(false)
-    console.log(sortedCards)
-  }
-
 
   const handleCloseForm = () => { setOpenCardForm(false); setCardTitle(''); }
   useOnClickOutside(ref, handleCloseForm)
@@ -156,22 +148,24 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
               </div>
               <IconButton onClick={() => {
                 setActionTrigger(true)
+                setDragDisabled(true)
               }}><BsThreeDots style={{ fontSize: "1.3em" }} /></IconButton>
               <Popup
                 title={'Akcje listy'}
                 trigger={actionTrigger}
                 closePopup={() => {
                   setActionTrigger(false)
+                  setDragDisabled(false)
                 }}
               >
                 <div className={styles.actionsPopupContent}>
                   <TaskButton
-                    onClick={() => handleSortCardsDateOfAdding(cards)}
-                    name={'Sortuj karty po dacie dodania'}
+                    onClick={() => handleSortCardsByDate('sort-from-newest')}
+                    name={'Sortuj karty od najnowszych'}
                   />
                   <TaskButton
-                    onClick={() => handleSortCardsDateOfDeadline(cards)}
-                    name={'Sortuj karty po terminie'}
+                    onClick={() => handleSortCardsByDate('sort-from-oldest')}
+                    name={'Sortuj karty od najstarszych'}
                   />
                   <div className={styles.divider}></div>
                   <TaskButton
@@ -204,6 +198,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                           files={card.files}
                           cover={card.cover}
                           nameList={listTitle}
+                          createdAt={card.createdAt}
                           setDragDisabled={setDragDisabled}
                         />
                       ))
