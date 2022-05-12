@@ -3,6 +3,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import styles from './styles.module.scss'
 import Button from '../../../../../Details/Button/Button'
 import { HexColorPicker } from "react-colorful";
+import { presetColors } from '../../../../localData'
 
 type Props = {
   formId: string
@@ -40,11 +41,27 @@ const LabelForm: React.FC<Props> = ({
         onFocus={onFocus}
       />
       <p style={{ marginBottom: '5px' }}>Wybierz kolor</p>
-      <HexColorPicker className={styles.reactColorful} color={selectColor} onChange={setSelectColor} />
+      <div className={styles.picker}>
+        <HexColorPicker
+          className={styles.reactColorful}
+          color={selectColor}
+          onChange={setSelectColor}
+        />
+        <div className={styles.pickerSwatches}>
+          {presetColors.slice(0, 14).map((presetColor) => (
+            <div
+              key={presetColor}
+              className={styles.pickerSwatch}
+              style={{ background: presetColor }}
+              onClick={() => setSelectColor(presetColor)}
+            />
+          ))}
+        </div>
+      </div>
       <div className={styles.actionsForm}>
-        <Button onClick={handleSubmit} title={'Zapisz'} type={'submit'}/>
+        <Button onClick={handleSubmit} title={'Zapisz'} type={'submit'} />
         <div style={{ marginRight: '1rem' }} />
-        <Button onClick={deleteLabel} title={'Usuń'} bgColor={'#EA4746'} type={'button'}/>
+        <Button onClick={deleteLabel} title={'Usuń'} bgColor={'#EA4746'} type={'button'} />
       </div>
     </form>
   )

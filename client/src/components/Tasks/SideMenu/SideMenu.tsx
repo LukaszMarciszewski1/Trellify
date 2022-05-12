@@ -3,7 +3,7 @@ import styles from './styles.module.scss'
 import getImages from '../../../api/unsplashApi';
 import { BsXLg } from "react-icons/bs";
 import IconButton from '../../Details/IconButton/IconButton';
-import { colors, defaultBackground, defaultColor } from '../localData';
+import { presetColors, defaultBackground, defaultColor } from '../localData';
 import {useUpdateBoardMutation,} from '../../../store/reducers/boardsReducer'
 
 type SideMenuProps = {
@@ -83,7 +83,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ closeMenu, setBackgroundUrl, boardI
         }
         {
           optionColors ? (
-            colors.map((color, index) => (
+            presetColors.map((color, index) => (
               <div
                 key={index}
                 className={styles.box}

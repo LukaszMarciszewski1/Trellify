@@ -60,7 +60,7 @@ const Card: React.FC<CardProps> = ({
 
   const [isOpenCardModal, setIsOpenCardModal] = useState<boolean>(false)
   const [isDisplayEditIcon, setIsDisplayEditIcon] = useState(false)
-  const [cardLabels, setCardLabels] = useState(labels)
+  const [cardLabels, setCardLabels] = useState([] as any)
   const [cardCompleted, setCardCompleted] = useState(completed)
   const [cardDeadline, setCardDeadline] = useState(deadline)
   const [nowDate, setNowDate] = useState(Date.now())
@@ -68,11 +68,16 @@ const Card: React.FC<CardProps> = ({
   const [cardCover, setCardCover] = useState(cover)
   const [cardFileIndex, setCardFileIndex] = useState(0)
   const [actionTrigger, setActionTrigger] = useState(false)
+  const [colorLabel, setColorLabel] = useState('')
 
   dayjs.locale('pl');
   dayjs.extend(isSameOrBefore)
   dayjs.extend(duration)
   dayjs.extend(relativeTime)
+
+  useEffect(() => {
+    setCardLabels(labels)
+  }, [labels])
 
   useEffect(() => {
     const intervalIsSameOrBefore = setInterval(() => setNowDate(Date.now()), 100000)
@@ -140,6 +145,7 @@ const Card: React.FC<CardProps> = ({
     })
   };
 
+
   const fiveHours = 300 //minutes
   const dateIsSameOrBefore = dayjs(cardDeadline).isSameOrBefore(nowDate, 'minute')
   const timeToDeadline = dayjs(cardDeadline).diff(dayjs(nowDate), 'minute', true)
@@ -173,6 +179,7 @@ const Card: React.FC<CardProps> = ({
   const hoverRef = useRef(null)
   const isHover = useHover(hoverRef)
 
+
   return (
     <div>
       {
@@ -184,7 +191,7 @@ const Card: React.FC<CardProps> = ({
             description={description}
             boardId={boardId}
             deadline={cardDeadline}
-            labels={cardLabels}
+            labels={labels}
             files={cardFiles}
             cover={cardCover}
             completed={cardCompleted}

@@ -1,6 +1,6 @@
 export const defaultBackground = "https://images.unsplash.com/photo-1501785888041-af3ef285b470?crop=entropy&cs=srgb&fm=jpg&ixid=MnwzMDMxMTR8MHwxfHNlYXJjaHw2fHxM";
 export const defaultColor = "https://images.pexels.com/photos/226589/pexels-photo-226589.jpeg?cs=srgb&dl=closeup-photo-of-multi-color-stick-226589.jpg&fm=jpg"
-export const colors = [
+export const presetColors = [
   '#FB8B24',
   '#9575cd',
   '#F36935',
@@ -13,8 +13,8 @@ export const colors = [
   '#30B68E',
   '#A2D2FF',
   '#FFDAB9',
-  '#FAF9F9',
-  '#3f3c3c'
+  '#3f3c3c',
+  '#e1e1e1',
 ];
 
 export const labelItems = [

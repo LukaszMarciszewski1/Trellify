@@ -14,6 +14,7 @@ const BoardSchema = mongoose.Schema(
     cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
     labels: [
       {
+        uuid: String,
         color: {
           type: String,
           default: '#61bd4f',

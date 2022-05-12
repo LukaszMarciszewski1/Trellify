@@ -8,7 +8,7 @@ import TaskForm from '../../TaskForm/TaskForm'
 import IconButton from '../../../Details/IconButton/IconButton';
 import useOnClickOutside from '../../../../hooks/useOnClickOutside'
 import { isFileImage } from '../../../../hooks/isFileImage'
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { BsXLg } from 'react-icons/bs';
 import { BsPencil } from 'react-icons/bs';
@@ -18,13 +18,14 @@ import { BsStopwatch } from 'react-icons/bs';
 import { MdOutlineLabel } from 'react-icons/md';
 import { IoMdAdd } from 'react-icons/io';
 import { RiDeleteBinLine } from 'react-icons/ri';
-
+import { v4 as uuid } from 'uuid';
 import {
   useGetBoardQuery,
   useUpdateBoardMutation,
 } from '../../../../store/reducers/boardsReducer'
 
 import {
+  useGetAllCardsQuery,
   useDeleteCardMutation,
   useUpdateCardMutation,
 } from "../../../../store/reducers/cardsReducer";
@@ -46,6 +47,8 @@ import { Line as ProgressLine } from 'rc-progress';
 import { File as FileResponse } from '../../../../models/file'
 import { Card as CardModel } from '../../../../models/card'
 import { Labels as LabelsInterface } from '../../../../models/labels'
+import pl from "date-fns/locale/pl"; // the locale you want
+
 
 interface CardModalProps extends CardModel {
   dateIsSameOrBefore: boolean
@@ -89,7 +92,9 @@ const CardModal: React.FC<CardModalProps> = ({
   setCardFileIndex,
 }) => {
   dayjs.locale('pl');
+  registerLocale("pl", pl);
   const { data: board, error, isLoading } = useGetBoardQuery(boardId);
+  const { data: cards } = useGetAllCardsQuery()
 
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
@@ -99,7 +104,7 @@ const CardModal: React.FC<CardModalProps> = ({
   const refWindow = useRef(null)
   const [cardTitle, setCardTitle] = useState<string>(title)
   const [cardDescription, setCardDescription] = useState<string>(description)
-  const [boardLabels, setBoardLabels] = useState<LabelsInterface[]>([] as LabelsInterface[])
+  const [boardLabels, setBoardLabels] = useState([] as any)
   const [labelTitle, setLabelTitle] = useState('')
 
   const [formIsOpen, setFormIsOpen] = useState(false)
@@ -125,6 +130,16 @@ const CardModal: React.FC<CardModalProps> = ({
       setBoardLabels(board.labels)
     }
   }, [board])
+
+  // if (cards) {
+  //   const el = cards.map(o => o.labels);
+  //   let result = el.reduce((c, v) => c.concat(v), []).map(o => o);
+  //   const im = boardLabels.find((label: { _id: LabelsInterface[]; }) => label._id === [...result])
+  //   console.log(boardLabels)
+  //   console.log(cards)
+  // }
+
+
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-title') setCardTitle(e.target.value)
@@ -159,10 +174,33 @@ const CardModal: React.FC<CardModalProps> = ({
     if (e.target.id === 'label-title-add') setLabelTitle(e.target.value)
   }
 
+  if (cards) {
+    // let result = el.reduce((c, v) => c.concat(v), []).map(o => o);
+    // let im = result.reduce((c, v) => c.concat(v), []).map(o => o);
+    // console.log(...result)
+    //  const im = cards.map(card => card.labels.filter(l => l._id === currentLabelId))
+    const em = cards.map(card => card.labels.map(l => l))
+    let result = em.reduce((c, v) => c.concat(v), []).map(o => o._id);
+    const newL = cards.filter(card => card.labels.filter(l => l._id === currentLabelId))
+  }
+
+  useEffect(() => {
+    // if (cards) {
+    //   cards.map(card => {
+    //     updateCard({
+    //       _id: card._id,
+    //       labels: labels
+    //     })
+    //   })
+    // }
+  }, [board])
+
+
   const handleSaveLabelEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     const newLabels = [...boardLabels]
     const newCardLabels = [...labels]
+
     if (boardLabels) {
       const newLabelState = newLabels.map((label) => {
         if (label._id !== currentLabelId) return label;
@@ -174,8 +212,21 @@ const CardModal: React.FC<CardModalProps> = ({
         return { ...label, title: currentLabelTitle, color: currentLabelColor };
       })
 
+      cards?.map(card => {
+        const editLabels = card.labels.filter(label => label._id === currentLabelId)
+        const newLabel = card.labels.map(label => {
+          if (label._id !== currentLabelId) return label;
+          return { ...label, title: currentLabelTitle, color: currentLabelColor };
+        })
+        updateCard({
+          _id: card._id,
+          labels: newLabel
+        })
+      })
+
       setCardLabels(newCardLabelState)
       setBoardLabels(newLabelState)
+
       updateBoard({
         _id: boardId,
         labels: newLabelState
@@ -186,7 +237,7 @@ const CardModal: React.FC<CardModalProps> = ({
 
   const handleAddNewLabel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
-    const newLabels = [...boardLabels, { _id, color: currentLabelColor, title: labelTitle, active: false }]
+    const newLabels = [...boardLabels, { color: currentLabelColor, title: labelTitle, active: false }]
     updateBoard({
       _id: boardId,
       labels: newLabels
@@ -245,6 +296,7 @@ const CardModal: React.FC<CardModalProps> = ({
     setCurrentLabelTitle(activeLabelTitle)
     setCurrentLabelColor(activeLabelColor)
     setCurrentLabelId(id)
+    // updateBoard({ _id: boardId })
   }
 
   const handleSaveDeadline = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -541,7 +593,7 @@ const CardModal: React.FC<CardModalProps> = ({
                       <>
                         <div className={styles.labelsList}>
                           {
-                            boardLabels.map((label) => (
+                            boardLabels.map((label: { _id: string; title: string; color: string; }) => (
                               <Label
                                 key={label._id}
                                 labelId={label._id}
@@ -584,10 +636,12 @@ const CardModal: React.FC<CardModalProps> = ({
                 <DatePicker
                   dateFormat='DD/MM/YYYY'
                   timeFormat="hh:mm"
+                  locale="pl"
                   selected={deadline ? new Date(deadline) : null}
                   onChange={(date: Date) => setCardDeadline(date)}
                   inline
                   showTimeInput
+                  timeInputLabel="Godzina:"
                 />
                 <label>Termin <br></br>
                   <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(deadline).format('DD/MM/YYYY')} />
