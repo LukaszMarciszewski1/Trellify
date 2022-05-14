@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import TextareaAutosize from 'react-textarea-autosize';
 import styles from './styles.module.scss'
 
@@ -10,40 +10,41 @@ type Props = {
   id: string
   handleSubmit: (value: any) => void
   handleChange: (value: any) => void
-  onFocus?: (value: any) => void
   closeForm: () => void
+  onFocus?: (value: any) => void
   onBlur?: () => void
-  value: string | undefined
+  value: string
   titleBtn: string
 }
 
-const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, closeForm, value, id, onBlur, onFocus, titleBtn }) => {
+const TaskForm: React.FC<Props> = ({ value, id, titleBtn, onBlur, onFocus, handleChange, handleSubmit, closeForm }) => {
   const placeholder = id === 'list' ? 'Dodaj listę zadań' : 'Dodaj nową kartę'
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     if (e.key === 'Enter' || e.code === "NumpadEnter") {
       e.stopPropagation();
       handleSubmit(e)
+    }
   }
-}
 
   return (
-    <form className={styles.form}>
+    <form className={styles.form} >
       <TextareaAutosize
         id={id}
         maxRows={20}
         placeholder={placeholder}
         value={value}
         className={styles.textarea}
-        autoFocus
+        autoFocus={true}
         onChange={handleChange}
         onBlur={onBlur}
         onFocus={onFocus}
         onKeyDown={onKeyDown}
-        required />
+        required
+      />
       <div className={styles.actionsForm}>
-        <Button onClick={handleSubmit} title={titleBtn} type={'submit'} />
-        <div style={{ marginRight: '1rem' }} />
+        <Button title={titleBtn} type={'submit'} onClick={handleSubmit} />
+        <div style={{ marginRight: '16px' }} />
         <IconButton onClick={closeForm}><BsXLg /></IconButton>
       </div>
     </form>

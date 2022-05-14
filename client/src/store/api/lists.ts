@@ -3,20 +3,20 @@ import { List } from '../../models/list'
 
 type ListResponse = List[]
 
-export const listApi = createApi({
+export const listsApi = createApi({
   reducerPath: 'listApi',
   baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }),
   tagTypes: ['List'],
   endpoints: (builder) => ({
-    getAllTasks: builder.query<ListResponse, void>({
+    getAllLists: builder.query<ListResponse, void>({
       query: () => `lists`,
       providesTags: ['List'],
     }),
-    getTask: builder.query<List, string>({
+    getList: builder.query<List, string>({
       query: (id) => `lists/${id}`,
       providesTags: ['List'],
     }),
-    addTask: builder.mutation<List, Partial<List>>({
+    addList: builder.mutation<List, Partial<List>>({
       query: (body: {}) => ({
         url: 'lists',
         method: 'POST',
@@ -24,11 +24,18 @@ export const listApi = createApi({
       }),
       invalidatesTags: ['List'],
     }),
-    updateTask: builder.mutation<List, Partial<List>>({
+    updateList: builder.mutation<List, Partial<List>>({
       query: ({ _id, ...patch }) => ({
         url: `lists/${_id}`,
         method: 'PATCH',
         body: patch,
+      }),
+      invalidatesTags: ['List'],
+    }),
+    deleteList: builder.mutation<{ success: boolean; id: string | number }, string>({
+      query: (id) => ({
+        url: `lists/${id}`,
+        method: 'DELETE',
       }),
       invalidatesTags: ['List'],
     }),
@@ -40,21 +47,14 @@ export const listApi = createApi({
       }),
       invalidatesTags: ['List'],
     }),
-    deleteTask: builder.mutation<{ success: boolean; id: string | number }, string>({
-      query: (id) => ({
-        url: `lists/${id}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['List'],
-    }),
   }),
 })
 
 export const {
-  useGetAllTasksQuery,
-  useGetTaskQuery,
-  useAddTaskMutation,
-  useDeleteTaskMutation,
-  useUpdateTaskMutation,
+  useGetAllListsQuery,
+  useGetListQuery,
+  useAddListMutation,
+  useUpdateListMutation,
+  useDeleteListMutation,
   useDeleteAllCardsOfListMutation,
-} = listApi
+} = listsApi

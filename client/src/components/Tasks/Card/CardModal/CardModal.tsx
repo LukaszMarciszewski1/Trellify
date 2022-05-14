@@ -18,21 +18,21 @@ import { BsStopwatch } from 'react-icons/bs';
 import { MdOutlineLabel } from 'react-icons/md';
 import { IoMdAdd } from 'react-icons/io';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import { v4 as uuid } from 'uuid';
+
 import {
   useGetBoardQuery,
   useUpdateBoardMutation,
-} from '../../../../store/reducers/boardsReducer'
+} from '../../../../store/api/boards'
 
 import {
   useGetAllCardsQuery,
   useDeleteCardMutation,
   useUpdateCardMutation,
-} from "../../../../store/reducers/cardsReducer";
+} from "../../../../store/api/cards";
 
 import {
   useDeleteFileMutation,
-} from '../../../../store/reducers/filesReducer'
+} from '../../../../store/api/files'
 
 import TaskButton from '../../TaskButton/TaskButton';
 import Popup from '../../../Details/Popup/Popup';
@@ -47,7 +47,7 @@ import { Line as ProgressLine } from 'rc-progress';
 import { File as FileResponse } from '../../../../models/file'
 import { Card as CardModel } from '../../../../models/card'
 import { Labels as LabelsInterface } from '../../../../models/labels'
-import pl from "date-fns/locale/pl"; // the locale you want
+import pl from "date-fns/locale/pl";
 
 
 interface CardModalProps extends CardModel {
@@ -119,6 +119,7 @@ const CardModal: React.FC<CardModalProps> = ({
   const [labelsTrigger, setLabelsTrigger] = useState(false)
   const [dateTrigger, setDateTrigger] = useState(false)
   const [fileTrigger, setFileTrigger] = useState(false)
+  const [storageTrigger, setStorageTrigger] = useState(false)
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [selectedNameFiles, setSelectedNameFiles] = useState<string[]>([]);
@@ -130,16 +131,6 @@ const CardModal: React.FC<CardModalProps> = ({
       setBoardLabels(board.labels)
     }
   }, [board])
-
-  // if (cards) {
-  //   const el = cards.map(o => o.labels);
-  //   let result = el.reduce((c, v) => c.concat(v), []).map(o => o);
-  //   const im = boardLabels.find((label: { _id: LabelsInterface[]; }) => label._id === [...result])
-  //   console.log(boardLabels)
-  //   console.log(cards)
-  // }
-
-
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-title') setCardTitle(e.target.value)
@@ -174,27 +165,6 @@ const CardModal: React.FC<CardModalProps> = ({
     if (e.target.id === 'label-title-add') setLabelTitle(e.target.value)
   }
 
-  if (cards) {
-    // let result = el.reduce((c, v) => c.concat(v), []).map(o => o);
-    // let im = result.reduce((c, v) => c.concat(v), []).map(o => o);
-    // console.log(...result)
-    //  const im = cards.map(card => card.labels.filter(l => l._id === currentLabelId))
-    const em = cards.map(card => card.labels.map(l => l))
-    let result = em.reduce((c, v) => c.concat(v), []).map(o => o._id);
-    const newL = cards.filter(card => card.labels.filter(l => l._id === currentLabelId))
-  }
-
-  useEffect(() => {
-    // if (cards) {
-    //   cards.map(card => {
-    //     updateCard({
-    //       _id: card._id,
-    //       labels: labels
-    //     })
-    //   })
-    // }
-  }, [board])
-
 
   const handleSaveLabelEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
@@ -202,34 +172,33 @@ const CardModal: React.FC<CardModalProps> = ({
     const newCardLabels = [...labels]
 
     if (boardLabels) {
-      const newLabelState = newLabels.map((label) => {
+      const newLabelsBoardState = newLabels.map((label) => {
         if (label._id !== currentLabelId) return label;
         return { ...label, title: currentLabelTitle, color: currentLabelColor };
       });
 
-      const newCardLabelState = newCardLabels.map((label) => {
-        if (label._id !== currentLabelId) return label;
-        return { ...label, title: currentLabelTitle, color: currentLabelColor };
-      })
+      // const newCardLabelState = newCardLabels.map((label) => {
+      //   if (label._id !== currentLabelId) return label;
+      //   return { ...label, title: currentLabelTitle, color: currentLabelColor };
+      // })
 
       cards?.map(card => {
-        const editLabels = card.labels.filter(label => label._id === currentLabelId)
-        const newLabel = card.labels.map(label => {
+        const newLabels = card.labels.map(label => {
           if (label._id !== currentLabelId) return label;
           return { ...label, title: currentLabelTitle, color: currentLabelColor };
         })
         updateCard({
           _id: card._id,
-          labels: newLabel
+          labels: newLabels
         })
+        setCardLabels(newLabels)
       })
 
-      setCardLabels(newCardLabelState)
-      setBoardLabels(newLabelState)
+      setBoardLabels(newLabelsBoardState)
 
       updateBoard({
         _id: boardId,
-        labels: newLabelState
+        labels: newLabelsBoardState
       })
       setIsOpenLabelEditWindow(false)
     }
@@ -245,24 +214,24 @@ const CardModal: React.FC<CardModalProps> = ({
     setIsOpenAddNewLabelWindow(false)
   }
 
-  const handleCheckedLabel = (item: any) => {
-    const copyCardLabels = [...labels]
+  const handleCheckedLabel = (item: LabelsInterface) => {
+    const newCardLabels = [...labels]
     const newLabel = { ...item, active: !item.active };
-    const existLabel = copyCardLabels.find((label: { _id: string; }) => label._id === newLabel._id)
+    const existLabel = newCardLabels.find((label: { _id: string; }) => label._id === newLabel._id)
 
     if (existLabel) {
-      const newLabels = copyCardLabels.filter((label: { _id: string; }) => label._id !== existLabel._id)
-      setCardLabels(newLabels)
+      const newStateLabels = [...labels].filter((label: { _id: string; }) => label._id !== existLabel._id)
+      setCardLabels(newStateLabels)
       updateCard({
         _id: _id,
-        labels: newLabels
+        labels: newStateLabels
       })
     } else {
-      const newLabels = [...copyCardLabels, newLabel]
-      setCardLabels(newLabels)
+      const newStateLabels = [...labels, newLabel]
+      setCardLabels(newStateLabels)
       updateCard({
         _id: _id,
-        labels: newLabels
+        labels: newStateLabels
       })
     }
     updateBoard({
@@ -271,19 +240,19 @@ const CardModal: React.FC<CardModalProps> = ({
   }
 
   const handleDeleteLabel = () => {
-    const newLabels = [...boardLabels]
-    const newCardLabels = [...labels]
-    const newLabelsState = newLabels.filter((label) => label._id !== currentLabelId);
-    const newCardLabelsState = newCardLabels.filter((label) => label._id !== currentLabelId);
-    setBoardLabels(newLabelsState)
-    setCardLabels(newCardLabelsState)
-    updateCard({
-      _id: _id,
-      labels: newCardLabelsState
+    const newBoardLabelsState = [...boardLabels].filter((label) => label._id !== currentLabelId);
+    cards?.map(card => {
+      const newCardLabelsState = card.labels.filter((label) => label._id !== currentLabelId);
+      setCardLabels(newCardLabelsState)
+      updateCard({
+        _id: card._id,
+        labels: newCardLabelsState
+      })
     })
+    setBoardLabels(newBoardLabelsState)
     updateBoard({
       _id: boardId,
-      labels: newLabelsState
+      labels: newBoardLabelsState
     })
     setIsOpenLabelEditWindow(false)
   }
@@ -341,28 +310,32 @@ const CardModal: React.FC<CardModalProps> = ({
         setSelectedNameFiles(arr)
       }
     }
+    setUploadStatus(true)
+    setUploadProgress(0)
   },
     [],
   );
 
-  const uploadFileOptions = {
-    headers: {
-      'content-type': 'multipart/form-data'
-    },
-    onUploadProgress: (progressEvent: { loaded: number; total: number; }) => {
-      const { loaded, total } = progressEvent;
-      const percent = Math.floor(((loaded / 1000) * 100) / (total / 1000));
-      setUploadProgress(percent);
-    }
-  }
-
   const handleSubmitFile = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
+
     if (!selectedFiles.length) return;
+    if (!uploadStatus) return;
     const formData = new FormData();
     formData.append('cardId', _id)
     for (let i = 0; i < selectedFiles.length; i++) {
       formData.append('files', selectedFiles[i]);
+    }
+
+    const uploadFileOptions = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      },
+      onUploadProgress: (progressEvent: { loaded: number; total: number; }) => {
+        const { loaded, total } = progressEvent;
+        let percent = Math.floor((loaded * 100) / total)
+        setUploadProgress(percent)
+      }
     }
 
     await axios.post(`${process.env.REACT_APP_API_URL}files`, formData, uploadFileOptions)
@@ -378,7 +351,7 @@ const CardModal: React.FC<CardModalProps> = ({
           setUploadProgress(0)
           setSelectedNameFiles([])
           setFileTrigger(false)
-        }, 1000)
+        }, 500)
       })
       .catch((error) => {
         console.log(error)
@@ -415,15 +388,11 @@ const CardModal: React.FC<CardModalProps> = ({
     });
   }
 
-  useOnClickOutside(refWindow, setIsCardWindowOpen)
-
   const onClickHandler = () => {
     // setSelected(id); 
     // const newWindow = window.open(`${cardCover}`, "_blank", 'noopener,noreferrer');
     // if (newWindow) newWindow.opener = null
   }
-
-
 
   const handleSelectCover = (index: number) => {
     setCardFileIndex(index)
@@ -436,6 +405,8 @@ const CardModal: React.FC<CardModalProps> = ({
       _id: boardId
     })
   }
+
+  useOnClickOutside(refWindow, setIsCardWindowOpen)
 
   return (
     <>
@@ -583,7 +554,7 @@ const CardModal: React.FC<CardModalProps> = ({
                 title={isOpenLabelEditWindow ? 'Edytuj etykietę' : isOpenAddNewLabelWindow ? 'Dodaj Etykietę' : 'Etykiety'}
                 trigger={labelsTrigger}
                 closePopup={() => { setLabelsTrigger(false); setIsOpenLabelEditWindow(false); setIsOpenAddNewLabelWindow(false) }}
-                editWindow={isOpenLabelEditWindow || isOpenAddNewLabelWindow}
+                isEditWindow={isOpenLabelEditWindow || isOpenAddNewLabelWindow}
                 backToMainWindow={() => { setIsOpenLabelEditWindow(false); setIsOpenAddNewLabelWindow(false) }}
               >
                 <div className={styles.labels}>
@@ -593,7 +564,7 @@ const CardModal: React.FC<CardModalProps> = ({
                       <>
                         <div className={styles.labelsList}>
                           {
-                            boardLabels.map((label: { _id: string; title: string; color: string; }) => (
+                            boardLabels.map((label: LabelsInterface) => (
                               <Label
                                 key={label._id}
                                 labelId={label._id}
@@ -665,22 +636,38 @@ const CardModal: React.FC<CardModalProps> = ({
                   label={'załącznik'}
                   type={'file'}
                   nameFiles={selectedNameFiles}
-                  handleInputState={handleUploadImage} handleSubmitFile={handleSubmitFile}
+                  handleInputState={handleUploadImage}
+                  handleSubmitFile={handleSubmitFile}
                 />{
                   uploadProgress > 0 ? (
                     <>
-                      {uploadStatus !== null ? (<ProgressLine percent={uploadProgress} strokeWidth={4} strokeColor="#D3D3D3" />) : null}
-                      {uploadStatus === false ?
-                        <p style={{ color: 'red' }}>Błąd przesyłania<small> (max 10mb, lub nieprawidłowy format pliku)</small></p>
-                        : `${uploadProgress}%`}
+                      {
+                        uploadStatus !== null && uploadStatus === true ? (
+                          <div><ProgressLine percent={uploadProgress} strokeWidth={4} strokeColor="#D3D3D3" /><p>{uploadProgress}%</p></div>
+                        ) : null
+                      }
+                      {
+                        uploadStatus === false ?
+                          <p style={{ color: 'red' }}>Błąd przesyłania<small> (max 10mb, lub nieprawidłowy format pliku)</small></p>
+                          : null
+                      }
                     </>
                   ) : null
                 }
               </Popup>
+              <Popup
+                title={'magazyn'}
+                trigger={storageTrigger}
+                closePopup={() => setStorageTrigger(false)}
+              >
+                <div>
+                  <p>In progress ...</p>
+                </div>
+              </Popup>
               <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
               <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
               <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />
-              <TaskButton onClick={() => setFormIsOpen(true)} name={'Marazyn'} icon={<BiTask />} />
+              <TaskButton onClick={() => setStorageTrigger(true)} name={'Marazyn'} icon={<BiTask />} />
               <div className={styles.divider}></div>
               <TaskButton onClick={() => {
                 deleteCard(_id);

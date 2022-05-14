@@ -12,15 +12,14 @@ import 'dayjs/locale/pl';
 import CardModal from './CardModal/CardModal';
 import {
   useUpdateBoardMutation,
-} from '../../../store/reducers/boardsReducer'
+} from '../../../store/api/boards'
 import {
   useDeleteCardMutation,
   useUpdateCardMutation,
-} from "../../../store/reducers/cardsReducer";
+} from "../../../store/api/cards";
 
 import { MdOutlineLabel } from 'react-icons/md';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { BsPencil } from 'react-icons/bs';
 import { GrTextAlignFull } from 'react-icons/gr';
 import { BsStopwatch } from 'react-icons/bs';
 import { ImCheckboxUnchecked } from 'react-icons/im';
@@ -30,12 +29,12 @@ import IconButton from '../../Details/IconButton/IconButton';
 import TaskButton from '../TaskButton/TaskButton';
 import useHover from '../../../hooks/useHover'
 import { isFileImage } from '../../../hooks/isFileImage'
-import Popup from '../../Details/Popup/Popup';
 import { Card as CardModel } from '../../../models/card'
+import { Labels as LabelsInterface } from '../../../models/labels'
 
 export interface CardProps extends CardModel {
   index: number
-  setDragDisabled: (value: boolean) => void
+  setIsDragDisabled: (value: boolean) => void
 }
 
 const Card: React.FC<CardProps> = ({
@@ -51,7 +50,7 @@ const Card: React.FC<CardProps> = ({
   cover,
   files,
   createdAt,
-  setDragDisabled,
+  setIsDragDisabled,
 }) => {
 
   const [deleteCard] = useDeleteCardMutation()
@@ -60,15 +59,13 @@ const Card: React.FC<CardProps> = ({
 
   const [isOpenCardModal, setIsOpenCardModal] = useState<boolean>(false)
   const [isDisplayEditIcon, setIsDisplayEditIcon] = useState(false)
-  const [cardLabels, setCardLabels] = useState([] as any)
+  const [cardLabels, setCardLabels] = useState<LabelsInterface[]>([] as LabelsInterface[])
   const [cardCompleted, setCardCompleted] = useState(completed)
   const [cardDeadline, setCardDeadline] = useState(deadline)
   const [nowDate, setNowDate] = useState(Date.now())
   const [cardFiles, setCardFiles] = useState([] as any)
   const [cardCover, setCardCover] = useState(cover)
   const [cardFileIndex, setCardFileIndex] = useState(0)
-  const [actionTrigger, setActionTrigger] = useState(false)
-  const [colorLabel, setColorLabel] = useState('')
 
   dayjs.locale('pl');
   dayjs.extend(isSameOrBefore)
@@ -126,12 +123,12 @@ const Card: React.FC<CardProps> = ({
 
   const handleOpenCardModal = () => {
     setIsOpenCardModal(true)
-    setDragDisabled(true)
+    setIsDragDisabled(true)
   }
 
   const handleCloseCardModal = () => {
     setIsOpenCardModal(false)
-    setDragDisabled(false)
+    setIsDragDisabled(false)
   }
 
   const handleChangeCompleted = () => {
@@ -263,35 +260,14 @@ const Card: React.FC<CardProps> = ({
                   {
                     isDisplayEditIcon ? (
                       <IconButton onClick={() => {
-                        setActionTrigger(true)
-                        setDragDisabled(true)
+
+                        setIsDragDisabled(true)
                       }}>
                         <RiDeleteBin6Line />
                       </IconButton>) : null
                   }
                 </div>
-                {/* <div className={styles.actionsContainer}>
-                  <Popup
-                    title={'akcje karty'}
-                    trigger={actionTrigger}
-                    closePopup={() => {
-                      setActionTrigger(false)
-                      setDragDisabled(false)
-                    }}
-                  >
-                    <div className={styles.actionsPopupContent}>
-                      <TaskButton onClick={() => {
-                        handleOpenCardModal()
-                        setActionTrigger(false)
-                      }} name={'Otwórz kartę'} icon={<MdOutlineLabel />} />
 
-                      <TaskButton onClick={() => {
-                        deleteCard(_id);
-                        updateBoard({ _id: boardId })
-                      }} name={'Usuń'} icon={<RiDeleteBinLine />} />
-                    </div>
-                  </Popup>
-                </div> */}
               </div>
             </div>
           )}

@@ -1,21 +1,20 @@
 import { configureStore } from '@reduxjs/toolkit'
-// import counterReducer from '../reducers/reducer'
-import { boardApi } from './reducers/boardsReducer'
-import { listApi } from './reducers/listsReducer'
-import { cardsApi } from './reducers/cardsReducer'
-import { filesApi } from './reducers/filesReducer'
+import { boardApi } from './api/boards'
+import { listsApi } from './api/lists'
+import { cardsApi } from './api/cards'
+import { filesApi } from './api/files'
 
 export const store = configureStore({
   reducer: {
     [boardApi.reducerPath]: boardApi.reducer,
-    [listApi.reducerPath]: listApi.reducer,
+    [listsApi.reducerPath]: listsApi.reducer,
     [cardsApi.reducerPath]: cardsApi.reducer,
     [filesApi.reducerPath]: filesApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       boardApi.middleware,
-      listApi.middleware,
+      listsApi.middleware,
       cardsApi.middleware,
       filesApi.middleware,
     ),

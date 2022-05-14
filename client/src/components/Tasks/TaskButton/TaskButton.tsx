@@ -3,7 +3,7 @@ import styles from './styles.module.scss'
 
 
 type ButtonProps = {
-  icon?: any
+  icon?: {}
   height?: string
   margin?: string
   name: string

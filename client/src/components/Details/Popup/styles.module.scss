@@ -7,12 +7,11 @@
   padding: 0.5rem 1rem 1rem;
   background-color: #fcfcfc;
   border: 1px solid #cdced1;
-  border-radius: 0.5rem;
-  // overflow: hidden;
+  border-radius: 8px;
   z-index: 200;
 }
 
-.menuHeader {
+.header {
   min-width: 240px;
   display: flex;
   align-items: center;
@@ -20,12 +19,12 @@
   padding-bottom: 0.5rem;
   h3 {
     width: 100%;
-    font-size: 0.8rem;
+    font-size: 14px;
     text-align: center;
     color: gray;
   }
 }
 
 .popupContent {
-  margin-top: 0.5rem;
+  margin-top: 8px;
 }

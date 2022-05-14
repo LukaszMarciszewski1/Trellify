@@ -1,8 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { Line } from 'rc-progress';
 import styles from './styles.module.scss'
-
-import storage from '../../../../../../config/firebase'
 import Button from '../../../../../Details/Button/Button'
 
 type Props = {
@@ -49,7 +47,6 @@ const FileForm: React.FC<Props> = ({ name, size, nameFiles, label, type, handleI
             ))
           }
         </div>
-        {/* <Line percent:number="10" strokeWidth="4" strokeColor="#D3D3D3" /> */}
         {
           nameFiles.length ? (
             <Button onClick={handleSubmitFile} title={"Załącz"} type={'submit'} />

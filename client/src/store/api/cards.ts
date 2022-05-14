@@ -49,5 +49,4 @@ export const {
   useAddCardMutation,
   useDeleteCardMutation,
   useUpdateCardMutation,
-  // useDeleteAllMutation,
 } = cardsApi

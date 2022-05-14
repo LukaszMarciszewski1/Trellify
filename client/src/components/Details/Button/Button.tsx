@@ -5,15 +5,15 @@ interface ButtonProps {
   onClick?: (e: any) => void
   title?: string
   bgColor?: string
-  type: any
+  type: "button" | "submit" | "reset" | undefined
 }
 
-const Button: React.FC<ButtonProps> = ({onClick, bgColor, title, type}) => (
+const Button: React.FC<ButtonProps> = ({ onClick, bgColor, title, type }) => (
   <button
     className={styles.button}
-    onClick={onClick} 
+    onClick={onClick}
     type={type}
-    style={{ backgroundColor: `${bgColor}`}}>
+    style={{ backgroundColor: `${bgColor}` }}>
     {title}
   </button>
 )

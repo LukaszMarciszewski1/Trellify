@@ -1,18 +1,11 @@
 @import '../../../scss/utils.scss';
-.container {
-  // position: relative;
-  // max-height: 100%;
-}
+
 .list {
   width: 272px;
-  // max-height: 100%;
   height: auto;
-  // height: fit-content;
-  // position: static;
   display: flex;
   flex-direction: column;
-  // padding: 0.3rem;
-  margin-right: 1rem;
+  margin-right: 16px;
   border-radius: 5px;
   background-color: #ebecf0;
   -webkit-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.15);
@@ -23,23 +16,21 @@
 .listHeader {
   width: 100%;
   position: relative;
-  // height: auto;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   padding: 5px;
-
-  // margin: 0.3rem 0;
 }
-.textWrapper {
+
+.textareaWrapper {
   box-sizing: border-box;
   justify-self: center;
   width: 220px;
   overflow-wrap: break-word;
   cursor: pointer;
   h2 {
-    padding: 0.3rem;
-    font-size: 0.9rem;
+    padding: 5px;
+    font-size: 14px;
     overflow-wrap: break-word;
     font-weight: bold;
     color: rgb(61, 61, 61);
@@ -48,14 +39,22 @@
   }
 }
 
-// .cards {
-//   position: absolute;
-//   left: 0;
-//   top: 0;
-//   background-color: yellow;
-//   height: 100%;
-//   max-height: 100%;
-// }
+.textarea {
+  width: 100%;
+  resize: none;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 5px;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  outline: 2px solid rgb(38, 99, 149);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
 
 .cardsContainer {
   padding: 1px 4px 0;
@@ -84,43 +83,17 @@
   }
 }
 
-.textarea {
-  // box-sizing: border-box;
-  width: 100%;
-  resize: none;
-  font-weight: bold;
-  border-radius: 3px;
-  font-size: 0.9rem;
-  padding: 0.3rem;
-  margin: 0;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  outline: 2px solid rgb(38, 99, 149);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-}
-.cardForm {
+.addCardForm {
   width: 100%;
   padding: 0 8px 4px;
 }
 
-.actionsPopup {
-  position: absolute;
-  right: -20px;
-  top: 5px;
-  user-select: none;
-  cursor: auto;
-  z-index: 200;
-}
-.actionsPopupContent {
+.popupContent {
   display: flex;
   flex-direction: column;
-  // gap: 1px;
 }
 
 .divider {
-  margin: 0.5rem 0;
+  margin: 8px 0;
   border-bottom: 1px solid rgb(173, 173, 173);
 }

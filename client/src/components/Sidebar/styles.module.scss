@@ -3,13 +3,12 @@
   width: 300px;
   min-height: 100%;
   background-color: #fcfcfc;
-  // background-color: #fbfbfb;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
   transition: 0.1s ease-in-out;
   z-index: 300;
 }
 
-.sidebarHide {
+.sidebarHidden {
   width: 69px;
 }
 
@@ -33,24 +32,23 @@
   top: 20px;
   background-color: #ebecf0;
   border: 1px solid #cdced1;
-  padding: 0.3rem;
+  padding: 5px;
   border-radius: 50%;
-  transition: 0.1s;
 }
 
-.navButtonHide {
+.navButtonHidden {
   transform: rotate(180deg);
 }
 
 .linksContainer {
   width: 100%;
-  padding: 1.4rem 1rem 1rem;
+  padding: 22px 16px 16px;
 }
 
 .navItem {
   position: relative;
   font-size: 1.1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 
 .navLink {
@@ -59,12 +57,12 @@
   justify-content: flex-start;
   align-items: center;
   font-weight: medium;
-  padding: 0.5rem;
-
+  padding: 8px;
   p {
-    margin-left: 1rem;
+    margin-left: 16px;
   }
 }
+
 .icon {
   display: flex;
   align-items: center;
@@ -74,7 +72,7 @@
 .active {
   opacity: 1;
   background-color: #ebecf0;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   &::before {
     content: '';
     position: absolute;

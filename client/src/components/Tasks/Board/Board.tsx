@@ -1,64 +1,49 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { isEmpty, cloneDeep } from 'lodash'
 import styles from './styles.module.scss'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
-import {
-  useGetBoardQuery,
-  useUpdateBoardMutation,
-} from '../../../store/reducers/boardsReducer'
-import {
-  useAddTaskMutation,
-  useUpdateTaskMutation,
-} from "../../../store/reducers/listsReducer";
-import {
-  useUpdateCardMutation,
-} from "../../../store/reducers/cardsReducer";
+import {useGetBoardQuery, useUpdateBoardMutation} from '../../../store/api/boards'
+import {useAddListMutation, useUpdateListMutation} from "../../../store/api/lists";
+import {useUpdateCardMutation} from "../../../store/api/cards";
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
-
 import { GoPlus } from "react-icons/go";
 import { defaultBackground } from '../localData';
-
+import { Board as BoardResponse } from '../../../models/board'
+import { List as ListResponse } from '../../../models/list'
 import BoardHeader from '../BoardHeader/BoardHeader';
 import List from '../List/List'
 import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import SideMenu from '../SideMenu/SideMenu';
 
-import { Board as BoardResponse } from '../../../models/board'
-import { List as ListResponse } from '../../../models/list'
-
 const Board: React.FC = () => {
   const boardId = '624f02f011fa05ce01907c07'
-  const { data, error, isLoading } = useGetBoardQuery(boardId);
-  const [addList] = useAddTaskMutation()
-  const [updateList] = useUpdateTaskMutation()
+  const { data: boardApi, error, isLoading } = useGetBoardQuery(boardId);
+  const [addList] = useAddListMutation()
+  const [updateList] = useUpdateListMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
-
-  const formRef = useRef(null)
 
   const [backgroundUrl, setBackgroundUrl] = useState('')
   const [listTitle, setListTitle] = useState('');
   const [isOpenForm, setIsOpenForm] = useState(false)
-  const [openSideMenu, setOpenSideMenu] = useState(false)
-
+  const [isOpenSideMenu, setIsOpenSideMenu] = useState(false)
   const [board, setBoard] = useState<BoardResponse>({} as BoardResponse)
   const [lists, setLists] = useState<ListResponse[]>([] as ListResponse[])
-
+  const formRef = useRef(null)
+  
   const closeForm = () => { setIsOpenForm(false); setListTitle('') }
   useOnClickOutside(formRef, closeForm)
 
   useEffect(() => {
-    if (data) {
-      const newBoard = { ...data }
-      const boardBG = newBoard.background === '' ? defaultBackground : newBoard.background
-      setBoard(newBoard)
-      setLists(newBoard.lists)
+    if (boardApi) {
+      const boardBG = boardApi.background === '' ? defaultBackground : boardApi.background
+      setBoard(boardApi)
+      setLists(boardApi.lists)
       setBackgroundUrl(boardBG)
     }
-  }, [data]);
+  }, [boardApi])
 
-  const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     if (e.target.id === 'list') setListTitle(e.target.value)
   }
 
@@ -72,7 +57,6 @@ const Board: React.FC = () => {
     updateBoard({
       _id: boardId,
     })
-
     setListTitle('')
     setIsOpenForm(false)
   }
@@ -80,9 +64,9 @@ const Board: React.FC = () => {
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type, draggableId } = result
     const newLists = [...lists]
-    if (!board) return;
-    if (!destination) return;
-    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+    if (!board) return
+    if (!destination) return
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return
 
     if (type === 'list') {
       const [removed] = newLists.splice(source.index, 1)
@@ -175,61 +159,60 @@ const Board: React.FC = () => {
 
   return (
     <div className={styles.board}
-    style={boardBackgroundStyle}
+      style={boardBackgroundStyle}
     >
       <div className={styles.container}>
-      <BoardHeader
-        name={'Zmień tło'}
-        onClick={() => setOpenSideMenu(true)}
-      />
-      {
-        openSideMenu ?
-          <SideMenu
-            boardId={boardId}
-            setBackgroundUrl={setBackgroundUrl}
-            closeMenu={() => setOpenSideMenu(false)}
-          /> : null
-      }
-      <DragDropContext onDragEnd={onDragEnd} >
-        <Droppable droppableId="all-list" direction="horizontal" type="list">
-          {provided => (
-            <div className={styles.listContainer}
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {
-                lists?.map((list, index: number) => (
-                  <List
-                    _id={list._id}
-                    index={index}
-                    boardId={list.boardId}
-                    key={list._id}
-                    // listId={list._id}
-                    title={list.title}
-                    cards={list.cards}
-                  />
-                ))
-              }
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-        <div className={styles.actionsForm}>
-          {isOpenForm ?
-            <div className={styles.formContainer} ref={formRef}>
-              <TaskForm
-                id='list'
-                handleChange={handleChangeListTitle}
-                handleSubmit={handleAddList}
-                closeForm={() => { setIsOpenForm(false); setListTitle('') }}
-                value={listTitle}
-                titleBtn={'Dodaj Listę'}
-              />
-            </div>
-            : <TaskButton onClick={() => setIsOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
-          }
-        </div>
-      </DragDropContext>
+        <BoardHeader
+          name={'Zmień tło'}
+          onClick={() => setIsOpenSideMenu(true)}
+        />
+        {
+          isOpenSideMenu ?
+            <SideMenu
+              boardId={boardId}
+              setBackgroundUrl={setBackgroundUrl}
+              setCloseMenu={() => setIsOpenSideMenu(false)}
+            /> : null
+        }
+        <DragDropContext onDragEnd={onDragEnd} >
+          <Droppable droppableId="all-list" direction="horizontal" type="list">
+            {provided => (
+              <div className={styles.listContainer}
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {
+                  lists?.map((list, index: number) => (
+                    <List
+                      _id={list._id}
+                      index={index}
+                      boardId={list.boardId}
+                      key={list._id}
+                      title={list.title}
+                      cards={list.cards}
+                    />
+                  ))
+                }
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <div className={styles.formContainer}>
+            {isOpenForm ?
+              <div className={styles.addListForm} ref={formRef}>
+                <TaskForm
+                  id='list'
+                  handleChange={handleChangeListTitle}
+                  handleSubmit={handleAddList}
+                  closeForm={() => { setIsOpenForm(false); setListTitle('') }}
+                  value={listTitle}
+                  titleBtn={'Dodaj Listę'}
+                />
+              </div>
+              : <TaskButton onClick={() => setIsOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
+            }
+          </div>
+        </DragDropContext>
       </div>
     </div>
   )

@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
-import getImages from '../../../api/unsplashApi';
-import { BsXLg } from "react-icons/bs";
-import IconButton from '../../Details/IconButton/IconButton';
-import { presetColors, defaultBackground, defaultColor } from '../localData';
-import {useUpdateBoardMutation,} from '../../../store/reducers/boardsReducer'
+import { presetColors, defaultBackground, defaultColor } from '../localData'
+import getImages from '../../../api/unsplashApi'
+import { useUpdateBoardMutation } from '../../../store/api/boards'
+import { BsXLg } from "react-icons/bs"
+import IconButton from '../../Details/IconButton/IconButton'
 
 type SideMenuProps = {
   boardId: string
-  closeMenu: () => void
+  setCloseMenu: () => void
   setBackgroundUrl: (value: string) => void;
 }
 
-const SideMenu: React.FC<SideMenuProps> = ({ closeMenu, setBackgroundUrl, boardId }) => {
+const SideMenu: React.FC<SideMenuProps> = ({ setCloseMenu, setBackgroundUrl, boardId }) => {
   const [updateBoard] = useUpdateBoardMutation()
   const [optionColors, setOptionsColors] = useState<boolean>(false)
   const [optionImages, setOptionsImages] = useState<boolean>(false)
   const [images, setImages] = useState<any>([])
 
   const getListOfImages = async () => {
-    const listOfImages = await getImages()
-    setImages(listOfImages)
+    const listImages = await getImages()
+    setImages(listImages)
   }
 
   useEffect(() => {
@@ -31,10 +31,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ closeMenu, setBackgroundUrl, boardI
     <div className={styles.sideMenu}>
       <div className={styles.menuHeader}>
         <h3>Zmień tło</h3>
-        <IconButton onClick={closeMenu}><BsXLg /></IconButton>
+        <IconButton onClick={setCloseMenu}><BsXLg /></IconButton>
       </div>
-      <div className={styles.options}>
-        <div className={styles.box}
+      <div className={styles.menuOptions}>
+        <div className={styles.itemBox}
           onClick={() => {
             setOptionsImages(true)
             setOptionsColors(false)
@@ -44,7 +44,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ closeMenu, setBackgroundUrl, boardI
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
           }}><p>Zdjęcia</p></div>
-        <div className={styles.box}
+        <div className={styles.itemBox}
           onClick={() => {
             setOptionsImages(false)
             setOptionsColors(true)
@@ -60,10 +60,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ closeMenu, setBackgroundUrl, boardI
       <div className={styles.optionsContainer}>
         {
           optionImages ? (
-            images.map((photo: { id: React.Key | null | undefined; thumb: any; full: string; }) => (
+            images.map((photo: { id: string | undefined; thumb: string; full: string; }) => (
               <div
                 key={photo.id}
-                className={styles.box}
+                className={styles.itemBox}
                 style={{
                   backgroundImage: `url(${photo.thumb})`,
                   backgroundSize: 'cover',
@@ -86,7 +86,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ closeMenu, setBackgroundUrl, boardI
             presetColors.map((color, index) => (
               <div
                 key={index}
-                className={styles.box}
+                className={styles.itemBox}
                 style={{
                   backgroundColor: `${color}`,
                 }}
