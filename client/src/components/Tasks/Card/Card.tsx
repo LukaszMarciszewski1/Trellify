@@ -52,29 +52,21 @@ const Card: React.FC<CardProps> = ({
   createdAt,
   setIsDragDisabled,
 }) => {
-
-  const [deleteCard] = useDeleteCardMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
-  const [isOpenCardModal, setIsOpenCardModal] = useState<boolean>(false)
+  const [isCardModalOpen, setIsCardModalOpen] = useState<boolean>(false)
   const [isDisplayEditIcon, setIsDisplayEditIcon] = useState(false)
-  const [cardLabels, setCardLabels] = useState<LabelsInterface[]>([] as LabelsInterface[])
   const [cardCompleted, setCardCompleted] = useState(completed)
-  const [cardDeadline, setCardDeadline] = useState(deadline)
   const [nowDate, setNowDate] = useState(Date.now())
-  const [cardFiles, setCardFiles] = useState([] as any)
   const [cardCover, setCardCover] = useState(cover)
   const [cardFileIndex, setCardFileIndex] = useState(0)
+  const [cardFiles, setCardFiles] = useState([] as any)
 
   dayjs.locale('pl');
   dayjs.extend(isSameOrBefore)
   dayjs.extend(duration)
   dayjs.extend(relativeTime)
-
-  useEffect(() => {
-    setCardLabels(labels)
-  }, [labels])
 
   useEffect(() => {
     const intervalIsSameOrBefore = setInterval(() => setNowDate(Date.now()), 100000)
@@ -122,12 +114,12 @@ const Card: React.FC<CardProps> = ({
   }
 
   const handleOpenCardModal = () => {
-    setIsOpenCardModal(true)
+    setIsCardModalOpen(true)
     setIsDragDisabled(true)
   }
 
   const handleCloseCardModal = () => {
-    setIsOpenCardModal(false)
+    setIsCardModalOpen(false)
     setIsDragDisabled(false)
   }
 
@@ -142,10 +134,9 @@ const Card: React.FC<CardProps> = ({
     })
   };
 
-
   const fiveHours = 300 //minutes
-  const dateIsSameOrBefore = dayjs(cardDeadline).isSameOrBefore(nowDate, 'minute')
-  const timeToDeadline = dayjs(cardDeadline).diff(dayjs(nowDate), 'minute', true)
+  const dateIsSameOrBefore = dayjs(deadline).isSameOrBefore(nowDate, 'minute')
+  const timeToDeadline = dayjs(deadline).diff(dayjs(nowDate), 'minute', true)
   const deadlineIsSoon = (timeToDeadline < fiveHours && timeToDeadline > 0) ? true : false
 
   const cardDateDisplay = {
@@ -155,7 +146,7 @@ const Card: React.FC<CardProps> = ({
     },
     title: cardCompleted ? 'Ta karta została ukończona' :
       dateIsSameOrBefore ? 'Ta karta jest przeterminowana' :
-        deadlineIsSoon ? `Deadline ${dayjs(cardDeadline).fromNow()}` : 'Karta jest na później',
+        deadlineIsSoon ? `Deadline ${dayjs(deadline).fromNow()}` : 'Karta jest na później',
     name: cardCompleted ? 'zrealizowany' :
       dateIsSameOrBefore ? 'termin przekroczony' :
         deadlineIsSoon ? `wkrótce` : '',
@@ -165,14 +156,6 @@ const Card: React.FC<CardProps> = ({
     }
   }
 
-  const cardCoverStyle = {
-    backgroundColor: cardCover,
-    backgroundImage: `url(${cardCover})`,
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center'
-  }
-
   const hoverRef = useRef(null)
   const isHover = useHover(hoverRef)
 
@@ -180,14 +163,14 @@ const Card: React.FC<CardProps> = ({
   return (
     <div>
       {
-        isOpenCardModal ?
+        isCardModalOpen ?
           <CardModal
             _id={_id}
             nameList={nameList}
             title={title}
             description={description}
             boardId={boardId}
-            deadline={cardDeadline}
+            deadline={deadline}
             labels={labels}
             files={cardFiles}
             cover={cardCover}
@@ -197,8 +180,6 @@ const Card: React.FC<CardProps> = ({
             deadlineIsSoon={deadlineIsSoon}
             cardDateDisplay={cardDateDisplay}
             createdAt={createdAt}
-            setCardLabels={setCardLabels}
-            setCardDeadline={setCardDeadline}
             setCardCompleted={setCardCompleted}
             setIsCardWindowOpen={handleCloseCardModal}
             setCardFileIndex={setCardFileIndex}
@@ -217,16 +198,24 @@ const Card: React.FC<CardProps> = ({
                   <div className={styles.cardClickableArea} onClick={handleOpenCardModal}></div>
                   {
                     cardFiles.length ? (
-                      <div className={styles.cardCover} style={cardCoverStyle}>
+                      <div className={styles.cardCover} style={
+                        {
+                          backgroundColor: cardCover,
+                          backgroundImage: `url(${cardCover})`,
+                          backgroundSize: 'cover',
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPosition: 'center'
+                        }
+                      }>
                       </div>
                     ) : null
                   }
                   <div className={styles.cardDetails}>
                     {
-                      cardLabels.length ? (
+                      labels.length ? (
                         <div className={styles.cardLabels} onClick={handleOpenCardModal}>
                           {
-                            cardLabels.map((label: { active: any; color: any; _id: string; title: string }) => (
+                            labels.map((label: { active: any; color: any; _id: string; title: string }) => (
                               <div title={`${label.title}`} key={label._id} className={styles.cardLabel} style={{ backgroundColor: `${label.color}` }}></div>
                             ))
                           }

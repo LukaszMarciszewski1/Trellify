@@ -171,7 +171,7 @@ const Board: React.FC = () => {
             <SideMenu
               boardId={boardId}
               setBackgroundUrl={setBackgroundUrl}
-              setCloseMenu={() => setIsOpenSideMenu(false)}
+              handleCloseMenu={() => setIsOpenSideMenu(false)}
             /> : null
         }
         <DragDropContext onDragEnd={onDragEnd} >

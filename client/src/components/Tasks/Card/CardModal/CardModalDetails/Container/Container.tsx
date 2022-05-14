@@ -3,13 +3,12 @@ import styles from './styles.module.scss'
 
 type Props = {
   data: any
-  children: any
+  children: JSX.Element | JSX.Element[];
   title: string
 }
 
-const ItemsContainer: React.FC<Props> = ({ children, title, data }) => {
+const Container: React.FC<Props> = ({ children, title, data }) => {
   const isDataExist = Array.isArray(data) ? (data.length ? true : false) : (data === null || data === undefined ? false : true)
-
   return (
     <>
       {
@@ -26,4 +25,4 @@ const ItemsContainer: React.FC<Props> = ({ children, title, data }) => {
   )
 }
 
-export default ItemsContainer
+export default Container

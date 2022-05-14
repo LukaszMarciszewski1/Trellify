@@ -1,12 +1,11 @@
-import React, { useEffect, useRef } from 'react'
-import TextareaAutosize from 'react-textarea-autosize';
+import React from 'react'
 import styles from './styles.module.scss'
-
-import Button from '../../Details/Button/Button'
+import TextareaAutosize from 'react-textarea-autosize';
 import { BsXLg } from "react-icons/bs";
+import Button from '../../Details/Button/Button'
 import IconButton from '../../Details/IconButton/IconButton';
 
-type Props = {
+interface TaskFormProps {
   id: string
   handleSubmit: (value: any) => void
   handleChange: (value: any) => void
@@ -17,7 +16,7 @@ type Props = {
   titleBtn: string
 }
 
-const TaskForm: React.FC<Props> = ({ value, id, titleBtn, onBlur, onFocus, handleChange, handleSubmit, closeForm }) => {
+const TaskForm: React.FC<TaskFormProps> = ({ value, id, titleBtn, onBlur, onFocus, handleChange, handleSubmit, closeForm }) => {
   const placeholder = id === 'list' ? 'Dodaj listę zadań' : 'Dodaj nową kartę'
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>): void => {

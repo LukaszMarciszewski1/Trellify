@@ -1,8 +1,6 @@
 import React from 'react'
 import styles from './styles.module.scss'
-
-
-type ButtonProps = {
+interface TaskButtonProps {
   icon?: {}
   height?: string
   margin?: string
@@ -10,7 +8,7 @@ type ButtonProps = {
   onClick: () => void
 }
 
-const TaskButton: React.FC<ButtonProps> = ({ onClick, name, icon, height, margin }) => {
+const TaskButton: React.FC<TaskButtonProps> = ({ onClick, name, icon, height, margin }) => {
   return (
     <button style={{height: height, margin: margin}} className={styles.taskButton} onClick={onClick}>
       <div className={styles.icon}>{icon}</div>

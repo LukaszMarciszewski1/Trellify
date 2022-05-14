@@ -1,25 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
 import TextareaAutosize from 'react-textarea-autosize';
 import styles from './styles.module.scss'
 import Button from '../../../../../Details/Button/Button'
 import { HexColorPicker } from "react-colorful";
 import { presetColors } from '../../../../localData'
-
-type Props = {
+interface LabelProps {
   formId: string
   value: string | undefined
-  handleSubmit: (value: any) => void
-  handleChange: (value: any) => void
-  onFocus?: (value: any) => void
-  deleteLabel: () => void
-  setSelectColor: (vlaue: string) => void
   selectColor: string
+  handleChangeLabelTitle: (value: any) => void
+  handleChangeTitle: (value: any) => void
+  onFocus?: (value: any) => void
+  handleDeleteLabel: () => void
+  setSelectColor: (value: string) => void
 }
 
-const LabelForm: React.FC<Props> = ({
-  handleChange,
-  handleSubmit,
-  deleteLabel,
+const LabelForm: React.FC<LabelProps> = ({
+  handleChangeTitle,
+  handleChangeLabelTitle,
+  handleDeleteLabel,
   value,
   formId,
   onFocus,
@@ -37,7 +36,7 @@ const LabelForm: React.FC<Props> = ({
         value={value}
         className={styles.textarea}
         autoFocus
-        onChange={handleChange}
+        onChange={handleChangeTitle}
         onFocus={onFocus}
       />
       <p style={{ marginBottom: '5px' }}>Wybierz kolor</p>
@@ -59,9 +58,9 @@ const LabelForm: React.FC<Props> = ({
         </div>
       </div>
       <div className={styles.actionsForm}>
-        <Button onClick={handleSubmit} title={'Zapisz'} type={'submit'} />
+        <Button onClick={handleChangeLabelTitle} title={'Zapisz'} type={'submit'} />
         <div style={{ marginRight: '1rem' }} />
-        <Button onClick={deleteLabel} title={'Usuń'} bgColor={'#EA4746'} type={'button'} />
+        <Button onClick={handleDeleteLabel} title={'Usuń'} bgColor={'#EA4746'} type={'button'} />
       </div>
     </form>
   )

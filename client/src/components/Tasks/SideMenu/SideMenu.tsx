@@ -6,13 +6,13 @@ import { useUpdateBoardMutation } from '../../../store/api/boards'
 import { BsXLg } from "react-icons/bs"
 import IconButton from '../../Details/IconButton/IconButton'
 
-type SideMenuProps = {
+interface SideMenuProps {
   boardId: string
-  setCloseMenu: () => void
+  handleCloseMenu: () => void
   setBackgroundUrl: (value: string) => void;
 }
 
-const SideMenu: React.FC<SideMenuProps> = ({ setCloseMenu, setBackgroundUrl, boardId }) => {
+const SideMenu: React.FC<SideMenuProps> = ({ handleCloseMenu, setBackgroundUrl, boardId }) => {
   const [updateBoard] = useUpdateBoardMutation()
   const [optionColors, setOptionsColors] = useState<boolean>(false)
   const [optionImages, setOptionsImages] = useState<boolean>(false)
@@ -31,7 +31,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ setCloseMenu, setBackgroundUrl, boa
     <div className={styles.sideMenu}>
       <div className={styles.menuHeader}>
         <h3>Zmień tło</h3>
-        <IconButton onClick={setCloseMenu}><BsXLg /></IconButton>
+        <IconButton onClick={handleCloseMenu}><BsXLg /></IconButton>
       </div>
       <div className={styles.menuOptions}>
         <div className={styles.itemBox}

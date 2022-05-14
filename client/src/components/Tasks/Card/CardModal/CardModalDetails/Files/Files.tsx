@@ -1,21 +1,20 @@
-import React, { useCallback } from 'react'
+import React  from 'react'
 import styles from './styles.module.scss'
 import { isFileImage } from '../../../../../../hooks/isFileImage'
 import TaskButton from '../../../../TaskButton/TaskButton'
-
-type Props = {
-  title: string,
-  src: string,
-  created: string,
-  index: number,
-  active: number,
-  type: string,
-  deleteFile: () => void
-  downloadFile: () => void
-  selectCover: () => void
+interface FileProps {
+  title: string
+  src: string
+  created: string
+  index: number
+  active: number
+  type: string
+  handleDeleteFile: () => void
+  handleDownloadFile: () => void
+  handleSelectCover: () => void
 }
 
-const Files: React.FC<Props> = ({ created, title, src, type, index, active, deleteFile, downloadFile, selectCover }) => {
+const Files: React.FC<FileProps> = ({ created, title, src, type, index, active, handleDeleteFile, handleDownloadFile, handleSelectCover }) => {
 const fileExtension = type.split('/').pop();
 
   return (
@@ -29,7 +28,7 @@ const fileExtension = type.split('/').pop();
                 <input
                   type="checkbox"
                   checked={active === index ? true : false}
-                  onChange={selectCover}
+                  onChange={handleSelectCover}
                   style={{ height: '100%', width: '1rem', marginRight: '8px' }} />
               </div>
             </>
@@ -40,8 +39,8 @@ const fileExtension = type.split('/').pop();
         <h4>{title}</h4>
         <span>{created}</span>
         <div className={styles.fileButtons}>
-          <TaskButton height={'25px'} margin={'0 8px 0 0'} onClick={deleteFile} name={'Skasuj'} />
-          <TaskButton height={'25px'} margin={'0'} onClick={downloadFile} name={'Pobierz'} />
+          <TaskButton height={'25px'} margin={'0 8px 0 0'} onClick={handleDeleteFile} name={'Skasuj'} />
+          <TaskButton height={'25px'} margin={'0'} onClick={handleDownloadFile} name={'Pobierz'} />
         </div>
       </div>
     </div>

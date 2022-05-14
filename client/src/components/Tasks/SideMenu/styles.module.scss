@@ -39,13 +39,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  // .box {
-  //   &:last-child {
-  //     justify-self: flex-start;
-  //     align-self: flex-start;
-  //   }
-  // }
 }
+
 .description {
   width: 100%;
   display: flex;
@@ -60,7 +55,6 @@
   position: relative;
   width: 45%;
   height: 100px;
-  // background-color: rgb(223, 223, 223);
   border-radius: 1rem;
   margin-bottom: 1rem;
   cursor: pointer;

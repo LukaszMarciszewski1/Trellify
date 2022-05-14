@@ -1,29 +1,18 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React from 'react'
 import { Line } from 'rc-progress';
 import styles from './styles.module.scss'
 import Button from '../../../../../Details/Button/Button'
-
-type Props = {
+interface FileFormProps {
   name: string
   size: number
   label: string
   type: string
-  nameFiles: string[]
-  handleSubmitFile: (value: any) => void
+  listNames: string[]
+  handleSubmitFiles: (value: any) => void
   handleInputState: (value: any) => void
 }
 
-const FileForm: React.FC<Props> = ({ name, size, nameFiles, label, type, handleInputState, handleSubmitFile, ...rest }) => {
-  const inputRef = useRef()
-  const [progress, setProgress] = useState<number>(0)
-
-  const uploadOptions =  {
-    onUploadProgress: (progressEvent: { loaded: any; total: any; }) => {
-      const {loaded, total} = progressEvent;
-      const percentage = Math.floor(((loaded / 1000) * 100) / (total / 1000));
-      setProgress(percentage);
-  }
-  }
+const FileForm: React.FC<FileFormProps> = ({ name, listNames, type, handleInputState, handleSubmitFiles }) => {
 
   return (
     <div >
@@ -36,20 +25,19 @@ const FileForm: React.FC<Props> = ({ name, size, nameFiles, label, type, handleI
             onChange={handleInputState}
             multiple
             hidden
-            {...rest}
           />
           Dodaj załączniki
         </label>
         <div className={styles.spanContainer}>
           {
-            nameFiles.map((name, index) => (
+            listNames.map((name, index) => (
               <span key={index} className={styles.nameFileSpan}>{name}</span>
             ))
           }
         </div>
         {
-          nameFiles.length ? (
-            <Button onClick={handleSubmitFile} title={"Załącz"} type={'submit'} />
+          listNames.length ? (
+            <Button onClick={handleSubmitFiles} title={"Załącz"} type={'submit'} />
           ) : null
         }
       </form>

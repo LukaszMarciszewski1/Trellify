@@ -1,29 +1,28 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import { BiCheck } from 'react-icons/bi';
-import IconButton from '../../../../../Details/IconButton/IconButton'
 import { BsPencil } from 'react-icons/bs';
-import LabelForm from '../LabelForm/LabelForm';
+import IconButton from '../../../../../Details/IconButton/IconButton'
 
-type Props = {
+interface LabelProps {
   labelId: string
   title: string
   color: string
   cardLabels: {
-    active: any
-    color: any
     _id: string
+    active: boolean
+    color: string
     title: string
   }[]
-  checkedLabel: (value: any) => void
+  handleCheckedLabel: (value: any) => void
   openLabelEditWindow: () => void
 }
 
-const Label: React.FC<Props> = ({ title, color, cardLabels, checkedLabel, openLabelEditWindow, labelId }) => {
+const Label: React.FC<LabelProps> = ({ title, color, cardLabels, handleCheckedLabel, openLabelEditWindow, labelId }) => {
   const activeLabels = cardLabels.filter((label: { _id: string }) => label._id === labelId)
   return (
     <div className={styles.container}>
-      <div onClick={checkedLabel} style={{ background: `${color}` }} className={styles.boxColor}>
+      <div onClick={handleCheckedLabel} style={{ background: `${color}` }} className={styles.boxColor}>
         <p>{title}</p>
         {activeLabels.length ? < BiCheck style={{ color: 'white' }} /> : null}
       </div>

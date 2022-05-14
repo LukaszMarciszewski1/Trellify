@@ -37,14 +37,13 @@ import {
 import TaskButton from '../../TaskButton/TaskButton';
 import Popup from '../../../Details/Popup/Popup';
 import Label from './CardModalDetails/Label/Label';
-import ItemsContainer from './CardModalDetails/ItemsContainer/ItemsContainer'
+import Container from './CardModalDetails/Container/Container'
 import LabelForm from './CardModalDetails/LabelForm/LabelForm'
 import Button from '../../../Details/Button/Button';
 import FileForm from './CardModalDetails/FileForm/FileForm'
 import Files from './CardModalDetails/Files/Files';
 
 import { Line as ProgressLine } from 'rc-progress';
-import { File as FileResponse } from '../../../../models/file'
 import { Card as CardModel } from '../../../../models/card'
 import { Labels as LabelsInterface } from '../../../../models/labels'
 import pl from "date-fns/locale/pl";
@@ -63,8 +62,6 @@ interface CardModalProps extends CardModel {
   }
   setIsCardWindowOpen: () => void
   setCardCompleted: (value: boolean) => void
-  setCardDeadline: (value: Date | null) => void
-  setCardLabels: (value: any) => void
   setCardCover: (value: string) => void
   setCardFileIndex: (value: number) => void
 }
@@ -84,16 +81,14 @@ const CardModal: React.FC<CardModalProps> = ({
   deadlineIsSoon,
   cardDateDisplay,
   cardFileIndex,
-  setCardDeadline,
   setCardCompleted,
   setIsCardWindowOpen,
-  setCardLabels,
   setCardCover,
   setCardFileIndex,
 }) => {
   dayjs.locale('pl');
   registerLocale("pl", pl);
-  const { data: board, error, isLoading } = useGetBoardQuery(boardId);
+  const { data: board } = useGetBoardQuery(boardId);
   const { data: cards } = useGetAllCardsQuery()
 
   const [updateCard] = useUpdateCardMutation();
@@ -101,21 +96,18 @@ const CardModal: React.FC<CardModalProps> = ({
   const [updateBoard] = useUpdateBoardMutation();
   const [deleteFile] = useDeleteFileMutation();
 
-  const refWindow = useRef(null)
   const [cardTitle, setCardTitle] = useState<string>(title)
   const [cardDescription, setCardDescription] = useState<string>(description)
-  const [boardLabels, setBoardLabels] = useState([] as any)
+  const [cardLabels, setCardLabels] = useState<LabelsInterface[]>(labels)
+  const [cardDeadline, setCardDeadline] = useState(deadline)
+  const [boardLabels, setBoardLabels] = useState<any>([])
   const [labelTitle, setLabelTitle] = useState('')
-
-  const [formIsOpen, setFormIsOpen] = useState(false)
-  const [isOpenLabelEditWindow, setIsOpenLabelEditWindow] = useState(false)
-  const [isOpenAddNewLabelWindow, setIsOpenAddNewLabelWindow] = useState(false)
-
+  const [isDescriptionFormOpen, setIsDescriptionFormOpen] = useState(false)
+  const [isLabelEditPopupOpen, setIsLabelEditPopupOpen] = useState(false)
+  const [isAddNewLabelPopupOpen, setIsAddNewLabelPopupOpen] = useState(false)
   const [currentLabelTitle, setCurrentLabelTitle] = useState('')
   const [currentLabelId, setCurrentLabelId] = useState('')
   const [currentLabelColor, setCurrentLabelColor] = useState('')
-
-  //triggers state
   const [labelsTrigger, setLabelsTrigger] = useState(false)
   const [dateTrigger, setDateTrigger] = useState(false)
   const [fileTrigger, setFileTrigger] = useState(false)
@@ -125,6 +117,8 @@ const CardModal: React.FC<CardModalProps> = ({
   const [selectedNameFiles, setSelectedNameFiles] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<boolean | null>(null)
+
+  const refModal = useRef(null)
 
   useEffect(() => {
     if (board) {
@@ -157,7 +151,7 @@ const CardModal: React.FC<CardModalProps> = ({
     updateBoard({
       _id: boardId
     })
-    setFormIsOpen(false)
+    setIsDescriptionFormOpen(false)
   }
 
   const handleChangeLabelTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -165,22 +159,15 @@ const CardModal: React.FC<CardModalProps> = ({
     if (e.target.id === 'label-title-add') setLabelTitle(e.target.value)
   }
 
-
-  const handleSaveLabelEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+  const handleSaveLabelEditing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     const newLabels = [...boardLabels]
-    const newCardLabels = [...labels]
 
     if (boardLabels) {
       const newLabelsBoardState = newLabels.map((label) => {
         if (label._id !== currentLabelId) return label;
         return { ...label, title: currentLabelTitle, color: currentLabelColor };
       });
-
-      // const newCardLabelState = newCardLabels.map((label) => {
-      //   if (label._id !== currentLabelId) return label;
-      //   return { ...label, title: currentLabelTitle, color: currentLabelColor };
-      // })
 
       cards?.map(card => {
         const newLabels = card.labels.map(label => {
@@ -200,7 +187,7 @@ const CardModal: React.FC<CardModalProps> = ({
         _id: boardId,
         labels: newLabelsBoardState
       })
-      setIsOpenLabelEditWindow(false)
+      setIsLabelEditPopupOpen(false)
     }
   }
 
@@ -211,23 +198,23 @@ const CardModal: React.FC<CardModalProps> = ({
       _id: boardId,
       labels: newLabels
     })
-    setIsOpenAddNewLabelWindow(false)
+    setIsAddNewLabelPopupOpen(false)
   }
 
   const handleCheckedLabel = (item: LabelsInterface) => {
-    const newCardLabels = [...labels]
+    const newCardLabels = [...cardLabels]
     const newLabel = { ...item, active: !item.active };
     const existLabel = newCardLabels.find((label: { _id: string; }) => label._id === newLabel._id)
 
     if (existLabel) {
-      const newStateLabels = [...labels].filter((label: { _id: string; }) => label._id !== existLabel._id)
+      const newStateLabels = [...cardLabels].filter((label: { _id: string; }) => label._id !== existLabel._id)
       setCardLabels(newStateLabels)
       updateCard({
         _id: _id,
         labels: newStateLabels
       })
     } else {
-      const newStateLabels = [...labels, newLabel]
+      const newStateLabels = [...cardLabels, newLabel]
       setCardLabels(newStateLabels)
       updateCard({
         _id: _id,
@@ -254,7 +241,7 @@ const CardModal: React.FC<CardModalProps> = ({
       _id: boardId,
       labels: newBoardLabelsState
     })
-    setIsOpenLabelEditWindow(false)
+    setIsLabelEditPopupOpen(false)
   }
 
   const handleGetCurrentEditLabel = (id: string) => {
@@ -265,14 +252,13 @@ const CardModal: React.FC<CardModalProps> = ({
     setCurrentLabelTitle(activeLabelTitle)
     setCurrentLabelColor(activeLabelColor)
     setCurrentLabelId(id)
-    // updateBoard({ _id: boardId })
   }
 
   const handleSaveDeadline = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     updateCard({
       _id: _id,
-      deadline: deadline
+      deadline: cardDeadline
     })
     updateBoard({ _id: boardId })
     setDateTrigger(false)
@@ -300,7 +286,7 @@ const CardModal: React.FC<CardModalProps> = ({
     })
   };
 
-  const handleUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadFiles = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { target: { files } } = e
     if (files !== null) {
       files?.length && setSelectedFiles(Array.from(files))
@@ -316,11 +302,11 @@ const CardModal: React.FC<CardModalProps> = ({
     [],
   );
 
-  const handleSubmitFile = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmitFiles = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-
     if (!selectedFiles.length) return;
     if (!uploadStatus) return;
+
     const formData = new FormData();
     formData.append('cardId', _id)
     for (let i = 0; i < selectedFiles.length; i++) {
@@ -406,31 +392,31 @@ const CardModal: React.FC<CardModalProps> = ({
     })
   }
 
-  useOnClickOutside(refWindow, setIsCardWindowOpen)
+  useOnClickOutside(refModal, setIsCardWindowOpen)
 
   return (
     <>
       <div className={styles.modal} onClick={setIsCardWindowOpen}></div>
-      <div ref={refWindow} className={styles.cardWindow}>
+      <div ref={refModal} className={styles.cardModal}>
         {
           cover && isFileImage(cover) ? (
-            <div className={styles.cardCover} >
+            <div className={styles.cardModalCover} >
               <img onClick={onClickHandler} src={cover} alt={cover} />
             </div>
           ) : null
         }
 
-        <div className={styles.closeWindowBtn}>
+        <div className={styles.closeModalBtn}>
           <IconButton onClick={setIsCardWindowOpen}><BsXLg /></IconButton>
         </div>
-        <div className={styles.cardWindowContent}>
-          <div className={styles.cardHeader}>
-            <div className={styles.cardHeaderText}>
+        <div className={styles.cardModalContainer}>
+          <div className={styles.cardModalHeader}>
+            <div className={styles.cardModalHeaderTextarea}>
               <TextareaAutosize
                 id='card-title'
                 autoFocus={false}
                 value={cardTitle}
-                className={styles.textareaTitle}
+                className={styles.cardModalTextareaTitle}
                 onChange={handleEditCardTitle}
                 onFocus={(e) => e.target.select()}
                 rows={20}
@@ -439,23 +425,24 @@ const CardModal: React.FC<CardModalProps> = ({
               <p>Na liscie: <strong>{nameList}</strong></p>
             </div>
           </div>
-          <div className={styles.cardContainer}>
-            <div className={styles.windowMain}>
-              <ItemsContainer data={labels} title={'Etykiety'}>
+          <div className={styles.cardModalContent}>
+            <div className={styles.cardModalMainContent}>
+              <Container data={cardLabels} title={'Etykiety'}>
                 {
-                  labels.map((label: { title: string; active: any; color: any; _id: string }) => (
+                  cardLabels.map((label: { title: string; active: any; color: any; _id: string }) => (
                     <div
                       key={label._id}
                       style={{ backgroundColor: `${label.color}` }}
-                      className={styles.label}
+                      className={styles.cardModalLabel}
                       onClick={() => setLabelsTrigger(true)}
                     >
                       <span>{label.title}</span>
                     </div>
                   ))
                 }
-              </ItemsContainer>
-              <ItemsContainer data={deadline} title={'Termin'}>
+              </Container>
+              <Container data={deadline} title={'Termin'}>
+                <>
                 {
                   deadline ? (
                     <>
@@ -465,13 +452,13 @@ const CardModal: React.FC<CardModalProps> = ({
                         onChange={handleChangeCompleted}
                         style={{ height: '100%', width: '1rem', marginRight: '8px' }} />
                       <button onClick={() => setDateTrigger(true)}
-                        className={styles.selectedDateBtn}>
+                        className={styles.cardModalSelectedDateBtn}>
                         <span>{dayjs(deadline).format('DD-MM-YYYY HH:mm')}</span>
                         {
                           dateIsSameOrBefore && !completed ? (
                             <span
                               title={cardDateDisplay.title}
-                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.datedateNotificationSpan}>
+                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
                               {cardDateDisplay.name}
                             </span>
                           ) : null
@@ -480,7 +467,7 @@ const CardModal: React.FC<CardModalProps> = ({
                           deadlineIsSoon && !completed ? (
                             <span
                               title={cardDateDisplay.title}
-                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.datedateNotificationSpan}>
+                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
                               {cardDateDisplay.name}
                             </span>
                           ) : null
@@ -489,46 +476,46 @@ const CardModal: React.FC<CardModalProps> = ({
                           completed ? (
                             <span
                               title={cardDateDisplay.title}
-                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.datedateNotificationSpan}>
+                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
                               {cardDateDisplay.name}
                             </span>
                           ) : null
                         }
-
                       </button>
                     </>
                   ) : null
                 }
-              </ItemsContainer>
-              <div className={styles.descriptionContainer}>
-                <div className={styles.descriptionHeader}>
+                </>
+              </Container>
+              <div className={styles.cardModalDescriptionContainer}>
+                <div className={styles.cardModalDescriptionHeader}>
                   <h4>Opis</h4>
                   <div style={{ maxWidth: '100px', marginLeft: '1rem' }}>
                     {
-                      !formIsOpen && cardDescription !== undefined && cardDescription !== '' ? (
-                        <TaskButton onClick={() => setFormIsOpen(true)} name={'Edytuj'} icon={<BsPencil />} />
+                      !isDescriptionFormOpen && cardDescription !== undefined && cardDescription !== '' ? (
+                        <TaskButton onClick={() => setIsDescriptionFormOpen(true)} name={'Edytuj'} icon={<BsPencil />} />
                       ) : null
                     }
                   </div>
                 </div>
                 {
-                  formIsOpen ?
+                  isDescriptionFormOpen ?
                     <TaskForm
                       id={'card-description'}
                       handleChange={handleEditCardDescription}
                       handleSubmit={handleSaveCardDescription}
-                      closeForm={() => { setFormIsOpen(false); setCardDescription(description) }}
+                      closeForm={() => { setIsDescriptionFormOpen(false); setCardDescription(description) }}
                       value={cardDescription}
                       onFocus={(e) => e.target.select()}
                       titleBtn={'Zapisz'}
                     /> :
                     <div>
-                      {cardDescription !== '' && cardDescription !== undefined ? <p onClick={() => setFormIsOpen(true)}>{cardDescription}</p> :
-                        <TaskButton onClick={() => setFormIsOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
+                      {cardDescription !== '' && cardDescription !== undefined ? <p onClick={() => setIsDescriptionFormOpen(true)}>{cardDescription}</p> :
+                        <TaskButton onClick={() => setIsDescriptionFormOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
                     </div>
                 }
               </div>
-              <ItemsContainer data={files} title={'Załącznik'}>
+              <Container data={files} title={'Załącznik'}>
                 <div className={styles.filesContainer}>
                   {
                     files?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
@@ -540,29 +527,29 @@ const CardModal: React.FC<CardModalProps> = ({
                         index={index}
                         src={`${file.fileUrl}`}
                         type={file.fileType}
-                        deleteFile={() => handleDeleteFile(file._id)}
-                        downloadFile={() => handleDownloadFile(file.fileUrl)}
-                        selectCover={() => handleSelectCover(index)}
+                        handleDeleteFile={() => handleDeleteFile(file._id)}
+                        handleDownloadFile={() => handleDownloadFile(file.fileUrl)}
+                        handleSelectCover={() => handleSelectCover(index)}
                       />
                     ))
                   }
                 </div>
-              </ItemsContainer>
+              </Container>
             </div>
-            <div className={styles.cardSidebar} >
+            <div className={styles.cardModalSidebar} >
               <Popup
-                title={isOpenLabelEditWindow ? 'Edytuj etykietę' : isOpenAddNewLabelWindow ? 'Dodaj Etykietę' : 'Etykiety'}
+                title={isLabelEditPopupOpen ? 'Edytuj etykietę' : isAddNewLabelPopupOpen ? 'Dodaj Etykietę' : 'Etykiety'}
                 trigger={labelsTrigger}
-                closePopup={() => { setLabelsTrigger(false); setIsOpenLabelEditWindow(false); setIsOpenAddNewLabelWindow(false) }}
-                isEditWindow={isOpenLabelEditWindow || isOpenAddNewLabelWindow}
-                backToMainWindow={() => { setIsOpenLabelEditWindow(false); setIsOpenAddNewLabelWindow(false) }}
+                closePopup={() => { setLabelsTrigger(false); setIsLabelEditPopupOpen(false); setIsAddNewLabelPopupOpen(false) }}
+                isEditWindow={isLabelEditPopupOpen || isAddNewLabelPopupOpen}
+                backToMainWindow={() => { setIsLabelEditPopupOpen(false); setIsAddNewLabelPopupOpen(false) }}
               >
-                <div className={styles.labels}>
+                <div className={styles.cardModalLabels}>
                   {
-                    !isOpenLabelEditWindow &&
-                      !isOpenAddNewLabelWindow ? (
+                    !isLabelEditPopupOpen &&
+                      !isAddNewLabelPopupOpen ? (
                       <>
-                        <div className={styles.labelsList}>
+                        <div className={styles.cardModalLabelsList}>
                           {
                             boardLabels.map((label: LabelsInterface) => (
                               <Label
@@ -572,24 +559,24 @@ const CardModal: React.FC<CardModalProps> = ({
                                 color={label.color}
                                 cardLabels={labels}
                                 openLabelEditWindow={() => {
-                                  setIsOpenLabelEditWindow(true)
+                                  setIsLabelEditPopupOpen(true)
                                   handleGetCurrentEditLabel(label._id)
                                 }}
-                                checkedLabel={() => handleCheckedLabel(label)}
+                                handleCheckedLabel={() => handleCheckedLabel(label)}
                               >
                               </Label>
                             ))
                           }
                         </div>
-                        <TaskButton onClick={() => setIsOpenAddNewLabelWindow(true)} name={'Utwórz nową etykietę'} />
+                        <TaskButton onClick={() => setIsAddNewLabelPopupOpen(true)} name={'Utwórz nową etykietę'} />
                       </>
                     ) : (
                       <LabelForm
-                        formId={isOpenLabelEditWindow ? 'label-title-edit' : isOpenAddNewLabelWindow ? 'label-title-add' : ''}
-                        handleChange={handleChangeLabelTitle}
-                        handleSubmit={isOpenLabelEditWindow ? handleSaveLabelEdit : isOpenAddNewLabelWindow ? handleAddNewLabel : () => console.log('label does not exist')}
-                        deleteLabel={handleDeleteLabel}
-                        value={isOpenLabelEditWindow ? currentLabelTitle : isOpenAddNewLabelWindow ? labelTitle : ''}
+                        formId={isLabelEditPopupOpen ? 'label-title-edit' : isAddNewLabelPopupOpen ? 'label-title-add' : ''}
+                        handleChangeTitle={handleChangeLabelTitle}
+                        handleChangeLabelTitle={isLabelEditPopupOpen ? handleSaveLabelEditing : isAddNewLabelPopupOpen ? handleAddNewLabel : () => console.log('label does not exist')}
+                        handleDeleteLabel={handleDeleteLabel}
+                        value={isLabelEditPopupOpen ? currentLabelTitle : isAddNewLabelPopupOpen ? labelTitle : ''}
                         onFocus={(e) => e.target.select()}
                         selectColor={currentLabelColor}
                         setSelectColor={setCurrentLabelColor}
@@ -635,11 +622,11 @@ const CardModal: React.FC<CardModalProps> = ({
                   size={0}
                   label={'załącznik'}
                   type={'file'}
-                  nameFiles={selectedNameFiles}
-                  handleInputState={handleUploadImage}
-                  handleSubmitFile={handleSubmitFile}
-                />{
-                  uploadProgress > 0 ? (
+                  listNames={selectedNameFiles}
+                  handleInputState={handleUploadFiles}
+                  handleSubmitFiles={handleSubmitFiles}
+                />
+                {uploadProgress > 0 ? (
                     <>
                       {
                         uploadStatus !== null && uploadStatus === true ? (
@@ -677,9 +664,7 @@ const CardModal: React.FC<CardModalProps> = ({
           </div>
         </div>
       </div>
-
     </>
-
   )
 }
 
