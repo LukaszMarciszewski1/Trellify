@@ -4,11 +4,11 @@
 https://print-control-m.netlify.app/
 
 ## Built With
-TypeScript
-React / Redux Toolkit
-MongoDB / Mongoose
-NodeJS, Express
-React beautiful dnd
+TypeScript,
+React / Redux Toolkit,
+MongoDB / Mongoose,
+NodeJS, Express,
+React beautiful dnd,
 Sass
 
 ## Demo Account Credentials
