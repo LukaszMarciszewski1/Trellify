@@ -10,12 +10,9 @@ import { IoLogoJavascript } from "react-icons/io";
 import { CgComponents } from "react-icons/cg";
 import { GrTask } from "react-icons/gr";
 
-import { labelItems } from '../../components/Tasks/localData'
 import { defaultBackground } from '../../components/Tasks/localData'
 
-import {
-  useCreateBoardMutation,
-} from '../../store/reducers/boardsReducer'
+import { useCreateBoardMutation } from '../../store/api/boards'
 
 const menuItems = [
   {
@@ -48,22 +45,17 @@ const menuItems = [
 const Sidebar: React.FC = () => {
   const [createBoard] = useCreateBoardMutation()
   const location = useLocation()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
-
+  const [isSidebarOpen, setISSidebarOpen] = useState(true)
 
   return (
-    <nav
-      // className={styles.container}
-      className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarHide : styles.sidebar}`}
-    >
+    <nav className={`${styles.sidebar} ${isSidebarOpen ? styles.sidebarHidden : styles.sidebar}`}>
       <button
-        className={`${styles.navButton} ${sidebarOpen ? styles.navButton : styles.navButtonHide}`}
-        onClick={() => setSidebarOpen((p) => !p)}>
+        className={`${styles.navButton} ${isSidebarOpen ? styles.navButton : styles.navButtonHidden}`}
+        onClick={() => setISSidebarOpen((p) => !p)}>
         <MdArrowForwardIos />
       </button>
       <div className={styles.logo} onClick={() => createBoard({
-        labels: labelItems,
+        labels: [],
         background: defaultBackground
       })}><IoLogoJavascript /></div>
       <ul className={styles.linksContainer}>
@@ -76,7 +68,7 @@ const Sidebar: React.FC = () => {
             >
               <div className={`${styles.navLink} ${location.pathname === item.path ? styles.active : styles.navLink}`}>
                 <div className={styles.icon}>{item.icon}</div>
-                <p>{!sidebarOpen ? item.name : null}</p>
+                <p>{!isSidebarOpen ? item.name : null}</p>
               </div>
             </Link>
           </li>

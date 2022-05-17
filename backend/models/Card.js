@@ -5,10 +5,7 @@ const CardSchema = mongoose.Schema(
   {
     title: String,
     description: String,
-    deadline: Date,
-    sourceIndex: Number,
-    destinationIndex: Number,
-    sortIndex: Number,
+    deadline: Date | null,
     listId: {
       type: Schema.Types.ObjectId,
       ref: 'List',
@@ -18,18 +15,24 @@ const CardSchema = mongoose.Schema(
       ref: 'Board',
     },
     completed: {
-      type: Number,
-      default: 0,
+      type: Boolean,
+      default: false,
     },
-    createdAt: {
-      type: Date,
-      default: new Date(),
-    },
-    updateDate: {
-      type: Date,
-      default: null,
-    },
-    position: Number,
+    // createdAt: {
+    //   type: Date,
+    //   default: new Date(),
+    // },
+    // updateDate: {
+    //   type: Date,
+    //   default: null,
+    // },
+    cover: String,
+    files: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'File',
+      },
+    ],
     labels: [
       {
         color: String,
@@ -42,10 +45,6 @@ const CardSchema = mongoose.Schema(
     timestamps: true,
   }
 )
-
-CardSchema.statics.updateOne = (id, data) => {
-  return Card.findByIdAndUpdate(id, data)
-}
 
 const Card = mongoose.model('Card', CardSchema)
 

@@ -1,11 +1,10 @@
 .button {
-  width: 100px;
   background-color: rgb(13, 97, 146);
   color: white;
-  padding: 0.6rem;
+  padding: 8px 12px;
   border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.05rem;
+  letter-spacing: 1px;
+  font-size: 14px;
   &:hover {
     background-color: darken(rgb(13, 97, 146), 5%);
   }

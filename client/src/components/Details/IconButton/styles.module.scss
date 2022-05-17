@@ -7,11 +7,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.3rem;
+  padding: 5px;
   border-radius: 3px;
   max-height: 100%;
-  margin: 0.2rem;
   &:hover {
-    background-color: #e4e4ec
+    background-color: #d8d8e0
   }
 }

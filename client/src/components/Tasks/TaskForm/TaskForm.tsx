@@ -1,40 +1,49 @@
-import React, { useRef } from 'react'
-import TextareaAutosize from 'react-textarea-autosize';
+import React from 'react'
 import styles from './styles.module.scss'
-
-import Button from '../../Details/Button/Button'
+import TextareaAutosize from 'react-textarea-autosize';
 import { BsXLg } from "react-icons/bs";
+import Button from '../../Details/Button/Button'
 import IconButton from '../../Details/IconButton/IconButton';
 
-type Props = {
+interface TaskFormProps {
   id: string
   handleSubmit: (value: any) => void
   handleChange: (value: any) => void
-  onFocus?: (value: any) => void
   closeForm: () => void
+  onFocus?: (value: any) => void
   onBlur?: () => void
-  value: string | undefined
+  value: string
+  titleBtn: string
 }
 
-const TaskForm: React.FC<Props> = ({ handleChange, handleSubmit, closeForm, value, id, onBlur, onFocus }) => {
+const TaskForm: React.FC<TaskFormProps> = ({ value, id, titleBtn, onBlur, onFocus, handleChange, handleSubmit, closeForm }) => {
   const placeholder = id === 'list' ? 'Dodaj listę zadań' : 'Dodaj nową kartę'
 
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
+    if (e.key === 'Enter' || e.code === "NumpadEnter") {
+      e.stopPropagation();
+      handleSubmit(e)
+    }
+  }
+
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form} >
       <TextareaAutosize
         id={id}
         maxRows={20}
         placeholder={placeholder}
         value={value}
         className={styles.textarea}
-        autoFocus
+        autoFocus={true}
         onChange={handleChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        required />
+        onKeyDown={onKeyDown}
+        required
+      />
       <div className={styles.actionsForm}>
-        <Button onClick={handleSubmit} title={'Dodaj'} />
-        <div style={{ marginRight: '1rem' }} />
+        <Button title={titleBtn} type={'submit'} onClick={handleSubmit} />
+        <div style={{ marginRight: '16px' }} />
         <IconButton onClick={closeForm}><BsXLg /></IconButton>
       </div>
     </form>

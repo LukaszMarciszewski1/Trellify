@@ -1,0 +1,55 @@
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.3rem;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 0.5rem;
+  resize: none;
+  margin-bottom: 10px;
+  background-color: #fcfcfc;
+  border-radius: 4px;
+  border: 1px solid grey;
+  &:focus {
+    outline: none;
+  }
+}
+
+.actionsForm {
+  display: flex;
+  margin-top: 12px;
+  overflow: hidden;
+  &:last-child {
+    margin-right: 1rem;
+  }
+}
+
+.reactColorful {
+  min-width: 100%;
+  max-height: 200px;;
+  width: auto;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(153, 153, 153, 0.404);
+}
+
+.pickerSwatches {
+  display: flex;
+  padding: 8px 0 0;
+  flex-wrap: wrap;
+}
+
+.pickerSwatch {
+  width: 24px;
+  height: 24px;
+  margin: 4px;
+  border: none;
+  padding: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}

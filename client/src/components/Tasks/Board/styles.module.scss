@@ -1,29 +1,29 @@
 .board {
   position: relative;
-  width: 100%;
+  min-width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
+  overflow-y: auto;
+  padding: 8px 32px 16px;
 }
 
 .container {
-  overflow-y: hidden;
-  display: flex;
-  flex-direction: row;
-  padding: 0.5rem 2rem 2rem;
-  flex-grow: 1;
-}
-.listContainer {
+  margin-top: 50px;
   display: flex;
 }
 
-.actionsForm {
+.listContainer {
+  display: flex;
+  height: 100%;
+}
+
+.formContainer {
   width: 250px;
   min-width: 250px;
 }
 
-.formContainer {
-  padding: 0.3rem;
+.addListForm {
+  padding: 5px;
   border-radius: 4px;
   background-color: #ebecf0;
   width: 100%;

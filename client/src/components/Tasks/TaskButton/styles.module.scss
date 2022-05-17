@@ -1,17 +1,15 @@
 .taskButton {
   width: 100%;
-  // position: relative;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  // min-width: 250px;
   padding: 0.6rem;
   background-color: #ebecf0;
   border-radius: 5px;
   transition: 0.1s;
   text-align: left;
   user-select: none;
-  margin: 3px 0;
+  margin: 4px 0;
   letter-spacing: 1px;
   .icon {
     margin-right: 0.5rem;
@@ -21,6 +19,6 @@
   }
 
   &:hover {
-    background-color: #dfdfe6
+    background-color: #d8d8e0
   }
 }

@@ -12,7 +12,7 @@ const BoardHeader: React.FC<BoardHeaderProps> = ({ name, onClick }) => {
   return (
     <div className={styles.container}>
       <div style={{ width: '130px' }}>
-        <TaskButton openForm={onClick} name={name} icon={<BsImage />} />
+        <TaskButton onClick={onClick} name={name} icon={<BsImage />} />
       </div>
     </div>
   )

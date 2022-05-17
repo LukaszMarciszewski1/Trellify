@@ -1,38 +1,36 @@
 @import '../../../scss/utils.scss';
 
-.container {
+.list {
   width: 272px;
-  // position: relative;
-  padding: 0.5rem 0.5rem 5px;
-  background-color: #ebecf0;
+  height: auto;
   display: flex;
   flex-direction: column;
-  margin-right: 1rem;
+  margin-right: 16px;
   border-radius: 5px;
+  background-color: #ebecf0;
   -webkit-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.15);
   box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.15);
   user-select: none;
-  overflow: hidden;
 }
 
 .listHeader {
   width: 100%;
-  height: auto;
+  position: relative;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-
-  // margin: 0.3rem 0;
+  padding: 5px;
 }
-.textWrapper {
+
+.textareaWrapper {
   box-sizing: border-box;
   justify-self: center;
   width: 220px;
   overflow-wrap: break-word;
   cursor: pointer;
   h2 {
-    padding: 0.3rem;
-    font-size: 0.9rem;
+    padding: 5px;
+    font-size: 14px;
     overflow-wrap: break-word;
     font-weight: bold;
     color: rgb(61, 61, 61);
@@ -41,18 +39,13 @@
   }
 }
 
-.cardsContainer {
-  padding-bottom: 0.5rem;
-}
-
 .textarea {
-  // box-sizing: border-box;
   width: 100%;
   resize: none;
   font-weight: bold;
   border-radius: 3px;
-  font-size: 0.9rem;
-  padding: 0.3rem;
+  font-size: 14px;
+  padding: 5px;
   margin: 0;
   background-color: transparent;
   border: none;
@@ -62,6 +55,45 @@
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
 }
-.actionsList {
+
+.cardsContainer {
+  padding: 1px 4px 0;
+  max-height: 680px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0 3px;
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+  &::-webkit-scrollbar:vertical {
+    width: 8px;
+    border-radius: 5px;
+    border: solid 3px transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: rgb(216, 216, 216);
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(187, 187, 187);
+    border-radius: 8px;
+    border: solid 3px transparent;
+  }
+}
+
+.addCardForm {
   width: 100%;
+  padding: 0 8px 4px;
+}
+
+.popupContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.divider {
+  margin: 8px 0;
+  border-bottom: 1px solid rgb(173, 173, 173);
 }

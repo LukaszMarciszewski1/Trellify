@@ -1,9 +1,12 @@
 @import '../../scss/utils.scss';
 .container {
-  height: 50px;
   width: 100%;
-  padding: 1rem;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16px;
   background-color: #ebecf0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.055);
-  z-index: 100;
+  z-index: 999;
 }

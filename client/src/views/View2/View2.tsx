@@ -4,7 +4,7 @@ const View2: React.FC = () => {
 
   return (
     <div>
-       Magayzn
+       Magazyn
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import express from 'express'
+import { upload } from '../helpers/filehelper.js'
 const router = express.Router()
 
 import {
@@ -7,16 +8,16 @@ import {
   createCard,
   deleteCard,
   updateCard,
-  deleteAllCardsOfList,
-  updateAllCards,
+  uploadFiles,
+  getFiles,
 } from '../controllers/cards.js'
 
 router.get('/', getCards)
 router.post('/', createCard)
 router.get('/:id', getCard)
 router.patch('/:id', updateCard)
-router.put('/', updateAllCards)
 router.delete('/:id', deleteCard)
-router.delete('/', deleteAllCardsOfList)
+router.post('/:id/files', upload.array('files'), uploadFiles)
+router.get('/:id/files', getFiles)
 
 export default router

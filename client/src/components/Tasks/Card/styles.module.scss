@@ -1,31 +1,55 @@
 @import '../../../scss/utils.scss';
+.container {
+  position: relative;
+}
 .card {
   position: relative;
   display: flex;
   align-items: flex-start;
   width: 100%;
-  margin-top: 8px;
+  margin-bottom: 8px;
   -webkit-box-shadow: $box-shadow;
   box-shadow: $box-shadow;
   background-color: #fcfcfc;
   border-radius: 3px;
   user-select: none;
+  overflow: hidden;
   cursor: pointer;
+  transition: 0.2s;
   &:hover {
-    background-color: #f8f8f8;
+    background-color: #f4f5f9;
   }
 }
 .cardContainer {
-  padding: 0.8rem;
-  max-width: 260px;
+  // padding: 6px;
+  max-width: 272px;
   flex-grow: 1;
   overflow-wrap: break-word;
   word-break: break-all;
+  position: relative;
+}
+
+.cardClickableArea {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.cardDetails {
+  padding: 6px;
+  p {
+    font-size: 14px;
+    color: rgb(109, 109, 109);
+    font-weight: medium;
+    overflow-wrap: break-word;
+  }
   span {
     font-size: 14px;
     color: rgb(24, 24, 24);
     font-weight: normal;
-    overflow-wrap: break-word;
   }
 }
 
@@ -41,6 +65,7 @@
   border: none;
   margin-right: 2rem;
   color: rgb(61, 61, 61);
+  z-index: 0;
 }
 
 .btnContainer {
@@ -49,12 +74,15 @@
   right: 3px;
   background-color: #f8f8f8d5;
   z-index: 100;
+  border-radius: 3px;
+  overflow: hidden;
 }
 
 .cardLabels {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  z-index: 0;
 }
 
 .cardLabel {
@@ -63,4 +91,91 @@
   border-radius: 5px;
   margin-right: 4px;
   margin-bottom: 4px;
+  z-index: 2;
+}
+
+.iconsContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.dateContainer {
+  display: 'inline-block';
+  border-radius: '3px';
+  margin-top: '5px';
+  position: 'absolute';
+  left: 0;
+  top: 0;
+  margin-right: 10px;
+  z-index: 2;
+}
+
+.dateBtn {
+  position: relative;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  padding: 4px 5px;
+  border-radius: 3px;
+  margin-right: 8px;
+  z-index: 2;
+  overflow: hidden;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #31313125;
+    transform: translateY(-100%);
+    z-index: -1;
+  }
+  &:hover::after {
+    transform: translateY(0);
+  }
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 14px;
+  color: grey;
+  z-index: 100;
+  margin-right: 10px;
+  span {
+    margin-left: 3px;
+  }
+}
+
+.cardCover {
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  background-color: rgb(206, 206, 206);
+  img {
+  }
+}
+
+.actionsContainer {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.actionsPopup {
+  user-select: none;
+  cursor: auto;
+  position: absolute;
+  right: -40px;
+  top: 15px;
+}
+.actionsPopupContent {
+  display: flex;
+  flex-direction: column;
+  // gap: 1px;
 }

@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   margin-top: 0.3rem;
-  // background-color: #e4e4e4;
 }
 
 .textarea {
@@ -18,7 +17,6 @@
   border: none;
   -webkit-box-shadow: $box-shadow;
   box-shadow: $box-shadow;
-
   &:focus {
     outline: none;
   }
@@ -26,6 +24,7 @@
 
 .actionsForm {
   display: flex;
+  align-items: center;
   margin-top: 0.5rem;
   overflow: hidden;
   &:last-child {
