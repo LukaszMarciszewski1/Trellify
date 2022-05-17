@@ -14,5 +14,5 @@ Sass
 Styled Components
 
 ## Demo Account Credentials
-Email:  baltazar@gmail.com
-Password:  baltazar
+Email:  `baltazar@gmail.com`
+Password:  `baltazar` 
