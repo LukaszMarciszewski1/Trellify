@@ -1,4 +1,5 @@
 import express from 'express'
+import { protect } from '../middlewares/authMiddleware.js'
 const router = express.Router()
 
 import {
@@ -6,13 +7,12 @@ import {
   getBoard,
   createBoard,
   updateBoard,
-
 } from '../controllers/boards.js'
 // import { getCards, getCard, createCard, deleteCard, updateCard} from '../controllers/cards.js'
 
-router.get('/', getBoards)
-router.get('/:id', getBoard)
-router.post('/', createBoard)
+router.get('/', protect, getBoards)
+router.get('/:id', protect, getBoard)
+router.post('/', protect, createBoard)
 router.patch('/:id', updateBoard)
 
 export default router

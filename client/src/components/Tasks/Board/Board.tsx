@@ -14,9 +14,12 @@ import List from '../List/List'
 import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import SideMenu from '../SideMenu/SideMenu';
+import { useParams } from 'react-router-dom';
 
 const Board: React.FC = () => {
   const boardId = '624f02f011fa05ce01907c07'
+  const {_id} = useParams()
+  console.log(_id)
   const { data: boardApi, error, isLoading } = useGetBoardQuery(boardId);
   const [addList] = useAddListMutation()
   const [updateList] = useUpdateListMutation()
@@ -219,5 +222,3 @@ const Board: React.FC = () => {
 }
 
 export default Board
-
-

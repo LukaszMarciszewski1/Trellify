@@ -59,7 +59,7 @@ const Card: React.FC<CardProps> = ({
   const [isDisplayEditIcon, setIsDisplayEditIcon] = useState(false)
   const [cardCompleted, setCardCompleted] = useState(completed)
   const [nowDate, setNowDate] = useState(Date.now())
-  const [cardCover, setCardCover] = useState(cover)
+  const [cardCover, setCardCover] = useState('')
   const [cardFileIndex, setCardFileIndex] = useState(0)
   const [cardFiles, setCardFiles] = useState([] as any)
 
@@ -78,6 +78,9 @@ const Card: React.FC<CardProps> = ({
       setCardFiles(files)
     }
   }, [files])
+  useEffect(() => {
+    setCardCover(cover)
+  },[])
 
   useEffect(() => {
     displayCover()

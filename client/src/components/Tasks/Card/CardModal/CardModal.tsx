@@ -111,6 +111,7 @@ const CardModal: React.FC<CardModalProps> = ({
   const [labelsTrigger, setLabelsTrigger] = useState(false)
   const [dateTrigger, setDateTrigger] = useState(false)
   const [fileTrigger, setFileTrigger] = useState(false)
+  const [valuationTrigger, setValuationTrigger] = useState(false)
   const [storageTrigger, setStorageTrigger] = useState(false)
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -375,9 +376,8 @@ const CardModal: React.FC<CardModalProps> = ({
   }
 
   const onClickHandler = () => {
-    // setSelected(id); 
-    // const newWindow = window.open(`${cardCover}`, "_blank", 'noopener,noreferrer');
-    // if (newWindow) newWindow.opener = null
+    const newWindow = window.open(`${cover}`, "_blank", 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null
   }
 
   const handleSelectCover = (index: number) => {
@@ -443,48 +443,48 @@ const CardModal: React.FC<CardModalProps> = ({
               </Container>
               <Container data={deadline} title={'Termin'}>
                 <>
-                {
-                  deadline ? (
-                    <>
-                      <input
-                        type="checkbox"
-                        checked={completed}
-                        onChange={handleChangeCompleted}
-                        style={{ height: '100%', width: '1rem', marginRight: '8px' }} />
-                      <button onClick={() => setDateTrigger(true)}
-                        className={styles.cardModalSelectedDateBtn}>
-                        <span>{dayjs(deadline).format('DD-MM-YYYY HH:mm')}</span>
-                        {
-                          dateIsSameOrBefore && !completed ? (
-                            <span
-                              title={cardDateDisplay.title}
-                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                              {cardDateDisplay.name}
-                            </span>
-                          ) : null
-                        }
-                        {
-                          deadlineIsSoon && !completed ? (
-                            <span
-                              title={cardDateDisplay.title}
-                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                              {cardDateDisplay.name}
-                            </span>
-                          ) : null
-                        }
-                        {
-                          completed ? (
-                            <span
-                              title={cardDateDisplay.title}
-                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                              {cardDateDisplay.name}
-                            </span>
-                          ) : null
-                        }
-                      </button>
-                    </>
-                  ) : null
-                }
+                  {
+                    deadline ? (
+                      <>
+                        <input
+                          type="checkbox"
+                          checked={completed}
+                          onChange={handleChangeCompleted}
+                          style={{ height: '100%', width: '1rem', marginRight: '8px' }} />
+                        <button onClick={() => setDateTrigger(true)}
+                          className={styles.cardModalSelectedDateBtn}>
+                          <span>{dayjs(deadline).format('DD-MM-YYYY HH:mm')}</span>
+                          {
+                            dateIsSameOrBefore && !completed ? (
+                              <span
+                                title={cardDateDisplay.title}
+                                style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
+                                {cardDateDisplay.name}
+                              </span>
+                            ) : null
+                          }
+                          {
+                            deadlineIsSoon && !completed ? (
+                              <span
+                                title={cardDateDisplay.title}
+                                style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
+                                {cardDateDisplay.name}
+                              </span>
+                            ) : null
+                          }
+                          {
+                            completed ? (
+                              <span
+                                title={cardDateDisplay.title}
+                                style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
+                                {cardDateDisplay.name}
+                              </span>
+                            ) : null
+                          }
+                        </button>
+                      </>
+                    ) : null
+                  }
                 </>
               </Container>
               <div className={styles.cardModalDescriptionContainer}>
@@ -586,7 +586,7 @@ const CardModal: React.FC<CardModalProps> = ({
                 </div>
               </Popup>
               <Popup
-                title={'data'}
+                title={'Data'}
                 trigger={dateTrigger}
                 closePopup={() => setDateTrigger(false)}
                 backToMainWindow={() => setDateTrigger(false)}
@@ -612,7 +612,7 @@ const CardModal: React.FC<CardModalProps> = ({
                 </div>
               </Popup>
               <Popup
-                title={'załącznik'}
+                title={'Załącznik'}
                 trigger={fileTrigger}
                 closePopup={() => setFileTrigger(false)}
                 backToMainWindow={() => setFileTrigger(false)}
@@ -627,23 +627,32 @@ const CardModal: React.FC<CardModalProps> = ({
                   handleSubmitFiles={handleSubmitFiles}
                 />
                 {uploadProgress > 0 ? (
-                    <>
-                      {
-                        uploadStatus !== null && uploadStatus === true ? (
-                          <div><ProgressLine percent={uploadProgress} strokeWidth={4} strokeColor="#D3D3D3" /><p>{uploadProgress}%</p></div>
-                        ) : null
-                      }
-                      {
-                        uploadStatus === false ?
-                          <p style={{ color: 'red' }}>Błąd przesyłania<small> (max 10mb, lub nieprawidłowy format pliku)</small></p>
-                          : null
-                      }
-                    </>
-                  ) : null
+                  <>
+                    {
+                      uploadStatus !== null && uploadStatus === true ? (
+                        <div><ProgressLine percent={uploadProgress} strokeWidth={4} strokeColor="#D3D3D3" /><p>{uploadProgress}%</p></div>
+                      ) : null
+                    }
+                    {
+                      uploadStatus === false ?
+                        <p style={{ color: 'red' }}>Błąd przesyłania<small> (max 10mb, lub nieprawidłowy format pliku)</small></p>
+                        : null
+                    }
+                  </>
+                ) : null
                 }
               </Popup>
               <Popup
-                title={'magazyn'}
+                title={'Dodaj wycenę'}
+                trigger={valuationTrigger}
+                closePopup={() => setValuationTrigger(false)}
+              >
+                <div>
+                  <p>In progress ...</p>
+                </div>
+              </Popup>
+              <Popup
+                title={'Magazyn'}
                 trigger={storageTrigger}
                 closePopup={() => setStorageTrigger(false)}
               >
@@ -654,7 +663,8 @@ const CardModal: React.FC<CardModalProps> = ({
               <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
               <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
               <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />
-              <TaskButton onClick={() => setStorageTrigger(true)} name={'Marazyn'} icon={<BiTask />} />
+              <TaskButton onClick={() => setValuationTrigger(true)} name={'Dodaj wycenę'} icon={<BiTask />} />
+              <TaskButton onClick={() => setStorageTrigger(true)} name={'Magazyn'} icon={<BiTask />} />
               <div className={styles.divider}></div>
               <TaskButton onClick={() => {
                 deleteCard(_id);

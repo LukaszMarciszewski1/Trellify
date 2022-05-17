@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './styles.module.scss'
 import Sidebar from './Sidebar/Sidebar'
 import Appbar from './Appbar/Appbar'
+import { Outlet } from 'react-router-dom';
 
 const Layout: React.FC = ({ children }) => {
   return (
@@ -12,7 +13,7 @@ const Layout: React.FC = ({ children }) => {
       <div className={styles.content}>
         <Sidebar />
         <div className={styles.pagesContainer}>
-          {children}
+          <Outlet />
         </div>
       </div>
     </div>

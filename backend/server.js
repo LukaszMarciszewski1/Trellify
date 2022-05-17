@@ -4,12 +4,14 @@ import helmet from 'helmet'
 import cors from 'cors'
 import fileUpload from 'express-fileupload'
 import path from 'path'
-import { connectDB, getDB } from './config/mongoose.js'
+import { connectDB } from './config/mongoose.js'
 
 import boardRoutes from './routes/boards.js'
 import listRoutes from './routes/lists.js'
 import cardRouters from './routes/cards.js'
 import filesRouters from './routes/files.js'
+import usersRouters from './routes/users.js'
+import { errorHandler, notFound } from './middlewares/errorHandler .js'
 
 dotenv.config()
 const app = express()
@@ -30,10 +32,12 @@ app.use('/boards', boardRoutes)
 app.use('/lists', listRoutes)
 app.use('/cards', cardRouters)
 app.use('/files', filesRouters)
+app.use('/users', usersRouters)
+app.use(errorHandler)
+app.use(notFound)
 
 app.get('/', (req, res) => {
   res.end('Hello world!')
-  const dbInstance = getDB()
 })
 
 app.listen(process.env.PORT, () => {
