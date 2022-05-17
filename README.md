@@ -1,4 +1,4 @@
-# Application is in progress
+# App is in progress
 
 ## Demo
 https://print-control-m.netlify.app/
