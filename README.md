@@ -1,9 +1,9 @@
 # Application is in progress
 
-##Demo
+## Demo
 https://print-control-m.netlify.app/
 
-##Built With
+## Built With
 TypeScript
 React / Redux
 MongoDB / Mongoose
@@ -13,6 +13,6 @@ React beautiful dnd
 Sass
 Styled Components
 
-##Demo Account Credentials
+## Demo Account Credentials
 Email:  baltazar@gmail.com
 Password:  baltazar
