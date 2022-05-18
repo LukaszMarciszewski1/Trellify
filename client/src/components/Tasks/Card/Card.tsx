@@ -248,18 +248,6 @@ const Card: React.FC<CardProps> = ({
                     </div>
                   </div>
                 </div>
-                <div className={styles.btnContainer}>
-                  {
-                    isDisplayEditIcon ? (
-                      <IconButton onClick={() => {
-
-                        setIsDragDisabled(true)
-                      }}>
-                        <RiDeleteBin6Line />
-                      </IconButton>) : null
-                  }
-                </div>
-
               </div>
             </div>
           )}
