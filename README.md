@@ -13,6 +13,7 @@ React / Redux Toolkit,
 MongoDB / Mongoose,
 NodeJS, Express,
 React beautiful dnd,
+AWS S3
 Sass
 
 ## Demo Account Credentials
