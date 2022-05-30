@@ -7,6 +7,10 @@
 ## Demo
 https://print-control-m.netlify.app/
 
+## Demo Account Credentials
+Email:  `baltazar@gmail.com`
+Password:  `baltazar` 
+
 ## Built With
 TypeScript,
 React / Redux Toolkit,
@@ -14,8 +18,4 @@ MongoDB / Mongoose,
 NodeJS, Express,
 React beautiful dnd,
 AWS S3,
-Sass
-
-## Demo Account Credentials
-Email:  `baltazar@gmail.com`
-Password:  `baltazar` 
+Scss
