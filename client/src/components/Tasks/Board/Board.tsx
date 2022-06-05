@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './styles.module.scss'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
-import {useGetBoardQuery, useUpdateBoardMutation} from '../../../store/api/boards'
-import {useAddListMutation, useUpdateListMutation} from "../../../store/api/lists";
-import {useUpdateCardMutation} from "../../../store/api/cards";
+import { useGetBoardQuery, useUpdateBoardMutation } from '../../../store/api/boards'
+import { useAddListMutation, useUpdateListMutation, listsApi } from '../../../store/api/lists';
+import { useUpdateCardMutation } from "../../../store/api/cards";
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import { GoPlus } from "react-icons/go";
 import { defaultBackground } from '../localData';
@@ -14,37 +14,33 @@ import List from '../List/List'
 import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import SideMenu from '../SideMenu/SideMenu';
-import { useParams } from 'react-router-dom';
 
-const Board: React.FC = () => {
-  const boardId = '624f02f011fa05ce01907c07'
-  const {_id} = useParams()
-  console.log(_id)
-  const { data: boardApi, error, isLoading } = useGetBoardQuery(boardId);
+const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: backgroundApi }) => {
+  // const { data: board } = useGetBoardQuery(_id);
   const [addList] = useAddListMutation()
   const [updateList] = useUpdateListMutation()
   const [updateCard] = useUpdateCardMutation()
   const [updateBoard] = useUpdateBoardMutation()
 
-  const [backgroundUrl, setBackgroundUrl] = useState('')
+  const [background, setBackground] = useState('')
   const [listTitle, setListTitle] = useState('');
   const [isOpenForm, setIsOpenForm] = useState(false)
   const [isOpenSideMenu, setIsOpenSideMenu] = useState(false)
-  const [board, setBoard] = useState<BoardResponse>({} as BoardResponse)
+  // const [board, setBoard] = useState<BoardResponse>({} as BoardResponse)
   const [lists, setLists] = useState<ListResponse[]>([] as ListResponse[])
   const formRef = useRef(null)
-  
+
   const closeForm = () => { setIsOpenForm(false); setListTitle('') }
   useOnClickOutside(formRef, closeForm)
 
   useEffect(() => {
-    if (boardApi) {
-      const boardBG = boardApi.background === '' ? defaultBackground : boardApi.background
-      setBoard(boardApi)
-      setLists(boardApi.lists)
-      setBackgroundUrl(boardBG)
+    if (listsApi) {
+      const boardBG = !backgroundApi ? defaultBackground : backgroundApi
+      // setBoard(boardApi)
+      setLists(listsApi)
+      setBackground(boardBG)
     }
-  }, [boardApi])
+  }, [listsApi, backgroundApi])
 
   const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     if (e.target.id === 'list') setListTitle(e.target.value)
@@ -55,10 +51,10 @@ const Board: React.FC = () => {
     if (listTitle.length === 0) return
     addList({
       title: listTitle,
-      boardId: boardId,
+      boardId: _id,
     })
     updateBoard({
-      _id: boardId,
+      _id: _id,
     })
     setListTitle('')
     setIsOpenForm(false)
@@ -67,7 +63,7 @@ const Board: React.FC = () => {
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type, draggableId } = result
     const newLists = [...lists]
-    if (!board) return
+    // if (!board) return
     if (!destination) return
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
 
@@ -77,7 +73,7 @@ const Board: React.FC = () => {
 
       setLists(newLists)
       updateBoard({
-        _id: boardId,
+        _id: _id,
         lists: newLists
       })
     }
@@ -150,15 +146,15 @@ const Board: React.FC = () => {
   }
 
   const boardBackgroundStyle = {
-    backgroundColor: backgroundUrl,
-    backgroundImage: `url(${backgroundUrl})`,
+    backgroundColor: background,
+    backgroundImage: `url(${background})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'
   }
 
-  if (isLoading) return <h2>Loading...</h2>
-  if (error) return <h2>Brak połączenia</h2>
+  // if (isLoading) return <h2>Loading...</h2>
+  // if (error) return <h2>Brak połączenia</h2>
 
   return (
     <div className={styles.board}
@@ -172,8 +168,8 @@ const Board: React.FC = () => {
         {
           isOpenSideMenu ?
             <SideMenu
-              boardId={boardId}
-              setBackgroundUrl={setBackgroundUrl}
+              boardId={_id}
+              setBackgroundUrl={setBackground}
               handleCloseMenu={() => setIsOpenSideMenu(false)}
             /> : null
         }

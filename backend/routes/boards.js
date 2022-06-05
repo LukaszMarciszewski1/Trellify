@@ -8,11 +8,15 @@ import {
   createBoard,
   updateBoard,
 } from '../controllers/boards.js'
-// import { getCards, getCard, createCard, deleteCard, updateCard} from '../controllers/cards.js'
 
 router.get('/', protect, getBoards)
 router.get('/:id', protect, getBoard)
 router.post('/', protect, createBoard)
-router.patch('/:id', updateBoard)
+router.patch('/:id', protect, updateBoard)
+
+// router.get('/', getBoards)
+// router.get('/:id', getBoard)
+// router.post('/', createBoard)
+// router.patch('/:id', updateBoard)
 
 export default router

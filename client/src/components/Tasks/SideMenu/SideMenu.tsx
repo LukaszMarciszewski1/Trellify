@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
-import { presetColors, defaultBackground, defaultColor } from '../localData'
-import getImages from '../../../api/unsplashApi'
+import { presetColors, defaultBgIcon, defaultColorIcon } from '../localData'
+import getImages from '../../../store/api/unsplashApi'
 import { useUpdateBoardMutation } from '../../../store/api/boards'
 import { BsXLg } from "react-icons/bs"
 import IconButton from '../../Details/IconButton/IconButton'
@@ -40,7 +40,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ handleCloseMenu, setBackgroundUrl, 
             setOptionsColors(false)
           }}
           style={{
-            backgroundImage: `url(${defaultBackground})`,
+            backgroundImage: `url(${defaultBgIcon})`,
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
           }}><p>Zdjęcia</p></div>
@@ -50,7 +50,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ handleCloseMenu, setBackgroundUrl, 
             setOptionsColors(true)
           }}
           style={{
-            backgroundImage: `url(${defaultColor})`,
+            backgroundImage: `url(${defaultColorIcon})`,
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
           }}

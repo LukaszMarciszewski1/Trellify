@@ -28,7 +28,7 @@ import { GrAttachment } from 'react-icons/gr';
 import IconButton from '../../Details/IconButton/IconButton';
 import TaskButton from '../TaskButton/TaskButton';
 import useHover from '../../../hooks/useHover'
-import { isFileImage } from '../../../hooks/isFileImage'
+import { isFileImage } from '../../../hooks/useIsFileImage'
 import { Card as CardModel } from '../../../models/card'
 import { Labels as LabelsInterface } from '../../../models/labels'
 
@@ -80,7 +80,7 @@ const Card: React.FC<CardProps> = ({
   }, [files])
   useEffect(() => {
     setCardCover(cover)
-  },[])
+  }, [])
 
   useEffect(() => {
     displayCover()

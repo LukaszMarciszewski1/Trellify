@@ -1,6 +1,6 @@
-import React  from 'react'
+import React from 'react'
 import styles from './styles.module.scss'
-import { isFileImage } from '../../../../../../hooks/isFileImage'
+import { isFileImage } from '../../../../../../hooks/useIsFileImage'
 import TaskButton from '../../../../TaskButton/TaskButton'
 interface FileProps {
   title: string
@@ -15,7 +15,7 @@ interface FileProps {
 }
 
 const Files: React.FC<FileProps> = ({ created, title, src, type, index, active, handleDeleteFile, handleDownloadFile, handleSelectCover }) => {
-const fileExtension = type.split('/').pop();
+  const fileExtension = type.split('/').pop();
 
   return (
     <div className={styles.container} >

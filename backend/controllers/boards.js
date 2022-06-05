@@ -8,6 +8,16 @@ const router = express.Router()
 export const getBoards = async (req, res) => {
   try {
     const boards = await Board.find({ user: req.user._id })
+    .populate({
+      path: 'lists',
+      populate: {
+        path: 'cards',
+        populate: {
+          path: 'files',
+        },
+      },
+    })
+    .exec()
     res.status(200).json(boards)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -18,16 +28,16 @@ export const getBoard = async (req, res) => {
   const { id } = req.params
   try {
     const board = await Board.findById(id)
-      .populate({
-        path: 'lists',
-        populate: {
-          path: 'cards',
-          populate: {
-            path: 'files',
-          },
-        },
-      })
-      .exec()
+      // .populate({
+      //   path: 'lists',
+      //   populate: {
+      //     path: 'cards',
+      //     populate: {
+      //       path: 'files',
+      //     },
+      //   },
+      // })
+      // .exec()
     res.status(200).json(board)
   } catch (error) {
     res.status(404).json({ message: error.message })

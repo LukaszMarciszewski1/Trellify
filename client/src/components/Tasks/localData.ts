@@ -1,5 +1,10 @@
-export const defaultBackground = "https://images.unsplash.com/photo-1501785888041-af3ef285b470?crop=entropy&cs=srgb&fm=jpg&ixid=MnwzMDMxMTR8MHwxfHNlYXJjaHw2fHxM";
-export const defaultColor = "https://images.pexels.com/photos/226589/pexels-photo-226589.jpeg?cs=srgb&dl=closeup-photo-of-multi-color-stick-226589.jpg&fm=jpg"
+import defaultImg from '../../assets/defaultImg.jpg'
+import defaultColors from '../../assets/defaultColors.jpg'
+import defaultBg from '../../assets/defaultBackground.jpg'
+
+export const defaultBgIcon = defaultImg
+export const defaultColorIcon = defaultColors
+export const defaultBackground = defaultBg
 export const presetColors = [
   '#FB8B24',
   '#9575cd',
@@ -15,4 +20,4 @@ export const presetColors = [
   '#FFDAB9',
   '#3f3c3c',
   '#e1e1e1',
-];
+]

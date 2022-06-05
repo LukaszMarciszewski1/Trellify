@@ -7,7 +7,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import TaskForm from '../../TaskForm/TaskForm'
 import IconButton from '../../../Details/IconButton/IconButton';
 import useOnClickOutside from '../../../../hooks/useOnClickOutside'
-import { isFileImage } from '../../../../hooks/isFileImage'
+import { isFileImage } from '../../../../hooks/useIsFileImage'
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { BsXLg } from 'react-icons/bs';
@@ -363,8 +363,8 @@ const CardModal: React.FC<CardModalProps> = ({
     }
   }
 
-  const handleDownloadFile = (fileUrl: string) => {
-    axios.get(`${fileUrl}`, {
+  const handleDownloadFile = async (fileUrl: string) => {
+    await axios.get(`${fileUrl}`, {
       responseType: 'blob',
     }).then((res) => {
       let filename = fileUrl.replace(/^.*[\\\/]/, '')

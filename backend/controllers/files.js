@@ -36,10 +36,6 @@ export const getFiles = async (req, res, next) => {
   const { id } = req.params
   try {
     let files = await Card.findById(id)
-      // .populate({
-      //   path: 'files',
-      // })
-      // .exec()
     res.status(200).send(files)
   } catch (error) {
     res.status(400).send(error.message)
@@ -51,12 +47,16 @@ export const downloadFiles = async (req, res, next) => {
   try {
     const files = await File.find()
     const currentFile = files.find(
-      (file) => mongoose.Types.ObjectId(file.cardId).toString() === id
+      (file) => mongoose.Types.ObjectId(file._id).toString() === id
     )
-    await File.findByIdAndRemove(currentFile)
-    console.log(currentFile)
-
-    res.status(200).send(files)
+    await File.findByIdAndRemove(id)
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: currentFile.fileKey,
+    }
+    deleteFileS3(params)
+    
+    res.status(200).send('Files Download Successfully')
   } catch (error) {
     res.status(400).send(error.message)
   }

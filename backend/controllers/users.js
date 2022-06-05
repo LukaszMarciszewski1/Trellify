@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import asyncHandler from 'express-async-handler'
 import User from '../models/User.js'
 import generateToken from '../utils/generateToken.js';
+import Board from '../models/Board.js'
 
 export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -46,6 +47,7 @@ if (user) {
     isAdmin: user.isAdmin,
     token: generateToken(user._id),
   });
+  await new Board({ user: user._id}).save()
 } else {
   res.status(400);
   throw new Error("User not found");
