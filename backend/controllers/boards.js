@@ -1,9 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import List from '../models/List.js'
-import Card from '../models/Card.js'
 import Board from '../models/Board.js'
-const { Schema } = mongoose
+
 const router = express.Router()
 export const getBoards = async (req, res) => {
   try {
@@ -28,16 +26,6 @@ export const getBoard = async (req, res) => {
   const { id } = req.params
   try {
     const board = await Board.findById(id)
-      // .populate({
-      //   path: 'lists',
-      //   populate: {
-      //     path: 'cards',
-      //     populate: {
-      //       path: 'files',
-      //     },
-      //   },
-      // })
-      // .exec()
     res.status(200).json(board)
   } catch (error) {
     res.status(404).json({ message: error.message })

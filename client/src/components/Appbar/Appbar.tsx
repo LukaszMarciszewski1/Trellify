@@ -12,7 +12,10 @@ const Appbar: React.FC = () => {
     <div className={styles.container}>
       <Button
         title={'Wyloguj'}
-        onClick={()=>localStorage.removeItem('token')}
+        onClick={() => {
+          localStorage.removeItem('token')
+          navigate("/login")
+        }}
         type={'button'} />
     </div>
   )
