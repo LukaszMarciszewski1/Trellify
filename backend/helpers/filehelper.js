@@ -23,8 +23,18 @@ const storage = multerS3({
   },
 })
 
-export const deleteFileS3 = function (params) {
+export const deleteFileS3 =  (params) => {
   s3.deleteObject(params, function (err, data) {
+    if (err) {
+      console.log(err, err.stack)
+    } else {
+      console.log(data)
+    }
+  })
+}
+
+export const downloadFileS3 = (params) => {
+  s3.getObject(params, function (err, data) {
     if (err) {
       console.log(err, err.stack)
     } else {

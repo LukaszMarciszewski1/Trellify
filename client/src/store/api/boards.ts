@@ -5,7 +5,16 @@ type BoardResponse = Board[]
 
 export const boardApi = createApi({
   reducerPath: 'boardApi',
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }),
+  baseQuery: fetchBaseQuery({ 
+    baseUrl: process.env.REACT_APP_API_URL,
+    prepareHeaders: (headers) => {
+      const {token} = JSON.parse(localStorage.getItem('token') || '{}');
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`)
+      }
+      return headers
+    },
+  }),
   tagTypes: ['Board'],
   endpoints: (builder) => ({
     getAllBoards: builder.query<BoardResponse, void>({
@@ -13,7 +22,11 @@ export const boardApi = createApi({
       providesTags: ['Board'],
     }),
     getBoard: builder.query<Board, string>({
-      query: (id) => `boards/${id}`,
+      query: (id) => {
+        return {
+          url: `boards/${id}`,
+        }
+      },
       providesTags: ['Board'],
     }),
     createBoard: builder.mutation<Board, Partial<Board>>({

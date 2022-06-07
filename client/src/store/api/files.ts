@@ -24,13 +24,17 @@ export const filesApi = createApi({
       }),
       invalidatesTags: ['Files'],
     }),
-    deleteFile: builder.mutation<
-      { success: boolean; id: string | number },
-      string
-    >({
+    deleteFile: builder.mutation<{ success: boolean; id: string | number },string>({
       query: (id) => ({
         url: `files/${id}`,
         method: 'DELETE',
+      }),
+      invalidatesTags: ['Files'],
+    }),
+    downloadFile: builder.mutation<{ success: boolean; id: string | number },string>({
+      query: (id) => ({
+        url: `files/${id}`,
+        method: 'GET',
       }),
       invalidatesTags: ['Files'],
     }),
@@ -42,4 +46,5 @@ export const {
   useGetFileQuery,
   useUploadFileMutation,
   useDeleteFileMutation,
+  useDownloadFileMutation,
 } = filesApi

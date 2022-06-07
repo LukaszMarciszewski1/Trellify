@@ -81,11 +81,9 @@ export const updateList = async (req, res) => {
 }
 
 export const deleteAllCardsOfList = async (req, res) => {
-  const { cardId } = req.body
   const { id } = req.params
   try {
     await Card.deleteMany({ listId: id })
-    // await File.deleteMany({ cardId: cardId })
     res.json({ message: 'Cards deleted successfully.' })
   } catch (error) {
     res.status(404).json({ message: error.message })

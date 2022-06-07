@@ -2,7 +2,6 @@ import dotenv from 'dotenv'
 import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
-import fileUpload from 'express-fileupload'
 import path from 'path'
 import { connectDB } from './config/mongoose.js'
 

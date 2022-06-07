@@ -3,8 +3,10 @@ import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './styles.module.scss'
 import Loading from '../../../components/Details/Loading/Loading'
+import { useCreateBoardMutation } from '../../../store/api/boards'
 
 const Signup = () => {
+
   // const [data, setData] = useState({
   //   firstName: '',
   //   lastName: '',
@@ -64,7 +66,6 @@ const Signup = () => {
           },
           config
         )
-        console.log(res.message)
         navigate('/login')
         setLoading(false)
       } catch (error: any) {
@@ -78,6 +79,7 @@ const Signup = () => {
       }
       setLoading(false)
     };
+
   }
 
   return (

@@ -4,7 +4,7 @@ import Card from '../models/Card.js'
 import File from '../models/File.js'
 import fs from 'fs'
 import dotenv from 'dotenv'
-import { deleteFileS3 } from '../helpers/filehelper.js'
+import { deleteFileS3, downloadFileS3 } from '../helpers/filehelper.js'
 
 dotenv.config()
 const router = express.Router()
@@ -36,26 +36,6 @@ export const getFiles = async (req, res, next) => {
   const { id } = req.params
   try {
     let files = await Card.findById(id)
-      // .populate({
-      //   path: 'files',
-      // })
-      // .exec()
-    res.status(200).send(files)
-  } catch (error) {
-    res.status(400).send(error.message)
-  }
-}
-
-export const downloadFiles = async (req, res, next) => {
-  const { id } = req.params
-  try {
-    const files = await File.find()
-    const currentFile = files.find(
-      (file) => mongoose.Types.ObjectId(file.cardId).toString() === id
-    )
-    await File.findByIdAndRemove(currentFile)
-    console.log(currentFile)
-
     res.status(200).send(files)
   } catch (error) {
     res.status(400).send(error.message)
@@ -77,6 +57,25 @@ export const deleteFile = async (req, res, next) => {
     deleteFileS3(params)
     
     res.status(200).send('Files Delete Successfully')
+  } catch (error) {
+    res.status(400).send(error.message)
+  }
+}
+
+export const downloadFile = async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const files = await File.find()
+    const currentFile = files.find(
+      (file) => mongoose.Types.ObjectId(file._id).toString() === id
+    )
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: currentFile.fileUrl,
+    }
+    downloadFileS3(params)
+    
+    res.status(200).send('File Download Successfully')
   } catch (error) {
     res.status(400).send(error.message)
   }

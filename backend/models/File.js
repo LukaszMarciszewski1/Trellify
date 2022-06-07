@@ -7,22 +7,10 @@ const FileSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Card',
     },
-    fileName: {
-      type: String,
-      // required: true,
-    },
-    filePath: {
-      type: String,
-      // required: true,
-    },
-    fileType: {
-      type: String,
-      // required: true,
-    },
-    fileSize: {
-      type: String,
-      // required: true,
-    },
+    fileName: String,
+    filePath: String,
+    fileType: String,
+    fileSize: String,
     fileUrl: String,
     fileKey: String
   },
