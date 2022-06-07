@@ -13,16 +13,13 @@ import './App.scss';
 
 const App: React.FC = () => {
 
-  // const user = localStorage.getItem("token");
-  const user = true
+  const user = localStorage.getItem("token");
 
   return (
     <BrowserRouter>
       <Routes>
         {user && <Route element={<Layout />}>
-          {/* <Route path="/boards/:_id" element={<TasksPage />} /> */}
-          <Route path="/" element={<Navigate replace to="/board" />} />
-          <Route path="/board" element={<TasksPage />} />
+          <Route path="/" element={<TasksPage />} />
           <Route path='/calculator' element={<Calculator />} />
           <Route path='/View-2' element={<View2 />} />
           <Route path='/View-3' element={<View3 />} />

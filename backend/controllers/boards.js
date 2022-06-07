@@ -33,8 +33,6 @@ export const getBoard = async (req, res) => {
 }
 
 export const createBoard = async (req, res) => {
-  const {title, user, background} = req.body
-  const board = req.body
   try {
     const newBoard = await new Board({ user: req.user._id}).save()
     res.status(201).json(newBoard)
