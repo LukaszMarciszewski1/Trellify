@@ -1,6 +1,6 @@
 import React from 'react'
 
-const View4: React.FC = () => {
+const Information: React.FC = () => {
 
   return (
     <div>
@@ -9,4 +9,4 @@ const View4: React.FC = () => {
   )
 }
 
-export default View4
+export default Information

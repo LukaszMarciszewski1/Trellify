@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import Layout from './components/Layout';
 import TasksPage from './views/TasksPage/TasksPage';
-import View2 from './views/View2/View2';
-import View3 from './views/View3/View3';
-import View4 from './views/View4/View4';
+import Storage from './views/Storage/Storage';
+import Statistics from './views/Statistics/Statistics';
+import Information from './views/Information/Information';
 import Calculator from './views/Calculator/Calculator';
 import Login from './views/Auth/Login/Login';
 import Signup from './views/Auth/Signup/Signup';
@@ -21,9 +21,9 @@ const App: React.FC = () => {
         {user && <Route element={<Layout />}>
           <Route path="/" element={<TasksPage />} />
           <Route path='/calculator' element={<Calculator />} />
-          <Route path='/View-2' element={<View2 />} />
-          <Route path='/View-3' element={<View3 />} />
-          <Route path='/View-4' element={<View4 />} />
+          <Route path='/storage' element={<Storage />} />
+          <Route path='/statistics' element={<Statistics />} />
+          <Route path='/information' element={<Information />} />
         </Route>}
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />

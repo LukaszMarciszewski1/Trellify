@@ -1,6 +1,6 @@
 import React from 'react'
 
-const View2: React.FC = () => {
+const Storage: React.FC = () => {
 
   return (
     <div>
@@ -9,4 +9,4 @@ const View2: React.FC = () => {
   )
 }
 
-export default View2
+export default Storage

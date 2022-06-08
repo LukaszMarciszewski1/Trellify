@@ -3,40 +3,8 @@ import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './styles.module.scss'
 import Loading from '../../../components/Details/Loading/Loading'
-import { useCreateBoardMutation } from '../../../store/api/boards'
 
 const Signup = () => {
-
-  // const [data, setData] = useState({
-  //   firstName: '',
-  //   lastName: '',
-  //   email: '',
-  //   password: '',
-  // })
-  // const [error, setError] = useState('')
-  // const navigate = useNavigate()
-
-  // const handleChange = ({ currentTarget: input }) => {
-  //   setData({ ...data, [input.name]: input.value })
-  // }
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault()
-  //   try {
-  //     const url = 'http://localhost:5000/api/users'
-  //     const { data: res } = await axios.post(url, data)
-  //     navigate('/login')
-  //     console.log(res.message)
-  //   } catch (error) {
-  //     if (
-  //       error.response &&
-  //       error.response.status >= 400 &&
-  //       error.response.status <= 500
-  //     ) {
-  //       setError(error.response.data.message)
-  //     }
-  //   }
-  // }
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -94,7 +62,7 @@ const Signup = () => {
           </Link>
         </div>
         <div className={styles.right}>
-        {loading ? <Loading /> : null}
+          {loading ? <Loading /> : null}
           <form className={styles.form_container} onSubmit={handleSubmit}>
             <h1>Utwórz konto</h1>
             <input
@@ -124,7 +92,7 @@ const Signup = () => {
               required
               className={styles.input}
             />
-                        <input
+            <input
               type='password'
               placeholder='Powtórz hasło'
               name='confirm-password'

@@ -44,7 +44,6 @@ export const createCard = async (req, res) => {
 
 export const updateCard = async (req, res) => {
   const { id } = req.params
-
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(404).send(`No card with id: ${id}`)
     const updateCard = await Card.findByIdAndUpdate(id, req.body, { new: true })

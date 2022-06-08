@@ -1,47 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
-import Axios from 'axios'
 import Loading from '../../../components/Details/Loading/Loading'
 
 const Login = () => {
   const [data, setData] = useState({ email: '', password: '' })
-  // const [error, setError] = useState('')
-
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<false | string>(false)
   const [loading, setLoading] = useState(false)
-
-  // const handleChange = ({ currentTarget: input }) => {
-  //   setData({ ...data, [input.name]: input.value })
-  // }
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault()
-  //   try {
-  //     const url = 'http://localhost:5000/api/auth'
-  //     const { data: res } = await axios.post(url, data)
-  //     localStorage.setItem('token', res.data)
-  //     window.location = '/'
-  //   } catch (error) {
-  //     if (
-  //       error.response &&
-  //       error.response.status >= 400 &&
-  //       error.response.status <= 500
-  //     ) {
-  //       setError(error.response.data.message)
-  //     }
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   const userInfo = localStorage.getItem('userInfo')
-  //   if (userInfo) {
-  //     history.push('/')
-  //   }
-  // }, [history])
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -77,7 +45,6 @@ const Login = () => {
         <div className={styles.left}>
           {loading ? <Loading /> : null}
           <form className={styles.form_container} onSubmit={handleSubmit}>
-            {/* <h1>Login to Your Account</h1> */}
             <h1>Zaloguj się</h1>
             <input
               type='email'

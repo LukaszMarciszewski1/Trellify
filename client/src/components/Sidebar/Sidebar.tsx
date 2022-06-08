@@ -26,18 +26,18 @@ const menuItems = [
     icon: <CgCalculator />
   },
   {
-    name: 'Materiały',
-    path: '/View-2',
+    name: 'Magazyn',
+    path: '/storage',
     icon: <CgComponents />
   },
   {
-    name: 'Dostawcy',
-    path: '/View-3',
+    name: 'Statystyki',
+    path: '/statistics',
     icon: <GiDeliveryDrone />
   },
   {
-    name: 'Informacje',
-    path: '/View-4',
+    name: 'informacje',
+    path: '/information',
     icon: <AiOutlineInfoCircle />
   },
 ]
@@ -54,10 +54,7 @@ const Sidebar: React.FC = () => {
         onClick={() => setISSidebarOpen((p) => !p)}>
         <MdArrowForwardIos />
       </button>
-      <div className={styles.logo} onClick={() => createBoard({
-        labels: [],
-        background: defaultBackground
-      })}><IoLogoJavascript /></div>
+      <div className={styles.logo}><IoLogoJavascript /></div>
       <ul className={styles.linksContainer}>
         {menuItems.map((item) => (
           <li key={item.name}

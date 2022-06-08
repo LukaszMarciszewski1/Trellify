@@ -18,7 +18,6 @@ import TaskForm from '../TaskForm/TaskForm';
 import TaskButton from '../TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton'
 import Popup from '../../Details/Popup/Popup';
-import useCallback from 'react';
 interface PropsList extends ListInterface {
   index: number
 }
@@ -76,7 +75,6 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
     updateBoard({ _id: boardId })
     setPopupTrigger(false)
   }
-  // useCallback()
 
   const handleDeleteList = () => {
     deleteList(_id)

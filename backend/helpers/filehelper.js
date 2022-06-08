@@ -61,31 +61,3 @@ export const upload = multer({
   fileFilter,
   limits: { fileSize: 10000000, files: 10 },
 })
-
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'uploads')
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname)
-//   },
-// })
-
-// const fileFilter = (req, file, cb) => {
-//   if (
-//     !file.originalname.match(/\.(jpeg|jpg|png|webp|pdf|doc|docx|xlsx|xls)$/)
-//   ) {
-//     return cb(
-//       new Error(
-//         'only upload files with jpg, jpeg, png, webp, pdf, doc, docx, xslx, xls format.'
-//       )
-//     )
-//   }
-//   cb(null, true)
-// }
-
-// export const upload = multer({
-//   storage,
-//   fileFilter,
-//   limits: { fileSize: 1000000000, files: 10 },
-// })
