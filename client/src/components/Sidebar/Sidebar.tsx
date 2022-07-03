@@ -17,7 +17,7 @@ import { useCreateBoardMutation } from '../../store/api/boards'
 const menuItems = [
   {
     name: 'Zadania',
-    path: '/',
+    path: '/board',
     icon: <GrTask />
   },
   {
@@ -26,18 +26,18 @@ const menuItems = [
     icon: <CgCalculator />
   },
   {
-    name: 'Materiały',
-    path: '/View-2',
+    name: 'Magazyn',
+    path: '/storage',
     icon: <CgComponents />
   },
   {
-    name: 'Dostawcy',
-    path: '/View-3',
+    name: 'Statystyki',
+    path: '/statistics',
     icon: <GiDeliveryDrone />
   },
   {
     name: 'Informacje',
-    path: '/View-4',
+    path: '/information',
     icon: <AiOutlineInfoCircle />
   },
 ]

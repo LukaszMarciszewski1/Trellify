@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './styles.module.scss'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
-import { useGetBoardQuery, useUpdateBoardMutation } from '../../../store/api/boards'
-import { useAddListMutation, useUpdateListMutation, listsApi } from '../../../store/api/lists';
+import {  useUpdateBoardMutation } from '../../../store/api/boards'
+import { useAddListMutation, useUpdateListMutation } from '../../../store/api/lists';
 import { useUpdateCardMutation } from "../../../store/api/cards";
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import { GoPlus } from "react-icons/go";

@@ -13,5 +13,9 @@ router.get('/', protect, getBoards)
 router.get('/:id', protect, getBoard)
 router.post('/', protect, createBoard)
 router.patch('/:id', protect, updateBoard)
+// router.get('/',getBoards)
+// router.get('/:id', getBoard)
+// router.post('/', createBoard)
+// router.patch('/:id', updateBoard)
 
 export default router

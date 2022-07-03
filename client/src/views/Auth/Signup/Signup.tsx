@@ -1,92 +1,78 @@
-import { useState } from 'react'
-import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link  } from 'react-router-dom'
 import styles from './styles.module.scss'
+import { useAuth } from '../../../hooks/useAuth'
+import { useForm } from 'react-hook-form';
+import { User } from '../../../models/user'
 import Loading from '../../../components/Details/Loading/Loading'
-import { useCreateBoardMutation } from '../../../store/api/boards'
+import Input from '../../../components/Details/Input/Input'
+import ErrorMessage from '../../../components/Details/Messages/ErrorMessage';
 
-const Signup = () => {
+const validation = {
+  name: {
+    required: true,
+    maxLength: 20,
+    minLength: 2,
+  },
+  email: {
+    required: true,
+    pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  },
+  password: {
+    required: true,
+    pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+  }
+}
 
-  // const [data, setData] = useState({
-  //   firstName: '',
-  //   lastName: '',
-  //   email: '',
-  //   password: '',
-  // })
-  // const [error, setError] = useState('')
-  // const navigate = useNavigate()
+const SignUp = () => {
+  const { loading, signUp } = useAuth()
 
-  // const handleChange = ({ currentTarget: input }) => {
-  //   setData({ ...data, [input.name]: input.value })
-  // }
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<User>();
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault()
-  //   try {
-  //     const url = 'http://localhost:5000/api/users'
-  //     const { data: res } = await axios.post(url, data)
-  //     navigate('/login')
-  //     console.log(res.message)
-  //   } catch (error) {
-  //     if (
-  //       error.response &&
-  //       error.response.status >= 400 &&
-  //       error.response.status <= 500
-  //     ) {
-  //       setError(error.response.data.message)
-  //     }
-  //   }
-  // }
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const nameErrors = (type: any) => {
+    switch (type) {
+      case 'required':
+        return <ErrorMessage message={'Imię jest wymagane'} />
+      case 'minLength'  :
+        return <ErrorMessage message={'Imię musi zawierać conajmiej 2 znaki'} />
+      case 'maxLength': 
+        return <ErrorMessage message={'Imię może zawierać maksymalnie 20 znaków'} />  
+      default: 
+        return null
+    }
+  }
 
-  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const url = `${process.env.REACT_APP_API_URL}users`
-    if (password !== confirmPassword) {
-      console.log("Passwords do not match");
-    } else {
-      try {
-        const config = {
-          headers: {
-            'Content-type': 'application/json',
-          },
-        }
-        setLoading(true)
-        const { data: res } = await axios.post(url,
-          {
-            name,
-            email,
-            password,
-          },
-          config
-        )
-        navigate('/login')
-        setLoading(false)
-      } catch (error: any) {
-        if (
-          error.response &&
-          error.response.status >= 400 &&
-          error.response.status <= 500
-        ) {
-          setError(error.response.data.message)
-        }
-      }
-      setLoading(false)
-    };
+  const emailErrors = (type: any) => {
+    switch (type) {
+      case 'required':
+        return <ErrorMessage message={'Email jest wymagany'} />
+      case 'pattern'  :
+        return <ErrorMessage message={'Email jest niepoprawny'} /> 
+      default: 
+        return null
+    }
+  }
 
+  const passwordErrors = (type: any) => {
+    switch (type) {
+      case 'required':
+        return <ErrorMessage message={'Hasło jest wymagane'} />
+      case 'pattern'  :
+        return <ErrorMessage message={'Hasło musi zawierać: co najmniej 8 znaków, 1 cyfrę, 1 małą literę i 1 wielką literę'} /> 
+      default: 
+        return null
+    }
   }
 
   return (
     <div className={styles.signup_container}>
       <div className={styles.signup_form_container}>
         <div className={styles.left}>
-          <h1>Witaj ponownie</h1><br />
+          <h1>Zaloguj się</h1><br />
           <Link to='/login'>
             <button type='button' className={styles.white_btn}>
               Logowanie
@@ -94,46 +80,44 @@ const Signup = () => {
           </Link>
         </div>
         <div className={styles.right}>
-        {loading ? <Loading /> : null}
-          <form className={styles.form_container} onSubmit={handleSubmit}>
+          {loading ? <Loading /> : null}
+          <form className={styles.form_container} onSubmit={handleSubmit(signUp)}>
             <h1>Utwórz konto</h1>
-            <input
-              type='text'
-              placeholder='Imię'
-              name='firstName'
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              required
-              className={styles.input}
+            <Input
+              id={'name'}
+              placeholder={'Imię'}
+              label={'Imię'}
+              type="text"
+              error={errors.name}
+              {...register("name", { ...validation.name })}
             />
-            <input
-              type='email'
-              placeholder='Email'
-              name='email'
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              required
-              className={styles.input}
+            {nameErrors(errors.name?.type)}
+            <Input
+              id={'email'}
+              placeholder={'email'}
+              label={'Email'}
+              type="text"
+              {...register("email", { ...validation.email })}
             />
-            <input
-              type='password'
-              placeholder='Hasło'
-              name='password'
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              required
-              className={styles.input}
+            {emailErrors(errors.email?.type)}
+            <Input
+              id={'password'}
+              placeholder={'password'}
+              label={'Password'}
+              type="password"
+              {...register("password", { ...validation.password })}
             />
-                        <input
-              type='password'
-              placeholder='Powtórz hasło'
-              name='confirm-password'
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              value={confirmPassword}
-              required
-              className={styles.input}
+            {passwordErrors(errors.password?.type)}
+            <Input
+              id={'confirm_password'}
+              placeholder={'confirm password'}
+              label={'Confirm Password'}
+              type="password"
+              {...register("confirm_password", {
+                required: true, validate: (val: string) => val === watch('password')
+              })}
             />
-            {error && <div className={styles.error_msg}>{error}</div>}
+            {errors.confirm_password && <ErrorMessage message={'Wpisz poprawne hasło'} />}
             <button type='submit' className={styles.green_btn}>
               Rejestracja
             </button>
@@ -144,4 +128,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default SignUp

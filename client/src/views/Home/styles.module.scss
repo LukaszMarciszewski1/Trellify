@@ -1,4 +1,6 @@
-@import '../scss/utils.scss';
+@import '../../scss/utils.scss';
+
+$height: $appbarHeight;
 
 .layout {
   width: 100%;
@@ -8,19 +10,14 @@
   flex-direction: column;
 }
 
-.appbar {
-  height: 50px;
-}
-
-.content {
+.container {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 50px);
   display: flex;
-  height: calc(100% - $appbarHeight);
 }
 
 .pagesContainer {
   width: 100%;
-  overflow: hidden;
   height: 100%;
+  overflow: hidden;
 }

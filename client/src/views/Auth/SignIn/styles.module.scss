@@ -1,3 +1,5 @@
+@import '../../../scss/utils.scss';
+
 .login_container {
   position: fixed;
   left: 0;
@@ -10,13 +12,15 @@
   justify-content: center;
 }
 
-.login_form_container {
+.login_formContainer {
   width: 900px;
   height: 500px;
   display: flex;
   justify-content: center;
   border-radius: 10px;
-  // box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+  -webkit-box-shadow: 0px 5px 31px -16px rgba(137, 140, 160, 0.6);
+  -moz-box-shadow: 0px 5px 31px -16px rgba(137, 140, 160, 0.6);
+  box-shadow: 0px 5px 31px -16px rgba(137, 140, 160, 0.6);
   // 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
 }
 
@@ -42,8 +46,6 @@
     margin-bottom: 12px;
   }
 }
-
-
 
 .input {
   outline: none;
@@ -102,5 +104,5 @@
   background-color: #3bb19b;
   background-color: rgb(13, 97, 146);
   color: white;
-  margin: 10px;
+  margin: 24px;
 }

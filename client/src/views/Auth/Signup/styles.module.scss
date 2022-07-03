@@ -1,3 +1,5 @@
+@import '../../../scss/utils.scss';
+
 .signup_container {
 	position: fixed;
   left: 0;
@@ -12,7 +14,7 @@
 
 .signup_form_container {
 	width: 900px;
-	height: 500px;
+	height: 550px;
 	display: flex;
 	border-radius: 10px;
 	// box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
@@ -103,5 +105,5 @@
 	background-color: #3bb19b;
 	background-color: rgb(13, 97, 146);
 	color: white;
-	margin: 10px;
+	margin: 24px;
 }

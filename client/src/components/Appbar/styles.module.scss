@@ -9,4 +9,13 @@
   background-color: #ebecf0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.055);
   z-index: 999;
+  height: $appbarHeight;
+}
+
+.userActionBtn{
+  width: 35px;
+  height: 35px;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
 }

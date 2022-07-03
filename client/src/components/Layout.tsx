@@ -1,15 +1,13 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import Sidebar from './Sidebar/Sidebar'
-import Appbar from './Appbar/Appbar'
+import AppBar from './AppBar/AppBar'
 import { Outlet } from 'react-router-dom';
 
-const Layout: React.FC = ({ children }) => {
+const Layout: React.FC = () => {
   return (
     <div className={styles.layout}>
-      <div className={styles.appbar}>
-        <Appbar />
-      </div>
+        <AppBar />
       <div className={styles.content}>
         <Sidebar />
         <div className={styles.pagesContainer}>

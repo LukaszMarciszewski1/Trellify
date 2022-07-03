@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import Board from '../../components/Tasks/Board/Board';
-import { useGetAllBoardsQuery, useGetBoardQuery } from '../../store/api/boards';
-import { Board as BoardResponse } from '../../models/board'
-import Loading from '../../components/Details/Loading/Loading';
+import Board from '../../../components/Tasks/Board/Board';
+import { useGetAllBoardsQuery, useGetBoardQuery } from '../../../store/api/boards';
+import { Board as BoardResponse } from '../../../models/board'
+import Loading from '../../../components/Details/Loading/Loading';
 import { useParams } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
 

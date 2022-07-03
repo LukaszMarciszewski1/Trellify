@@ -8,7 +8,7 @@ export const boardApi = createApi({
   baseQuery: fetchBaseQuery({ 
     baseUrl: process.env.REACT_APP_API_URL,
     prepareHeaders: (headers) => {
-      const {token} = JSON.parse(localStorage.getItem('token') || '{}');
+      const {token} = JSON.parse(localStorage.getItem('user') || '{}');
       if (token) {
         headers.set('authorization', `Bearer ${token}`)
       }

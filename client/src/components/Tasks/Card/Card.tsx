@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
-// import TextareaAutosize from 'react-textarea-autosize';
+import React, { useState, useEffect, useRef } from 'react'
 import styles from './styles.module.scss'
 import { Draggable } from 'react-beautiful-dnd';
 
@@ -14,24 +13,17 @@ import {
   useUpdateBoardMutation,
 } from '../../../store/api/boards'
 import {
-  useDeleteCardMutation,
   useUpdateCardMutation,
 } from "../../../store/api/cards";
 
-import { MdOutlineLabel } from 'react-icons/md';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 import { GrTextAlignFull } from 'react-icons/gr';
 import { BsStopwatch } from 'react-icons/bs';
 import { ImCheckboxUnchecked } from 'react-icons/im';
 import { ImCheckboxChecked } from 'react-icons/im';
 import { GrAttachment } from 'react-icons/gr';
-import IconButton from '../../Details/IconButton/IconButton';
-import TaskButton from '../TaskButton/TaskButton';
 import useHover from '../../../hooks/useHover'
 import { isFileImage } from '../../../hooks/useIsFileImage'
 import { Card as CardModel } from '../../../models/card'
-import { Labels as LabelsInterface } from '../../../models/labels'
-
 export interface CardProps extends CardModel {
   index: number
   setIsDragDisabled: (value: boolean) => void
@@ -56,7 +48,7 @@ const Card: React.FC<CardProps> = ({
   const [updateBoard] = useUpdateBoardMutation()
 
   const [isCardModalOpen, setIsCardModalOpen] = useState<boolean>(false)
-  const [isDisplayEditIcon, setIsDisplayEditIcon] = useState(false)
+  const [, setIsDisplayEditIcon] = useState(false)
   const [cardCompleted, setCardCompleted] = useState(completed)
   const [nowDate, setNowDate] = useState(Date.now())
   const [cardCover, setCardCover] = useState('')
@@ -78,9 +70,10 @@ const Card: React.FC<CardProps> = ({
       setCardFiles(files)
     }
   }, [files])
+  
   useEffect(() => {
     setCardCover(cover)
-  }, [])
+  }, [cover])
 
   useEffect(() => {
     displayCover()
