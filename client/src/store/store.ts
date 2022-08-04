@@ -3,7 +3,6 @@ import { boardApi } from './api/boards'
 import { listsApi } from './api/lists'
 import { cardsApi } from './api/cards'
 import { filesApi } from './api/files'
-import {authApi} from './api/user'
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +10,6 @@ export const store = configureStore({
     [listsApi.reducerPath]: listsApi.reducer,
     [cardsApi.reducerPath]: cardsApi.reducer,
     [filesApi.reducerPath]: filesApi.reducer,
-    [authApi.reducerPath]: authApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -19,7 +17,6 @@ export const store = configureStore({
       listsApi.middleware,
       cardsApi.middleware,
       filesApi.middleware,
-      authApi.middleware,
     ),
 })
 

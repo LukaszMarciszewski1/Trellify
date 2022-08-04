@@ -14,9 +14,9 @@ import List from '../List/List'
 import TaskButton from '../TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import SideMenu from '../SideMenu/SideMenu';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: backgroundApi }) => {
-  // const { data: board } = useGetBoardQuery(_id);
   const [addList] = useAddListMutation()
   const [updateList] = useUpdateListMutation()
   const [updateCard] = useUpdateCardMutation()
@@ -26,7 +26,6 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: back
   const [listTitle, setListTitle] = useState('');
   const [isOpenForm, setIsOpenForm] = useState(false)
   const [isOpenSideMenu, setIsOpenSideMenu] = useState(false)
-  // const [board, setBoard] = useState<BoardResponse>({} as BoardResponse)
   const [lists, setLists] = useState<ListResponse[]>([] as ListResponse[])
   const formRef = useRef(null)
 
@@ -36,7 +35,6 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: back
   useEffect(() => {
     if (listsApi) {
       const boardBG = !backgroundApi ? defaultBackground : backgroundApi
-      // setBoard(boardApi)
       setLists(listsApi)
       setBackground(boardBG)
     }
@@ -63,7 +61,6 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: back
   const onDragEnd = (result: DropResult) => {
     const { destination, source, type, draggableId } = result
     const newLists = [...lists]
-    // if (!board) return
     if (!destination) return
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
 
@@ -152,9 +149,6 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: back
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'
   }
-
-  // if (isLoading) return <h2>Loading...</h2>
-  // if (error) return <h2>Brak połączenia</h2>
 
   return (
     <div className={styles.board}

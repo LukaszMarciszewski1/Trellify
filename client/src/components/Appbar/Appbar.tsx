@@ -1,22 +1,23 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import Button from '../Details/Button/Button'
-import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import Popup from '../Details/Popup/Popup'
+import logoSrc from '../../assets/img/logo.svg'
 
 const AppBar: React.FC = () => {
-  let navigate = useNavigate()
   const { user, signOut } = useAuth()
   const [popupTrigger, setPopupTrigger] = useState(false)
-
-  const sygnature = user?.name.charAt(0)
+  const signature = user ? user.name.charAt(0) : ''
 
   return (
     <div className={styles.container}>
+      <div className={styles.logoContainer}>
+        <img src={logoSrc} />
+      </div>
       <div className={styles.userAction}>
         <button onClick={() => setPopupTrigger(true)} className={styles.userActionBtn}>
-          <h3>{sygnature}</h3>
+          <h3>{signature}</h3>
         </button>
         <Popup
           title={'Konto'}
@@ -27,14 +28,18 @@ const AppBar: React.FC = () => {
           top={'55px'}
           right={'5px'}
         >
-          <div className={styles.userActionBtn}>{sygnature}</div>
+          <div className={styles.userInfo}>
+            <div className={styles.userSignature}><h3>{signature}</h3></div>
+            <div>
+              <p>{user?.name}</p>
+              <span>{user?.email}</span>
+            </div>
+          </div>
           <Button
             title={'Wyloguj'}
-            onClick={() => {
-              navigate("/login")
-              signOut()
-            }}
-            type={'button'} />
+            onClick={signOut}
+            type={'button'} 
+          />
         </Popup>
       </div>
     </div>

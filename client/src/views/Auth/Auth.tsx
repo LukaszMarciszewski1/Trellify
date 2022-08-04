@@ -1,15 +1,20 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import SignIn from './SignIn/SignIn';
 import SignUp from './SignUp/SignUp';
+import { useAuth } from '../../hooks/useAuth'
+import Layout from '../../components/Layout';
 
 const Auth = () => {
-
+  const { user } = useAuth()
+  console.log(user)
   return (
     <Routes>
-      <Route path="/login" element={<SignIn />} />
-      <Route path="/register" element={<SignUp />} />
-      <Route path="/" element={<Navigate replace to="/login" />} />
+      <Route element={<Layout />} >
+        <Route path='/logowanie' element={<SignIn />} />
+        <Route path='/rejestracja' element={<SignUp />} />
+        <Route path='/' element={<Navigate replace to='/logowanie' />} />
+      </Route>
     </Routes>
   )
 }

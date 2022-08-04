@@ -16,12 +16,12 @@ const Home: React.FC = () => {
   return (
     <Routes>
       <Route element={<Layout />} >
-        <Route path="/board" element={<Tasks />} />
-        <Route path='/calculator' element={<Calculator />} />
-        <Route path='/storage' element={<Storage />} />
-        <Route path='/statistics' element={<Statistics />} />
-        <Route path='/information' element={<Information />} />
-        <Route path="/" element={<Navigate replace to="/board" />} />
+        <Route path="/zadania" element={<Tasks />} />
+        <Route path='/magazyn' element={<Storage />} />
+        <Route path='/kalkulator' element={<Calculator />} />
+        <Route path='/statystyki' element={<Statistics />} />
+        <Route path='/informacje' element={<Information />} />
+        <Route path="/" element={<Navigate replace to="/zadania" />} />
       </Route>
     </Routes>
   )

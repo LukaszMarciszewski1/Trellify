@@ -1,4 +1,4 @@
-import { Link  } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
 import { useAuth } from '../../../hooks/useAuth'
 import { useForm } from 'react-hook-form';
@@ -37,11 +37,11 @@ const SignUp = () => {
     switch (type) {
       case 'required':
         return <ErrorMessage message={'Imię jest wymagane'} />
-      case 'minLength'  :
+      case 'minLength':
         return <ErrorMessage message={'Imię musi zawierać conajmiej 2 znaki'} />
-      case 'maxLength': 
-        return <ErrorMessage message={'Imię może zawierać maksymalnie 20 znaków'} />  
-      default: 
+      case 'maxLength':
+        return <ErrorMessage message={'Imię może zawierać maksymalnie 20 znaków'} />
+      default:
         return null
     }
   }
@@ -50,9 +50,9 @@ const SignUp = () => {
     switch (type) {
       case 'required':
         return <ErrorMessage message={'Email jest wymagany'} />
-      case 'pattern'  :
-        return <ErrorMessage message={'Email jest niepoprawny'} /> 
-      default: 
+      case 'pattern':
+        return <ErrorMessage message={'Email jest niepoprawny'} />
+      default:
         return null
     }
   }
@@ -61,68 +61,66 @@ const SignUp = () => {
     switch (type) {
       case 'required':
         return <ErrorMessage message={'Hasło jest wymagane'} />
-      case 'pattern'  :
-        return <ErrorMessage message={'Hasło musi zawierać: co najmniej 8 znaków, 1 cyfrę, 1 małą literę i 1 wielką literę'} /> 
-      default: 
+      case 'pattern':
+        return <ErrorMessage message={'Hasło musi zawierać: co najmniej 8 znaków, 1 cyfrę, 1 małą literę i 1 wielką literę'} />
+      default:
         return null
     }
   }
 
   return (
-    <div className={styles.signup_container}>
-      <div className={styles.signup_form_container}>
-        <div className={styles.left}>
-          <h1>Zaloguj się</h1><br />
-          <Link to='/login'>
-            <button type='button' className={styles.white_btn}>
-              Logowanie
-            </button>
-          </Link>
-        </div>
-        <div className={styles.right}>
-          {loading ? <Loading /> : null}
-          <form className={styles.form_container} onSubmit={handleSubmit(signUp)}>
-            <h1>Utwórz konto</h1>
-            <Input
-              id={'name'}
-              placeholder={'Imię'}
-              label={'Imię'}
-              type="text"
-              error={errors.name}
-              {...register("name", { ...validation.name })}
-            />
-            {nameErrors(errors.name?.type)}
-            <Input
-              id={'email'}
-              placeholder={'email'}
-              label={'Email'}
-              type="text"
-              {...register("email", { ...validation.email })}
-            />
-            {emailErrors(errors.email?.type)}
-            <Input
-              id={'password'}
-              placeholder={'password'}
-              label={'Password'}
-              type="password"
-              {...register("password", { ...validation.password })}
-            />
-            {passwordErrors(errors.password?.type)}
-            <Input
-              id={'confirm_password'}
-              placeholder={'confirm password'}
-              label={'Confirm Password'}
-              type="password"
-              {...register("confirm_password", {
-                required: true, validate: (val: string) => val === watch('password')
-              })}
-            />
-            {errors.confirm_password && <ErrorMessage message={'Wpisz poprawne hasło'} />}
-            <button type='submit' className={styles.green_btn}>
-              Rejestracja
-            </button>
-          </form>
-        </div>
+    <div className={styles.signup_formContainer}>
+      <div className={styles.left}>
+        <h1>Zaloguj się</h1><br />
+        <Link to='/logowanie'>
+          <button type='button' className={styles.white_btn}>
+            Logowanie
+          </button>
+        </Link>
+      </div>
+      <div className={styles.right}>
+        {loading ? <Loading /> : null}
+        <form className={styles.form_container} onSubmit={handleSubmit(signUp)}>
+          <h1>Utwórz konto</h1>
+          <Input
+            id={'name'}
+            placeholder={'Imię'}
+            label={'Imię'}
+            type="text"
+            error={errors.name}
+            {...register("name", { ...validation.name })}
+          />
+          {nameErrors(errors.name?.type)}
+          <Input
+            id={'email'}
+            placeholder={'email'}
+            label={'Email'}
+            type="text"
+            {...register("email", { ...validation.email })}
+          />
+          {emailErrors(errors.email?.type)}
+          <Input
+            id={'password'}
+            placeholder={'password'}
+            label={'Password'}
+            type="password"
+            {...register("password", { ...validation.password })}
+          />
+          {passwordErrors(errors.password?.type)}
+          <Input
+            id={'confirm_password'}
+            placeholder={'confirm password'}
+            label={'Confirm Password'}
+            type="password"
+            {...register("confirm_password", {
+              required: true, validate: (val: string) => val === watch('password')
+            })}
+          />
+          {errors.confirm_password && <ErrorMessage message={'Wpisz poprawne hasło'} />}
+          <button type='submit' className={styles.green_btn}>
+            Rejestracja
+          </button>
+        </form>
       </div>
     </div>
   )

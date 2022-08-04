@@ -1,12 +1,15 @@
 //colors
 $white: white;
+$grey: #b3b3b3;
 $dark-grey: #262626;
 $light-grey: #F7F8FA;
 $dark: #000;
 $orange: #e08e33;
 $red: #d25e49;
+$blue: rgb(13, 97, 146);
 $box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.3);
 $appbarHeight: 50px;
+$divider: 1px solid rgb(212, 212, 212);
 
 //breakpoints
 $breakpoints: (
@@ -27,6 +30,12 @@ $breakpoints: (
   } @else {
     @error '"#{$breakpoint}" - error';
   }
+}
+
+@mixin centerFlex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 

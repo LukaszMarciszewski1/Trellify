@@ -139,6 +139,8 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                   setPopupTrigger(false)
                   setIsDragDisabled(false)
                 }}
+                top={'30px'}
+                right={'-30px'}
               >
                 <div className={styles.popupContent}>
                   <TaskButton

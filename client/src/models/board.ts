@@ -3,7 +3,7 @@ import { Labels } from './labels'
 
 export interface Board {
   _id: string
-  // user: string
+  user?: string
   background: string
   lists: List[]
   labels?: Labels[]
