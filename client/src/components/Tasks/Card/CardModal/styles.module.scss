@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  // padding: 1rem;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 998;
 }
@@ -28,13 +28,37 @@
   }
 }
 
-.cardModalContainer{
-  padding: 1rem;
+.container{
+  position: relative;
+}
+
+.closeModalBtn {
+  position: absolute;
+  right: 0.9rem;
+  top: 0.9rem;
+  z-index: 100;
+  background-color: #fcfcfc;
+  border-radius: 3px;
+}
+
+.cardCover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #ebebeb;
+  border-radius: 3px;
+  overflow: hidden;
+  img{
+    height: 120px;
+    cursor: pointer;
+  }
 }
 
 .cardModalHeader {
   width: 100%;
   padding: 0 0 0.5rem;
+  padding: 1rem;
   border-bottom: $divider;
 }
 .cardModalHeaderTextarea {
@@ -65,7 +89,7 @@
   width: 100%;
   height: auto;
   display: flex;
-  padding-top: 24px;
+  padding: 1.5rem 1rem 1rem;
 }
 
 .cardModalMainContent {
@@ -75,12 +99,26 @@
   background-color: rgb(247, 247, 247);
   padding: 1rem 1rem;
   border-radius: 0.5rem;
+  max-height: 500px;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  &::-webkit-scrollbar-track{
+    display: none;
+  }
+  &::-webkit-scrollbar-thumb{
+    display: none;
+  }
 }
 
 .cardModalDescriptionContainer {
   margin-bottom: 2rem;
   p{
     cursor: pointer;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    position: relative;
   }
 }
 
@@ -168,31 +206,10 @@
 .filesContainer {
   width: 100%;
   max-height: 300px;
-  overflow-y: auto;
+  // overflow-y: auto;
 }
 
-.cardModalCover {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  background-color: #ebebeb;
-  border-radius: 3px;
-  overflow: hidden;
-  img{
-    height: 120px;
-    cursor: pointer;
-  }
-}
 
-.closeModalBtn {
-  position: absolute;
-  right: 0.9rem;
-  top: 0.9rem;
-  z-index: 100;
-  background-color: #fcfcfc;
-  border-radius: 3px;
-}
 
 input[type="checkbox"] {
   cursor: pointer;

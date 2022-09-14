@@ -13,9 +13,9 @@ import { BsThreeDots } from "react-icons/bs";
 import { GoPlus } from "react-icons/go";
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import { List as ListInterface } from '../../../models/list'
-import Card from '../Card/Card';
+import Card from '../Card/TaskCard';
 import TaskForm from '../TaskForm/TaskForm';
-import TaskButton from '../TaskButton/TaskButton';
+import TaskButton from '../../Details/TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton'
 import Popup from '../../Details/Popup/Popup';
 import useCallback from 'react';
@@ -85,17 +85,17 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
 
   const handleSortCardsByDate = (props: string) => {
     const newCards = [...cards]
-    let sortedCards
-    if (props === 'sort-from-oldest') sortedCards = newCards.sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
-    if (props === 'sort-from-newest') sortedCards = newCards.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
+    if (props === 'sort-from-oldest') newCards.sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
+    if (props === 'sort-from-newest') newCards.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
     updateList({
       _id,
-      cards: sortedCards
+      cards: newCards
     })
     updateBoard({
       _id: boardId
     })
     setPopupTrigger(false)
+    setIsDragDisabled(false)
   }
 
   const handleCloseForm = () => { setIsCardFormOpen(false); setCardTitle('') }

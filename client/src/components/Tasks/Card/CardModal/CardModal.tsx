@@ -35,7 +35,7 @@ import {
   useDeleteFileMutation,
 } from '../../../../store/api/files'
 
-import TaskButton from '../../TaskButton/TaskButton';
+import TaskButton from '../../../Details/TaskButton/TaskButton';
 import Popup from '../../../Details/Popup/Popup';
 import Label from './CardModalDetails/Label/Label';
 import Container from './CardModalDetails/Container/Container'
@@ -43,6 +43,7 @@ import LabelForm from './CardModalDetails/LabelForm/LabelForm'
 import Button from '../../../Details/Button/Button';
 import FileForm from './CardModalDetails/FileForm/FileForm'
 import Files from './CardModalDetails/Files/Files';
+import Modal from '../../../Details/Modal/Modal'
 
 import { Line as ProgressLine } from 'rc-progress';
 import { Card as CardModel } from '../../../../models/card'
@@ -103,6 +104,7 @@ const CardModal: React.FC<CardModalProps> = ({
   const [cardDeadline, setCardDeadline] = useState(deadline)
   const [boardLabels, setBoardLabels] = useState<any>([])
   const [labelTitle, setLabelTitle] = useState('')
+
   const [isDescriptionFormOpen, setIsDescriptionFormOpen] = useState(false)
   const [isLabelEditPopupOpen, setIsLabelEditPopupOpen] = useState(false)
   const [isAddNewLabelPopupOpen, setIsAddNewLabelPopupOpen] = useState(false)
@@ -396,21 +398,15 @@ const CardModal: React.FC<CardModalProps> = ({
   useOnClickOutside(refModal, setIsCardWindowOpen)
 
   return (
-    <>
-      <div className={styles.modal} onClick={setIsCardWindowOpen}></div>
-      <div ref={refModal} className={styles.cardModal}>
-        {
-          cover && isFileImage(cover) ? (
-            <div className={styles.cardModalCover} >
-              <img onClick={onClickHandler} src={cover} alt={cover} />
-            </div>
-          ) : null
-        }
-
-        <div className={styles.closeModalBtn}>
-          <IconButton onClick={setIsCardWindowOpen}><BsXLg /></IconButton>
-        </div>
-        <div className={styles.cardModalContainer}>
+      <Modal trigger={true} closeModal={setIsCardWindowOpen}>
+        <div className={styles.container}>
+          {
+            cover && isFileImage(cover) ? (
+              <div className={styles.cardCover} >
+                <img onClick={onClickHandler} src={cover} alt={cover} />
+              </div>
+            ) : null
+          }
           <div className={styles.cardModalHeader}>
             <div className={styles.cardModalHeaderTextarea}>
               <TextareaAutosize
@@ -421,6 +417,7 @@ const CardModal: React.FC<CardModalProps> = ({
                 onChange={handleEditCardTitle}
                 onFocus={(e) => e.target.select()}
                 rows={20}
+                maxRows={4}
                 required
               />
               <p>Na liscie: <strong>{nameList}</strong></p>
@@ -674,8 +671,7 @@ const CardModal: React.FC<CardModalProps> = ({
             </div>
           </div>
         </div>
-      </div>
-    </>
+        </Modal>
   )
 }
 

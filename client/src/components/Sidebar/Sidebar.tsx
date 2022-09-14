@@ -37,14 +37,13 @@ const menuItems = [
     icon: <GiDeliveryDrone />
   },
   {
-    name: 'Informacje',
-    path: '/informacje',
+    name: 'Ustawienia',
+    path: '/ustawienia',
     icon: <AiOutlineInfoCircle />
   },
 ]
 
 const Sidebar: React.FC = () => {
-  const [createBoard] = useCreateBoardMutation()
   const location = useLocation()
   const [isSidebarOpen, setISSidebarOpen] = useState(true)
 
@@ -55,7 +54,6 @@ const Sidebar: React.FC = () => {
         onClick={() => setISSidebarOpen((p) => !p)}>
         <MdArrowForwardIos />
       </button>
-      {/* <div className={styles.logo}><h1>Trello</h1></div> */}
       <ul className={styles.linksContainer}>
         {menuItems.map((item) => (
           <li key={item.name}

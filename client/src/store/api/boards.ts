@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Board } from '../../models/board'
 type BoardResponse = Board[]
-
+const token = localStorage.getItem('token') || null
 export const boardApi = createApi({
   reducerPath: 'boardApi',
   baseQuery: fetchBaseQuery({
@@ -14,7 +14,7 @@ export const boardApi = createApi({
       return headers
     },
   }),
-  // refetchOnMountOrArgChange: token ? true : false,
+  refetchOnMountOrArgChange: token ? true : false,
   tagTypes: ['Board'],
   endpoints: (builder) => ({
     getAllBoards: builder.query<BoardResponse, void>({

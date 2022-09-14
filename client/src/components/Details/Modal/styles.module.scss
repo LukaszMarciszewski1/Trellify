@@ -1,0 +1,41 @@
+.overlay{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 199;
+}
+
+.modal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  // padding: 1rem;
+  background-color: #fcfcfc;
+  border: 1px solid #cdced1;
+  border-radius: 8px;
+  z-index: 200;
+  @media (max-width: 768px) {
+    max-width: 400px;
+  }
+}
+
+.header {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 200;
+  h3 {
+    font-size: 18px;
+    color: gray;
+    margin: 0;
+  }
+}

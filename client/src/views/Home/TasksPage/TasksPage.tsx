@@ -11,11 +11,11 @@ const TasksPage: React.FC = () => {
   const { data, error, isLoading, refetch } = useGetAllBoardsQuery()
   const [boards, setBoards] = useState<BoardResponse[]>([] as BoardResponse[])
   const { user } = useAuth()
-  // useEffect(() => {
-  //   if (user) {
-  //     refetch()
-  //   }
-  // }, [])
+  useEffect(() => {
+    if (user) {
+      refetch()
+    }
+  }, [])
 
   return (
     <>

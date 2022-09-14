@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './styles.module.scss'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
-import {  useUpdateBoardMutation } from '../../../store/api/boards'
+import { useUpdateBoardMutation } from '../../../store/api/boards'
 import { useAddListMutation, useUpdateListMutation } from '../../../store/api/lists';
 import { useUpdateCardMutation } from "../../../store/api/cards";
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
@@ -11,7 +11,7 @@ import { Board as BoardResponse } from '../../../models/board'
 import { List as ListResponse } from '../../../models/list'
 import BoardHeader from '../BoardHeader/BoardHeader';
 import List from '../List/List'
-import TaskButton from '../TaskButton/TaskButton'
+import TaskButton from '../../Details/TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import SideMenu from '../SideMenu/SideMenu';
 import { useParams, useSearchParams } from 'react-router-dom';

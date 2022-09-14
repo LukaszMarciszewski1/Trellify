@@ -6,9 +6,9 @@ import AppBar from '../../components/AppBar/AppBar';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Layout from '../../components/Layout';
 import Tasks from './TasksPage/TasksPage';
-import Storage from './Storage/Storage';
+import Storage from './StoragePage/StoragePage';
 import Statistics from './Statistics/Statistics';
-import Information from './Information/Information';
+import Information from './Settings/Settings';
 import Calculator from './Calculator/Calculator';
 
 const Home: React.FC = () => {
@@ -20,7 +20,7 @@ const Home: React.FC = () => {
         <Route path='/magazyn' element={<Storage />} />
         <Route path='/kalkulator' element={<Calculator />} />
         <Route path='/statystyki' element={<Statistics />} />
-        <Route path='/informacje' element={<Information />} />
+        <Route path='/ustawienia' element={<Information />} />
         <Route path="/" element={<Navigate replace to="/zadania" />} />
       </Route>
     </Routes>

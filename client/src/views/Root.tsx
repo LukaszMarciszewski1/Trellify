@@ -7,9 +7,9 @@ import SignUp from './Auth/SignUp/SignUp'
 import Layout from '../components/Layout'
 import TasksPage from './Home/TasksPage/TasksPage'
 import Calculator from './Home/Calculator/Calculator'
-import Storage from './Home/Storage/Storage'
+import Storage from './Home/StoragePage/StoragePage'
 import Statistics from './Home/Statistics/Statistics'
-import Information from './Home/Information/Information'
+import Information from './Home/Settings/Settings'
 import { useEffect } from 'react';
 
 const Root = () => {

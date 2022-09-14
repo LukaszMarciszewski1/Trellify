@@ -1,17 +1,19 @@
 .input {
   outline: none;
   border: none;
-  width: 370px;
+  width: 100%;
   padding: 15px;
   border-radius: 10px;
   background-color: #edf5f3;
+  background-color: #edf6f9;
+  border: 1px solid darken(#edf3f5, 10%);
   margin: 5px 0;
   font-size: 14px;
 }
 .error{
   outline: none;
   border: none;
-  width: 370px;
+  width: 100%;
   padding: 15px;
   border-radius: 10px;
   background-color: #edf5f3;

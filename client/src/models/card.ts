@@ -13,4 +13,3 @@ export interface Card {
   files: any
   labels: Labels[]
 }
-

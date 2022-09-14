@@ -1,7 +1,8 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import { isFileImage } from '../../../../../../hooks/useIsFileImage'
-import TaskButton from '../../../../TaskButton/TaskButton'
+import TaskButton from '../../../../../Details/TaskButton/TaskButton'
+
 interface FileProps {
   title: string
   src: string
@@ -39,8 +40,8 @@ const Files: React.FC<FileProps> = ({ created, title, src, type, index, active, 
         <h4>{title}</h4>
         <span>{created}</span>
         <div className={styles.fileButtons}>
-          <TaskButton height={'25px'} margin={'0 8px 0 0'} onClick={handleDeleteFile} name={'Skasuj'} />
-          <TaskButton height={'25px'} margin={'0'} onClick={handleDownloadFile} name={'Pobierz'} />
+          <TaskButton style={{height:'25px', margin:'0 8px 0 0'}} onClick={handleDeleteFile} name={'Skasuj'} />
+          <TaskButton style={{height:'25px', margin:'0'}} onClick={handleDownloadFile} name={'Pobierz'} />
         </div>
       </div>
     </div>

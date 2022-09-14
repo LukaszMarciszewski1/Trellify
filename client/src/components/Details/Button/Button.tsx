@@ -3,15 +3,17 @@ import styles from './styles.module.scss'
 
 interface ButtonProps {
   onClick?: (e: any) => void
+  style?: {}
   title?: string
   bgColor?: string
   icon?: Element
   type: "button" | "submit" | "reset" | undefined
 }
 
-const Button: React.FC<ButtonProps> = ({ title, ...props }) => (
+const Button: React.FC<ButtonProps> = ({ title, style, onClick, bgColor, ...props }) => (
   <button
     className={styles.button}
+    onClick={onClick}
     {...props}>
     {title}
   </button>
