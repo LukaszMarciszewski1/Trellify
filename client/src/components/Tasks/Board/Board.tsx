@@ -11,9 +11,10 @@ import { Board as BoardResponse } from '../../../models/board'
 import { List as ListResponse } from '../../../models/list'
 import BoardHeader from '../BoardHeader/BoardHeader';
 import List from '../List/List'
-import TaskButton from '../TaskButton/TaskButton'
+import TaskButton from '../../Details/TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import SideMenu from '../SideMenu/SideMenu';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: backgroundApi }) => {
   const [addList] = useAddListMutation()

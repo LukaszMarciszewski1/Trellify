@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './hooks/useAuth';
 import './index.css';
-import App from './App';
-import { Provider } from "react-redux";
+import AppProviders from './providers/AppProviders';
 import { store } from './store/store';
-import { AuthProvider } from './context/AuthContext';
+import Root from './views/Root';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-     {/* <AuthProvider> */}
-       <App />
-      {/* </AuthProvider> */}
-    </Provider>
+    <AppProviders>
+      <Root />
+    </AppProviders>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,6 +1,6 @@
-import defaultImg from '../../assets/defaultImg.jpg'
-import defaultColors from '../../assets/defaultColors.jpg'
-import defaultBg from '../../assets/defaultBackground.jpg'
+import defaultImg from '../../assets/img/defaultImg.jpg'
+import defaultColors from '../../assets/img/defaultColors.jpg'
+import defaultBg from '../../assets/img/defaultBackground.jpg'
 
 export const defaultBgIcon = defaultImg
 export const defaultColorIcon = defaultColors
@@ -19,5 +19,6 @@ export const presetColors = [
   '#A2D2FF',
   '#FFDAB9',
   '#3f3c3c',
-  '#e1e1e1',
+  '#f6faff',
+  // '#fcfcfc',
 ]

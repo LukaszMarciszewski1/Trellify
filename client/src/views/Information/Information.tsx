@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Information: React.FC = () => {
+const Settings: React.FC = () => {
 
   return (
     <div>
@@ -9,4 +9,5 @@ const Information: React.FC = () => {
   )
 }
 
-export default Information
+export default Settings
+

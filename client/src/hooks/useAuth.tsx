@@ -1,65 +1,70 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import  {User } from '../models/user'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+const AuthContext = createContext<AuthContextData | null>(null)
 
-type ContextProviderProps = {
-  children: React.ReactNode
-}
+type AuthContextData = ReturnType<typeof useProviderAuth>
 
-const AuthContext = React.createContext({})
-
-export const AuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState(null)
+export const useProviderAuth = () => {
+  const [user, setUser] = useState<User | null>(null)
   const [error, setError] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token') || null;
     if (token) {
-      ; (async () => {
+      (async () => {
         try {
-          const { data } = await axios.get('/boards', {
+          const { data } = await axios.get(`${process.env.REACT_APP_API_URL}users/me`, {
             headers: {
               authorization: `Bearer ${token}`,
             },
-          })
-          setUser(data)
-        } catch (e) {
-          console.log(e)
+          });
+          setUser(data);
+        } catch (error) {
+          console.log(error)
         }
       })()
     }
   }, [])
 
-  const signIn = async (email: string, password: string) => {
-    const url = `${process.env.REACT_APP_API_URL}users/login`
+  const signIn = async ({ email, password }: User) => {
     const config = {
       headers: {
         'Content-type': 'application/json',
       },
     }
+    setLoading(true)
     try {
       const { data } = await axios.post(
-        url,
+        `${process.env.REACT_APP_API_URL}users/login`,
         {
           email,
           password,
         },
         config
       )
+      setLoading(false)
       setUser(data)
       localStorage.setItem('token', data.token)
-    } catch (error: any) { console.log(error) }
+    } catch (error: any) {
+      setLoading(false)
+      setError(error.response.data.message)
+    }
   }
 
-  const signUp = async (name: string, email: string, password: string) => {
-    const url = `${process.env.REACT_APP_API_URL}users`
+  const signUp = async ({ name, email, password }: User) => {
     const config = {
       headers: {
         'Content-type': 'application/json',
       },
     }
+    setLoading(true)
     try {
-      const { data: res } = await axios.post(
-        url,
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}users`,
         {
           name,
           email,
@@ -67,19 +72,27 @@ export const AuthProvider: React.FC = ({ children }) => {
         },
         config
       )
-      console.log(res.message)
+      setLoading(false)
     } catch (error: any) {
-      console.log(error)
+      setLoading(false)
+      setError(error.response.data.message)
     }
   }
 
   const signOut = () => {
     setUser(null)
     localStorage.removeItem('token')
+    navigate('/logowanie')
   }
 
+  return { user, loading, error, signIn, signUp, signOut }
+}
+
+export const AuthProvider: React.FC = ({ children }) => {
+  const value = useProviderAuth()
+
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   )
@@ -89,7 +102,7 @@ export const useAuth = () => {
   const auth = useContext(AuthContext)
 
   if (!auth) {
-    throw Error('useAuth needs to be used inside AuthContext')
+    throw new Error('useAuth needs to be used inside AuthContext')
   }
 
   return auth

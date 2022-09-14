@@ -1,0 +1,42 @@
+@import '../../scss/utils.scss';
+
+.container {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr minmax(auto, 400px);
+  width: 100%;
+  height: 100%;
+  gap: 2rem;
+  padding: 3rem 6rem;
+  // background-color: #2F8278;
+  background-color: #f6faff;
+}
+
+.leftPanel {
+  grid-column: 1/2;
+}
+.rightPanel {
+  grid-column: 2/-1;
+}
+
+.card {
+  max-width: 1400px;
+  padding: 2rem;
+  min-height: 100%;
+  -webkit-box-shadow: $box-shadow;
+  box-shadow: $box-shadow;
+  background-color: #fcfcfc;
+  border: 1px solid rgba(207, 206, 206, 0.056);
+  border-radius: 16px;
+  // margin: 0 auto;
+}
+
+.cardContent {
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  h3 {
+    padding-bottom: 1rem;
+  }
+}

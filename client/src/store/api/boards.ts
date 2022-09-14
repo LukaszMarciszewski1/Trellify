@@ -1,20 +1,20 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Board } from '../../models/board'
-
 type BoardResponse = Board[]
-
+const token = localStorage.getItem('token') || null
 export const boardApi = createApi({
   reducerPath: 'boardApi',
-  baseQuery: fetchBaseQuery({ 
+  baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_API_URL,
     prepareHeaders: (headers) => {
-      const {token} = JSON.parse(localStorage.getItem('token') || '{}');
+      const token = localStorage.getItem('token') || null
       if (token) {
         headers.set('authorization', `Bearer ${token}`)
       }
       return headers
     },
   }),
+  refetchOnMountOrArgChange: token ? true : false,
   tagTypes: ['Board'],
   endpoints: (builder) => ({
     getAllBoards: builder.query<BoardResponse, void>({

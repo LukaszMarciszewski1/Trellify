@@ -3,9 +3,9 @@ import React from 'react'
 const Storage: React.FC = () => {
 
   return (
-    <div>
-       Magazyn
-    </div>
+    <>
+      <Storage />
+    </>
   )
 }
 

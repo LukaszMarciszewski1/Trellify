@@ -1,22 +1,28 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import Sidebar from './Sidebar/Sidebar'
-import Appbar from './Appbar/Appbar'
+import AppBar from './AppBar/Appbar'
 import { Outlet } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth'
 
-const Layout: React.FC = ({ children }) => {
+const Layout: React.FC = () => {
+  const { user } = useAuth()
   return (
-    <div className={styles.layout}>
-      <div className={styles.appbar}>
-        <Appbar />
-      </div>
-      <div className={styles.content}>
-        <Sidebar />
-        <div className={styles.pagesContainer}>
-          <Outlet />
+    <>
+      {user ? (
+        <div className={styles.layout}>
+          <AppBar />
+          <div className={styles.content}>
+            <Sidebar />
+            <div className={styles.pagesContainer}>
+              <Outlet />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <div className={styles.authContainer}><Outlet /></div>
+      )}
+    </>
   )
 }
 

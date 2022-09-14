@@ -3,6 +3,7 @@ import { boardApi } from './api/boards'
 import { listsApi } from './api/lists'
 import { cardsApi } from './api/cards'
 import { filesApi } from './api/files'
+import { productsApi } from './api/products'
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     [listsApi.reducerPath]: listsApi.reducer,
     [cardsApi.reducerPath]: cardsApi.reducer,
     [filesApi.reducerPath]: filesApi.reducer,
+    [productsApi.reducerPath]: productsApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -17,6 +19,7 @@ export const store = configureStore({
       listsApi.middleware,
       cardsApi.middleware,
       filesApi.middleware,
+      productsApi.middleware
     ),
 })
 

@@ -1,0 +1,21 @@
+.wrapper{
+  width: 100%;
+  max-width: 350px;
+  padding: 0 3px;
+  border-radius: 0.25rem;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 15px;
+}
+.span {
+  color: #c68188;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  color: #c68188;
+  margin-left: 10px;
+}

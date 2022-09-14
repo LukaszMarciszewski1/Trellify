@@ -12,38 +12,38 @@ import { GrTask } from "react-icons/gr";
 
 import { defaultBackground } from '../../components/Tasks/localData'
 
+
 import { useCreateBoardMutation } from '../../store/api/boards'
 
 const menuItems = [
   {
     name: 'Zadania',
-    path: '/',
+    path: '/zadania',
     icon: <GrTask />
   },
   {
-    name: 'Kalkulator',
-    path: '/calculator',
-    icon: <CgCalculator />
-  },
-  {
     name: 'Magazyn',
-    path: '/storage',
+    path: '/magazyn',
     icon: <CgComponents />
   },
   {
+    name: 'Kalkulator',
+    path: '/kalkulator',
+    icon: <CgCalculator />
+  },
+  {
     name: 'Statystyki',
-    path: '/statistics',
+    path: '/statystyki',
     icon: <GiDeliveryDrone />
   },
   {
-    name: 'informacje',
-    path: '/information',
+    name: 'Ustawienia',
+    path: '/ustawienia',
     icon: <AiOutlineInfoCircle />
   },
 ]
 
 const Sidebar: React.FC = () => {
-  const [createBoard] = useCreateBoardMutation()
   const location = useLocation()
   const [isSidebarOpen, setISSidebarOpen] = useState(true)
 
@@ -54,7 +54,6 @@ const Sidebar: React.FC = () => {
         onClick={() => setISSidebarOpen((p) => !p)}>
         <MdArrowForwardIos />
       </button>
-      <div className={styles.logo}><IoLogoJavascript /></div>
       <ul className={styles.linksContainer}>
         {menuItems.map((item) => (
           <li key={item.name}
@@ -71,6 +70,7 @@ const Sidebar: React.FC = () => {
           </li>
         ))}
       </ul>
+      <div className={styles.divider} />
     </nav>
   )
 }
