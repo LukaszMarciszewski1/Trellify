@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import Sidebar from './Sidebar/Sidebar'
-import AppBar from './AppBar/AppBar'
+import AppBar from './AppBar/Appbar'
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth'
 
