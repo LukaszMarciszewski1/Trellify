@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Calculator = () => {
+const Calculator: React.FC = () => {
   return (
     <div>Kalkulator</div>
   )

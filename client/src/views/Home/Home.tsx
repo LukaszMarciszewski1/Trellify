@@ -1,13 +1,18 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import styles from './styles.module.scss'
-import Sidebar from '../../components/Sidebar/Sidebar';
 import Layout from '../../components/Layout';
 import Tasks from './TasksPage/TasksPage';
 import Storage from './StoragePage/StoragePage';
 import Statistics from './Statistics/Statistics';
 import Information from './Settings/Settings';
 import Calculator from './Calculator/Calculator';
+
+const ErrorPage: React.FC = () => {
+  return (
+    <div><h1>page 404</h1></div>
+  )
+}
 
 const Home: React.FC = () => {
 
@@ -20,6 +25,7 @@ const Home: React.FC = () => {
         <Route path='/statystyki' element={<Statistics />} />
         <Route path='/ustawienia' element={<Information />} />
         <Route path="/" element={<Navigate replace to="/zadania" />} />
+        <Route path="*" element={<ErrorPage />} />
       </Route>
     </Routes>
   )

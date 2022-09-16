@@ -14,6 +14,7 @@ export const useProviderAuth = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token') || null;
+    console.log(token)
     if (token) {
       (async () => {
         try {
@@ -73,6 +74,7 @@ export const useProviderAuth = () => {
         config
       )
       setLoading(false)
+      navigate('/logowanie')
     } catch (error: any) {
       setLoading(false)
       setError(error.response.data.message)

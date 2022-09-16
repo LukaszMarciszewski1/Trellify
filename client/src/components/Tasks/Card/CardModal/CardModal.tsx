@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import fileDownload from 'js-file-download'
 import TextareaAutosize from 'react-textarea-autosize';
 import TaskForm from '../../TaskForm/TaskForm'
-import IconButton from '../../../Details/IconButton/IconButton';
 import useOnClickOutside from '../../../../hooks/useOnClickOutside'
 import { isFileImage } from '../../../../hooks/useIsFileImage'
 import DatePicker, { registerLocale } from "react-datepicker";

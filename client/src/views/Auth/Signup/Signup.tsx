@@ -23,7 +23,7 @@ const validation = {
   }
 }
 
-const SignUp = () => {
+const SignUp: React.FC = () => {
   const { loading, signUp } = useAuth()
 
   const {
