@@ -9,20 +9,13 @@ import ErrorMessage from '../../../components/Details/Messages/ErrorMessage';
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react';
 const SignIn: React.FC = () => {
-  const { user, loading, error: errorResponse, signIn } = useAuth()
-  const navigate = useNavigate()
+  const { loading, error: errorResponse, signIn } = useAuth()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<User>();
-
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate('/')
-  //   }
-  // }, [user]);
-  // console.log(user)
 
   return (
     <div className={styles.login_formContainer}>

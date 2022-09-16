@@ -1,19 +1,16 @@
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth'
 import Auth from './Auth/Auth'
 import Home from './Home/Home'
-import { useEffect } from 'react';
 
 const Root: React.FC = () => {
   const { user } = useAuth()
   const navigate = useNavigate()
-  useEffect(() => {
-    if (user) {
-      navigate('/')
-    }
-  }, [user])
 
-  console.log(user)
+  useEffect(() => {
+    user ? navigate('/') : navigate('/logowanie')
+  }, [user])
 
   return (
     <>

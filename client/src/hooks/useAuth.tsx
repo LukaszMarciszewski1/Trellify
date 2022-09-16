@@ -14,7 +14,6 @@ export const useProviderAuth = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token') || null;
-    console.log(token)
     if (token) {
       (async () => {
         try {
@@ -23,6 +22,7 @@ export const useProviderAuth = () => {
               authorization: `Bearer ${token}`,
             },
           });
+          console.log(data)
           setUser(data);
         } catch (error) {
           console.log(error)
@@ -30,6 +30,10 @@ export const useProviderAuth = () => {
       })()
     }
   }, [])
+
+  // useEffect(() => {
+  //   user ? navigate('/') : navigate('/logowanie')
+  // }, [user])
 
   const signIn = async ({ email, password }: User) => {
     const config = {
@@ -84,7 +88,6 @@ export const useProviderAuth = () => {
   const signOut = () => {
     setUser(null)
     localStorage.removeItem('token')
-    navigate('/logowanie')
   }
 
   return { user, loading, error, signIn, signUp, signOut }

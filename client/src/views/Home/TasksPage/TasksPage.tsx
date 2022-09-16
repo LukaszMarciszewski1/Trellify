@@ -8,14 +8,14 @@ import { useLocation } from "react-router-dom";
 import { useAuth } from '../../../hooks/useAuth'
 
 const TasksPage: React.FC = () => {
-  const { data, error, isLoading, refetch } = useGetAllBoardsQuery()
+  const { data, error, isLoading } = useGetAllBoardsQuery()
   const [boards, setBoards] = useState<BoardResponse[]>([] as BoardResponse[])
   const { user } = useAuth()
-  useEffect(() => {
-    if (user) {
-      refetch()
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (user) {
+  //     refetch()
+  //   }
+  // }, [])
 
   return (
     <>

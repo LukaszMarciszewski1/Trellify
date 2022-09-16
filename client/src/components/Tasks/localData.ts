@@ -4,7 +4,7 @@ import defaultBg from '../../assets/img/defaultBackground.jpg'
 
 export const defaultBgIcon = defaultImg
 export const defaultColorIcon = defaultColors
-export const defaultBackground = defaultBg
+export const defaultBackground = '#f6faff'
 export const presetColors = [
   '#FB8B24',
   '#9575cd',
