@@ -398,280 +398,279 @@ const CardModal: React.FC<CardModalProps> = ({
   useOnClickOutside(refModal, setIsCardWindowOpen)
 
   return (
-      <Modal trigger={true} closeModal={setIsCardWindowOpen}>
-        <div className={styles.container}>
-          {
-            cover && isFileImage(cover) ? (
-              <div className={styles.cardCover} >
-                <img onClick={onClickHandler} src={cover} alt={cover} />
-              </div>
-            ) : null
-          }
-          <div className={styles.cardModalHeader}>
-            <div className={styles.cardModalHeaderTextarea}>
-              <TextareaAutosize
-                id='card-title'
-                autoFocus={false}
-                value={cardTitle}
-                className={styles.cardModalTextareaTitle}
-                onChange={handleEditCardTitle}
-                onFocus={(e) => e.target.select()}
-                rows={20}
-                maxRows={4}
-                required
-              />
-              <p>Na liscie: <strong>{nameList}</strong></p>
+    <Modal trigger={true} closeModal={setIsCardWindowOpen}>
+      <div className={styles.container}>
+        {
+          cover && isFileImage(cover) ? (
+            <div className={styles.cardCover} >
+              <img onClick={onClickHandler} src={cover} alt={cover} />
             </div>
-          </div>
-          <div className={styles.cardModalContent}>
-            <div className={styles.cardModalMainContent}>
-              <Container data={cardLabels} title={'Etykiety'}>
-                {
-                  cardLabels.map((label: { title: string; active: any; color: any; _id: string }) => (
-                    <div
-                      key={label._id}
-                      style={{ backgroundColor: `${label.color}` }}
-                      className={styles.cardModalLabel}
-                      onClick={() => setLabelsTrigger(true)}
-                    >
-                      <span>{label.title}</span>
-                    </div>
-                  ))
-                }
-              </Container>
-              <Container data={deadline} title={'Termin'}>
-                <>
-                  {
-                    deadline ? (
-                      <>
-                        <input
-                          type="checkbox"
-                          checked={completed}
-                          onChange={handleChangeCompleted}
-                          style={{ height: '100%', width: '1rem', marginRight: '8px' }} />
-                        <button onClick={() => setDateTrigger(true)}
-                          className={styles.cardModalSelectedDateBtn}>
-                          <span>{dayjs(deadline).format('DD-MM-YYYY HH:mm')}</span>
-                          {
-                            dateIsSameOrBefore && !completed ? (
-                              <span
-                                title={cardDateDisplay.title}
-                                style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                                {cardDateDisplay.name}
-                              </span>
-                            ) : null
-                          }
-                          {
-                            deadlineIsSoon && !completed ? (
-                              <span
-                                title={cardDateDisplay.title}
-                                style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                                {cardDateDisplay.name}
-                              </span>
-                            ) : null
-                          }
-                          {
-                            completed ? (
-                              <span
-                                title={cardDateDisplay.title}
-                                style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                                {cardDateDisplay.name}
-                              </span>
-                            ) : null
-                          }
-                        </button>
-                      </>
-                    ) : null
-                  }
-                </>
-              </Container>
-              <div className={styles.cardModalDescriptionContainer}>
-                <div className={styles.cardModalDescriptionHeader}>
-                  <h4>Opis</h4>
-                  <div style={{ maxWidth: '100px', marginLeft: '1rem' }}>
-                    {
-                      !isDescriptionFormOpen && cardDescription !== undefined && cardDescription !== '' ? (
-                        <TaskButton onClick={() => setIsDescriptionFormOpen(true)} name={'Edytuj'} icon={<BsPencil />} />
-                      ) : null
-                    }
-                  </div>
-                </div>
-                {
-                  isDescriptionFormOpen ?
-                    <TaskForm
-                      id={'card-description'}
-                      handleChange={handleEditCardDescription}
-                      handleSubmit={handleSaveCardDescription}
-                      closeForm={() => { setIsDescriptionFormOpen(false); setCardDescription(description) }}
-                      value={cardDescription}
-                      onFocus={(e) => e.target.select()}
-                      titleBtn={'Zapisz'}
-                    /> :
-                    <div>
-                      {cardDescription !== '' && cardDescription !== undefined ? <p onClick={() => setIsDescriptionFormOpen(true)}>{cardDescription}</p> :
-                        <TaskButton onClick={() => setIsDescriptionFormOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
-                    </div>
-                }
-              </div>
-              <Container data={files} title={'Załącznik'}>
-                <div className={styles.filesContainer}>
-                  {
-                    files?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
-                      <Files
-                        key={file._id}
-                        title={file.fileName}
-                        created={`Dodano ${dayjs(file.createdAt).format('DD MMM')} o ${dayjs(file.createdAt).format('HH:mm')}`}
-                        active={cardFileIndex}
-                        index={index}
-                        src={`${file.fileUrl}`}
-                        type={file.fileType}
-                        handleDeleteFile={() => handleDeleteFile(file._id)}
-                        handleDownloadFile={() => handleDownloadFile(file.fileUrl)}
-                        handleSelectCover={() => handleSelectCover(index)}
-                      />
-                    ))
-                  }
-                </div>
-              </Container>
-            </div>
-            <div className={styles.cardModalSidebar} >
-              <Popup
-                title={isLabelEditPopupOpen ? 'Edytuj etykietę' : isAddNewLabelPopupOpen ? 'Dodaj Etykietę' : 'Etykiety'}
-                trigger={labelsTrigger}
-                closePopup={() => { setLabelsTrigger(false); setIsLabelEditPopupOpen(false); setIsAddNewLabelPopupOpen(false) }}
-                isEditWindow={isLabelEditPopupOpen || isAddNewLabelPopupOpen}
-                backToMainWindow={() => { setIsLabelEditPopupOpen(false); setIsAddNewLabelPopupOpen(false) }}
-              >
-                <div className={styles.cardModalLabels}>
-                  {
-                    !isLabelEditPopupOpen &&
-                      !isAddNewLabelPopupOpen ? (
-                      <>
-                        <div className={styles.cardModalLabelsList}>
-                          {
-                            boardLabels.map((label: LabelsInterface) => (
-                              <Label
-                                key={label._id}
-                                labelId={label._id}
-                                title={label.title}
-                                color={label.color}
-                                cardLabels={labels}
-                                openLabelEditWindow={() => {
-                                  setIsLabelEditPopupOpen(true)
-                                  handleGetCurrentEditLabel(label._id)
-                                }}
-                                handleCheckedLabel={() => handleCheckedLabel(label)}
-                              >
-                              </Label>
-                            ))
-                          }
-                        </div>
-                        <TaskButton onClick={() => setIsAddNewLabelPopupOpen(true)} name={'Utwórz nową etykietę'} />
-                      </>
-                    ) : (
-                      <LabelForm
-                        formId={isLabelEditPopupOpen ? 'label-title-edit' : isAddNewLabelPopupOpen ? 'label-title-add' : ''}
-                        handleChangeTitle={handleChangeLabelTitle}
-                        handleChangeLabelTitle={isLabelEditPopupOpen ? handleSaveLabelEditing : isAddNewLabelPopupOpen ? handleAddNewLabel : () => console.log('label does not exist')}
-                        handleDeleteLabel={handleDeleteLabel}
-                        value={isLabelEditPopupOpen ? currentLabelTitle : isAddNewLabelPopupOpen ? labelTitle : ''}
-                        onFocus={(e) => e.target.select()}
-                        selectColor={currentLabelColor}
-                        setSelectColor={setCurrentLabelColor}
-                      />
-                    )
-                  }
-                </div>
-              </Popup>
-              <Popup
-                title={'Data'}
-                trigger={dateTrigger}
-                closePopup={() => setDateTrigger(false)}
-                backToMainWindow={() => setDateTrigger(false)}
-              >
-                <DatePicker
-                  dateFormat='DD/MM/YYYY'
-                  timeFormat="hh:mm"
-                  locale="pl"
-                  selected={deadline ? new Date(deadline) : null}
-                  onChange={(date: Date) => setCardDeadline(date)}
-                  inline
-                  showTimeInput
-                  timeInputLabel="Godzina:"
-                />
-                <label>Termin <br></br>
-                  <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(deadline).format('DD/MM/YYYY')} />
-                  <input style={{ maxWidth: '100px' }} placeholder={dayjs(deadline).format('HH:mm')} />
-                </label>
-                <div className={styles.actionsForm}>
-                  <Button onClick={handleSaveDeadline} title={'Zapisz'} type={'button'} />
-                  <div style={{ marginRight: '1rem' }} />
-                  <Button onClick={handleDeleteDeadline} title={'Usuń'} bgColor={'#EA4746'} type={'button'} />
-                </div>
-              </Popup>
-              <Popup
-                title={'Załącznik'}
-                trigger={fileTrigger}
-                closePopup={() => setFileTrigger(false)}
-                backToMainWindow={() => setFileTrigger(false)}
-              >
-                <FileForm
-                  name={'załącznik'}
-                  size={0}
-                  label={'załącznik'}
-                  type={'file'}
-                  listNames={selectedNameFiles}
-                  handleInputState={handleUploadFiles}
-                  handleSubmitFiles={handleSubmitFiles}
-                />
-                {uploadProgress > 0 ? (
-                  <>
-                    {
-                      uploadStatus !== null && uploadStatus === true ? (
-                        <div><ProgressLine percent={uploadProgress} strokeWidth={4} strokeColor="#D3D3D3" /><p>{uploadProgress}%</p></div>
-                      ) : null
-                    }
-                    {
-                      uploadStatus === false ?
-                        <p style={{ color: 'red' }}>Błąd przesyłania<small> (max 10mb, lub nieprawidłowy format pliku)</small></p>
-                        : null
-                    }
-                  </>
-                ) : null
-                }
-              </Popup>
-              <Popup
-                title={'Dodaj wycenę'}
-                trigger={valuationTrigger}
-                closePopup={() => setValuationTrigger(false)}
-              >
-                <div>
-                  <p>In progress ...</p>
-                </div>
-              </Popup>
-              <Popup
-                title={'Magazyn'}
-                trigger={storageTrigger}
-                closePopup={() => setStorageTrigger(false)}
-              >
-                <div>
-                  <p>In progress ...</p>
-                </div>
-              </Popup>
-              <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
-              <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
-              <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />
-              <TaskButton onClick={() => setValuationTrigger(true)} name={'Dodaj wycenę'} icon={<BiTask />} />
-              <TaskButton onClick={() => setStorageTrigger(true)} name={'Magazyn'} icon={<BiTask />} />
-              <div className={styles.divider}></div>
-              <TaskButton onClick={() => {
-                deleteCard(_id);
-                updateBoard({ _id: boardId })
-              }} name={'Usuń'} icon={<RiDeleteBinLine />} />
-            </div>
+          ) : null
+        }
+        <div className={styles.cardModalHeader}>
+          <div className={styles.cardModalHeaderTextarea}>
+            <TextareaAutosize
+              id='card-title'
+              autoFocus={false}
+              value={cardTitle}
+              className={styles.cardModalTextareaTitle}
+              onChange={handleEditCardTitle}
+              onFocus={(e) => e.target.select()}
+              rows={20}
+              maxRows={4}
+              required
+            />
+            <p>Na liscie: <strong>{nameList}</strong></p>
           </div>
         </div>
-        </Modal>
+        <div className={styles.groupWrapper}>
+          <div className={styles.content}>
+            <Container data={cardLabels} title={'Etykiety'}>
+              {
+                cardLabels.map((label: { title: string; active: any; color: any; _id: string }) => (
+                  <div
+                    key={label._id}
+                    style={{ backgroundColor: `${label.color}` }}
+                    className={styles.cardModalLabel}
+                    onClick={() => setLabelsTrigger(true)}
+                  >
+                    <span>{label.title}</span>
+                  </div>
+                ))
+              }
+            </Container>
+            <Container data={deadline} title={'Termin'}>
+              <>
+                {
+                  deadline ? (
+                    <>
+                      <input
+                        type="checkbox"
+                        checked={completed}
+                        onChange={handleChangeCompleted} />
+                      <button onClick={() => setDateTrigger(true)}
+                        className={styles.cardModalSelectedDateBtn}>
+                        <span>{dayjs(deadline).format('DD-MM-YYYY HH:mm')}</span>
+                        {
+                          dateIsSameOrBefore && !completed ? (
+                            <span
+                              title={cardDateDisplay.title}
+                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
+                              {cardDateDisplay.name}
+                            </span>
+                          ) : null
+                        }
+                        {
+                          deadlineIsSoon && !completed ? (
+                            <span
+                              title={cardDateDisplay.title}
+                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
+                              {cardDateDisplay.name}
+                            </span>
+                          ) : null
+                        }
+                        {
+                          completed ? (
+                            <span
+                              title={cardDateDisplay.title}
+                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
+                              {cardDateDisplay.name}
+                            </span>
+                          ) : null
+                        }
+                      </button>
+                    </>
+                  ) : null
+                }
+              </>
+            </Container>
+            <div className={styles.descriptionContainer}>
+              <div className={styles.descriptionHeader}>
+                <h4>Opis</h4>
+                <div style={{ maxWidth: '100px', marginLeft: '1rem' }}>
+                  {
+                    !isDescriptionFormOpen && cardDescription !== undefined && cardDescription !== '' ? (
+                      <TaskButton onClick={() => setIsDescriptionFormOpen(true)} name={'Edytuj'} icon={<BsPencil />} />
+                    ) : null
+                  }
+                </div>
+              </div>
+              {
+                isDescriptionFormOpen ?
+                  <TaskForm
+                    id={'card-description'}
+                    handleChange={handleEditCardDescription}
+                    handleSubmit={handleSaveCardDescription}
+                    closeForm={() => { setIsDescriptionFormOpen(false); setCardDescription(description) }}
+                    value={cardDescription}
+                    onFocus={(e) => e.target.select()}
+                    titleBtn={'Zapisz'}
+                  /> :
+                  <div>
+                    {cardDescription !== '' && cardDescription !== undefined ? <p onClick={() => setIsDescriptionFormOpen(true)}>{cardDescription}</p> :
+                      <TaskButton onClick={() => setIsDescriptionFormOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
+                  </div>
+              }
+            </div>
+            <Container data={files} title={'Załącznik'}>
+              <div className={styles.filesContainer}>
+                {
+                  files?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
+                    <Files
+                      key={file._id}
+                      title={file.fileName}
+                      created={`Dodano ${dayjs(file.createdAt).format('DD MMM')} o ${dayjs(file.createdAt).format('HH:mm')}`}
+                      active={cardFileIndex}
+                      index={index}
+                      src={`${file.fileUrl}`}
+                      type={file.fileType}
+                      handleDeleteFile={() => handleDeleteFile(file._id)}
+                      handleDownloadFile={() => handleDownloadFile(file.fileUrl)}
+                      handleSelectCover={() => handleSelectCover(index)}
+                    />
+                  ))
+                }
+              </div>
+            </Container>
+          </div>
+          <div className={styles.cardModalSidebar} >
+            <Popup
+              title={isLabelEditPopupOpen ? 'Edytuj etykietę' : isAddNewLabelPopupOpen ? 'Dodaj Etykietę' : 'Etykiety'}
+              trigger={labelsTrigger}
+              closePopup={() => { setLabelsTrigger(false); setIsLabelEditPopupOpen(false); setIsAddNewLabelPopupOpen(false) }}
+              isEditWindow={isLabelEditPopupOpen || isAddNewLabelPopupOpen}
+              backToMainWindow={() => { setIsLabelEditPopupOpen(false); setIsAddNewLabelPopupOpen(false) }}
+            >
+              <div className={styles.cardModalLabels}>
+                {
+                  !isLabelEditPopupOpen &&
+                    !isAddNewLabelPopupOpen ? (
+                    <>
+                      <div className={styles.cardModalLabelsList}>
+                        {
+                          boardLabels.map((label: LabelsInterface) => (
+                            <Label
+                              key={label._id}
+                              labelId={label._id}
+                              title={label.title}
+                              color={label.color}
+                              cardLabels={labels}
+                              openLabelEditWindow={() => {
+                                setIsLabelEditPopupOpen(true)
+                                handleGetCurrentEditLabel(label._id)
+                              }}
+                              handleCheckedLabel={() => handleCheckedLabel(label)}
+                            >
+                            </Label>
+                          ))
+                        }
+                      </div>
+                      <TaskButton onClick={() => setIsAddNewLabelPopupOpen(true)} name={'Utwórz nową etykietę'} />
+                    </>
+                  ) : (
+                    <LabelForm
+                      formId={isLabelEditPopupOpen ? 'label-title-edit' : isAddNewLabelPopupOpen ? 'label-title-add' : ''}
+                      handleChangeTitle={handleChangeLabelTitle}
+                      handleChangeLabelTitle={isLabelEditPopupOpen ? handleSaveLabelEditing : isAddNewLabelPopupOpen ? handleAddNewLabel : () => console.log('label does not exist')}
+                      handleDeleteLabel={handleDeleteLabel}
+                      value={isLabelEditPopupOpen ? currentLabelTitle : isAddNewLabelPopupOpen ? labelTitle : ''}
+                      onFocus={(e) => e.target.select()}
+                      selectColor={currentLabelColor}
+                      setSelectColor={setCurrentLabelColor}
+                    />
+                  )
+                }
+              </div>
+            </Popup>
+            <Popup
+              title={'Data'}
+              trigger={dateTrigger}
+              closePopup={() => setDateTrigger(false)}
+              backToMainWindow={() => setDateTrigger(false)}
+            >
+              <DatePicker
+                dateFormat='DD/MM/YYYY'
+                timeFormat="hh:mm"
+                locale="pl"
+                selected={deadline ? new Date(deadline) : null}
+                onChange={(date: Date) => setCardDeadline(date)}
+                inline
+                showTimeInput
+                timeInputLabel="Godzina:"
+              />
+              <label>Termin <br></br>
+                <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(deadline).format('DD/MM/YYYY')} />
+                <input style={{ maxWidth: '100px' }} placeholder={dayjs(deadline).format('HH:mm')} />
+              </label>
+              <div className={styles.actionsForm}>
+                <Button onClick={handleSaveDeadline} title={'Zapisz'} type={'button'} />
+                <div style={{ marginRight: '1rem' }} />
+                <Button onClick={handleDeleteDeadline} title={'Usuń'} bgColor={'#EA4746'} type={'button'} />
+              </div>
+            </Popup>
+            <Popup
+              title={'Załącznik'}
+              trigger={fileTrigger}
+              closePopup={() => setFileTrigger(false)}
+              backToMainWindow={() => setFileTrigger(false)}
+            >
+              <FileForm
+                name={'załącznik'}
+                size={0}
+                label={'załącznik'}
+                type={'file'}
+                listNames={selectedNameFiles}
+                handleInputState={handleUploadFiles}
+                handleSubmitFiles={handleSubmitFiles}
+              />
+              {uploadProgress > 0 ? (
+                <>
+                  {
+                    uploadStatus !== null && uploadStatus === true ? (
+                      <div><ProgressLine percent={uploadProgress} strokeWidth={4} strokeColor="#D3D3D3" /><p>{uploadProgress}%</p></div>
+                    ) : null
+                  }
+                  {
+                    uploadStatus === false ?
+                      <p style={{ color: 'red' }}>Błąd przesyłania<small> (max 10mb, lub nieprawidłowy format pliku)</small></p>
+                      : null
+                  }
+                </>
+              ) : null
+              }
+            </Popup>
+            <Popup
+              title={'Dodaj wycenę'}
+              trigger={valuationTrigger}
+              closePopup={() => setValuationTrigger(false)}
+            >
+              <div>
+                <p>In progress ...</p>
+              </div>
+            </Popup>
+            <Popup
+              title={'Magazyn'}
+              trigger={storageTrigger}
+              closePopup={() => setStorageTrigger(false)}
+            >
+              <div>
+                <p>In progress ...</p>
+              </div>
+            </Popup>
+            <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
+            <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
+            <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />
+            <TaskButton onClick={() => setValuationTrigger(true)} name={'Dodaj wycenę'} icon={<BiTask />} />
+            <TaskButton onClick={() => setStorageTrigger(true)} name={'Magazyn'} icon={<BiTask />} />
+            <div className={styles.divider}></div>
+            <TaskButton onClick={() => {
+              deleteCard(_id);
+              updateBoard({ _id: boardId })
+            }} name={'Usuń'} icon={<RiDeleteBinLine />} />
+          </div>
+        </div>
+      </div>
+    </Modal>
   )
 }
 
