@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Board } from '../../models/board'
-let token = localStorage.getItem('token') || null
 type BoardResponse = Board[]
+const token = localStorage.getItem('token') || null
 
 export const boardApi = createApi({
   reducerPath: 'boardApi',

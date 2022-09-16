@@ -24,7 +24,7 @@ import { GrAttachment } from 'react-icons/gr';
 import useHover from '../../../hooks/useHover'
 import { isFileImage } from '../../../hooks/useIsFileImage'
 import { Card as CardModel } from '../../../models/card'
-import Wrap from '../../Details/Card/Wrap'
+import Box from '../../Details/Box/Box'
 export interface CardProps extends CardModel {
   index: number
   setIsDragDisabled: (value: boolean) => void
@@ -49,7 +49,6 @@ const TaskCard: React.FC<CardProps> = ({
   const [updateBoard] = useUpdateBoardMutation()
 
   const [isCardModalOpen, setIsCardModalOpen] = useState<boolean>(false)
-  // const [, setIsDisplayEditIcon] = useState(false)
   const [cardCompleted, setCardCompleted] = useState(completed)
   const [nowDate, setNowDate] = useState(Date.now())
   const [cardCover, setCardCover] = useState('')
@@ -101,14 +100,6 @@ const TaskCard: React.FC<CardProps> = ({
       }
     }
   }
-
-  // const handleMouseEnter = () => {
-  //   setIsDisplayEditIcon(true)
-  // }
-
-  // const handleMouseLeave = () => {
-  //   setIsDisplayEditIcon(false)
-  // }
 
   const handleOpenCardModal = () => {
     setIsCardModalOpen(true)
@@ -187,62 +178,56 @@ const TaskCard: React.FC<CardProps> = ({
         <Draggable draggableId={_id} index={index} >
           {provided => (
             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-              <Wrap onClick={handleOpenCardModal}>
-              {
-                    cardFiles.length ? (
-                      <div className={styles.cardCover} style={
+              <Box onClick={handleOpenCardModal}>
+                {
+                  cardFiles.length ? (
+                    <div className={styles.cardCover} style={
+                      {
+                        backgroundColor: cardCover,
+                        backgroundImage: `url(${cardCover})`,
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center'
+                      }
+                    }>
+                    </div>
+                  ) : null
+                }
+                <div className={styles.cardDetails}>
+                  {
+                    labels.length ? (
+                      <div className={styles.cardLabels} onClick={handleOpenCardModal}>
                         {
-                          backgroundColor: cardCover,
-                          backgroundImage: `url(${cardCover})`,
-                          backgroundSize: 'cover',
-                          backgroundRepeat: 'no-repeat',
-                          backgroundPosition: 'center'
+                          labels.map((label: { active: any; color: any; _id: string; title: string }) => (
+                            <div title={`${label.title}`} key={label._id} className={styles.cardLabel} style={{ backgroundColor: `${label.color}` }}></div>
+                          ))
                         }
-                      }>
                       </div>
                     ) : null
                   }
-                  <div className={styles.cardDetails}>
-                    {
-                      labels.length ? (
-                        <div className={styles.cardLabels} onClick={handleOpenCardModal}>
-                          {
-                            labels.map((label: { active: any; color: any; _id: string; title: string }) => (
-                              <div title={`${label.title}`} key={label._id} className={styles.cardLabel} style={{ backgroundColor: `${label.color}` }}></div>
-                            ))
-                          }
-                        </div>
-                      ) : null
-                    }
-                    <p >{title}</p>
-                    <div className={styles.iconsContainer}>
-                      <div ref={hoverRef}>
-                        {
-                          deadline ? (
-                            <button
-                              className={styles.dateBtn}
-                              onClick={handleChangeCompleted}
-                              style={cardDateDisplay.style}
-                              title={cardDateDisplay.title}
+                  <p >{title}</p>
+                  <div className={styles.iconsContainer}>
+                    <div ref={hoverRef}>
+                      {
+                        deadline ? (
+                          <button
+                            className={styles.dateBtn}
+                            onClick={handleChangeCompleted}
+                            style={cardDateDisplay.style}
+                            title={cardDateDisplay.title}
 
-                            >
-                              {isHover ? (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />) : <BsStopwatch style={cardDateDisplay.iconStyle} />}
-                              {dayjs(deadline).format('DD MMM')}
-                            </button>
-                          ) : null
-                        }
-                      </div>
-                      {description ? <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardModal} /></div> : null}
-                      {cardFiles.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{cardFiles.length}</span></div> : null}
+                          >
+                            {isHover ? (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />) : <BsStopwatch style={cardDateDisplay.iconStyle} />}
+                            {dayjs(deadline).format('DD MMM')}
+                          </button>
+                        ) : null
+                      }
                     </div>
+                    {description ? <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardModal} /></div> : null}
+                    {cardFiles.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{cardFiles.length}</span></div> : null}
                   </div>
-              </Wrap>
-              {/* <div className={styles.card}>
-                <div className={styles.cardContainer} >
-                  <div className={styles.cardClickableArea} onClick={handleOpenCardModal}></div>
                 </div>
-              </div> */}
-               {/* // */}
+              </Box>
             </div>
           )}
         </Draggable>

@@ -1,4 +1,4 @@
-@import '../../../scss/utils.scss';
+@import '../../../assets/scss/utils.scss';
 .card {
   position: relative;
   display: flex;
@@ -18,7 +18,6 @@
   }
 }
 .cardContainer {
-  // padding: 6px;
   max-width: 272px;
   flex-grow: 1;
   overflow-wrap: break-word;

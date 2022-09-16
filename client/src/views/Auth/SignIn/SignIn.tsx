@@ -6,8 +6,7 @@ import { useForm } from 'react-hook-form';
 import Input from '../../../components/Details/Input/Input'
 import { User } from '../../../models/user'
 import ErrorMessage from '../../../components/Details/Messages/ErrorMessage';
-import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react';
+
 const SignIn: React.FC = () => {
   const { loading, error: errorResponse, signIn } = useAuth()
 

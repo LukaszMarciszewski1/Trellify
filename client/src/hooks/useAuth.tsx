@@ -31,10 +31,6 @@ export const useProviderAuth = () => {
     }
   }, [])
 
-  // useEffect(() => {
-  //   user ? navigate('/') : navigate('/logowanie')
-  // }, [user])
-
   const signIn = async ({ email, password }: User) => {
     const config = {
       headers: {

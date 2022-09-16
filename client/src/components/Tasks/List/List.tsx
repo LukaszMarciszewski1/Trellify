@@ -13,12 +13,12 @@ import { BsThreeDots } from "react-icons/bs";
 import { GoPlus } from "react-icons/go";
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import { List as ListInterface } from '../../../models/list'
-import Card from '../Card/TaskCard';
+import Card from '../Card/Card';
 import TaskForm from '../TaskForm/TaskForm';
 import TaskButton from '../../Details/TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton'
 import Popup from '../../Details/Popup/Popup';
-import useCallback from 'react';
+
 interface PropsList extends ListInterface {
   index: number
 }
