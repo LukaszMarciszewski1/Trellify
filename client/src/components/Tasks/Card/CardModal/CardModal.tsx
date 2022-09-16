@@ -513,24 +513,22 @@ const CardModal: React.FC<CardModalProps> = ({
               }
             </div>
             <Container data={files} title={'Załącznik'}>
-              <div className={styles.filesContainer}>
-                {
-                  files?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
-                    <Files
-                      key={file._id}
-                      title={file.fileName}
-                      created={`Dodano ${dayjs(file.createdAt).format('DD MMM')} o ${dayjs(file.createdAt).format('HH:mm')}`}
-                      active={cardFileIndex}
-                      index={index}
-                      src={`${file.fileUrl}`}
-                      type={file.fileType}
-                      handleDeleteFile={() => handleDeleteFile(file._id)}
-                      handleDownloadFile={() => handleDownloadFile(file.fileUrl)}
-                      handleSelectCover={() => handleSelectCover(index)}
-                    />
-                  ))
-                }
-              </div>
+              {
+                files?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
+                  <Files
+                    key={file._id}
+                    title={file.fileName}
+                    created={`Dodano ${dayjs(file.createdAt).format('DD MMM')} o ${dayjs(file.createdAt).format('HH:mm')}`}
+                    active={cardFileIndex}
+                    index={index}
+                    src={`${file.fileUrl}`}
+                    type={file.fileType}
+                    handleDeleteFile={() => handleDeleteFile(file._id)}
+                    handleDownloadFile={() => handleDownloadFile(file.fileUrl)}
+                    handleSelectCover={() => handleSelectCover(index)}
+                  />
+                ))
+              }
             </Container>
           </div>
           <div className={styles.cardModalSidebar} >
