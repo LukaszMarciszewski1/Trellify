@@ -25,6 +25,7 @@ import useHover from '../../../hooks/useHover'
 import { isFileImage } from '../../../hooks/useIsFileImage'
 import { Card as CardModel } from '../../../models/card'
 import Box from '../../Details/Box/Box'
+import defaultBg from '../../../assets/img/defaultBackground.jpg'
 export interface CardProps extends CardModel {
   index: number
   setIsDragDisabled: (value: boolean) => void
@@ -51,14 +52,17 @@ const TaskCard: React.FC<CardProps> = ({
   const [isCardModalOpen, setIsCardModalOpen] = useState<boolean>(false)
   const [cardCompleted, setCardCompleted] = useState(completed)
   const [nowDate, setNowDate] = useState(Date.now())
-  const [cardCover, setCardCover] = useState('')
+  const [cardCover, setCardCover] = useState<string>(cover)
   const [cardFileIndex, setCardFileIndex] = useState(0)
-  const [cardFiles, setCardFiles] = useState([] as any)
+  const [cardFiles, setCardFiles] = useState(files)
 
   dayjs.locale('pl');
   dayjs.extend(isSameOrBefore)
   dayjs.extend(duration)
   dayjs.extend(relativeTime)
+
+  const hoverRef = useRef(null)
+  const isHover = useHover(hoverRef)
 
   useEffect(() => {
     const intervalIsSameOrBefore = setInterval(() => setNowDate(Date.now()), 100000)
@@ -72,12 +76,14 @@ const TaskCard: React.FC<CardProps> = ({
   }, [files])
 
   useEffect(() => {
-    setCardCover(cover)
-  }, [cover])
-
-  useEffect(() => {
     displayCover()
   }, [cardFiles])
+
+  useEffect(() => {
+    updateCard({ _id, cover: cardCover })
+    updateBoard({ _id: boardId })
+  }, [cardCover])
+
 
   const displayCover = () => {
     if (cardFiles) {
@@ -143,10 +149,6 @@ const TaskCard: React.FC<CardProps> = ({
       fontSize: '14px',
     }
   }
-
-  const hoverRef = useRef(null)
-  const isHover = useHover(hoverRef)
-
 
   return (
     <div>

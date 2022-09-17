@@ -396,6 +396,7 @@ const CardModal: React.FC<CardModalProps> = ({
 
   useOnClickOutside(refModal, setIsCardWindowOpen)
 
+
   return (
     <Modal trigger={true} closeModal={setIsCardWindowOpen}>
       <div className={styles.container}>
