@@ -12,23 +12,26 @@ const MaterialsList: React.FC = () => {
 
   //DODAĆ KATEGORIĘ DO PRODUKTU ///
   return (
-    <div >
+    <div className={styles.container}>
       <div className={styles.head}>
-        <Row name={'Nazwa'} quantity={'Stan'} unit={'Jedn.'} price={'Cena'} action={false} />
+        <Row name={'Nazwa'} category={'Kategoria'} quantity={'Stan'} unit={'Jedn.'} price={'Cena'} action={false} />
       </div>
-      {
-        isLoading ? <div>Loading...</div> : (
-          data?.map(product => (
-            <Row
-              key={product._id}
-              name={product.name}
-              quantity={product.quantity}
-              unit={product.unit}
-              price={product.price}
-              action={true} />
-          )
-          ))
-      }
+      <div className={styles.list}>
+        {
+          isLoading ? <div>Loading...</div> : (
+            data?.map(product => (
+              <Row
+                key={product._id}
+                name={product.name}
+                category={product.category}
+                quantity={product.quantity}
+                unit={product.unit}
+                price={`${product.price} zł`}
+                action={true} />
+            )
+            ))
+        }
+      </div>
     </div>
   )
 }

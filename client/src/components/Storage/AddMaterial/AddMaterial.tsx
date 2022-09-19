@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Input from '../../Details/Input/Input';
 import Loading from '../../Details/Loading/Loading';
@@ -18,6 +19,11 @@ const validation = {
     maxLength: 20,
     minLength: 2,
   },
+  category: {
+    required: true,
+    maxLength: 20,
+    minLength: 2,
+  },
   quantity: {
     required: true,
     pattern: /[0-9]/g
@@ -28,8 +34,13 @@ const validation = {
   }
 }
 
-const MaterialForm: React.FC = () => {
+interface MaterialFormProps {
+  closeModal?: () => void
+}
+
+const MaterialForm: React.FC<MaterialFormProps> = ({ closeModal }) => {
   const [addProduct] = useAddProductMutation()
+  const [isSuccess, setIsSuccess] = useState(false)
   const {
     register,
     handleSubmit,
@@ -45,6 +56,19 @@ const MaterialForm: React.FC = () => {
         return <ErrorMessage message={'Nazwa musi zawierać conajmiej 2 znaki'} />
       case 'maxLength':
         return <ErrorMessage message={'Nazwa może zawierać maksymalnie 20 znaków'} />
+      default:
+        return null
+    }
+  }
+
+  const categoryErrors = (type: any) => {
+    switch (type) {
+      case 'required':
+        return <ErrorMessage message={'Kategoria jest wymagana'} />
+      case 'minLength':
+        return <ErrorMessage message={'Kategoria musi zawierać conajmiej 2 znaki'} />
+      case 'maxLength':
+        return <ErrorMessage message={'Kategoria może zawierać maksymalnie 20 znaków'} />
       default:
         return null
     }
@@ -74,13 +98,16 @@ const MaterialForm: React.FC = () => {
 
   const handleAddProduct = (data: Product) => {
     console.log(data)
-    const { name, quantity, unit, price } = data
+    const { name, category, quantity, unit, price } = data
     addProduct({
       name,
+      category,
       quantity,
       unit,
       price
     })
+    setIsSuccess(true)
+    setTimeout(() => setIsSuccess(false), 3000)
   }
 
   // <Row name='Nazwa' quantity={'Stan'} unit={'Jedn.'} price={'Cena'} />
@@ -101,34 +128,51 @@ const MaterialForm: React.FC = () => {
             />
             {nameErrors(errors.name?.type)}
             <Input
+              id={'category'}
+              placeholder={'Kategoria'}
+              label={'Kategoria'}
+              type="text"
+              error={errors.category}
+              {...register("category", { ...validation.category })}
+            />
+            {categoryErrors(errors.category?.type)}
+            <Input
               id={'quantity'}
               placeholder={'Stan'}
               label={'Stan'}
               type="number"
+              minValue={0}
               error={errors.quantity}
               {...register("quantity", { ...validation.quantity })}
             />
             {quantityErrors(errors.quantity?.type)}
           </div>
           <div className={styles.formGroup}>
-            <select {...register('unit')}>
-              <option value="m2">female</option>
-              <option value="ark">male</option>
-              <option value="szt">other</option>
-              <option value="inne">other</option>
+            <select {...register('unit')} className={styles.select}>
+              <option value="m2">m2</option>
+              <option value="ark">ark.</option>
+              <option value="ryz">ryz</option>
+              <option value="szt">szt.</option>
+              <option value="litry">litry</option>
+              <option value="inne">inne</option>
             </select>
             <Input
               id={'price'}
               placeholder={'Cena'}
               label={'Cena'}
               type="number"
+              step="0.01"
+              minValue={0}
               error={errors.price}
               {...register("price", { ...validation.price })}
             />
             {priceErrors(errors.price?.type)}
           </div>
         </div>
-        <Button title={'Dodaj'} type={'submit'} />
+        <div className={styles.actionForm}>
+          <Button title={'Dodaj produkt'} type={'submit'} />
+          <h3>{isSuccess && 'Produkt został dodany'}</h3>
+        </div>
       </form>
     </div>
   )

@@ -176,7 +176,7 @@ const TaskCard: React.FC<CardProps> = ({
             setCardCover={setCardCover}
           /> : null
       }
-      <div>
+      <div className={styles.container}>
         <Draggable draggableId={_id} index={index} >
           {provided => (
             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >

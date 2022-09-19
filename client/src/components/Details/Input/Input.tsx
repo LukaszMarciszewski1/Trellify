@@ -11,6 +11,8 @@ export type InputProps = {
   onChange?: (value: any) => void
   error?: {} | undefined | ((value: any) => void)
   value?: number
+  step?: string
+  minValue?: number
 }
 
 const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
@@ -24,6 +26,8 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
       disabled,
       onChange,
       value,
+      step,
+      minValue,
       ...props
     },
     ref
@@ -37,6 +41,8 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
         value={value}
         aria-label={label}
         placeholder={placeholder}
+        step={step}
+        min={minValue}
         onChange={onChange}
         disabled={disabled}
         className={styles.input}

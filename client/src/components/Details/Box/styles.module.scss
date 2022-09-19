@@ -1,10 +1,10 @@
 @import '../../../assets/scss/utils.scss';
-.card {
+.box {
   position: relative;
   display: flex;
   align-items: flex-start;
   max-width: 300px;
-  margin-bottom: 8px;
+  // margin-bottom: 8px;
   -webkit-box-shadow: $box-shadow;
   box-shadow: $box-shadow;
   background-color: #fcfcfc;
@@ -17,7 +17,7 @@
     background-color: #f4f5f9;
   }
 }
-.cardContainer {
+.container {
   max-width: 272px;
   flex-grow: 1;
   overflow-wrap: break-word;
@@ -25,7 +25,7 @@
   position: relative;
 }
 
-.cardClickableArea {
+.clickableArea {
   position: absolute;
   left: 0;
   top: 0;

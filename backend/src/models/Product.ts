@@ -4,6 +4,7 @@ const ProductSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     name: String,
+    category: String,
     quantity: Number,
     unit: String,
     price: Number,
@@ -15,4 +16,4 @@ const ProductSchema = new Schema(
 
 const Product = mongoose.model('Product', ProductSchema)
 
-export default Product 
+export default Product

@@ -5,6 +5,7 @@ import ToolBar from './ToolBar/ToolBar'
 import AddMaterial from './AddMaterial/AddMaterial'
 import MaterialsList from './MaterialsList/MaterialsList'
 import Input from '../Details/Input/Input'
+import Header from './Header/Header'
 
 import {
   useGetAllProductsQuery
@@ -15,21 +16,16 @@ const Storage = () => {
   const { data, error, isLoading, refetch } = useGetAllProductsQuery()
   return (
     <div className={styles.container}>
-      <div className={`${styles.card} ${styles.leftPanel}`}>
-        <ToolBar setIsModalOpen={setIsModalOpen} />
-        <MaterialsList />
+      <div className={styles.left}>
+        <div className={styles.top}></div>
+        <div className={styles.bottom}>
+          <Header
+            addNewProduct={() => setIsModalOpen(true)}
+          />
+          <MaterialsList />
+        </div>
       </div>
-      <div className={`${styles.card} ${styles.rightPanel}`}>
-        <ToolBar setIsModalOpen={setIsModalOpen} />
-        <Input
-          id={'price'}
-          name={''}
-          placeholder={'Cena'}
-          label={'Cena'}
-          type="number"
-          disabled={true}
-        />
-      </div>
+      <div className={styles.right}></div>
       <Modal trigger={isModalOpen} closeModal={() => setIsModalOpen(false)}>
         <AddMaterial />
       </Modal>
@@ -38,3 +34,25 @@ const Storage = () => {
 }
 
 export default Storage
+
+
+
+
+{/* <div className={`${styles.card} ${styles.leftPanel}`}>
+<ToolBar setIsModalOpen={setIsModalOpen} />
+<MaterialsList />
+</div>
+<div className={`${styles.card} ${styles.rightPanel}`}>
+<ToolBar setIsModalOpen={setIsModalOpen} />
+<Input
+  id={'price'}
+  name={''}
+  placeholder={'Cena'}
+  label={'Cena'}
+  type="number"
+  disabled={true}
+/>
+</div>
+<Modal trigger={isModalOpen} closeModal={() => setIsModalOpen(false)}>
+<AddMaterial />
+</Modal> */}

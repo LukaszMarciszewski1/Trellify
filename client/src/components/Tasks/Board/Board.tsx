@@ -154,10 +154,10 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: back
       style={boardBackgroundStyle}
     >
       <div className={styles.container}>
-        <BoardHeader
+        {/* <BoardHeader
           name={'Zmień tło'}
           onClick={() => setIsOpenSideMenu(true)}
-        />
+        /> */}
         {
           isOpenSideMenu ?
             <SideMenu

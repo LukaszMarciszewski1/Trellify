@@ -7,7 +7,7 @@ interface ButtonProps {
   title?: string
   bgColor?: string
   icon?: Element
-  type: "button" | "submit" | "reset" | undefined
+  type?: "button" | "submit" | "reset" | undefined
 }
 
 const Button: React.FC<ButtonProps> = ({ title, style, onClick, bgColor, ...props }) => (
