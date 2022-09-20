@@ -69,58 +69,60 @@ const SignUp: React.FC = () => {
   }
 
   return (
-    <div className={styles.signup_formContainer}>
-      <div className={styles.left}>
-        <h1>Zaloguj się</h1><br />
-        <Link to='/logowanie'>
-          <button type='button' className={styles.white_btn}>
-            Logowanie
-          </button>
-        </Link>
-      </div>
-      <div className={styles.right}>
-        {loading ? <Loading /> : null}
-        <form className={styles.form_container} onSubmit={handleSubmit(signUp)}>
-          <h1>Utwórz konto</h1>
-          <Input
-            id={'name'}
-            placeholder={'Imię'}
-            label={'Imię'}
-            type="text"
-            error={errors.name}
-            {...register("name", { ...validation.name })}
-          />
-          {nameErrors(errors.name?.type)}
-          <Input
-            id={'email'}
-            placeholder={'email'}
-            label={'Email'}
-            type="text"
-            {...register("email", { ...validation.email })}
-          />
-          {emailErrors(errors.email?.type)}
-          <Input
-            id={'password'}
-            placeholder={'password'}
-            label={'Password'}
-            type="password"
-            {...register("password", { ...validation.password })}
-          />
-          {passwordErrors(errors.password?.type)}
-          <Input
-            id={'confirm_password'}
-            placeholder={'confirm password'}
-            label={'Confirm Password'}
-            type="password"
-            {...register("confirm_password", {
-              required: true, validate: (val: string) => val === watch('password')
-            })}
-          />
-          {errors.confirm_password && <ErrorMessage message={'Wpisz poprawne hasło'} />}
-          <button type='submit' className={styles.green_btn}>
-            Rejestracja
-          </button>
-        </form>
+    <div className={styles.container}>
+      <div className={styles.signup_formContainer}>
+        <div className={styles.left}>
+          <h1>Zaloguj się</h1><br />
+          <Link to='/logowanie'>
+            <button type='button' className={styles.white_btn}>
+              Logowanie
+            </button>
+          </Link>
+        </div>
+        <div className={styles.right}>
+          {loading ? <Loading /> : null}
+          <form className={styles.form_container} onSubmit={handleSubmit(signUp)}>
+            <h1>Utwórz konto</h1>
+            <Input
+              id={'name'}
+              placeholder={'Imię'}
+              label={'Imię'}
+              type="text"
+              error={errors.name}
+              {...register("name", { ...validation.name })}
+            />
+            {nameErrors(errors.name?.type)}
+            <Input
+              id={'email'}
+              placeholder={'email'}
+              label={'Email'}
+              type="text"
+              {...register("email", { ...validation.email })}
+            />
+            {emailErrors(errors.email?.type)}
+            <Input
+              id={'password'}
+              placeholder={'password'}
+              label={'Password'}
+              type="password"
+              {...register("password", { ...validation.password })}
+            />
+            {passwordErrors(errors.password?.type)}
+            <Input
+              id={'confirm_password'}
+              placeholder={'confirm password'}
+              label={'Confirm Password'}
+              type="password"
+              {...register("confirm_password", {
+                required: true, validate: (val: string) => val === watch('password')
+              })}
+            />
+            {errors.confirm_password && <ErrorMessage message={'Wpisz poprawne hasło'} />}
+            <button type='submit' className={styles.green_btn}>
+              Rejestracja
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )

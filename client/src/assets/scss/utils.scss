@@ -21,6 +21,28 @@ $breakpoints: (
   ),
 );
 
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+  &::-webkit-scrollbar:vertical {
+    width: 8px;
+    border-radius: 5px;
+    border: solid 3px transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: rgb(216, 216, 216);
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(187, 187, 187);
+    border-radius: 8px;
+    border: solid 3px transparent;
+  }
+}
+
 @mixin mq($breakpoint) {
   $size: map-get($breakpoints, $breakpoint);
   @if ($size) {

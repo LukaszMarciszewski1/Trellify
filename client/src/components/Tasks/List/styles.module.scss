@@ -1,16 +1,15 @@
 @import '../../../assets/scss/utils.scss';
+.listWrapper {
+  // padding-bottom: 10px;
+  // min-height: 100%;
+}
 
 .list {
+  margin-right: 16px;
   width: 272px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
   margin-right: 16px;
   border-radius: 5px;
   background-color: #ebecf0;
-  // background-color: #f6f6f6;
-  // -webkit-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.15);
-  // box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.15);
   -webkit-box-shadow: $box-shadow;
   box-shadow: $box-shadow;
   user-select: none;
@@ -61,29 +60,11 @@
 
 .cardsContainer {
   padding: 1px 4px 0;
-  max-height: 680px;
+  max-height: 700px;
   overflow-x: hidden;
   overflow-y: auto;
   margin: 0 3px;
-  &::-webkit-scrollbar {
-    -webkit-appearance: none;
-  }
-  &::-webkit-scrollbar:vertical {
-    width: 8px;
-    border-radius: 5px;
-    border: solid 3px transparent;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: rgb(216, 216, 216);
-    border-radius: 8px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgb(187, 187, 187);
-    border-radius: 8px;
-    border: solid 3px transparent;
-  }
+  @include scrollbar;
 }
 
 .addCardForm {

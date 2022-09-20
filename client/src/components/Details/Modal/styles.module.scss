@@ -1,24 +1,23 @@
 .overlay {
-  position: absolute;
+  position: fixed;
+  overflow-y: scroll;
   left: 0;
   top: 0;
   width: 100%;
-  min-height: calc(100vh - 50px);
+  min-height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 199;
+  z-index: 998;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .modal {
-  position: relative;
+  position: absolute;
   background-color: #fcfcfc;
   border: 1px solid #cdced1;
   border-radius: 8px;
-  margin: 20px;
-  z-index: 200;
-
+  z-index: 999;
   @media (max-width: 768px) {
     max-width: 400px;
   }

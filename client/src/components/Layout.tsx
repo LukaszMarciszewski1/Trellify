@@ -11,12 +11,14 @@ const Layout: React.FC = () => {
     <>
       {user ? (
         <div className={styles.layout}>
-          <AppBar />
-          <div className={styles.content}>
+          <div className={styles.appbar}>
+            <AppBar />
+          </div>
+          <div className={styles.sidebar}>
             <Sidebar />
-            <div className={styles.pagesContainer}>
-              <Outlet />
-            </div>
+          </div>
+          <div className={styles.pages}>
+            <Outlet />
           </div>
         </div>
       ) : (

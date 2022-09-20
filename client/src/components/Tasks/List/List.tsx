@@ -102,7 +102,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   useOnClickOutside(ref, handleCloseForm)
 
   return (
-    <div>
+    <div className={styles.listWrapper}>
       <Draggable draggableId={String(_id)} index={index} isDragDisabled={isDragDisabled}>
         {provided => (
           <div className={styles.list} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>

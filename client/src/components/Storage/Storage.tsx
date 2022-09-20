@@ -6,6 +6,7 @@ import AddMaterial from './AddMaterial/AddMaterial'
 import MaterialsList from './MaterialsList/MaterialsList'
 import Input from '../Details/Input/Input'
 import Header from './Header/Header'
+import Box from '../Details/Box/Box'
 
 import {
   useGetAllProductsQuery
@@ -19,9 +20,9 @@ const Storage = () => {
       <div className={styles.left}>
         <div className={styles.top}></div>
         <div className={styles.bottom}>
-          <Header
-            addNewProduct={() => setIsModalOpen(true)}
-          />
+            <Header
+              addNewProduct={() => setIsModalOpen(true)}
+            />
           <MaterialsList />
         </div>
       </div>

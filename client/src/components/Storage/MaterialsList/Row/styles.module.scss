@@ -2,7 +2,7 @@
 .head,
 .row {
   display: grid;
-  grid-template-columns: 1fr repeat(4, minmax(80px, 140px)) minmax(40px, auto);
+  grid-template-columns: minmax(140px, 1fr) repeat(4, minmax(80px, 140px)) minmax(40px, auto);
   padding: 0.5rem;
   gap: 20px;
   width: 100%;
@@ -29,6 +29,9 @@
 .block {
   display: flex;
   align-items: center;
+  p {
+    white-space: nowrap;
+  }
   // justify-content: center;
 }
 
