@@ -3,6 +3,7 @@ import styles from './styles.module.scss'
 import TaskButton from '../../Details/TaskButton/TaskButton'
 // import Filters from './Filters/Filters'
 import { GoPlus } from 'react-icons/go'
+import { BsFilter } from 'react-icons/bs'
 import { FaFolder } from 'react-icons/fa'
 import { IoIosArrowDown } from 'react-icons/io'
 import Box from '../../Details/Box/Box'
@@ -14,7 +15,7 @@ interface HeaderProps {
   addNewProduct: () => void
 }
 
-const Header: React.FC<HeaderProps> = ({addNewProduct}) => {
+const Header: React.FC<HeaderProps> = ({ addNewProduct }) => {
   return (
     <div className={styles.header}>
       <TaskButton
@@ -25,12 +26,14 @@ const Header: React.FC<HeaderProps> = ({addNewProduct}) => {
       />
       <div className={styles.filter}>
         <div className={styles.categoryName}><h3>Papiery Ofsetowe</h3></div>
-        <Box>
-          <div className={styles.filterIcons}>
-            <FaFolder fontSize={'20px'} color={'rgb(13, 97, 146)'} />
-            <IoIosArrowDown />
-          </div>
-        </Box>
+        <div className={styles.filterBtn}>
+          <TaskButton
+            icon={<BsFilter style={{ color: 'grey', fontSize: '1.2rem' }} />}
+            name={'Filtruj'}
+            onClick={addNewProduct}
+            style={{ width: '200px' }}
+          />
+        </div>
       </div>
     </div>
   )

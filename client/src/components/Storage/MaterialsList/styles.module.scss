@@ -9,13 +9,13 @@
   display: flex;
   font-weight: bold;
   height: 50px;
-  margin-bottom: 10px;
   padding-right: 20px;
 }
 
 .list {
+  height: 530px;
   max-height: 530px;
   overflow-y: auto;
   padding-right: 10px;
-  @include scrollbar
+  @include scrollbar;
 }

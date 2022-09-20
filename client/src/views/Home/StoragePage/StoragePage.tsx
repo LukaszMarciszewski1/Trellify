@@ -1,11 +1,16 @@
 import React from 'react'
 import Storage from '../../../components/Storage/Storage'
 
-const View2: React.FC = () => {
+import {
+  useGetAllProductsQuery,
+  useDeleteProductMutation
+} from "../../../store/api/products";
 
+const View2: React.FC = () => {
+const { data, error, isLoading, refetch } = useGetAllProductsQuery()
   return (
     <>
-      <Storage />
+      <Storage/>
     </>
   )
 }
