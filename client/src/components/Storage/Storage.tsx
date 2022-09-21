@@ -23,18 +23,10 @@ interface StorageProps {
 }
 
 const Storage: React.FC = () => {
+  const { data, error, isLoading, refetch } = useGetAllProductsQuery()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalEditOpen, setIsModalEditOpen] = useState(false)
   const [currentProduct, setCurrentProduct] = useState<any>(null)
-  const [isPopupOpen, setIsPopupOpen] = useState(false)
-
-  const { data, error, isLoading, refetch } = useGetAllProductsQuery()
-  const [deleteProduct] = useDeleteProductMutation()
-
-  const handleEditProd = (prod: Product) => {
-    setIsModalEditOpen(true)
-    setCurrentProduct(prod)
-  }
 
   return (
     <div className={styles.container}>

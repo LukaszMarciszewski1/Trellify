@@ -51,4 +51,17 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+  line-height: 1;
+  span {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.sortable{
+  cursor: pointer;
+}
+
+.sort-reverse {
+  transform: rotate(180deg);
 }

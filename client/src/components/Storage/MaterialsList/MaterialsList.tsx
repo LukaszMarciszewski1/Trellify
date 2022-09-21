@@ -1,85 +1,120 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Row from './Row/Row'
 import styles from './styles.module.scss'
 import {
-  useGetAllProductsQuery,
   useDeleteProductMutation
 } from "../../../store/api/products";
 import IconButton from '../../Details/IconButton/IconButton';
 import Popup from '../../Details/Popup/Popup';
 import TaskButton from '../../Details/TaskButton/TaskButton';
 import { TiArrowSortedDown } from 'react-icons/ti'
+import { TiArrowSortedUp } from 'react-icons/ti'
+import { TiArrowUnsorted } from 'react-icons/ti'
+import { FaSort } from 'react-icons/fa'
 import { Product } from '../../../models/product';
-import { BiDotsVerticalRounded } from 'react-icons/bi';
 
-interface Props {
+interface MaterialsListProps {
   data: Product[] | undefined
   setIsModalEditOpen: (value: boolean) => void
-  setCurrentProduct: (value: Product | null) => void
+  setCurrentProduct: (value: Product) => void
 }
 
 type SortKeys = keyof Product;
 
-const MaterialsList: React.FC<Props> = ({ data, setIsModalEditOpen, setCurrentProduct }) => {
+const SortButton = ({ order, columnKey, sortKey }: { order: string; columnKey: string; sortKey: string; }) => (
+  <div className={`${sortKey === columnKey && order === "desc" ? "sort-reverse" : "" }`}>
+    {sortKey === columnKey ? (order === 'desc' ? <TiArrowSortedDown /> : <TiArrowSortedUp /> ): <TiArrowUnsorted color='#d4d4d4' />}
+  </div>
+)
+
+const headersData: { key: SortKeys; label: string, sortable: boolean, asc?: boolean }[] = [
+  { key: "name", label: "Nazwa", sortable: true, asc: false },
+  { key: "category", label: "Kategoria", sortable: true, asc: false },
+  { key: "quantity", label: "Stan", sortable: true, asc: false },
+  { key: "unit", label: "Jedn.", sortable: false },
+  { key: "price", label: "Cena", sortable: true, asc: false },
+  { key: "actions", label: "Akcje", sortable: false },
+];
+
+const MaterialsList: React.FC<MaterialsListProps> = ({ data, setIsModalEditOpen, setCurrentProduct }) => {
   const [deleteProduct] = useDeleteProductMutation()
   const [products, setProducts] = useState(data)
   const [order, setOrder] = useState('asc')
-  const [sortKey, setSortKey] = useState<SortKeys>('name')
+  const [headers, setHeaders] = useState(headersData)
+  // const [sortKey, setSortKey] = useState<SortKeys>('name');
+  const [sortKey, setSortKey] = useState('');
+  const [currenHeader, setCurrenHeader] = useState('')
 
-  const headers: { key: SortKeys; label: string, sortable: boolean }[] = [
-    { key: "name", label: "Nazwa", sortable: true },
-    { key: "category", label: "Kategoria", sortable: true },
-    { key: "quantity", label: "Stan", sortable: true },
-    { key: "unit", label: "Jedn.", sortable: false },
-    { key: "price", label: "Cena", sortable: true },
-    { key: "actions", label: "Akcje", sortable: false },
-  ];
+
 
   const handleEditProd = (prod: Product) => {
     setIsModalEditOpen(true)
     setCurrentProduct(prod)
   }
 
-  // const sortTableData = ({ sortBy, direction }: { sortBy: SortKeys; direction: string; }) => {
-  //   if (!products) return;
-  //   const array: Product[] = [...products]
-  //   return array.sort((a, b) => {
-  //     if (a[sortBy] < b[sortBy]) return direction === 'ascending' ? -1 : 1
-  //     if (a[sortBy] > b[sortBy]) return direction === 'ascending' ? 1 : -1
-  //     return 0
-  //   })
-  // }
+  // const sortedData = useCallback(
+  //   () => sortData({ tableData: data, sortKey, reverse: sortOrder === "desc" }),
+  //   [data, sortKey, sortOrder]
+  // );
 
-  const sortData = ({ sortBy, direction }: { sortBy: SortKeys; direction: string; }) => {
+  const sortData = useCallback(({ sortBy }: { sortBy: SortKeys }) => {
     if (!products) return;
     const array: Product[] = [...products]
-    // if (col === 'name') {
-    //   const sorted = [...products].sort((a, b) => a.name.localeCompare(b.name.toString(), "en", {
-    //     numeric: true
-    //   }))
-    //   setProducts(sorted)
-    // }
 
-    if (direction === 'asc') {
-      const sorted = array.sort((a, b) => a[sortBy].toString().localeCompare(b[sortBy].toString(), "en", {numeric: true}))
+    if (order === 'asc') {
+      const sorted = array.sort((a, b) => a[sortBy].toString().localeCompare(b[sortBy].toString(), "pl", { numeric: true }))
       setProducts(sorted)
+      setOrder('desc')
     }
-  }
+
+    if (order === 'desc') {
+      const sorted = array.sort((a, b) => b[sortBy].toString().localeCompare(a[sortBy].toString(), "pl", { numeric: true }))
+      setProducts(sorted)
+      setOrder('asc')
+    }
+
+    setSortKey(sortBy);
+
+  }, [products, order])
+
+  console.log(sortKey)
+
+  // const changeDirection = (key: string) => {
+  //   [...headers].map(item => {
+  //     if (key === item.key) {
+  //       item.asc = !item.asc
+  //     }
+  //   })
+  //   setHeaders(headers)
+  // }
+
+  // console.log(order)
+  //{row.label} {row.sortable ? (row.key === sortKey && order === 'dsc' ? <TiArrowSortedUp /> : <TiArrowSortedDown />) : null}
+
+ 
 
   return (
     <div className={styles.container}>
       <div className={styles.head}>
         {headers.map(row => (
-          <div key={row.key} className={styles.block} >
-            <span >{row.label}</span>
-            {row.sortable ? <IconButton onClick={() => sortData({ sortBy: row.key, direction: 'asc' })}><TiArrowSortedDown /></IconButton> : null}
+          <div
+            key={row.key}
+            className={`${styles.block} ${row.sortable && styles.sortable}`}
+            {...(row.sortable && { onClick: () => sortData({ sortBy: row.key }) })}>
+            <span >
+              {/* {row.label} {row.sortable ? (row.key === sortKey && order === 'dsc' ? <TiArrowSortedUp /> : <TiArrowSortedDown />) : null} */}
+              {/* {row.label} {row.sortable ? (!sortKey ? <TiArrowUnsorted color='#dedede' /> : row.key === sortKey && order === 'dsc' ? <TiArrowSortedUp /> : <TiArrowSortedDown />) : null} */}
+              {/* {row.label} {row.sortable ? <SortButton columnKey={row.key} order={order} sortKey={sortKey}/> : null} */}
+              {row.label} 
+              {row.sortable ? (sortKey === row.key ? (order === 'desc' ? <TiArrowSortedDown /> : <TiArrowSortedUp /> ): <TiArrowUnsorted color='#d4d4d4' />) : null}
+            </span>
           </div>
         ))}
       </div>
       <div className={styles.list}>
         {
           products?.map(product => (
-            <div key={product._id} className={`${styles.row}`}>
+            <div key={product._id} className={styles.row}>
               <Row
                 _id={product._id}
                 name={product.name}
@@ -99,25 +134,3 @@ const MaterialsList: React.FC<Props> = ({ data, setIsModalEditOpen, setCurrentPr
 }
 
 export default MaterialsList
-
-
-
-{/* <div className={styles.container}>
-<div className={styles.head}>
-  <Row
-    _id={'head'}
-    name={'Nazwa'}
-    category={'Kategoria'}
-    quantity={'Stan'}
-    unit={'Jedn.'}
-    price={'Cena'}
-    head={true}
-    deleteProd={function (): void { throw new Error('Function not implemented.'); }}
-    editProd={function (): void { throw new Error('Function not implemented.'); }}
-    sorted={() => console.log('okkk')}
-  />
-</div>
-<div className={styles.list}>
-  {children}
-</div>
-</div> */}
