@@ -12,10 +12,6 @@ import {
 } from "../../store/api/products";
 import Row from './MaterialsList/Row/Row'
 
-interface StorageProps {
-  data: Product[]
-}
-
 const Storage: React.FC = () => {
   const { data, error, isLoading } = useGetAllProductsQuery()
   const [deleteProduct] = useDeleteProductMutation()
