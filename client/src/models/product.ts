@@ -5,4 +5,5 @@ export interface Product {
   quantity: number | string
   unit: string
   price: number | string
+  actions?: any
 }

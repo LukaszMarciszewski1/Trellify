@@ -34,10 +34,7 @@ const Storage: React.FC = () => {
   const handleEditProd = (prod: Product) => {
     setIsModalEditOpen(true)
     setCurrentProduct(prod)
-    console.log(prod)
   }
-
-  console.log(currentProduct?.name)
 
   return (
     <div className={styles.container}>
@@ -48,26 +45,15 @@ const Storage: React.FC = () => {
           <Header
             addNewProduct={() => setIsModalOpen(true)}
           />
-          <MaterialsList>
-            {
-              isLoading ? <div>Loading...</div> : (
-                data?.map(product => (
-                  <Row
-                    key={product._id}
-                    _id={product._id}
-                    name={product.name}
-                    category={product.category}
-                    quantity={product.quantity}
-                    unit={product.unit}
-                    price={`${product.price} zł`}
-                    action={true}
-                    editProd={() => handleEditProd(product)}
-                    deleteProd={() => deleteProduct(product._id)}
-                  />
-                )
-                ))
-            }
-          </MaterialsList>
+          {
+            isLoading ? <div>Loading...</div> : (
+              <MaterialsList
+                data={data}
+                setIsModalEditOpen={setIsModalEditOpen}
+                setCurrentProduct={setCurrentProduct}
+              />
+            )
+          }
         </div>
       </div>
       <div className={styles.right}></div>

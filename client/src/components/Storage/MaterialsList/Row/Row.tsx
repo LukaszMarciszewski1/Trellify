@@ -8,23 +8,22 @@ import Popup from '../../../Details/Popup/Popup';
 import TaskButton from '../../../Details/TaskButton/TaskButton';
 
 interface RowProps extends Product {
-  action?: boolean
-  onClick?: () => void
   deleteProd: () => void
   editProd: () => void
 }
 
-const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, action, editProd, deleteProd }) => {
+const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, editProd, deleteProd }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+
   return (
-    <div className={action ? `${styles.row}` : `${styles.head}`}>
-      <div className={`${styles.block} ${styles.r1}`}><p>{name}</p></div>
-      <div className={`${styles.block} ${styles.r2}`}><p>{category}</p></div>
-      <div className={`${styles.block} ${styles.r3}`}><p>{quantity}</p></div>
-      <div className={`${styles.block} ${styles.r4}`}><p>{unit}</p></div>
-      <div className={`${styles.block} ${styles.r5}`}><p>{price}</p></div>
-      <div className={`${styles.block} ${styles.r6}`}>
-        {action ? <IconButton onClick={() => setIsPopupOpen(true)}><BiDotsVerticalRounded style={{ fontSize: '1.2rem', color: 'grey' }} /></IconButton> : 'akcje'}
+    <>
+      <div className={`${styles.block}`}><p>{name}</p></div>
+      <div className={`${styles.block}`}><p>{category}</p></div>
+      <div className={`${styles.block}`}><p>{quantity}</p></div>
+      <div className={`${styles.block}`}><p>{unit}</p></div>
+      <div className={`${styles.block}`}><p>{price}</p></div>
+      <div className={`${styles.block}`}>
+        <IconButton onClick={() => setIsPopupOpen(true)}><BiDotsVerticalRounded style={{ fontSize: '1.2rem', color: 'grey' }} /></IconButton>
       </div>
       <Popup
         title={'Akcje listy'}
@@ -37,6 +36,7 @@ const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, action
           <TaskButton
             onClick={editProd}
             name={'Etytuj'}
+            style={{ margin: '12px 0' }}
           />
           <TaskButton
             onClick={deleteProd}
@@ -44,7 +44,7 @@ const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, action
           />
         </div>
       </Popup>
-    </div>
+    </>
   )
 }
 
