@@ -1,21 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
 import Modal from '../Details/Modal/Modal'
-import ToolBar from './ToolBar/ToolBar'
 import AddMaterial from './AddMaterial/AddMaterial'
 import MaterialsList from './MaterialsList/MaterialsList'
-import Input from '../Details/Input/Input'
 import Header from './Header/Header'
-import Box from '../Details/Box/Box'
-import Popup from '../Details/Popup/Popup'
 import { Product } from '../../models/product'
 import EditMaterial from './EditMaterial/EditMaterial'
-
 import {
   useGetAllProductsQuery,
   useDeleteProductMutation
 } from "../../store/api/products";
-import TaskButton from '../Details/TaskButton/TaskButton'
 import Row from './MaterialsList/Row/Row'
 
 interface StorageProps {
@@ -23,10 +17,21 @@ interface StorageProps {
 }
 
 const Storage: React.FC = () => {
-  const { data, error, isLoading, refetch } = useGetAllProductsQuery()
+  const { data, error, isLoading } = useGetAllProductsQuery()
+  const [deleteProduct] = useDeleteProductMutation()
+  const [products, setProducts] = useState<Product[]>()
+  const [currentProduct, setCurrentProduct] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalEditOpen, setIsModalEditOpen] = useState(false)
-  const [currentProduct, setCurrentProduct] = useState<any>(null)
+
+  useEffect(() => {
+    setProducts(data)
+  }, [data])
+
+  const handleEditProd = (prod: Product) => {
+    setIsModalEditOpen(true)
+    setCurrentProduct(prod)
+  }
 
   return (
     <div className={styles.container}>
@@ -40,10 +45,25 @@ const Storage: React.FC = () => {
           {
             isLoading ? <div>Loading...</div> : (
               <MaterialsList
-                data={data}
-                setIsModalEditOpen={setIsModalEditOpen}
-                setCurrentProduct={setCurrentProduct}
-              />
+                data={products}
+                sortProducts={setProducts}
+              >
+                {
+                  products?.map(product => (
+                    <Row
+                      key={product._id}
+                      _id={product._id}
+                      name={product.name}
+                      category={product.category}
+                      quantity={product.quantity}
+                      unit={product.unit}
+                      price={`${product.price} zł`}
+                      editProd={() => handleEditProd(product)}
+                      deleteProd={() => deleteProduct(product._id)}
+                    />
+                  ))
+                }
+              </MaterialsList>
             )
           }
         </div>

@@ -16,7 +16,7 @@ const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, editPr
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   
   return (
-    <>
+    <div className={styles.row}>
       <div className={`${styles.block}`}><span>{name}</span></div>
       <div className={`${styles.block}`}><span>{category}</span></div>
       <div className={`${styles.block}`}><span>{quantity}</span></div>
@@ -26,7 +26,7 @@ const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, editPr
         <IconButton onClick={() => setIsPopupOpen(true)}><BiDotsVerticalRounded style={{ fontSize: '1.2rem', color: 'grey' }} /></IconButton>
       </div>
       <Popup
-        title={'Akcje listy'}
+        title={'Akcje produktu'}
         trigger={isPopupOpen}
         closePopup={() => setIsPopupOpen(false)}
         top={'10px'}
@@ -36,7 +36,7 @@ const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, editPr
           <TaskButton
             onClick={editProd}
             name={'Etytuj'}
-            style={{ margin: '12px 0' }}
+            style={{ margin: '10px 0' }}
           />
           <TaskButton
             onClick={deleteProd}
@@ -44,7 +44,7 @@ const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, editPr
           />
         </div>
       </Popup>
-    </>
+    </div>
   )
 }
 

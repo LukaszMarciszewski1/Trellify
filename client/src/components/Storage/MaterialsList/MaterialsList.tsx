@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import Row from './Row/Row'
 import styles from './styles.module.scss'
-import { useDeleteProductMutation } from "../../../store/api/products";
 import { TiArrowSortedDown } from 'react-icons/ti'
 import { TiArrowSortedUp } from 'react-icons/ti'
 import { TiArrowUnsorted } from 'react-icons/ti'
@@ -9,15 +7,12 @@ import { Product } from '../../../models/product';
 
 interface MaterialsListProps {
   data: Product[] | undefined
-  setIsModalEditOpen: (value: boolean) => void
-  setCurrentProduct: (value: Product) => void
+  sortProducts: (value: Product[]) => void
 }
 
 type SortKeys = keyof Product;
 
-const MaterialsList: React.FC<MaterialsListProps> = ({ data, setIsModalEditOpen, setCurrentProduct }) => {
-  const [deleteProduct] = useDeleteProductMutation()
-  const [products, setProducts] = useState(data)
+const MaterialsList: React.FC<MaterialsListProps> = ({ data, children, sortProducts }) => {
   const [order, setOrder] = useState('asc')
   const [sortKey, setSortKey] = useState('');
 
@@ -30,30 +25,25 @@ const MaterialsList: React.FC<MaterialsListProps> = ({ data, setIsModalEditOpen,
     { key: "actions", label: "Akcje", sortable: false },
   ];
 
-  const handleEditProd = (prod: Product) => {
-    setIsModalEditOpen(true)
-    setCurrentProduct(prod)
-  }
-
   const sortData = useCallback(({ sortBy }: { sortBy: SortKeys }) => {
-    if (!products) return;
-    const array: Product[] = [...products]
+    if (!data) return;
+    const array: Product[] = [...data]
 
     if (order === 'asc') {
       const sorted = array.sort((a, b) => a[sortBy].toString().localeCompare(b[sortBy].toString(), "pl", { numeric: true }))
-      setProducts(sorted)
+      sortProducts(sorted)
       setOrder('desc')
     }
 
     if (order === 'desc') {
       const sorted = array.sort((a, b) => b[sortBy].toString().localeCompare(a[sortBy].toString(), "pl", { numeric: true }))
-      setProducts(sorted)
+      sortProducts(sorted)
       setOrder('asc')
     }
 
     setSortKey(sortBy);
 
-  }, [products, order, sortKey])
+  }, [data, order, sortKey])
 
   return (
     <div className={styles.container}>
@@ -66,29 +56,14 @@ const MaterialsList: React.FC<MaterialsListProps> = ({ data, setIsModalEditOpen,
             <span>
               {row.label}
               {row.sortable ?
-                (sortKey === row.key ? (order === 'desc' ? <TiArrowSortedDown /> : <TiArrowSortedUp />) : <TiArrowUnsorted color='#d4d4d4' />)
+                (sortKey === row.key ? (order === 'desc' ? <TiArrowSortedDown /> : <TiArrowSortedUp />) : <TiArrowUnsorted color='#c8c8c8' />)
                 : null}
             </span>
           </div>
         ))}
       </div>
       <div className={styles.list}>
-        {
-          products?.map(product => (
-            <div key={product._id} className={styles.row}>
-              <Row
-                _id={product._id}
-                name={product.name}
-                category={product.category}
-                quantity={product.quantity}
-                unit={product.unit}
-                price={`${product.price} zł`}
-                editProd={() => handleEditProd(product)}
-                deleteProd={() => deleteProduct(product._id)}
-              />
-            </div>
-          ))
-        }
+        {children}
       </div>
     </div>
   )

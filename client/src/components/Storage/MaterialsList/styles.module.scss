@@ -35,7 +35,7 @@
 .head,
 .row {
   display: grid;
-  grid-template-columns: minmax(140px, 1fr) repeat(4, minmax(80px, 140px)) 40px;
+  grid-template-columns: minmax(140px, 1fr) repeat(2, minmax(80px, 140px)) minmax(40px, 100px)  minmax(80px, 140px) 40px;
   gap: 20px;
   width: 100%;
   height: 100%;

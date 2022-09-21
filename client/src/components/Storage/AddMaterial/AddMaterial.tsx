@@ -110,8 +110,6 @@ const MaterialForm: React.FC<MaterialFormProps> = ({ closeModal }) => {
   }
   setTimeout(() => setIsSuccess(false), 3000)
 
-  // <Row name='Nazwa' quantity={'Stan'} unit={'Jedn.'} price={'Cena'} />
-
   return (
     <div className={styles.container}>
       <h2>Dodaj produkt</h2>
