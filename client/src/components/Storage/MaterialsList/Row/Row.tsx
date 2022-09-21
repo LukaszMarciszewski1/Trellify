@@ -14,14 +14,14 @@ interface RowProps extends Product {
 
 const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, editProd, deleteProd }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
-
+  
   return (
     <>
-      <div className={`${styles.block}`}><p>{name}</p></div>
-      <div className={`${styles.block}`}><p>{category}</p></div>
-      <div className={`${styles.block}`}><p>{quantity}</p></div>
-      <div className={`${styles.block}`}><p>{unit}</p></div>
-      <div className={`${styles.block}`}><p>{price}</p></div>
+      <div className={`${styles.block}`}><span>{name}</span></div>
+      <div className={`${styles.block}`}><span>{category}</span></div>
+      <div className={`${styles.block}`}><span>{quantity}</span></div>
+      <div className={`${styles.block}`}><span>{unit}</span></div>
+      <div className={`${styles.block}`}><span>{price}</span></div>
       <div className={`${styles.block}`}>
         <IconButton onClick={() => setIsPopupOpen(true)}><BiDotsVerticalRounded style={{ fontSize: '1.2rem', color: 'grey' }} /></IconButton>
       </div>

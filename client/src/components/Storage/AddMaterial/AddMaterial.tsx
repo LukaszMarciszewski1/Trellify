@@ -107,8 +107,8 @@ const MaterialForm: React.FC<MaterialFormProps> = ({ closeModal }) => {
       price
     })
     setIsSuccess(true)
-    setTimeout(() => setIsSuccess(false), 3000)
   }
+  setTimeout(() => setIsSuccess(false), 3000)
 
   // <Row name='Nazwa' quantity={'Stan'} unit={'Jedn.'} price={'Cena'} />
 
