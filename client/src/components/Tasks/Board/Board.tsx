@@ -33,9 +33,8 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: back
 
   useEffect(() => {
     if (listsApi) {
-      const boardBG = !backgroundApi ? defaultBackground : backgroundApi
       setLists(listsApi)
-      setBackground(boardBG)
+      setBackground(defaultBackground)
     }
   }, [listsApi, backgroundApi])
 
