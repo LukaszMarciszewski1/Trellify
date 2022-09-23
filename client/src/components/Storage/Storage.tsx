@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
-import Modal from '../Details/Modal/Modal'
-import AddProductForm from './AddProductForm/AddProductForm'
-import ProductsList from './ProductsList/ProductsList'
-import Header from './Header/Header'
 import { Product as ProductModel } from '../../models/product'
-import EditProductForm from './EditProductForm/EditProductForm'
 import {
   useGetAllProductsQuery,
   useDeleteProductMutation
-} from "../../store/api/products";
+} from "../../store/api/products"
+import Modal from '../Details/Modal/Modal'
+import AddProductForm from './AddProductForm/AddProductForm'
+import Header from './Header/Header'
+import EditProductForm from './EditProductForm/EditProductForm'
+import ProductsList from './ProductsList/ProductsList'
 import Product from './Product/Product'
+import CategoriesList from './CategoriesList/CategoriesList'
 
 const Storage: React.FC = () => {
   const { data, error, isLoading } = useGetAllProductsQuery()
@@ -33,7 +34,9 @@ const Storage: React.FC = () => {
     <div className={styles.container}>
       {error && <h2>Error 500</h2>}
       <div className={styles.left}>
-        <div className={styles.top}></div>
+        <div className={styles.top}>
+          <CategoriesList data={products}/>
+        </div>
         <div className={styles.bottom}>
           <Header
             addNewProduct={() => setIsModalOpen(true)}

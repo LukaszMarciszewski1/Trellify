@@ -99,7 +99,7 @@ const AddProductForm: React.FC = () => {
     })
     setIsSuccess(true)
   }
-  setTimeout(() => setIsSuccess(false), 3000)
+  // setTimeout(() => setIsSuccess(false), 3000)
 
   return (
     <div className={styles.container}>
