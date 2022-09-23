@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import IconButton from '../../Details/IconButton/IconButton';
-import { Product } from '../../../models/product';
+import { Product as ProductModel } from '../../../models/product';
 
 import { BiDotsVerticalRounded } from 'react-icons/bi'
 import Popup from '../../Details/Popup/Popup';
 import TaskButton from '../../Details/TaskButton/TaskButton';
 
-interface RowProps extends Product {
+interface ProductProps extends ProductModel {
   deleteProd: () => void
   editProd: () => void
 }
 
-const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, editProd, deleteProd }) => {
+const Product: React.FC<ProductProps> = ({ name, category, quantity, unit, price, editProd, deleteProd }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   
   return (
@@ -48,4 +48,4 @@ const Row: React.FC<RowProps> = ({ name, category, quantity, unit, price, editPr
   )
 }
 
-export default Row
+export default Product

@@ -1,8 +1,5 @@
 @import '../../../assets/scss/utils.scss';
-.listWrapper {
-  // padding-bottom: 10px;
-  // min-height: 100%;
-}
+@import '../../../assets/scss/mixins.scss';
 
 .list {
   margin-right: 16px;
