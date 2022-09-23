@@ -2,29 +2,30 @@ import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import { Product as ProductModel } from '../../../models/product'
 import { BiCategory } from 'react-icons/bi'
+import {ReduceReturnType} from '../Storage'
 
 interface CategoriesListProps {
-  data: ProductModel[] | undefined
+  data: ReduceReturnType | undefined
 }
-type ReduceReturnType = Record<string, number>;
+// type ReduceReturnType = Record<string, number>;
 
 const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
-  const [categories, setCategories] = useState<ReduceReturnType | undefined>()
+  // const [categories, setCategories] = useState<ReduceReturnType | undefined>()
 
-  useEffect(() => {
-    setCategories(getDuplicateElements(data))
-  }, [data])
+  // useEffect(() => {
+  //   setCategories(getCategories(data))
+  // }, [data])
 
-  const getDuplicateElements = (data: ProductModel[] | undefined) => {
-    if (!data) return
-    const categories = [...data].map(product => product.category)
-    const categoryObj = categories.reduce<ReduceReturnType>((acc, value) => ({
-      ...acc,
-      [value]: (acc[value] || 0) + 1
-    }), {});
+  // const getCategories = (data: ProductModel[] | undefined) => {
+  //   if (!data) return
+  //   const categories = [...data].map(product => product.category)
+  //   const categoryObj = categories.reduce<ReduceReturnType>((acc, value) => ({
+  //     ...acc,
+  //     [value]: (acc[value] || 0) + 1
+  //   }), {});
 
-    return categoryObj
-  }
+  //   return categoryObj
+  // }
 
   return (
     <div className={styles.container}>
@@ -33,7 +34,7 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
         <h4>Kategorie</h4>
       </div>
       {
-        categories ? Object.entries(categories).map(([key, value]) => (
+        data ? Object.entries(data).map(([key, value]) => (
           <div key={key} className={styles.box}>
             <h5>{key}</h5>
             <span>{`ilość: ${value}`}</span>

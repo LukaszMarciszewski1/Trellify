@@ -4,8 +4,8 @@
 .container {
   position: relative;
   padding-bottom: 1rem;
-  height: 530px;
-  max-height: 530px;
+  height: 600px;
+  max-height: 600px;
   overflow-y: auto;
   padding-right: 10px;
   @include scrollbar;

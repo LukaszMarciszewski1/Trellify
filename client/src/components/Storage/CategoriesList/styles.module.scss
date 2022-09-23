@@ -1,3 +1,4 @@
+@import '../../../assets/scss/mixins.scss';
 .container {
   display: flex;
   align-items: center;
@@ -17,8 +18,9 @@
 
 .box {
   margin-right: 2rem;
+  padding: 0 1rem;
   color: rgb(74, 80, 98);
-  // padding: 1rem;
+  white-space: nowrap;
   &:last-child {
     margin-right: 0;
   }
