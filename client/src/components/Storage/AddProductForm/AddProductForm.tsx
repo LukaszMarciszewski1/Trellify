@@ -7,12 +7,7 @@ import styles from './styles.module.scss'
 import Button from '../../Details/Button/Button';
 import { Product } from '../../../models/product';
 
-import {
-  useAddProductMutation,
-  useDeleteProductMutation,
-  useUpdateProductMutation,
-} from "../../../store/api/products";
-
+import { useAddProductMutation } from "../../../store/api/products";
 
 const validation = {
   name: {
@@ -35,31 +30,12 @@ const validation = {
   }
 }
 
-interface EditMaterialFormProps {
-  closeModal?: () => void
-  _id: string
-  defaultName: string
-  defaultCategory: string
-  defaultQuantity: number
-  defaultUnit: string
-  defaultPrice: number
-}
-
-const EditMaterial: React.FC<EditMaterialFormProps> = ({
-  _id,
-  defaultName,
-  defaultCategory,
-  defaultQuantity,
-  defaultUnit,
-  defaultPrice
-}) => {
-
-  const [updateProduct] = useUpdateProductMutation()
+const AddProductForm: React.FC = () => {
+  const [addProduct] = useAddProductMutation()
   const [isSuccess, setIsSuccess] = useState(false)
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<Product>();
 
@@ -111,31 +87,29 @@ const EditMaterial: React.FC<EditMaterialFormProps> = ({
     }
   }
 
-  const handleEditProduct = (data: Product) => {
+  const handleAddProduct = (data: Product) => {
+    console.log(data)
     const { name, category, quantity, unit, price } = data
-    console.log(_id)
-    updateProduct({
-      _id,
+    addProduct({
       name,
       category,
       quantity,
       unit,
       price
     })
-    // setIsSuccess(true)
-    // setTimeout(() => setIsSuccess(false), 3000)
+    setIsSuccess(true)
   }
+  setTimeout(() => setIsSuccess(false), 3000)
 
   return (
     <div className={styles.container}>
       <h2>Dodaj produkt</h2>
-      <form className={styles.form} onSubmit={handleSubmit(handleEditProduct)}>
+      <form className={styles.form} onSubmit={handleSubmit(handleAddProduct)}>
         <div className={styles.formContainer}>
           <div className={styles.formGroup}>
             <Input
               id={'name'}
               placeholder={'Nazwa'}
-              defaultValue={defaultName}
               label={'Nazwa'}
               type="text"
               error={errors.name}
@@ -145,7 +119,6 @@ const EditMaterial: React.FC<EditMaterialFormProps> = ({
             <Input
               id={'category'}
               placeholder={'Kategoria'}
-              defaultValue={defaultCategory}
               label={'Kategoria'}
               type="text"
               error={errors.category}
@@ -155,7 +128,6 @@ const EditMaterial: React.FC<EditMaterialFormProps> = ({
             <Input
               id={'quantity'}
               placeholder={'Stan'}
-              defaultValue={defaultQuantity}
               label={'Stan'}
               type="number"
               minValue={0}
@@ -165,7 +137,7 @@ const EditMaterial: React.FC<EditMaterialFormProps> = ({
             {quantityErrors(errors.quantity?.type)}
           </div>
           <div className={styles.formGroup}>
-            <select {...register('unit')} className={styles.select} defaultValue={defaultUnit}>
+            <select {...register('unit')} className={styles.select}>
               <option value="m2">m2</option>
               <option value="ark">ark.</option>
               <option value="ryz">ryz</option>
@@ -176,7 +148,6 @@ const EditMaterial: React.FC<EditMaterialFormProps> = ({
             <Input
               id={'price'}
               placeholder={'Cena'}
-              defaultValue={defaultPrice}
               label={'Cena'}
               type="number"
               step="0.01"
@@ -188,7 +159,7 @@ const EditMaterial: React.FC<EditMaterialFormProps> = ({
           </div>
         </div>
         <div className={styles.actionForm}>
-          <Button title={'Zapisz'} type={'submit'} />
+          <Button title={'Dodaj produkt'} type={'submit'} />
           <h3>{isSuccess && 'Produkt został dodany'}</h3>
         </div>
       </form>
@@ -196,4 +167,4 @@ const EditMaterial: React.FC<EditMaterialFormProps> = ({
   )
 }
 
-export default EditMaterial
+export default AddProductForm

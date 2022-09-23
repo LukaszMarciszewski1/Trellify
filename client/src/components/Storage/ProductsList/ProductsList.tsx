@@ -3,16 +3,16 @@ import styles from './styles.module.scss'
 import { TiArrowSortedDown } from 'react-icons/ti'
 import { TiArrowSortedUp } from 'react-icons/ti'
 import { TiArrowUnsorted } from 'react-icons/ti'
-import { Product } from '../../../models/product';
+import { Product as ProductModel } from '../../../models/product';
 
-interface MaterialsListProps {
-  data: Product[] | undefined
-  sortProducts: (value: Product[]) => void
+interface ProductsListProps {
+  data: ProductModel[] | undefined
+  sortProducts: (value: ProductModel[]) => void
 }
 
-type SortKeys = keyof Product;
+type SortKeys = keyof ProductModel;
 
-const MaterialsList: React.FC<MaterialsListProps> = ({ data, children, sortProducts }) => {
+const ProductsList: React.FC<ProductsListProps> = ({ data, children, sortProducts }) => {
   const [order, setOrder] = useState('asc')
   const [sortKey, setSortKey] = useState('');
 
@@ -27,7 +27,7 @@ const MaterialsList: React.FC<MaterialsListProps> = ({ data, children, sortProdu
 
   const sortData = useCallback(({ sortBy }: { sortBy: SortKeys }) => {
     if (!data) return;
-    const array: Product[] = [...data]
+    const array: ProductModel[] = [...data]
 
     if (order === 'asc') {
       const sorted = array.sort((a, b) => a[sortBy].toString().localeCompare(b[sortBy].toString(), "pl", { numeric: true }))
@@ -69,4 +69,4 @@ const MaterialsList: React.FC<MaterialsListProps> = ({ data, children, sortProdu
   )
 }
 
-export default MaterialsList
+export default ProductsList

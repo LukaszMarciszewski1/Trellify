@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
 import Modal from '../Details/Modal/Modal'
-import AddMaterial from './AddMaterial/AddMaterial'
-import MaterialsList from './MaterialsList/MaterialsList'
+import AddProductForm from './AddProductForm/AddProductForm'
+import ProductsList from './ProductsList/ProductsList'
 import Header from './Header/Header'
-import { Product } from '../../models/product'
-import EditMaterial from './EditMaterial/EditMaterial'
+import { Product as ProductModel } from '../../models/product'
+import EditProductForm from './EditProductForm/EditProductForm'
 import {
   useGetAllProductsQuery,
   useDeleteProductMutation
 } from "../../store/api/products";
-import Row from './MaterialsList/Row/Row'
+import Product from './Product/Product'
 
 const Storage: React.FC = () => {
   const { data, error, isLoading } = useGetAllProductsQuery()
   const [deleteProduct] = useDeleteProductMutation()
-  const [products, setProducts] = useState<Product[]>()
+  const [products, setProducts] = useState<ProductModel[]>()
   const [currentProduct, setCurrentProduct] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalEditOpen, setIsModalEditOpen] = useState(false)
@@ -24,7 +24,7 @@ const Storage: React.FC = () => {
     setProducts(data)
   }, [data])
 
-  const handleEditProd = (prod: Product) => {
+  const handleEditProd = (prod: ProductModel) => {
     setIsModalEditOpen(true)
     setCurrentProduct(prod)
   }
@@ -40,13 +40,13 @@ const Storage: React.FC = () => {
           />
           {
             isLoading ? <div>Loading...</div> : (
-              <MaterialsList
+              <ProductsList
                 data={products}
                 sortProducts={setProducts}
               >
                 {
                   products?.map(product => (
-                    <Row
+                    <Product
                       key={product._id}
                       _id={product._id}
                       name={product.name}
@@ -59,19 +59,19 @@ const Storage: React.FC = () => {
                     />
                   ))
                 }
-              </MaterialsList>
+              </ProductsList>
             )
           }
         </div>
       </div>
       <div className={styles.right}></div>
       <Modal trigger={isModalOpen} closeModal={() => setIsModalOpen(false)}>
-        <AddMaterial />
+        <AddProductForm />
       </Modal>
       <Modal trigger={isModalEditOpen} closeModal={() => setIsModalEditOpen(false)}>
         {
           currentProduct && (
-            <EditMaterial
+            <EditProductForm
               _id={currentProduct._id}
               defaultName={currentProduct.name}
               defaultCategory={currentProduct.category}

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
-import IconButton from '../../../Details/IconButton/IconButton';
-import { Product } from '../../../../models/product';
+import IconButton from '../../Details/IconButton/IconButton';
+import { Product } from '../../../models/product';
 
 import { BiDotsVerticalRounded } from 'react-icons/bi'
-import Popup from '../../../Details/Popup/Popup';
-import TaskButton from '../../../Details/TaskButton/TaskButton';
+import Popup from '../../Details/Popup/Popup';
+import TaskButton from '../../Details/TaskButton/TaskButton';
 
 interface RowProps extends Product {
   deleteProd: () => void
