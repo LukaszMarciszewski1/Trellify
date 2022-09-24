@@ -14,7 +14,6 @@ import List from '../List/List'
 import TaskButton from '../../Details/TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import SideMenu from '../SideMenu/SideMenu';
-import { useParams, useSearchParams } from 'react-router-dom';
 
 const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: backgroundApi }) => {
   const [addList] = useAddListMutation()
@@ -34,9 +33,8 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: back
 
   useEffect(() => {
     if (listsApi) {
-      const boardBG = !backgroundApi ? defaultBackground : backgroundApi
       setLists(listsApi)
-      setBackground(boardBG)
+      setBackground(defaultBackground)
     }
   }, [listsApi, backgroundApi])
 
@@ -155,10 +153,10 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: back
       style={boardBackgroundStyle}
     >
       <div className={styles.container}>
-        <BoardHeader
+        {/* <BoardHeader
           name={'Zmień tło'}
           onClick={() => setIsOpenSideMenu(true)}
-        />
+        /> */}
         {
           isOpenSideMenu ?
             <SideMenu

@@ -1,16 +1,18 @@
-.input {
+.input{
   outline: none;
   border: none;
   width: 100%;
   padding: 15px;
   border-radius: 10px;
-  background-color: #edf5f3;
-  background-color: #edf6f9;
+  margin: 6px 0;
   border: 1px solid darken(#edf3f5, 10%);
-  margin: 5px 0;
+  background-color: #edf6f9;
   font-size: 14px;
+  &:disabled {
+    opacity: 0.8;
+  }
 }
-.error{
+.error {
   outline: none;
   border: none;
   width: 100%;

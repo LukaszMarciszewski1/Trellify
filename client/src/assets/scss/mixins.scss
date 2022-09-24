@@ -1,0 +1,40 @@
+@mixin gridTable {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) repeat(2, minmax(80px, 140px)) minmax(
+      40px,
+      100px
+    ) minmax(80px, 140px) 40px;
+  gap: 20px;
+}
+
+@mixin blockTable {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  & {
+    display: flex;
+    align-items: center;
+  }
+}
+
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+  &::-webkit-scrollbar:vertical {
+    width: 8px;
+    border-radius: 5px;
+    border: solid 3px transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: rgb(216, 216, 216);
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(187, 187, 187);
+    border-radius: 8px;
+    border: solid 3px transparent;
+  }
+}

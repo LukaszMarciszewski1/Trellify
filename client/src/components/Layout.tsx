@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import Sidebar from './Sidebar/Sidebar'
-import AppBar from './AppBar/Appbar'
+import AppBar from './AppBar/AppBar'
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth'
 
@@ -11,12 +11,14 @@ const Layout: React.FC = () => {
     <>
       {user ? (
         <div className={styles.layout}>
-          <AppBar />
-          <div className={styles.content}>
+          <div className={styles.appbar}>
+            <AppBar />
+          </div>
+          <div className={styles.sidebar}>
             <Sidebar />
-            <div className={styles.pagesContainer}>
-              <Outlet />
-            </div>
+          </div>
+          <div className={styles.pages}>
+            <Outlet />
           </div>
         </div>
       ) : (

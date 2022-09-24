@@ -1,21 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState  } from 'react'
 import Board from '../../../components/Tasks/Board/Board';
-import { useGetAllBoardsQuery, useGetBoardQuery } from '../../../store/api/boards';
+import { useGetAllBoardsQuery  } from '../../../store/api/boards';
 import { Board as BoardResponse } from '../../../models/board'
 import Loading from '../../../components/Details/Loading/Loading';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { useLocation } from "react-router-dom";
-import { useAuth } from '../../../hooks/useAuth'
 
 const TasksPage: React.FC = () => {
-  const { data, error, isLoading, refetch } = useGetAllBoardsQuery()
+  const { data, error, isLoading } = useGetAllBoardsQuery()
   const [boards, setBoards] = useState<BoardResponse[]>([] as BoardResponse[])
-  const { user } = useAuth()
-  useEffect(() => {
-    if (user) {
-      refetch()
-    }
-  }, [])
 
   return (
     <>

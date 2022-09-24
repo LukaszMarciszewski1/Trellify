@@ -18,7 +18,6 @@ export const getBoards = asyncHandler(async (req: Request, res: Response) => {
         },
       })
       .exec()
-    console.log(userId)
     res.status(200).json(boards)
   } catch (error) {
     res.status(404).json({ error })

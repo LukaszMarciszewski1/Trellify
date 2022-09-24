@@ -73,6 +73,7 @@ export const useProviderAuth = () => {
         config
       )
       setLoading(false)
+      navigate('/logowanie')
     } catch (error: any) {
       setLoading(false)
       setError(error.response.data.message)
@@ -82,7 +83,6 @@ export const useProviderAuth = () => {
   const signOut = () => {
     setUser(null)
     localStorage.removeItem('token')
-    navigate('/logowanie')
   }
 
   return { user, loading, error, signIn, signUp, signOut }

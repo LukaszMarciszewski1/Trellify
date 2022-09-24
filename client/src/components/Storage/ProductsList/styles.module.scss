@@ -1,0 +1,49 @@
+@import '../../../assets/scss/utils.scss';
+@import '../../../assets/scss/mixins.scss';
+
+.container {
+  position: relative;
+  padding-bottom: 1rem;
+  height: 600px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 10px;
+  @include scrollbar;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  font-weight: bold;
+  height: 50px;
+  padding-right: 10px;
+}
+
+.list {
+  // height: 530px;
+  // max-height: 530px;
+  // overflow-y: auto;
+  // padding-right: 10px;
+  // @include scrollbar;
+}
+
+.head {
+  @include gridTable;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: 8px;
+  padding-right: 8px;
+  font-weight: bold;
+  color: rgb(74, 80, 98);
+  background-color: #fcfcfc;
+  z-index: 1;
+}
+
+.block {
+  @include blockTable;
+}
+
+.sortable {
+  cursor: pointer;
+}

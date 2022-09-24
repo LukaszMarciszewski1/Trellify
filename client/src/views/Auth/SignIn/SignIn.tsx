@@ -6,59 +6,53 @@ import { useForm } from 'react-hook-form';
 import Input from '../../../components/Details/Input/Input'
 import { User } from '../../../models/user'
 import ErrorMessage from '../../../components/Details/Messages/ErrorMessage';
-import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react';
+
 const SignIn: React.FC = () => {
-  const { user, loading, error: errorResponse, signIn } = useAuth()
-  const navigate = useNavigate()
+  const { loading, error: errorResponse, signIn } = useAuth()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<User>();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate('/')
-  //   }
-  // }, [user]);
-  // console.log(user)
-
   return (
-    <div className={styles.login_formContainer}>
-      <div className={styles.left}>
-        {loading ? <Loading /> : null}
-        <form className={styles.form_container} onSubmit={handleSubmit(signIn)}>
-          <h1>Zaloguj się</h1>
-          <Input
-            id={'email'}
-            placeholder={'email'}
-            label={'Email'}
-            type="text"
-            {...register("email", { required: true })}
-          />
-          {errors.email && <ErrorMessage message={'Email jest wymagany'} />}
-          <Input
-            id={'password'}
-            placeholder={'password'}
-            label={'Password'}
-            type="password"
-            {...register("password", { required: true })}
-          />
-          {errors.password && <ErrorMessage message={'Hasło jest wymagane'} />}
-          {errorResponse && <ErrorMessage message={'Email lub hasło jest nieprawidłowe'} />}
-          <button type='submit' className={styles.green_btn}>
-            Logowanie
-          </button>
-        </form>
-      </div>
-      <div className={styles.right}>
-        <h1>Zarejestruj się</h1> <br />
-        <Link to='/rejestracja'>
-          <button type='button' className={styles.white_btn}>
-            Rejestracja
-          </button>
-        </Link>
+    <div className={styles.container}>
+      <div className={styles.login_formContainer}>
+        <div className={styles.left}>
+          {loading ? <Loading /> : null}
+          <form className={styles.form_container} onSubmit={handleSubmit(signIn)}>
+            <h1>Zaloguj się</h1>
+            <Input
+              id={'email'}
+              placeholder={'email'}
+              label={'Email'}
+              type="text"
+              {...register("email", { required: true })}
+            />
+            {errors.email && <ErrorMessage message={'Email jest wymagany'} />}
+            <Input
+              id={'password'}
+              placeholder={'password'}
+              label={'Password'}
+              type="password"
+              {...register("password", { required: true })}
+            />
+            {errors.password && <ErrorMessage message={'Hasło jest wymagane'} />}
+            {errorResponse && <ErrorMessage message={'Email lub hasło jest nieprawidłowe'} />}
+            <button type='submit' className={styles.green_btn}>
+              Logowanie
+            </button>
+          </form>
+        </div>
+        <div className={styles.right}>
+          <h1>Zarejestruj się</h1> <br />
+          <Link to='/rejestracja'>
+            <button type='button' className={styles.white_btn}>
+              Rejestracja
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   )

@@ -2,12 +2,9 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import SignIn from './SignIn/SignIn';
 import SignUp from './SignUp/SignUp';
-import { useAuth } from '../../hooks/useAuth'
 import Layout from '../../components/Layout';
 
-const Auth = () => {
-  const { user } = useAuth()
-  console.log(user)
+const Auth: React.FC = () => {
   return (
     <Routes>
       <Route element={<Layout />} >

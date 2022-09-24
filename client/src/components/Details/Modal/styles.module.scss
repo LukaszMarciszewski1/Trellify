@@ -1,24 +1,23 @@
-.overlay{
-  position: absolute;
+.overlay {
+  position: fixed;
+  overflow-y: scroll;
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 199;
+  z-index: 998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 800px;
-  // padding: 1rem;
   background-color: #fcfcfc;
   border: 1px solid #cdced1;
   border-radius: 8px;
-  z-index: 200;
+  z-index: 999;
   @media (max-width: 768px) {
     max-width: 400px;
   }

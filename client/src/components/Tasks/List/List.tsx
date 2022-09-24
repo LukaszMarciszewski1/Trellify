@@ -13,11 +13,12 @@ import { BsThreeDots } from "react-icons/bs";
 import { GoPlus } from "react-icons/go";
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import { List as ListInterface } from '../../../models/list'
-import Card from '../Card/TaskCard';
+import Card from '../Card/Card';
 import TaskForm from '../TaskForm/TaskForm';
 import TaskButton from '../../Details/TaskButton/TaskButton';
 import IconButton from '../../Details/IconButton/IconButton'
 import Popup from '../../Details/Popup/Popup';
+
 interface PropsList extends ListInterface {
   index: number
 }
@@ -100,7 +101,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   useOnClickOutside(ref, handleCloseForm)
 
   return (
-    <div>
+    <div className={styles.listWrapper}>
       <Draggable draggableId={String(_id)} index={index} isDragDisabled={isDragDisabled}>
         {provided => (
           <div className={styles.list} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
