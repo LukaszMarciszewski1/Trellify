@@ -60,7 +60,7 @@ const LabelForm: React.FC<LabelProps> = ({
       <div className={styles.actionsForm}>
         <Button onClick={handleChangeLabelTitle} title={'Zapisz'} type={'submit'} />
         <div style={{ marginRight: '1rem' }} />
-        <Button onClick={handleDeleteLabel} title={'Usuń'} bgColor={'#EA4746'} type={'button'} />
+        <Button onClick={handleDeleteLabel} title={'Usuń'} type={'button'} />
       </div>
     </form>
   )

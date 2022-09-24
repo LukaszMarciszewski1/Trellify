@@ -603,7 +603,7 @@ const CardModal: React.FC<CardModalProps> = ({
               <div className={styles.actionsForm}>
                 <Button onClick={handleSaveDeadline} title={'Zapisz'} type={'button'} />
                 <div style={{ marginRight: '1rem' }} />
-                <Button onClick={handleDeleteDeadline} title={'Usuń'} bgColor={'#EA4746'} type={'button'} />
+                <Button onClick={handleDeleteDeadline} title={'Usuń'} type={'button'} />
               </div>
             </Popup>
             <Popup

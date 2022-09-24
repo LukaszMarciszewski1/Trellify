@@ -6,9 +6,8 @@ import {
   useDeleteProductMutation
 } from "../../store/api/products"
 import Modal from '../Details/Modal/Modal'
-import AddProductForm from './AddProductForm/AddProductForm'
+import ProductForm from './ProductForm/ProductForm'
 import Header from './Header/Header'
-import EditProductForm from './EditProductForm/EditProductForm'
 import ProductsList from './ProductsList/ProductsList'
 import Product from './Product/Product'
 import CategoriesList from './CategoriesList/CategoriesList'
@@ -23,12 +22,14 @@ const Storage: React.FC = () => {
   const [currentProduct, setCurrentProduct] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalEditOpen, setIsModalEditOpen] = useState(false)
-  const allCategoryValue = 'Wszystkie'
+  const allCategoryValue = 'Wszystkie kategorie'
   const [activeCategory, setActiveCategory] = useState<string>(allCategoryValue)
 
   useEffect(() => {
-    setProducts(data)
-    setCategories(getCategories(data))
+    if (data) {
+      setProducts(data)
+      setCategories(getCategories(data))
+    }
   }, [data])
 
   const getCategories = (data: ProductModel[] | undefined) => {
@@ -58,6 +59,9 @@ const Storage: React.FC = () => {
     setIsModalEditOpen(true)
     setCurrentProduct(prod)
   }
+
+  console.log(products)
+  console.log(categories)
 
   return (
     <div className={styles.container}>
@@ -102,12 +106,14 @@ const Storage: React.FC = () => {
       </div>
       <div className={styles.right}><p>sticky</p></div>
       <Modal trigger={isModalOpen} closeModal={() => setIsModalOpen(false)}>
-        <AddProductForm />
+        <ProductForm categoryList={categories} formTitle={'Dodaj produkt'} />
       </Modal>
       <Modal trigger={isModalEditOpen} closeModal={() => setIsModalEditOpen(false)}>
         {
           currentProduct && (
-            <EditProductForm
+            <ProductForm
+              categoryList={categories}
+              formTitle={'Edytuj produkt'}
               _id={currentProduct._id}
               defaultName={currentProduct.name}
               defaultCategory={currentProduct.category}

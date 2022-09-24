@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Input from '../../Details/Input/Input';
-import Loading from '../../Details/Loading/Loading';
-import ErrorMessage from '../../Details/Messages/ErrorMessage';
+import Input from '../../../Details/Input/Input';
+import Loading from '../../../Details/Loading/Loading';
+import ErrorMessage from '../../../Details/Messages/ErrorMessage';
 import styles from './styles.module.scss'
-import Button from '../../Details/Button/Button';
-import { Product } from '../../../models/product';
-import { useUpdateProductMutation } from "../../../store/api/products";
+import Button from '../../../Details/Button/Button';
+import { Product } from '../../../../models/product';
+import { useUpdateProductMutation } from "../../../../store/api/products";
 
 
 const validation = {
@@ -31,7 +31,6 @@ const validation = {
 }
 
 interface EditProductFormProps {
-  closeModal?: () => void
   _id: string
   defaultName: string
   defaultCategory: string
@@ -107,7 +106,6 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
 
   const handleEditProduct = (data: Product) => {
     const { name, category, quantity, unit, price } = data
-    console.log(_id)
     updateProduct({
       _id,
       name,

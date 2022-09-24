@@ -2,18 +2,26 @@
   padding: 3rem;
 }
 
+.formContainer {
+  display: flex;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .formGroup {
   width: 220px;
 }
 
 .formGroup:first-child {
-  margin-right: 1rem;
+  margin-right: 2rem;
 }
 
-.formContainer {
-  display: flex;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+.inputContainer {
+  margin-bottom: 1.2rem;
+  .selectGroup {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .select {
@@ -26,7 +34,7 @@
   border-radius: 10px;
   background-color: #edf6f9;
   border: 1px solid darken(#edf3f5, 10%);
-  margin: 5px 0;
+  margin: 6px 0;
   font-size: 14px;
 }
 
@@ -34,4 +42,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+label {
+  color: rgb(74, 80, 98);
 }
