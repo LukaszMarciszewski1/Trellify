@@ -6,14 +6,8 @@ import { MdArrowForwardIos } from "react-icons/md";
 import { CgCalculator } from "react-icons/cg";
 import { GiDeliveryDrone } from "react-icons/gi";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { IoLogoJavascript } from "react-icons/io";
-import { CgComponents } from "react-icons/cg";
 import { GrTask } from "react-icons/gr";
-
-import { defaultBackground } from '../../components/Tasks/localData'
-
-
-import { useCreateBoardMutation } from '../../store/api/boards'
+import { BiCategory } from 'react-icons/bi'
 
 const menuItems = [
   {
@@ -24,7 +18,7 @@ const menuItems = [
   {
     name: 'Magazyn',
     path: '/magazyn',
-    icon: <CgComponents />
+    icon: <BiCategory />
   },
   {
     name: 'Kalkulator',

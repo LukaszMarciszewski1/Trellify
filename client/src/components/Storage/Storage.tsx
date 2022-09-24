@@ -23,6 +23,8 @@ const Storage: React.FC = () => {
   const [currentProduct, setCurrentProduct] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalEditOpen, setIsModalEditOpen] = useState(false)
+  const allCategoryValue = 'Wszystkie'
+  const [activeCategory, setActiveCategory] = useState<string>(allCategoryValue)
 
   useEffect(() => {
     setProducts(data)
@@ -42,13 +44,14 @@ const Storage: React.FC = () => {
 
   const handleFilterCategory = (value: string) => {
     if (!data) return
-    const filterProducts = [...data].filter(item => item.category === value)
-    if (value !== 'all') {
+    const filterProducts = [...data].filter(product => product.category === value)
+    if (value !== allCategoryValue) {
       setProducts(filterProducts)
     }
     else {
       setProducts(data)
     }
+    setActiveCategory(value)
   }
 
   const handleEditProd = (prod: ProductModel) => {
@@ -68,6 +71,8 @@ const Storage: React.FC = () => {
             addNewProduct={() => setIsModalOpen(true)}
             categories={categories}
             handleFilterCategory={handleFilterCategory}
+            activeCategory={activeCategory}
+            allCategoryValue={allCategoryValue}
           />
           {
             isLoading ? <div>Loading...</div> : (
