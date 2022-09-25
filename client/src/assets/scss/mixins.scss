@@ -38,3 +38,15 @@
     border: solid 3px transparent;
   }
 }
+
+@mixin input {
+  max-height: 48px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #edf6f9;
+  border: 1px solid darken(#edf3f5, 10%);
+  margin: 6px 0;
+  font-size: 14px;
+}
