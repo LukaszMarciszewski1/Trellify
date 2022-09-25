@@ -6,7 +6,7 @@ import styles from './styles.module.scss'
 import Button from '../../Details/Button/Button';
 import { Product as ProductModel } from '../../../models/product';
 import { ReduceReturnType } from '../Storage'
-import { useAddProductMutation } from "../../../store/api/products";
+import { useAddProductMutation, useUpdateProductMutation } from "../../../store/api/products";
 
 const validation = {
   name: {
@@ -41,20 +41,25 @@ interface DefaultValuesProps {
 interface AddProductFormProps extends DefaultValuesProps {
   categoryList: ReduceReturnType | undefined
   formTitle: string
+  handleSubmitForm: (data: ProductModel) => void
 }
 
 const AddProductForm: React.FC<AddProductFormProps> = ({
-  _id,
+  // _id,
   defaultName,
   defaultCategory,
   defaultQuantity,
   defaultUnit,
   defaultPrice,
   categoryList,
-  formTitle
+  formTitle,
+  handleSubmitForm
 }) => {
   const [addProduct] = useAddProductMutation()
+  const [updateProduct] = useUpdateProductMutation()
+
   const [isSuccess, setIsSuccess] = useState(false)
+  const [categorySwitch, setCategorySwitch] = useState(true)
   const {
     register,
     handleSubmit,
@@ -109,24 +114,34 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     }
   }
 
-  const handleAddProduct = (data: ProductModel) => {
-    const { name, category, quantity, unit, price } = data
-    addProduct({
-      name,
-      category,
-      quantity,
-      unit,
-      price
-    })
-    setIsSuccess(true)
-  }
+  // const handleAddProduct = (data: ProductModel) => {
+  //   const { name, category, quantity, unit, price } = data
+  //   addProduct({
+  //     name,
+  //     category,
+  //     quantity,
+  //     unit,
+  //     price
+  //   })
+  //   setIsSuccess(true)
+  // }
 
-  const [categorySwitch, setCategorySwitch] = useState(true)
+  // const handleEditProduct = (data: ProductModel) => {
+  //   const { name, category, quantity, unit, price } = data
+  //   updateProduct({
+  //     _id,
+  //     name,
+  //     category,
+  //     quantity,
+  //     unit,
+  //     price
+  //   })
+  // }
 
   return (
     <div className={styles.container}>
       <h2>{formTitle}</h2>
-      <form className={styles.form} onSubmit={handleSubmit(handleAddProduct)}>
+      <form className={styles.form} onSubmit={handleSubmit(handleSubmitForm)}>
         <div className={styles.formContainer}>
           <div className={styles.formGroup}>
             <div className={styles.inputContainer}>

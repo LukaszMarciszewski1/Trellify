@@ -43,6 +43,7 @@ import Button from '../../../Details/Button/Button';
 import FileForm from './CardModalDetails/FileForm/FileForm'
 import Files from './CardModalDetails/Files/Files';
 import Modal from '../../../Details/Modal/Modal'
+import Srorage from './CardModalDetails/Storage/Storage'
 
 import { Line as ProgressLine } from 'rc-progress';
 import { Card as CardModel } from '../../../../models/card'
@@ -651,9 +652,7 @@ const CardModal: React.FC<CardModalProps> = ({
               trigger={storageTrigger}
               closePopup={() => setStorageTrigger(false)}
             >
-              <div>
-                <p>In progress ...</p>
-              </div>
+              <Srorage />
             </Popup>
             <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
             <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />

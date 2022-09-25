@@ -3,7 +3,9 @@ import styles from './styles.module.scss'
 import { Product as ProductModel } from '../../models/product'
 import {
   useGetAllProductsQuery,
-  useDeleteProductMutation
+  useDeleteProductMutation,
+  useAddProductMutation,
+  useUpdateProductMutation
 } from "../../store/api/products"
 import Modal from '../Details/Modal/Modal'
 import ProductForm from './ProductForm/ProductForm'
@@ -17,6 +19,9 @@ export type ReduceReturnType = Record<string, number>;
 const Storage: React.FC = () => {
   const { data, error, isLoading } = useGetAllProductsQuery()
   const [deleteProduct] = useDeleteProductMutation()
+  const [addProduct] = useAddProductMutation()
+  const [updateProduct] = useUpdateProductMutation()
+
   const [products, setProducts] = useState<ProductModel[]>()
   const [categories, setCategories] = useState<ReduceReturnType | undefined>()
   const [currentProduct, setCurrentProduct] = useState<any>(null)
@@ -60,8 +65,28 @@ const Storage: React.FC = () => {
     setCurrentProduct(prod)
   }
 
-  console.log(products)
-  console.log(categories)
+  const handleAddProduct = (data: ProductModel) => {
+    const { name, category, quantity, unit, price } = data
+    addProduct({
+      name,
+      category,
+      quantity,
+      unit,
+      price
+    })
+  }
+
+  const handleEditProduct = (data: ProductModel) => {
+    const { name, category, quantity, unit, price } = data
+    updateProduct({
+      _id: currentProduct._id,
+      name,
+      category,
+      quantity,
+      unit,
+      price
+    })
+  }
 
   return (
     <div className={styles.container}>
@@ -105,21 +130,28 @@ const Storage: React.FC = () => {
         </div>
       </div>
       <div className={styles.right}><p>sticky</p></div>
-      <Modal trigger={isModalOpen} closeModal={() => setIsModalOpen(false)}>
-        <ProductForm categoryList={categories} formTitle={'Dodaj produkt'} />
+      <Modal
+        trigger={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}>
+        <ProductForm
+          categoryList={categories}
+          formTitle={'Dodaj produkt'}
+          handleSubmitForm={handleAddProduct} />
       </Modal>
-      <Modal trigger={isModalEditOpen} closeModal={() => setIsModalEditOpen(false)}>
+      <Modal
+        trigger={isModalEditOpen}
+        closeModal={() => setIsModalEditOpen(false)}>
         {
           currentProduct && (
             <ProductForm
               categoryList={categories}
               formTitle={'Edytuj produkt'}
-              _id={currentProduct._id}
               defaultName={currentProduct.name}
               defaultCategory={currentProduct.category}
               defaultQuantity={currentProduct.quantity}
               defaultUnit={currentProduct.unit}
               defaultPrice={currentProduct.price}
+              handleSubmitForm={handleEditProduct}
             />
           )
         }
