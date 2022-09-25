@@ -12,6 +12,7 @@
   margin-bottom: 10px;
   label {
     display: inline-block;
+    margin-bottom: 5px;
   }
 }
 
@@ -33,11 +34,11 @@
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-    padding: 5px 5px 5px 8px;
+    padding: 5px 8px;
     border-radius: 8px;
     color: rgb(74, 80, 98);
     border: 1px solid rgb(223, 223, 223);
-    background-color: #f9fdff;
+    background-color: #f9fbfc;
     span {
       width: 200px;
       font-size: 14px;
@@ -52,6 +53,8 @@
     input[type='text'] {
       max-width: 110px;
       margin-right: 10px;
+      background-color: #edf2f4;
+      opacity: 0.8;
     }
     input[type='number'] {
       max-width: 80px;

@@ -43,6 +43,7 @@ const TaskCard: React.FC<CardProps> = ({
   deadline,
   cover,
   files,
+  usedProducts,
   createdAt,
   setIsDragDisabled,
 }) => {
@@ -163,6 +164,7 @@ const TaskCard: React.FC<CardProps> = ({
             deadline={deadline}
             labels={labels}
             files={cardFiles}
+            usedProducts={usedProducts}
             cover={cardCover}
             completed={cardCompleted}
             cardFileIndex={cardFileIndex}

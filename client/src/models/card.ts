@@ -1,4 +1,5 @@
 import { Labels } from './labels'
+import { Product } from './product'
 export interface Card {
   _id: string
   createdAt: string | number | Date
@@ -11,5 +12,6 @@ export interface Card {
   completed: boolean
   nameList: string
   files: any
+  usedProducts?: Product[]
   labels: Labels[]
 }

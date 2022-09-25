@@ -6,7 +6,6 @@ import styles from './styles.module.scss'
 import Button from '../../Details/Button/Button';
 import { Product as ProductModel } from '../../../models/product';
 import { ReduceReturnType } from '../Storage'
-import { useAddProductMutation, useUpdateProductMutation } from "../../../store/api/products";
 
 const validation = {
   name: {
@@ -45,7 +44,6 @@ interface AddProductFormProps extends DefaultValuesProps {
 }
 
 const AddProductForm: React.FC<AddProductFormProps> = ({
-  // _id,
   defaultName,
   defaultCategory,
   defaultQuantity,
@@ -55,8 +53,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   formTitle,
   handleSubmitForm
 }) => {
-  const [addProduct] = useAddProductMutation()
-  const [updateProduct] = useUpdateProductMutation()
 
   const [isSuccess, setIsSuccess] = useState(false)
   const [categorySwitch, setCategorySwitch] = useState(true)
@@ -113,30 +109,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
         return null
     }
   }
-
-  // const handleAddProduct = (data: ProductModel) => {
-  //   const { name, category, quantity, unit, price } = data
-  //   addProduct({
-  //     name,
-  //     category,
-  //     quantity,
-  //     unit,
-  //     price
-  //   })
-  //   setIsSuccess(true)
-  // }
-
-  // const handleEditProduct = (data: ProductModel) => {
-  //   const { name, category, quantity, unit, price } = data
-  //   updateProduct({
-  //     _id,
-  //     name,
-  //     category,
-  //     quantity,
-  //     unit,
-  //     price
-  //   })
-  // }
 
   return (
     <div className={styles.container}>

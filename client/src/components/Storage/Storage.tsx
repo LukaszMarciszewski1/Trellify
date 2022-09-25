@@ -30,6 +30,8 @@ const Storage: React.FC = () => {
   const allCategoryValue = 'Wszystkie kategorie'
   const [activeCategory, setActiveCategory] = useState<string>(allCategoryValue)
 
+  console.log(data)
+
   useEffect(() => {
     if (data) {
       setProducts(data)
@@ -129,7 +131,7 @@ const Storage: React.FC = () => {
           }
         </div>
       </div>
-      <div className={styles.right}><p>sticky</p></div>
+      <div className={styles.right}><p>statystyki magazynu</p></div>
       <Modal
         trigger={isModalOpen}
         closeModal={() => setIsModalOpen(false)}>

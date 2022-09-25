@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 import Card from '../models/Card'
-import {File} from '../models/File'
+import { File } from '../models/File'
 import List from '../models/List'
 import { deleteFileS3 } from '../helpers/filehelper.js'
 
@@ -41,18 +41,20 @@ export const createCard = async (req: Request, res: Response) => {
 
 export const updateCard = async (req: Request, res: Response) => {
   const { id } = req.params
-    if (!mongoose.Types.ObjectId.isValid(id))
-      return res.status(404).send(`No card with id: ${id}`)
-    const updateCard = await Card.findByIdAndUpdate(id, req.body, { new: true })
-    res.json(updateCard)
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send(`No card with id: ${id}`)
+  const updateCard = await Card.findByIdAndUpdate(id, req.body, { new: true })
+  res.json(updateCard)
 }
 
 export const deleteCard = async (req: Request, res: Response) => {
   const { id } = req.params
   const files = await File.find()
-  const cardFiles = files.filter(file => new mongoose.Types.ObjectId(file.cardId).toString() === id)
+  const cardFiles = files.filter(
+    (file) => new mongoose.Types.ObjectId(file.cardId).toString() === id
+  )
   try {
-    cardFiles.map(file => {
+    cardFiles.map((file) => {
       const params = {
         Bucket: process.env.S3_BUCKET_NAME,
         Key: file.fileKey,

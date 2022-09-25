@@ -6,4 +6,5 @@ export interface Product {
   unit: string
   price: number | string
   actions?: any
+  used?: number
 }

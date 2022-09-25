@@ -6,7 +6,7 @@ const CardSchema = new Schema(
     description: String,
     deadline: {
       type: Date || null,
-      default: null
+      default: null,
     },
     listId: {
       type: Schema.Types.ObjectId,
@@ -21,6 +21,16 @@ const CardSchema = new Schema(
       default: false,
     },
     cover: String,
+    usedProducts: [
+      {
+        name: String,
+        category: String,
+        quantity: Number,
+        unit: String,
+        price: Number,
+        used: Number,
+      },
+    ],
     files: [
       {
         type: Schema.Types.ObjectId,

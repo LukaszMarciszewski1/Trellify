@@ -16,5 +16,4 @@ router.post('/', protect, createProduct)
 router.patch('/:id', protect, updateProduct)
 router.delete('/:id', protect, deleteProduct)
 
-
 export default router

@@ -43,13 +43,12 @@ import Button from '../../../Details/Button/Button';
 import FileForm from './CardModalDetails/FileForm/FileForm'
 import Files from './CardModalDetails/Files/Files';
 import Modal from '../../../Details/Modal/Modal'
-import Srorage from './CardModalDetails/Storage/Storage'
+import UsedProducts from './CardModalDetails/UsedProducts/UsedProducts'
 
 import { Line as ProgressLine } from 'rc-progress';
 import { Card as CardModel } from '../../../../models/card'
 import { Labels as LabelsInterface } from '../../../../models/labels'
 import pl from "date-fns/locale/pl";
-
 
 interface CardModalProps extends CardModel {
   dateIsSameOrBefore: boolean
@@ -78,6 +77,7 @@ const CardModal: React.FC<CardModalProps> = ({
   deadline,
   cover,
   files,
+  usedProducts,
   nameList,
   dateIsSameOrBefore,
   deadlineIsSoon,
@@ -123,6 +123,8 @@ const CardModal: React.FC<CardModalProps> = ({
   const [uploadStatus, setUploadStatus] = useState<boolean | null>(null)
 
   const refModal = useRef(null)
+
+  console.log(usedProducts)
 
   useEffect(() => {
     if (board) {
@@ -513,6 +515,22 @@ const CardModal: React.FC<CardModalProps> = ({
                   </div>
               }
             </div>
+            <Container data={usedProducts} title={'Wykorzystane materiały'}>
+              <>
+                {
+                  usedProducts?.map((product) => (
+                    <div
+                      key={product._id}
+                      style={{ backgroundColor: `grey` }}
+                      className={styles.cardModalLabel}
+                      onClick={() => setLabelsTrigger(true)}
+                    >
+                      <span>{product.name}</span>
+                    </div>
+                  ))
+                }
+              </>
+            </Container>
             <Container data={files} title={'Załącznik'}>
               {
                 files?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
@@ -644,7 +662,7 @@ const CardModal: React.FC<CardModalProps> = ({
               closePopup={() => setValuationTrigger(false)}
             >
               <div>
-                <p>In progress ...</p>
+                <p>Is in progress ...</p>
               </div>
             </Popup>
             <Popup
@@ -652,13 +670,13 @@ const CardModal: React.FC<CardModalProps> = ({
               trigger={storageTrigger}
               closePopup={() => setStorageTrigger(false)}
             >
-              <Srorage />
+              <UsedProducts cardId={_id} />
             </Popup>
             <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
             <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
             <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />
-            <TaskButton onClick={() => setValuationTrigger(true)} name={'Dodaj wycenę'} icon={<BiTask />} />
             <TaskButton onClick={() => setStorageTrigger(true)} name={'Magazyn'} icon={<BiTask />} />
+            <TaskButton onClick={() => setValuationTrigger(true)} name={'Dodaj wycenę'} icon={<BiTask />} />
             <div className={styles.divider}></div>
             <TaskButton onClick={() => {
               deleteCard(_id);

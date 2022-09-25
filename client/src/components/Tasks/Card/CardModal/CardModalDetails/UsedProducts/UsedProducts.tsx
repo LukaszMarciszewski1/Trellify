@@ -5,19 +5,32 @@ import {
   useGetAllProductsQuery,
   useDeleteProductMutation
 } from "../../../../../../store/api/products"
+import {
+  useUpdateCardMutation,
+  useDeleteCardMutation
+} from "../../../../../../store/api/cards"
 import { Product as ProductModel } from '../../../../../../models/product';
 import Button from '../../../../../Details/Button/Button'
 import IconButton from '../../../../../Details/IconButton/IconButton';
 
-const Storage: React.FC = () => {
+interface UsedProductsProps {
+  cardId: string
+}
+
+interface ProductValue extends ProductModel {
+  used: number
+}
+
+const UsedProducts: React.FC<UsedProductsProps> = ({ cardId }) => {
   const { data, error, isLoading } = useGetAllProductsQuery()
+  const [updateCard] = useUpdateCardMutation()
   const [selectProduct, setSelectProduct] = useState<string>('')
   const [productsIdList, setProductsIdList] = useState<string[]>([])
   const [products, setProducts] = useState<ProductModel[] | undefined>()
 
   useEffect(() => {
     if (!data) return
-    setSelectProduct(data[0]._id)
+    setSelectProduct(data[0]?._id)
   }, [data])
 
   useEffect(() => {
@@ -31,8 +44,10 @@ const Storage: React.FC = () => {
 
   const handleAddProductToList = () => {
     if (!data) return
+    if ([...productsIdList].find(item => item === selectProduct)) {
+      return alert('produkt został już dodany do listy')
+    }
     setProductsIdList([...productsIdList, selectProduct])
-
   }
 
   const displayProductFromList = () => {
@@ -42,15 +57,24 @@ const Storage: React.FC = () => {
   }
 
   const handleRemoveFromList = (id: string) => {
-    if (!products) return
-    const newProducts = [...products].filter(item => item._id !== id)
-    setProducts(newProducts)
+    if (!productsIdList) return
+    const newProductsIdList = [...productsIdList].filter(item => item !== id)
+    setProductsIdList(newProductsIdList)
+  }
+
+  const handleAddProductsToCard = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log('dziala')
+    updateCard({
+      _id: cardId,
+      usedProducts: products
+    })
   }
 
   return (
     <div className={styles.container}>
       <form className={styles.form}>
-        <label htmlFor="products">Dodaj z magazynu</label>
+        <label htmlFor="products">Dodaj produkt z magazynu</label>
         <div className={styles.inputContainer}>
           <select className={styles.select} onChange={(e) => handleSelectProduct(e)}>
             {
@@ -65,37 +89,33 @@ const Storage: React.FC = () => {
             onClick={handleAddProductToList}
             title={'Dodaj'} type={'button'}
             style={{
-              height: '35px',
-              // width: '100px',
+              height: '38px',
               marginLeft: '10px'
             }} />
         </div>
       </form>
       <div className={styles.list}>
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={(e) => handleAddProductsToCard(e)}>
           {
             products?.map(item => (
               <div key={item._id}>
                 <span>{item.name}</span>
                 <input type="text" name="name" value={`stan: ${item.quantity} ${item.unit}`} disabled />
                 <input type="number" name="name" defaultValue={item.quantity} min={1} max={item.quantity} />
-                <IconButton onClick={() => handleRemoveFromList(item._id)} style={{ marginLeft: '10px' }}>X</IconButton>
-                {/* <Button
-                  onClick={handleAddProductToList}
-                  title={'X'} type={'button'}
-                  style={{
-                    backgroundColor: 'transparent',
-                    color: 'black',
-                    padding: '5px',
-                    marginLeft: '10px'
-                  }} /> */}
+                <IconButton onClick={() => handleRemoveFromList(item._id)} style={{ marginLeft: '8px' }}>X</IconButton>
               </div>
             ))
           }
+          {
+            products?.length ? (
+              <Button title={'Zapisz'} type={'submit'} style={{ width: '100%', padding: '0.6rem', marginTop: '10px' }} />
+            ) : null
+          }
         </form>
       </div>
+      <h3>Is in progress...</h3>
     </div>
   )
 }
 
-export default Storage
+export default UsedProducts

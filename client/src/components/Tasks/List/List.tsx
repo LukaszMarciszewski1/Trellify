@@ -38,7 +38,6 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   const [popupTrigger, setPopupTrigger] = useState(false)
   const ref = useRef(null)
 
-
   const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
     updateList({
@@ -76,7 +75,6 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
     updateBoard({ _id: boardId })
     setPopupTrigger(false)
   }
-  // useCallback()
 
   const handleDeleteList = () => {
     deleteList(_id)
@@ -181,6 +179,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                           labels={card.labels}
                           files={card.files}
                           cover={card.cover}
+                          usedProducts={card.usedProducts}
                           nameList={listTitle}
                           createdAt={card.createdAt}
                           setIsDragDisabled={setIsDragDisabled}
