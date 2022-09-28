@@ -1,9 +1,8 @@
 @mixin gridTable {
   display: grid;
-  grid-template-columns: minmax(140px, 1fr) repeat(2, minmax(80px, 140px)) minmax(
-      40px,
-      100px
-    ) minmax(80px, 140px) 40px;
+  grid-template-columns:
+    minmax(180px, 1fr) repeat(2, minmax(80px, 140px)) minmax(40px, 100px)
+    minmax(80px, 140px) 40px;
   gap: 20px;
 }
 

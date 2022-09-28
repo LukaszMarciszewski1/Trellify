@@ -38,6 +38,8 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   const [popupTrigger, setPopupTrigger] = useState(false)
   const ref = useRef(null)
 
+  // console.log(cards)
+
   const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
     updateList({
@@ -179,7 +181,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                           labels={card.labels}
                           files={card.files}
                           cover={card.cover}
-                          usedProducts={card.usedProducts}
+                          usedMaterials={card.usedMaterials}
                           nameList={listTitle}
                           createdAt={card.createdAt}
                           setIsDragDisabled={setIsDragDisabled}

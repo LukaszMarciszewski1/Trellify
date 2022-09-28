@@ -43,7 +43,7 @@ import Button from '../../../Details/Button/Button';
 import FileForm from './CardModalDetails/FileForm/FileForm'
 import Files from './CardModalDetails/Files/Files';
 import Modal from '../../../Details/Modal/Modal'
-import UsedProducts from './CardModalDetails/UsedProducts/UsedProducts'
+import UsedProducts from './CardModalDetails/Materials/Materials'
 
 import { Line as ProgressLine } from 'rc-progress';
 import { Card as CardModel } from '../../../../models/card'
@@ -77,7 +77,7 @@ const CardModal: React.FC<CardModalProps> = ({
   deadline,
   cover,
   files,
-  usedProducts,
+  usedMaterials,
   nameList,
   dateIsSameOrBefore,
   deadlineIsSoon,
@@ -123,8 +123,6 @@ const CardModal: React.FC<CardModalProps> = ({
   const [uploadStatus, setUploadStatus] = useState<boolean | null>(null)
 
   const refModal = useRef(null)
-
-  console.log(usedProducts)
 
   useEffect(() => {
     if (board) {
@@ -515,17 +513,17 @@ const CardModal: React.FC<CardModalProps> = ({
                   </div>
               }
             </div>
-            <Container data={usedProducts} title={'Wykorzystane materiały'}>
+            <Container data={usedMaterials} title={'Wykorzystane materiały'}>
               <>
                 {
-                  usedProducts?.map((product) => (
+                  usedMaterials?.map((product) => (
                     <div
                       key={product._id}
                       style={{ backgroundColor: `grey` }}
                       className={styles.cardModalLabel}
                       onClick={() => setLabelsTrigger(true)}
                     >
-                      <span>{product.name}</span>
+                      <span>{product.name}: {product.used} {product.unit}</span>
                     </div>
                   ))
                 }

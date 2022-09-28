@@ -10,7 +10,7 @@ import { ReduceReturnType } from '../Storage'
 const validation = {
   name: {
     required: true,
-    maxLength: 20,
+    maxLength: 40,
     minLength: 2,
   },
   category: {
@@ -91,9 +91,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   const quantityErrors = (type: any) => {
     switch (type) {
       case 'required':
-        return <ErrorMessage message={'Email jest wymagany'} />
+        return <ErrorMessage message={'Stan jest wymagany'} />
       case 'pattern':
-        return <ErrorMessage message={'Email jest niepoprawny'} />
+        return <ErrorMessage message={'Stan jest niepoprawny'} />
       default:
         return null
     }
@@ -163,10 +163,11 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
             <div className={styles.inputContainer}>
               <label htmlFor="unit">Jednostka</label>
               <select {...register('unit')} className={styles.select} defaultValue={defaultUnit}>
+                <option value="szt">szt</option>
                 <option value="m2">m2</option>
-                <option value="ark">ark.</option>
+                <option value="mb">mb</option>
+                <option value="ark">ark</option>
                 <option value="ryz">ryz</option>
-                <option value="szt">szt.</option>
                 <option value="litry">litry</option>
                 <option value="inne">inne</option>
               </select>

@@ -14,14 +14,14 @@ interface ProductProps extends ProductModel {
 
 const Product: React.FC<ProductProps> = ({ name, category, quantity, unit, price, editProd, deleteProd }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
-  
+
   return (
     <div className={styles.row}>
       <div className={`${styles.block}`}><span>{name}</span></div>
       <div className={`${styles.block}`}><span>{category}</span></div>
       <div className={`${styles.block}`}><span>{quantity}</span></div>
       <div className={`${styles.block}`}><span>{unit}</span></div>
-      <div className={`${styles.block}`}><span>{price}</span></div>
+      <div className={`${styles.block}`}><span>{price} zł</span></div>
       <div className={`${styles.block}`}>
         <IconButton onClick={() => setIsPopupOpen(true)}><BiDotsVerticalRounded style={{ fontSize: '1.2rem', color: 'grey' }} /></IconButton>
       </div>

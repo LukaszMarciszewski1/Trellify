@@ -90,6 +90,8 @@ const Storage: React.FC = () => {
     })
   }
 
+  console.log(products)
+
   return (
     <div className={styles.container}>
       {error && <h2>Error 500</h2>}
@@ -120,7 +122,7 @@ const Storage: React.FC = () => {
                       category={product.category}
                       quantity={product.quantity}
                       unit={product.unit}
-                      price={`${product.price} zł`}
+                      price={product.price}
                       editProd={() => handleEditProd(product)}
                       deleteProd={() => deleteProduct(product._id)}
                     />
