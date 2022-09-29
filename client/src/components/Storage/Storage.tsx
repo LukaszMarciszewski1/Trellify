@@ -30,7 +30,7 @@ const Storage: React.FC = () => {
   const allCategoryValue = 'Wszystkie kategorie'
   const [activeCategory, setActiveCategory] = useState<string>(allCategoryValue)
 
-  console.log(data)
+  console.log(products)
 
   useEffect(() => {
     if (data) {
@@ -89,8 +89,6 @@ const Storage: React.FC = () => {
       price
     })
   }
-
-  console.log(products)
 
   return (
     <div className={styles.container}>

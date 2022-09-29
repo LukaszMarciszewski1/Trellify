@@ -9,31 +9,28 @@ import {
   useUpdateCardMutation,
   useDeleteCardMutation
 } from "../../../../../../store/api/cards"
-import {
-  useGetBoardQuery,
-  useUpdateBoardMutation,
-
-} from '../../../../../../store/api/boards'
 import { Product as ProductModel } from '../../../../../../models/product';
 import Button from '../../../../../Details/Button/Button'
 import IconButton from '../../../../../Details/IconButton/IconButton';
 interface UsedProductsProps {
   cardId: string
   usedMaterials: any
-  boardId: string
 }
 
-const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMaterials }) => {
+const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, usedMaterials }) => {
   const { data, error, isLoading } = useGetAllProductsQuery()
-  const [updateBoard] = useUpdateBoardMutation();
   const [updateCard] = useUpdateCardMutation()
   const [updateProduct] = useUpdateProductMutation()
   const [selectProduct, setSelectProduct] = useState<any>({})
-  const [products, setProducts] = useState<ProductModel[]>(usedMaterials)
+  const [products, setProducts] = useState<any>([])
 
   useEffect(() => {
     if (!data) return
     setSelectProduct(data[0])
+  }, [data])
+
+  useEffect(() => {
+    setProducts(usedMaterials)
   }, [data])
 
   const handleSelectProduct = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -53,26 +50,20 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
   const handleOnChangeUsedValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!products) return;
     const { id, valueAsNumber } = e.target;
-    const newProducts: ProductModel[] = []
-    const targetIndex = products.findIndex(item => item._id === id);
-    products.map((product, index) => (newProducts[index] = { ...product }))
-
+    const newProductsValue = [...products]
+    const targetIndex = newProductsValue.findIndex(item => item._id == id);
     if (targetIndex !== -1) {
-      newProducts[targetIndex].used = valueAsNumber
-      setProducts(newProducts)
+      newProductsValue[targetIndex].used = valueAsNumber
+      setProducts(newProductsValue)
     }
-
   }
+  console.log(usedMaterials)
+
 
   const handleRemoveFromList = (id: string) => {
     if (!products) return
     const newProductsList = [...products].filter(item => item._id !== id)
     setProducts(newProductsList)
-    updateCard({
-      _id: cardId,
-      usedMaterials: newProductsList
-    })
-    updateBoard({ _id: boardId })
   }
 
 
@@ -82,7 +73,6 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
       _id: cardId,
       usedMaterials: products
     })
-    updateBoard({ _id: boardId })
   }
 
   return (
@@ -110,7 +100,7 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
         </div>
         <div className={styles.list}>
           {
-            products?.map((item) => (
+            products?.map((item: { _id: string; name: string; quantity: number; unit: string; used: number }) => (
               <div key={item._id}>
                 <span>{item.name}</span>
                 <input type="text" name="quantity" value={`stan: ${item.quantity} ${item.unit}`} disabled />
@@ -126,12 +116,11 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
             ))
           }
         </div>
-        <Button title={'Zapisz'} type={'submit'} style={{ width: '100%', padding: '0.6rem' }} disabled={products?.length ? false : true} />
-        {/* {
+        {
           products?.length ? (
             <Button title={'Zapisz'} type={'submit'} style={{ width: '100%', padding: '0.6rem' }} />
           ) : null
-        } */}
+        }
       </form>
     </div>
   )

@@ -4,31 +4,32 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 440px;
 }
 
 .form {
   margin-top: 10px;
-  margin-bottom: 10px;
   label {
     display: inline-block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
 }
 
-.inputContainer {
+.selectContainer {
   width: 100%;
   display: flex;
   align-items: center;
 }
 
 .select {
-  flex-grow: 1;
   @include input;
+  flex-grow: 1;
+  margin: 0;
 }
 
 .list {
   width: 100%;
+  margin: 20px 0;
   div {
     width: 100%;
     display: flex;
@@ -38,7 +39,7 @@
     border-radius: 8px;
     color: rgb(74, 80, 98);
     border: 1px solid rgb(223, 223, 223);
-    background-color: #f9fbfc;
+    background-color: #f2f7fa;
     span {
       width: 200px;
       font-size: 14px;
@@ -47,7 +48,7 @@
     input[type='number'] {
       @include input;
       margin: 0;
-      max-height: 40px;
+      padding: 6px;
     }
 
     input[type='text'] {

@@ -5,7 +5,7 @@
       "dom",
       "dom.iterable",
       "esnext",
-      "es6"
+      "es5"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -20,7 +20,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "downlevelIteration": true
+    // "downlevelIteration": true
   },
   "include": [
     "src"

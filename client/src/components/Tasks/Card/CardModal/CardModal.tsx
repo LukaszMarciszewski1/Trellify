@@ -43,7 +43,7 @@ import Button from '../../../Details/Button/Button';
 import FileForm from './CardModalDetails/FileForm/FileForm'
 import Files from './CardModalDetails/Files/Files';
 import Modal from '../../../Details/Modal/Modal'
-import UsedProducts from './CardModalDetails/Materials/Materials'
+import UsedMaterials from './CardModalDetails/Materials/Materials'
 
 import { Line as ProgressLine } from 'rc-progress';
 import { Card as CardModel } from '../../../../models/card'
@@ -529,7 +529,7 @@ const CardModal: React.FC<CardModalProps> = ({
                 }
               </>
             </Container>
-            <Container data={files} title={'Załącznik'}>
+            <Container data={files} title={'Załączniki'}>
               {
                 files?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
                   <Files
@@ -624,15 +624,15 @@ const CardModal: React.FC<CardModalProps> = ({
               </div>
             </Popup>
             <Popup
-              title={'Załącznik'}
+              title={'Załączniki'}
               trigger={fileTrigger}
               closePopup={() => setFileTrigger(false)}
               backToMainWindow={() => setFileTrigger(false)}
             >
               <FileForm
-                name={'załącznik'}
+                name={'załączniki'}
                 size={0}
-                label={'załącznik'}
+                label={'załączniki'}
                 type={'file'}
                 listNames={selectedNameFiles}
                 handleInputState={handleUploadFiles}
@@ -664,11 +664,14 @@ const CardModal: React.FC<CardModalProps> = ({
               </div>
             </Popup>
             <Popup
-              title={'Magazyn'}
+              title={'Wykorzystane materiały'}
               trigger={storageTrigger}
               closePopup={() => setStorageTrigger(false)}
             >
-              <UsedProducts cardId={_id} />
+              <UsedMaterials
+                cardId={_id}
+                boardId={boardId}
+                usedMaterials={usedMaterials} />
             </Popup>
             <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
             <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
