@@ -143,19 +143,31 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                 right={'-30px'}
               >
                 <div className={styles.popupContent}>
-                  <TaskButton
-                    onClick={() => handleSortCardsByDate('sort-from-newest')}
-                    name={'Sortuj karty od najnowszych'}
-                  />
-                  <TaskButton
-                    onClick={() => handleSortCardsByDate('sort-from-oldest')}
-                    name={'Sortuj karty od najstarszych'}
-                  />
-                  <div className={styles.divider}></div>
-                  <TaskButton
-                    onClick={handleDeleteAllCardsOfList}
-                    name={'Usuń wszystkie karty'}
-                  />
+                  {
+                    cards.length > 1 ? (
+                      <>
+                        <TaskButton
+                          onClick={() => handleSortCardsByDate('sort-from-newest')}
+                          name={'Sortuj karty od najnowszych'}
+                        />
+                        <TaskButton
+                          onClick={() => handleSortCardsByDate('sort-from-oldest')}
+                          name={'Sortuj karty od najstarszych'}
+                        />
+                      </>
+                    ) : null
+                  }
+                  {
+                    cards.length ? (
+                      <>
+                        <div className={styles.divider}></div>
+                        <TaskButton
+                          onClick={handleDeleteAllCardsOfList}
+                          name={'Usuń wszystkie karty'}
+                        />
+                      </>
+                    ) : null
+                  }
                   <TaskButton
                     onClick={handleDeleteList}
                     name={'Usuń listę'}

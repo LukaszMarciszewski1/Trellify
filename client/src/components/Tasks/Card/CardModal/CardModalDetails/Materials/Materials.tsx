@@ -3,14 +3,11 @@ import styles from './styles.module.scss'
 import {
   useGetAllProductsQuery,
   useUpdateProductMutation,
-  useDeleteProductMutation
 } from "../../../../../../store/api/products"
 import {
   useUpdateCardMutation,
-  useDeleteCardMutation
 } from "../../../../../../store/api/cards"
 import {
-  useGetBoardQuery,
   useUpdateBoardMutation,
 
 } from '../../../../../../store/api/boards'
@@ -19,70 +16,99 @@ import Button from '../../../../../Details/Button/Button'
 import IconButton from '../../../../../Details/IconButton/IconButton';
 interface UsedProductsProps {
   cardId: string
-  usedMaterials: any
   boardId: string
+  usedMaterials: any
 }
 
 const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMaterials }) => {
-  const { data, error, isLoading } = useGetAllProductsQuery()
+  const { data: productsApi, error, isLoading } = useGetAllProductsQuery()
   const [updateBoard] = useUpdateBoardMutation();
   const [updateCard] = useUpdateCardMutation()
   const [updateProduct] = useUpdateProductMutation()
   const [selectProduct, setSelectProduct] = useState<any>({})
-  const [products, setProducts] = useState<ProductModel[]>(usedMaterials)
+  const [productsList, setProductsList] = useState<ProductModel[]>(usedMaterials)
+  const [changed, setChanged] = useState(false)
 
   useEffect(() => {
-    if (!data) return
-    setSelectProduct(data[0])
-  }, [data])
+    if (!productsApi) return
+    setSelectProduct(productsApi[0])
+  }, [productsApi])
 
   const handleSelectProduct = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (!data) return
-    const product = [...data].find(item => item._id === e.target.value)
+    if (!productsApi) return
+    const product = [...productsApi].find(item => item._id === e.target.value)
     setSelectProduct(product)
   }
 
   const handleAddProductToList = () => {
-    if ([...products].find(item => item._id === selectProduct._id)) {
+    if ([...productsList].find(item => item._id === selectProduct._id)) {
       return alert('produkt został już dodany do listy')
     }
-    const newProducts = [...products, { ...selectProduct, used: 1 }]
-    setProducts(newProducts)
+    const newProducts = [...productsList, { ...selectProduct, used: 1 }]
+    setProductsList(newProducts)
+    setChanged(true)
   }
 
   const handleOnChangeUsedValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!products) return;
+    if (!productsList) return;
     const { id, valueAsNumber } = e.target;
     const newProducts: ProductModel[] = []
-    const targetIndex = products.findIndex(item => item._id === id);
-    products.map((product, index) => (newProducts[index] = { ...product }))
+    const targetIndex = productsList.findIndex(item => item._id === id);
+    //cannot assign to read only property name of object, solution - copies of the objects in the array
+    productsList.map((product, index) => (newProducts[index] = { ...product }))
 
     if (targetIndex !== -1) {
       newProducts[targetIndex].used = valueAsNumber
-      setProducts(newProducts)
+      setProductsList(newProducts)
+      setChanged(true)
     }
-
   }
 
+
   const handleRemoveFromList = (id: string) => {
-    if (!products) return
-    const newProductsList = [...products].filter(item => item._id !== id)
-    setProducts(newProductsList)
+    if (!productsList) return
+    const newProductsList = [...productsList].filter(item => item._id !== id)
+    setProductsList(newProductsList)
     updateCard({
       _id: cardId,
       usedMaterials: newProductsList
     })
     updateBoard({ _id: boardId })
-  }
+    setChanged(true)
+    const restoreQuantityToStorage = Number([...productsList]
+      .filter(product => product._id === id)
+      .map(product => product.quantity))
+    updateProduct({
+      _id: id,
+      quantity: restoreQuantityToStorage
+    })
 
+  }
 
   const handleSubmitForm = (e: { preventDefault: () => void }) => {
     e.preventDefault()
+    const products = [...productsList]
+
     updateCard({
       _id: cardId,
-      usedMaterials: products
+      usedMaterials: productsList
     })
+
+    products.map(product => {
+      updateProduct({
+        _id: product._id,
+        quantity: product.used && (product.quantity - product.used)
+      })
+    })
+
     updateBoard({ _id: boardId })
+    setChanged(false)
+
+  }
+
+  const getProductQuantityFromStorage = (id: string) => {
+    if (!productsApi) return
+    return productsApi.filter(product => product._id === id).map(product => product.quantity)
   }
 
   return (
@@ -92,8 +118,8 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
         <div className={styles.selectContainer}>
           <select className={styles.select} onChange={handleSelectProduct}>
             {
-              data ? (
-                data.map(product => (
+              productsApi ? (
+                productsApi.map(product => (
                   <option key={product._id} value={product._id}>{product.name}</option>
                 ))
               ) : null
@@ -110,15 +136,21 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
         </div>
         <div className={styles.list}>
           {
-            products?.map((item) => (
+            productsList?.map((item) => (
               <div key={item._id}>
                 <span>{item.name}</span>
-                <input type="text" name="quantity" value={`stan: ${item.quantity} ${item.unit}`} disabled />
+                <input
+                  type="text"
+                  name="quantity"
+                  value={`stan: ${getProductQuantityFromStorage(item._id)} ${item.unit}`}
+                  disabled />
                 <input
                   id={item._id}
                   type="number"
                   name={item.name}
                   defaultValue={item.used}
+                  max={item.quantity}
+                  min={1}
                   onChange={handleOnChangeUsedValue}
                 />
                 <IconButton onClick={() => handleRemoveFromList(item._id)} style={{ marginLeft: '8px' }}>X</IconButton>
@@ -126,12 +158,11 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
             ))
           }
         </div>
-        <Button title={'Zapisz'} type={'submit'} style={{ width: '100%', padding: '0.6rem' }} disabled={products?.length ? false : true} />
-        {/* {
-          products?.length ? (
-            <Button title={'Zapisz'} type={'submit'} style={{ width: '100%', padding: '0.6rem' }} />
+        {
+          productsApi?.length ? (
+            <Button title={'Zapisz'} type={'submit'} style={{ width: '100%', padding: '0.6rem' }} disabled={changed ? false : true} />
           ) : null
-        } */}
+        }
       </form>
     </div>
   )

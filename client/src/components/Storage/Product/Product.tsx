@@ -14,9 +14,10 @@ interface ProductProps extends ProductModel {
 
 const Product: React.FC<ProductProps> = ({ name, category, quantity, unit, price, editProd, deleteProd }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const quantityColor = quantity === 0 ? 'red' : 'initial'
 
   return (
-    <div className={styles.row}>
+    <div className={styles.row} style={{ color: quantityColor }}>
       <div className={`${styles.block}`}><span>{name}</span></div>
       <div className={`${styles.block}`}><span>{category}</span></div>
       <div className={`${styles.block}`}><span>{quantity}</span></div>
@@ -44,7 +45,7 @@ const Product: React.FC<ProductProps> = ({ name, category, quantity, unit, price
           />
         </div>
       </Popup>
-    </div>
+    </div >
   )
 }
 

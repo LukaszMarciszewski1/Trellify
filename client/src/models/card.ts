@@ -1,9 +1,5 @@
 import { Labels } from './labels'
 import { Product } from './product'
-
-interface UsedProducts extends Product {
-  used: number
-}
 export interface Card {
   _id: string
   createdAt: string | number | Date
