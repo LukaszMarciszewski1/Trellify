@@ -54,7 +54,7 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
     const { id, valueAsNumber } = e.target;
     const newProducts: ProductModel[] = []
     const targetIndex = productsList.findIndex(item => item._id === id);
-    //cannot assign to read only property name of object, solution - copies of the objects in the array
+    //solution - cannot assign to read only property used of object
     productsList.map((product, index) => (newProducts[index] = { ...product }))
 
     if (targetIndex !== -1) {
@@ -74,7 +74,6 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
       usedMaterials: newProductsList
     })
     updateBoard({ _id: boardId })
-    setChanged(true)
     const restoreQuantityToStorage = Number([...productsList]
       .filter(product => product._id === id)
       .map(product => product.quantity))
@@ -82,28 +81,24 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
       _id: id,
       quantity: restoreQuantityToStorage
     })
-
+    setChanged(true)
   }
 
   const handleSubmitForm = (e: { preventDefault: () => void }) => {
     e.preventDefault()
     const products = [...productsList]
-
     updateCard({
       _id: cardId,
       usedMaterials: productsList
     })
-
     products.map(product => {
       updateProduct({
         _id: product._id,
         quantity: product.used && (product.quantity - product.used)
       })
     })
-
     updateBoard({ _id: boardId })
     setChanged(false)
-
   }
 
   const getProductQuantityFromStorage = (id: string) => {
