@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import styles from './styles.module.scss'
 import "react-datepicker/dist/react-datepicker.css"
+import DatePicker, { registerLocale } from "react-datepicker"
 import axios from 'axios'
 import dayjs from 'dayjs'
 import fileDownload from 'js-file-download'
-import DatePicker, { registerLocale } from "react-datepicker"
 import { useDebounce, useDebouncedCallback } from 'use-debounce'
 import { Line as ProgressLine } from 'rc-progress'
 import pl from "date-fns/locale/pl"
@@ -101,7 +101,7 @@ const CardModal: React.FC<CardModalProps> = ({
   const [cardTitle, setCardTitle] = useState<string>(title)
   const [cardDescription, setCardDescription] = useState<string>(description)
   const [cardLabels, setCardLabels] = useState<LabelsInterface[]>(labels)
-  const [cardDeadline, setCardDeadline] = useState(deadline)
+  const [cardDeadline, setCardDeadline] = useState<Date | null>(deadline ? new Date(deadline) : new Date())
   const [boardLabels, setBoardLabels] = useState<any>([])
   const [labelTitle, setLabelTitle] = useState('')
 
@@ -366,6 +366,8 @@ const CardModal: React.FC<CardModalProps> = ({
   }
 
   const handleDeleteFile = (fileId: string) => {
+    const result = window.confirm("Usunąć plik?")
+    if (!result) return
     deleteFile(fileId)
     updateCard({
       _id: _id,
@@ -441,7 +443,7 @@ const CardModal: React.FC<CardModalProps> = ({
           <div className={styles.content}>
             <Container data={cardLabels} title={'Etykiety'}>
               {
-                cardLabels.map((label: { title: string; active: any; color: any; _id: string }) => (
+                cardLabels.map((label: { title: string; active: boolean; color: string; _id: string }) => (
                   <div
                     key={label._id}
                     style={{ backgroundColor: `${label.color}` }}
@@ -620,20 +622,21 @@ const CardModal: React.FC<CardModalProps> = ({
                 dateFormat='DD/MM/YYYY'
                 timeFormat="hh:mm"
                 locale="pl"
-                selected={deadline ? new Date(deadline) : null}
+                selected={cardDeadline}
                 onChange={(date: Date) => setCardDeadline(date)}
                 inline
                 showTimeInput
-                timeInputLabel="Godzina:"
+                timeInputLabel={`Godzina:`}
               />
               <label>Termin <br></br>
-                <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(deadline).format('DD/MM/YYYY')} />
-                <input style={{ maxWidth: '100px' }} placeholder={dayjs(deadline).format('HH:mm')} />
+                {console.log(cardDeadline)}
+                <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(cardDeadline ? cardDeadline : new Date()).format('DD/MM/YYYY')} />
+                <input style={{ maxWidth: '100px' }} placeholder={dayjs(cardDeadline ? cardDeadline : new Date()).format('HH:mm')} />
               </label>
               <div className={styles.actionsForm}>
                 <Button onClick={handleSaveDeadline} title={'Zapisz'} type={'button'} />
                 <div style={{ marginRight: '1rem' }} />
-                <Button onClick={handleDeleteDeadline} title={'Usuń'} type={'button'} />
+                <Button onClick={handleDeleteDeadline} title={'Usuń'} type={'reset'} />
               </div>
             </Popup>
             <Popup
@@ -693,6 +696,8 @@ const CardModal: React.FC<CardModalProps> = ({
             <TaskButton onClick={() => setValuationTrigger(true)} name={'Dodaj wycenę'} icon={<BiTask />} />
             <div className={styles.divider}></div>
             <TaskButton onClick={() => {
+              const result = window.confirm("Usunąć kartę?")
+              if (!result) return
               deleteCard(_id);
               updateBoard({ _id: boardId })
             }} name={'Usuń'} icon={<RiDeleteBinLine />} />

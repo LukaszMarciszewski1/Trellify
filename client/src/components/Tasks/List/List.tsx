@@ -82,6 +82,8 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   }
 
   const handleDeleteList = () => {
+    const result = window.confirm("Usunąć listę?")
+    if (!result) return
     deleteList(_id)
     updateBoard({ _id: boardId })
   }

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import { User } from 'models/user'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+
 const AuthContext = createContext<AuthContextData | null>(null)
 
 type AuthContextData = ReturnType<typeof useProviderAuth>
@@ -9,6 +10,7 @@ type AuthContextData = ReturnType<typeof useProviderAuth>
 export const useProviderAuth = () => {
   const [user, setUser] = useState<User | null>(null)
   const [error, setError] = useState(false)
+  const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -51,7 +53,8 @@ export const useProviderAuth = () => {
       localStorage.setItem('token', data.token)
     } catch (error: any) {
       setLoading(false)
-      setError(error.response.data.message)
+      setError(true)
+      console.log(error.response.data.message)
     }
   }
 
@@ -73,10 +76,12 @@ export const useProviderAuth = () => {
         config
       )
       setLoading(false)
-      navigate('/logowanie')
+      setSuccess(true)
+      setTimeout(() => navigate('/logowanie'), 1000)
     } catch (error: any) {
       setLoading(false)
-      setError(error.response.data.message)
+      setError(true)
+      console.log(error.response.data.message)
     }
   }
 
@@ -85,7 +90,7 @@ export const useProviderAuth = () => {
     localStorage.removeItem('token')
   }
 
-  return { user, loading, error, signIn, signUp, signOut }
+  return { user, loading, success, error, signIn, signUp, signOut }
 }
 
 export const AuthProvider: React.FC = ({ children }) => {
