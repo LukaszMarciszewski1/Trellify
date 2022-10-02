@@ -119,8 +119,10 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
 
   const getProductQuantityFromStorage = (id: string) => {
     if (!productsApi) return
-    return productsApi.filter(product => product._id === id).map(product => product.quantity)
+    const productQuantity = productsApi.filter(product => product._id === id).map(product => product.quantity)
+    return productQuantity.length ? productQuantity : 0
   }
+
 
   return (
     <div className={styles.container}>
@@ -160,7 +162,7 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
                   type="number"
                   name={item.name}
                   defaultValue={item.used}
-                  max={item.quantity}
+                  max={!getProductQuantityFromStorage(item._id) ? item.used : item.quantity}
                   min={1}
                   onChange={handleOnChangeUsedValue}
                 />

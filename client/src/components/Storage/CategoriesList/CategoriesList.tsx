@@ -13,14 +13,16 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
         <BiCategory fontSize={'1.5rem'} />
         <h4>Magazyn</h4>
       </div>
-      {
-        data ? Object.entries(data).map(([key, value]) => (
-          <div key={key} className={styles.box}>
-            <h5>{key}</h5>
-            <span>{`ilość: ${value}`}</span>
-          </div>
-        )) : null
-      }
+      <div className={styles.categoryList}>
+        {
+          data ? Object.entries(data).map(([name, quantity]) => (
+            <div key={name} className={styles.box}>
+              <h5>{name}</h5>
+              <span>{`ilość: ${quantity}`}</span>
+            </div>
+          )) : null
+        }
+      </div>
     </div>
   )
 }

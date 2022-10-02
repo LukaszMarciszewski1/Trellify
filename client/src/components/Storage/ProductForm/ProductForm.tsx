@@ -4,7 +4,7 @@ import styles from './styles.module.scss'
 import { Product as ProductModel } from 'models/product';
 import Button from 'components/Details/Button/Button';
 import Input from 'components/Details/Input/Input';
-import ErrorMessage from 'components/Details/Messages/ErrorMessage';
+import ErrorMessage from 'components/Details/Messages/ValidateMessage';
 import { ReduceReturnType } from '../Storage'
 
 const validation = {
@@ -40,10 +40,11 @@ interface DefaultValuesProps {
 interface AddProductFormProps extends DefaultValuesProps {
   categoryList: ReduceReturnType | undefined
   formTitle: string
+  message?: JSX.Element | boolean
   handleSubmitForm: (data: ProductModel) => void
 }
 
-const AddProductForm: React.FC<AddProductFormProps> = ({
+const ProductForm: React.FC<AddProductFormProps> = ({
   defaultName,
   defaultCategory,
   defaultQuantity,
@@ -51,10 +52,10 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   defaultPrice,
   categoryList,
   formTitle,
+  message,
   handleSubmitForm
 }) => {
 
-  const [isSuccess, setIsSuccess] = useState(false)
   const [categorySwitch, setCategorySwitch] = useState(true)
   const {
     register,
@@ -110,10 +111,15 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     }
   }
 
+
+
   return (
     <div className={styles.container}>
       <h2>{formTitle}</h2>
       <form className={styles.form} onSubmit={handleSubmit(handleSubmitForm)}>
+        <div className={styles.message}>
+          {message}
+        </div>
         <div className={styles.formContainer}>
           <div className={styles.formGroup}>
             <div className={styles.inputContainer}>
@@ -220,11 +226,10 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
         </div>
         <div className={styles.actionForm}>
           <Button title={'Zapisz'} type={'submit'} style={{ width: '100%', padding: '0.8rem' }} />
-          <h3>{isSuccess && 'Produkt został dodany'}</h3>
         </div>
       </form>
     </div>
   )
 }
 
-export default AddProductForm
+export default ProductForm

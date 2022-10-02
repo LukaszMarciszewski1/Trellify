@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import { HexColorPicker } from "react-colorful";
-import { presetColors } from '../../../../localData'
+import { presetColors } from '../../../../../../assets/localData'
 import TextareaAutosize from 'react-textarea-autosize';
 import Button from 'components/Details/Button/Button'
 interface LabelProps {
@@ -60,7 +60,7 @@ const LabelForm: React.FC<LabelProps> = ({
       <div className={styles.actionsForm}>
         <Button onClick={handleChangeLabelTitle} title={'Zapisz'} type={'submit'} />
         <div style={{ marginRight: '1rem' }} />
-        <Button onClick={handleDeleteLabel} title={'Usuń'} type={'button'} />
+        <Button onClick={handleDeleteLabel} title={'Usuń'} type={'reset'} />
       </div>
     </form>
   )

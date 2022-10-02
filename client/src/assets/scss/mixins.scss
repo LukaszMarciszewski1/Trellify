@@ -20,10 +20,14 @@
   &::-webkit-scrollbar {
     -webkit-appearance: none;
   }
-  &::-webkit-scrollbar:vertical {
+  &::-webkit-scrollbar {
     width: 8px;
     border-radius: 5px;
     border: solid 3px transparent;
+  }
+
+  &::-webkit-scrollbar:horizontal {
+    height: 5px;
   }
 
   &::-webkit-scrollbar-track {

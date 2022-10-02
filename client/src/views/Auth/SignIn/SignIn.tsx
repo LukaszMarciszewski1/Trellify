@@ -21,6 +21,7 @@ const SignIn: React.FC = () => {
       <div className={styles.login_formContainer}>
         <div className={styles.left}>
           {loading ? <Loading /> : null}
+          {errorResponse && <><ErrorMessage message={'Błąd logowania'} /> <br /></>}
           <form className={styles.form_container} onSubmit={handleSubmit(signIn)}>
             <h1>Zaloguj się</h1>
             <Input
@@ -39,7 +40,6 @@ const SignIn: React.FC = () => {
               {...register("password", { required: true })}
             />
             {errors.password && <ErrorMessage message={'Hasło jest wymagane'} />}
-            {errorResponse && <ErrorMessage message={'Email lub hasło jest nieprawidłowe'} />}
             <button type='submit' className={styles.green_btn}>
               Logowanie
             </button>

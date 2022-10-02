@@ -6,6 +6,7 @@ import { User } from 'models/user'
 import Loading from 'components/Details/Loading/Loading'
 import Input from 'components/Details/Input/Input'
 import ErrorMessage from 'components/Details/Messages/ErrorMessage';
+import SuccessMessage from 'components/Details/Messages/SuccessMessage'
 
 const validation = {
   name: {
@@ -24,7 +25,7 @@ const validation = {
 }
 
 const SignUp: React.FC = () => {
-  const { loading, signUp } = useAuth()
+  const { loading, success: successResponse, error: errorResponse, signUp } = useAuth()
 
   const {
     register,
@@ -67,6 +68,7 @@ const SignUp: React.FC = () => {
         return null
     }
   }
+  console.log(errorResponse)
 
   return (
     <div className={styles.container}>
@@ -81,6 +83,8 @@ const SignUp: React.FC = () => {
         </div>
         <div className={styles.right}>
           {loading ? <Loading /> : null}
+          {successResponse && <SuccessMessage message={'Zostałeś zarejestrowany'} />}
+          {errorResponse && <ErrorMessage message={'Rejestracja się nie powiodła!'} />}
           <form className={styles.form_container} onSubmit={handleSubmit(signUp)}>
             <h1>Utwórz konto</h1>
             <Input

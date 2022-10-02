@@ -13,6 +13,7 @@ import Header from './Header/Header'
 import ProductsList from './ProductsList/ProductsList'
 import Product from './Product/Product'
 import CategoriesList from './CategoriesList/CategoriesList'
+import SuccessMessage from 'components/Details/Messages/SuccessMessage'
 
 export type ReduceReturnType = Record<string, number>;
 
@@ -27,15 +28,15 @@ const Storage: React.FC = () => {
   const [currentProduct, setCurrentProduct] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalEditOpen, setIsModalEditOpen] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const allCategoryValue = 'Wszystkie kategorie'
   const [activeCategory, setActiveCategory] = useState<string>(allCategoryValue)
-
-  console.log(products)
 
   useEffect(() => {
     if (data) {
       setProducts(data)
       setCategories(getCategories(data))
+      setTimeout(() => setIsSuccess(false), 2000)
     }
   }, [data])
 
@@ -62,7 +63,7 @@ const Storage: React.FC = () => {
     setActiveCategory(value)
   }
 
-  const handleEditProd = (prod: ProductModel) => {
+  const handleOpenEditProduct = (prod: ProductModel) => {
     setIsModalEditOpen(true)
     setCurrentProduct(prod)
   }
@@ -76,6 +77,7 @@ const Storage: React.FC = () => {
       unit,
       price
     })
+    setIsSuccess(true)
   }
 
   const handleEditProduct = (data: ProductModel) => {
@@ -88,6 +90,7 @@ const Storage: React.FC = () => {
       unit,
       price
     })
+    setIsSuccess(true)
   }
 
   return (
@@ -112,7 +115,7 @@ const Storage: React.FC = () => {
                 sortProducts={setProducts}
               >
                 {
-                  products?.map(product => (
+                  products?.slice(0).reverse().map(product => (
                     <Product
                       key={product._id}
                       _id={product._id}
@@ -121,8 +124,12 @@ const Storage: React.FC = () => {
                       quantity={product.quantity}
                       unit={product.unit}
                       price={product.price}
-                      editProd={() => handleEditProd(product)}
-                      deleteProd={() => deleteProduct(product._id)}
+                      editProd={() => handleOpenEditProduct(product)}
+                      deleteProd={() => {
+                        const result = window.confirm("Usunąć produkt?")
+                        if (!result) return
+                        deleteProduct(product._id)
+                      }}
                     />
                   ))
                 }
@@ -131,14 +138,16 @@ const Storage: React.FC = () => {
           }
         </div>
       </div>
-      <div className={styles.right}><p>statystyki magazynu</p></div>
+      {/* <div className={styles.right}><p>statystyki magazynu</p></div> */}
       <Modal
         trigger={isModalOpen}
         closeModal={() => setIsModalOpen(false)}>
         <ProductForm
           categoryList={categories}
           formTitle={'Dodaj produkt'}
-          handleSubmitForm={handleAddProduct} />
+          handleSubmitForm={handleAddProduct}
+          message={(isSuccess && <SuccessMessage message={'Produkt został dodany'} />)}
+        />
       </Modal>
       <Modal
         trigger={isModalEditOpen}
@@ -146,14 +155,15 @@ const Storage: React.FC = () => {
         {
           currentProduct && (
             <ProductForm
-              categoryList={categories}
               formTitle={'Edytuj produkt'}
+              categoryList={categories}
               defaultName={currentProduct.name}
               defaultCategory={currentProduct.category}
               defaultQuantity={currentProduct.quantity}
               defaultUnit={currentProduct.unit}
               defaultPrice={currentProduct.price}
               handleSubmitForm={handleEditProduct}
+              message={(isSuccess && <SuccessMessage message={'Produkt został zmieniony'} />)}
             />
           )
         }

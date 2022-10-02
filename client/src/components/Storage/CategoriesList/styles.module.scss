@@ -9,11 +9,21 @@
   display: flex;
   align-items: center;
   padding: 1rem;
-  margin-right: 1.5rem;
+
   border-right: 1px solid rgb(225, 225, 225);
   h4 {
     padding: 0 1rem;
   }
+}
+
+.categoryList {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  @include scrollbar;
+  margin-right: 1.5rem;
+  margin-left: 1.5rem;
 }
 
 .box {

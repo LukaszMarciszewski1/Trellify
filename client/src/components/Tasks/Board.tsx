@@ -8,11 +8,11 @@ import useOnClickOutside from 'hooks/useOnClickOutside';
 import { Board as BoardResponse } from 'models/board'
 import { List as ListResponse } from 'models/list'
 import TaskButton from 'components/Details/TaskButton/TaskButton'
-import List from '../List/List'
-import TaskForm from '../TaskForm/TaskForm'
-import SideMenu from '../SideMenu/SideMenu';
+import List from './List/List'
+import TaskForm from './TaskForm/TaskForm'
+import SideMenu from './SideMenu/SideMenu';
 import { GoPlus } from "react-icons/go";
-import { defaultBackground } from '../localData';
+import { defaultBackground } from '../../assets/localData';
 
 const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: backgroundApi }) => {
   const [addList] = useAddListMutation()
