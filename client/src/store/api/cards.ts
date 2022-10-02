@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Card } from '../../models/card'
+import { Card } from 'models/card'
 
 type CardsResponse = Card[]
 

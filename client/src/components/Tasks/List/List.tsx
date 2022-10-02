@@ -1,23 +1,26 @@
 import React, { useState, useRef } from 'react'
 import styles from './styles.module.scss'
-import { Draggable, Droppable } from 'react-beautiful-dnd';
-import TextareaAutosize from 'react-textarea-autosize';
+import { Draggable, Droppable } from 'react-beautiful-dnd'
+
 import {
   useDeleteListMutation,
   useUpdateListMutation,
   useDeleteAllCardsOfListMutation,
-} from "../../../store/api/lists";
-import { useUpdateBoardMutation } from '../../../store/api/boards'
-import { useAddCardMutation } from "../../../store/api/cards";
-import { BsThreeDots } from "react-icons/bs";
-import { GoPlus } from "react-icons/go";
-import useOnClickOutside from '../../../hooks/useOnClickOutside';
-import { List as ListInterface } from '../../../models/list'
-import Card from '../Card/Card';
-import TaskForm from '../TaskForm/TaskForm';
-import TaskButton from '../../Details/TaskButton/TaskButton';
-import IconButton from '../../Details/IconButton/IconButton'
-import Popup from '../../Details/Popup/Popup';
+} from "store/api/lists";
+import { useUpdateBoardMutation } from 'store/api/boards'
+import { useAddCardMutation } from "store/api/cards"
+
+import useOnClickOutside from 'hooks/useOnClickOutside'
+import { List as ListInterface } from 'models/list'
+
+import TextareaAutosize from 'react-textarea-autosize'
+import Card from '../Card/Card'
+import TaskForm from '../TaskForm/TaskForm'
+import TaskButton from 'components/Details/TaskButton/TaskButton'
+import IconButton from 'components/Details/IconButton/IconButton'
+import Popup from 'components/Details/Popup/Popup'
+import { BsThreeDots } from "react-icons/bs"
+import { GoPlus } from "react-icons/go"
 
 interface PropsList extends ListInterface {
   index: number
@@ -38,6 +41,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   const [popupTrigger, setPopupTrigger] = useState(false)
   const ref = useRef(null)
 
+  // console.log(cards)
 
   const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
@@ -142,19 +146,31 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                 right={'-30px'}
               >
                 <div className={styles.popupContent}>
-                  <TaskButton
-                    onClick={() => handleSortCardsByDate('sort-from-newest')}
-                    name={'Sortuj karty od najnowszych'}
-                  />
-                  <TaskButton
-                    onClick={() => handleSortCardsByDate('sort-from-oldest')}
-                    name={'Sortuj karty od najstarszych'}
-                  />
-                  <div className={styles.divider}></div>
-                  <TaskButton
-                    onClick={handleDeleteAllCardsOfList}
-                    name={'Usuń wszystkie karty'}
-                  />
+                  {
+                    cards.length > 1 ? (
+                      <>
+                        <TaskButton
+                          onClick={() => handleSortCardsByDate('sort-from-newest')}
+                          name={'Sortuj karty od najnowszych'}
+                        />
+                        <TaskButton
+                          onClick={() => handleSortCardsByDate('sort-from-oldest')}
+                          name={'Sortuj karty od najstarszych'}
+                        />
+                      </>
+                    ) : null
+                  }
+                  {
+                    cards.length ? (
+                      <>
+                        <div className={styles.divider}></div>
+                        <TaskButton
+                          onClick={handleDeleteAllCardsOfList}
+                          name={'Usuń wszystkie karty'}
+                        />
+                      </>
+                    ) : null
+                  }
                   <TaskButton
                     onClick={handleDeleteList}
                     name={'Usuń listę'}
@@ -180,6 +196,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                           labels={card.labels}
                           files={card.files}
                           cover={card.cover}
+                          usedMaterials={card.usedMaterials}
                           nameList={listTitle}
                           createdAt={card.createdAt}
                           setIsDragDisabled={setIsDragDisabled}

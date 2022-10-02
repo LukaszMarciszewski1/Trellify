@@ -4,13 +4,15 @@ import mongoose from 'mongoose'
 import Card from '../models/Card'
 import { File } from '../models/File'
 import { deleteFileS3, downloadFileS3 } from '../helpers/filehelper.js'
+import { config } from '../config/config'
 
 export const uploadFiles = async (req: Request, res: Response) => {
   const { cardId } = req.body
   try {
     let parentCard = await Card.findById(cardId)
     const files = (req as any).files
-    files.map( async (element: {
+    files.map(
+      async (element: {
         location: string
         originalname: string
         mimetype: string
@@ -55,7 +57,7 @@ export const deleteFile = async (req: Request, res: Response) => {
     )
     await File.findByIdAndRemove(id)
     const params = {
-      Bucket: process.env.S3_BUCKET_NAME,
+      Bucket: config.s3.bucket_name,
       Key: currentFile?.fileKey,
     }
     deleteFileS3(params)
@@ -67,17 +69,18 @@ export const deleteFile = async (req: Request, res: Response) => {
 }
 
 export const downloadFile = async (req: Request, res: Response) => {
-  const { id } = req.params
+  const { id, fileUrl } = req.params
   try {
     const files = await File.find()
     const currentFile = files.find(
       (file) => new mongoose.Types.ObjectId(file._id).toString() === id
     )
     const params = {
-      Bucket: process.env.S3_BUCKET_NAME,
-      Key: currentFile?.fileUrl,
+      Bucket: config.s3.bucket_name,
+      Key: currentFile?.fileKey,
     }
     downloadFileS3(params)
+    console.log(`to jest param: ${fileUrl}`)
 
     res.status(200).send('File Download Successfully')
   } catch (error) {

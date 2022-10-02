@@ -6,7 +6,7 @@ export type InputProps = {
   name: string;
   label: string;
   type?: 'text' | 'email' | 'number' | 'password';
-  placeholder: string
+  placeholder?: string
   disabled?: boolean
   onChange?: (value: any) => void
   error?: {} | undefined | ((value: any) => void)

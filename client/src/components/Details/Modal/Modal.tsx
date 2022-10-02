@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import styles from './styles.module.scss'
 import IconButton from '../IconButton/IconButton'
-import useOnClickOutside from '../../../hooks/useOnClickOutside'
+import useOnClickOutside from 'hooks/useOnClickOutside'
 import { BsXLg } from "react-icons/bs";
 
 type ModalProps = {

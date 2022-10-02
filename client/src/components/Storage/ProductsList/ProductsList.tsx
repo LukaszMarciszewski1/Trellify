@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import styles from './styles.module.scss'
+import { Product as ProductModel } from 'models/product';
 import { TiArrowSortedDown } from 'react-icons/ti'
 import { TiArrowSortedUp } from 'react-icons/ti'
 import { TiArrowUnsorted } from 'react-icons/ti'
-import { Product as ProductModel } from '../../../models/product';
 
 interface ProductsListProps {
   data: ProductModel[] | undefined

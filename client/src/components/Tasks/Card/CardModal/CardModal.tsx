@@ -1,54 +1,54 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
-import axios from 'axios';
 import styles from './styles.module.scss'
-import dayjs from 'dayjs';
+import "react-datepicker/dist/react-datepicker.css"
+import axios from 'axios'
+import dayjs from 'dayjs'
 import fileDownload from 'js-file-download'
-import TextareaAutosize from 'react-textarea-autosize';
-import TaskForm from '../../TaskForm/TaskForm'
-import useOnClickOutside from '../../../../hooks/useOnClickOutside'
-import { isFileImage } from '../../../../hooks/useIsFileImage'
-import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { BsXLg } from 'react-icons/bs';
-import { BsPencil } from 'react-icons/bs';
-import { BiTask } from 'react-icons/bi';
-import { GrAttachment } from 'react-icons/gr';
-import { BsStopwatch } from 'react-icons/bs';
-import { MdOutlineLabel } from 'react-icons/md';
-import { IoMdAdd } from 'react-icons/io';
-import { RiDeleteBinLine } from 'react-icons/ri';
+import DatePicker, { registerLocale } from "react-datepicker"
+import { useDebounce, useDebouncedCallback } from 'use-debounce'
+import { Line as ProgressLine } from 'rc-progress'
+import pl from "date-fns/locale/pl"
 
 import {
   useGetBoardQuery,
   useUpdateBoardMutation,
 
-} from '../../../../store/api/boards'
-
+} from 'store/api/boards'
 import {
   useGetAllCardsQuery,
   useDeleteCardMutation,
   useUpdateCardMutation,
-} from "../../../../store/api/cards";
-
+} from "store/api/cards"
 import {
-  useDeleteFileMutation,
-} from '../../../../store/api/files'
+  useDeleteFileMutation
+} from 'store/api/files'
 
-import TaskButton from '../../../Details/TaskButton/TaskButton';
-import Popup from '../../../Details/Popup/Popup';
-import Label from './CardModalDetails/Label/Label';
+import { Card as CardModel } from 'models/card'
+import { Labels as LabelsInterface } from 'models/labels'
+
+import useOnClickOutside from 'hooks/useOnClickOutside'
+import { isFileImage } from 'hooks/useIsFileImage'
+
+import TextareaAutosize from 'react-textarea-autosize'
+import TaskForm from '../../TaskForm/TaskForm'
+import TaskButton from '../../../Details/TaskButton/TaskButton'
+import Popup from '../../../Details/Popup/Popup'
+import Label from './CardModalDetails/Label/Label'
 import Container from './CardModalDetails/Container/Container'
 import LabelForm from './CardModalDetails/LabelForm/LabelForm'
-import Button from '../../../Details/Button/Button';
+import Button from '../../../Details/Button/Button'
 import FileForm from './CardModalDetails/FileForm/FileForm'
-import Files from './CardModalDetails/Files/Files';
+import Files from './CardModalDetails/Files/Files'
 import Modal from '../../../Details/Modal/Modal'
+import UsedMaterials from './CardModalDetails/Materials/Materials'
 
-import { Line as ProgressLine } from 'rc-progress';
-import { Card as CardModel } from '../../../../models/card'
-import { Labels as LabelsInterface } from '../../../../models/labels'
-import pl from "date-fns/locale/pl";
-
+import { BsPencil } from 'react-icons/bs'
+import { BiTask } from 'react-icons/bi'
+import { GrAttachment } from 'react-icons/gr'
+import { BsStopwatch } from 'react-icons/bs'
+import { MdOutlineLabel } from 'react-icons/md'
+import { IoMdAdd } from 'react-icons/io'
+import { RiDeleteBinLine } from 'react-icons/ri'
 
 interface CardModalProps extends CardModel {
   dateIsSameOrBefore: boolean
@@ -77,6 +77,7 @@ const CardModal: React.FC<CardModalProps> = ({
   deadline,
   cover,
   files,
+  usedMaterials,
   nameList,
   dateIsSameOrBefore,
   deadlineIsSoon,
@@ -130,15 +131,32 @@ const CardModal: React.FC<CardModalProps> = ({
   }, [board])
 
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (e.target.id === 'card-title') setCardTitle(e.target.value)
-    updateCard({
-      _id: _id,
-      title: e.target.value
-    })
-    updateBoard({
-      _id: boardId
-    })
+    if (e.target.id === 'card-title') {
+      setCardTitle(e.target.value)
+      updateCard({
+        _id: _id,
+        title: e.target.value
+      })
+      updateBoard({
+        _id: boardId
+      })
+    }
   }
+
+  // const handleEditCardTitle = useDebouncedCallback(
+  //   (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  //     if (e.target.id === 'card-title') {
+  //       setCardTitle(e.target.value)
+  //       updateCard({
+  //         _id: _id,
+  //         title: e.target.value
+  //       })
+  //       updateBoard({
+  //         _id: boardId
+  //       })
+  //     }
+  //   }, 1000
+  // )
 
   const handleEditCardDescription = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-description')
@@ -163,35 +181,34 @@ const CardModal: React.FC<CardModalProps> = ({
   }
 
   const handleSaveLabelEditing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    if (!boardLabels) return
     e.preventDefault()
     const newLabels = [...boardLabels]
 
-    if (boardLabels) {
-      const newLabelsBoardState = newLabels.map((label) => {
+    const newLabelsBoardState = newLabels.map((label) => {
+      if (label._id !== currentLabelId) return label;
+      return { ...label, title: currentLabelTitle, color: currentLabelColor };
+    });
+
+    cards?.map(card => {
+      const newLabels = card.labels.map(label => {
         if (label._id !== currentLabelId) return label;
         return { ...label, title: currentLabelTitle, color: currentLabelColor };
-      });
-
-      cards?.map(card => {
-        const newLabels = card.labels.map(label => {
-          if (label._id !== currentLabelId) return label;
-          return { ...label, title: currentLabelTitle, color: currentLabelColor };
-        })
-        updateCard({
-          _id: card._id,
-          labels: newLabels
-        })
-        setCardLabels(newLabels)
       })
-
-      setBoardLabels(newLabelsBoardState)
-
-      updateBoard({
-        _id: boardId,
-        labels: newLabelsBoardState
+      updateCard({
+        _id: card._id,
+        labels: newLabels
       })
-      setIsLabelEditPopupOpen(false)
-    }
+      setCardLabels(newLabels)
+    })
+
+    setBoardLabels(newLabelsBoardState)
+
+    updateBoard({
+      _id: boardId,
+      labels: newLabelsBoardState
+    })
+    setIsLabelEditPopupOpen(false)
   }
 
   const handleAddNewLabel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -365,16 +382,13 @@ const CardModal: React.FC<CardModalProps> = ({
     }
   }
 
-  const handleDownloadFile = async (fileUrl: string) => {
-    await axios.get(`${fileUrl}`, {
+  const handleDownloadFile = (fileUrl: string) => {
+    axios.get(`${process.env.REACT_APP_API_URL}files`, {
       responseType: 'blob',
-    }).then((res) => {
-      let filename = fileUrl.replace(/^.*[\\\/]/, '')
-      let fileExtension;
-      fileExtension = fileUrl.split('.');
-      fileExtension = fileExtension[fileExtension.length - 1];
-      fileDownload(res.data, `${filename}.${fileExtension}`);
-    });
+    })
+      .then((res) => {
+        fileDownload(res.data, fileUrl)
+      })
   }
 
   const onClickHandler = () => {
@@ -512,7 +526,23 @@ const CardModal: React.FC<CardModalProps> = ({
                   </div>
               }
             </div>
-            <Container data={files} title={'Załącznik'}>
+            <Container data={usedMaterials} title={'Wykorzystane materiały'}>
+              <>
+                {
+                  usedMaterials?.map((product) => (
+                    <div
+                      key={product._id}
+                      style={{ backgroundColor: `grey` }}
+                      className={styles.cardModalLabel}
+                      onClick={() => setStorageTrigger(true)}
+                    >
+                      <span>{product.name}: {product.used} {product.unit}</span>
+                    </div>
+                  ))
+                }
+              </>
+            </Container>
+            <Container data={files} title={'Załączniki'}>
               {
                 files?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
                   <Files
@@ -607,15 +637,15 @@ const CardModal: React.FC<CardModalProps> = ({
               </div>
             </Popup>
             <Popup
-              title={'Załącznik'}
+              title={'Załączniki'}
               trigger={fileTrigger}
               closePopup={() => setFileTrigger(false)}
               backToMainWindow={() => setFileTrigger(false)}
             >
               <FileForm
-                name={'załącznik'}
+                name={'załączniki'}
                 size={0}
-                label={'załącznik'}
+                label={'załączniki'}
                 type={'file'}
                 listNames={selectedNameFiles}
                 handleInputState={handleUploadFiles}
@@ -643,23 +673,24 @@ const CardModal: React.FC<CardModalProps> = ({
               closePopup={() => setValuationTrigger(false)}
             >
               <div>
-                <p>In progress ...</p>
+                <p>Is in progress ...</p>
               </div>
             </Popup>
             <Popup
-              title={'Magazyn'}
+              title={'Wykorzystane materiały'}
               trigger={storageTrigger}
               closePopup={() => setStorageTrigger(false)}
             >
-              <div>
-                <p>In progress ...</p>
-              </div>
+              <UsedMaterials
+                cardId={_id}
+                boardId={boardId}
+                usedMaterials={usedMaterials} />
             </Popup>
             <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
             <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
             <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />
-            <TaskButton onClick={() => setValuationTrigger(true)} name={'Dodaj wycenę'} icon={<BiTask />} />
             <TaskButton onClick={() => setStorageTrigger(true)} name={'Magazyn'} icon={<BiTask />} />
+            <TaskButton onClick={() => setValuationTrigger(true)} name={'Dodaj wycenę'} icon={<BiTask />} />
             <div className={styles.divider}></div>
             <TaskButton onClick={() => {
               deleteCard(_id);

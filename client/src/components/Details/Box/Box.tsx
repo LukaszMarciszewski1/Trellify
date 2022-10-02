@@ -3,7 +3,6 @@ import styles from './styles.module.scss'
 
 interface CardProps {
   onClick?: () => void
-  // children: JSX.Element | JSX.Element[];
 }
 
 const Card: React.FC<CardProps> = ({ onClick, children }) => {

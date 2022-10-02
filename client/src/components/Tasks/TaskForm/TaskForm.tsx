@@ -1,9 +1,9 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import TextareaAutosize from 'react-textarea-autosize';
+import Button from 'components/Details/Button/Button'
+import IconButton from 'components/Details/IconButton/IconButton';
 import { BsXLg } from "react-icons/bs";
-import Button from '../../Details/Button/Button'
-import IconButton from '../../Details/IconButton/IconButton';
 
 interface TaskFormProps {
   id: string

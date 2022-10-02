@@ -2,7 +2,7 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import SignIn from './SignIn/SignIn';
 import SignUp from './SignUp/SignUp';
-import Layout from '../../components/Layout';
+import Layout from 'components/Layout';
 
 const Auth: React.FC = () => {
   return (

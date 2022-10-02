@@ -14,6 +14,7 @@ const IconButton: React.FC<IconButtonProps> = (props) => (
     className={styles.iconButton}
     onClick={props.onClick}
     type='button'
+    style={props.style}
   >
     {props.children}
   </button>

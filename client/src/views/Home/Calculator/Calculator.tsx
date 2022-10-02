@@ -2,7 +2,7 @@ import React from 'react'
 
 const Calculator: React.FC = () => {
   return (
-    <div>Kalkulator</div>
+    <div style={{ padding: '4rem' }}><h2>Is in progress...</h2></div>
   )
 }
 

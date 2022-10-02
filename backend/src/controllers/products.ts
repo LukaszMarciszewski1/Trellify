@@ -2,7 +2,6 @@ import 'dotenv/config'
 import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 import Product from '../models/Product'
-import { config } from '../config/config'
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
@@ -54,7 +53,6 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
 export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params
-  const { apiaryName, apiaryNumber } = req.body
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send(`No apiary with id: ${id}`)
   }

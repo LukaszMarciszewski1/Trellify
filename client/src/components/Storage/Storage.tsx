@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
-import { Product as ProductModel } from '../../models/product'
 import {
   useGetAllProductsQuery,
-  useDeleteProductMutation
-} from "../../store/api/products"
-import Modal from '../Details/Modal/Modal'
+  useDeleteProductMutation,
+  useAddProductMutation,
+  useUpdateProductMutation
+} from "store/api/products"
+import { Product as ProductModel } from 'models/product'
+import Modal from 'components/Details/Modal/Modal'
 import ProductForm from './ProductForm/ProductForm'
 import Header from './Header/Header'
 import ProductsList from './ProductsList/ProductsList'
@@ -17,6 +19,9 @@ export type ReduceReturnType = Record<string, number>;
 const Storage: React.FC = () => {
   const { data, error, isLoading } = useGetAllProductsQuery()
   const [deleteProduct] = useDeleteProductMutation()
+  const [addProduct] = useAddProductMutation()
+  const [updateProduct] = useUpdateProductMutation()
+
   const [products, setProducts] = useState<ProductModel[]>()
   const [categories, setCategories] = useState<ReduceReturnType | undefined>()
   const [currentProduct, setCurrentProduct] = useState<any>(null)
@@ -24,6 +29,8 @@ const Storage: React.FC = () => {
   const [isModalEditOpen, setIsModalEditOpen] = useState(false)
   const allCategoryValue = 'Wszystkie kategorie'
   const [activeCategory, setActiveCategory] = useState<string>(allCategoryValue)
+
+  console.log(products)
 
   useEffect(() => {
     if (data) {
@@ -60,8 +67,28 @@ const Storage: React.FC = () => {
     setCurrentProduct(prod)
   }
 
-  console.log(products)
-  console.log(categories)
+  const handleAddProduct = (data: ProductModel) => {
+    const { name, category, quantity, unit, price } = data
+    addProduct({
+      name,
+      category,
+      quantity,
+      unit,
+      price
+    })
+  }
+
+  const handleEditProduct = (data: ProductModel) => {
+    const { name, category, quantity, unit, price } = data
+    updateProduct({
+      _id: currentProduct._id,
+      name,
+      category,
+      quantity,
+      unit,
+      price
+    })
+  }
 
   return (
     <div className={styles.container}>
@@ -93,7 +120,7 @@ const Storage: React.FC = () => {
                       category={product.category}
                       quantity={product.quantity}
                       unit={product.unit}
-                      price={`${product.price} zł`}
+                      price={product.price}
                       editProd={() => handleEditProd(product)}
                       deleteProd={() => deleteProduct(product._id)}
                     />
@@ -104,22 +131,29 @@ const Storage: React.FC = () => {
           }
         </div>
       </div>
-      <div className={styles.right}><p>sticky</p></div>
-      <Modal trigger={isModalOpen} closeModal={() => setIsModalOpen(false)}>
-        <ProductForm categoryList={categories} formTitle={'Dodaj produkt'} />
+      <div className={styles.right}><p>statystyki magazynu</p></div>
+      <Modal
+        trigger={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}>
+        <ProductForm
+          categoryList={categories}
+          formTitle={'Dodaj produkt'}
+          handleSubmitForm={handleAddProduct} />
       </Modal>
-      <Modal trigger={isModalEditOpen} closeModal={() => setIsModalEditOpen(false)}>
+      <Modal
+        trigger={isModalEditOpen}
+        closeModal={() => setIsModalEditOpen(false)}>
         {
           currentProduct && (
             <ProductForm
               categoryList={categories}
               formTitle={'Edytuj produkt'}
-              _id={currentProduct._id}
               defaultName={currentProduct.name}
               defaultCategory={currentProduct.category}
               defaultQuantity={currentProduct.quantity}
               defaultUnit={currentProduct.unit}
               defaultPrice={currentProduct.price}
+              handleSubmitForm={handleEditProduct}
             />
           )
         }

@@ -80,7 +80,6 @@ export const updateList = async (req: Request, res: Response) => {
 
 export const deleteAllCardsOfList = async (req: Request, res: Response) => {
   const { id } = req.params
-  //do zrobienia - usunąc wszystkie rekordy plików
   try {
     await Card.deleteMany({ listId: id })
     res.json({ message: 'Cards deleted successfully.' })

@@ -1,9 +1,9 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import Sidebar from './Sidebar/Sidebar'
-import AppBar from './AppBar/AppBar'
 import { Outlet } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from 'hooks/useAuth'
+import Sidebar from './Navigation/Navigation'
+import AppBar from './AppBar/AppBar'
 
 const Layout: React.FC = () => {
   const { user } = useAuth()

@@ -1,31 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styles from './styles.module.scss'
 import { Draggable } from 'react-beautiful-dnd';
-
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration'
-
 import 'dayjs/locale/pl';
-import CardModal from './CardModal/CardModal';
 import {
   useUpdateBoardMutation,
-} from '../../../store/api/boards'
+} from 'store/api/boards'
 import {
   useUpdateCardMutation,
-} from "../../../store/api/cards";
-
+} from "store/api/cards";
+import defaultBg from 'assets/img/defaultBackground.jpg'
+import useHover from 'hooks/useHover'
+import { isFileImage } from 'hooks/useIsFileImage'
+import { Card as CardModel } from 'models/card'
+import Box from 'components/Details/Box/Box'
+import CardModal from './CardModal/CardModal';
 import { GrTextAlignFull } from 'react-icons/gr';
 import { BsStopwatch } from 'react-icons/bs';
 import { ImCheckboxUnchecked } from 'react-icons/im';
 import { ImCheckboxChecked } from 'react-icons/im';
 import { GrAttachment } from 'react-icons/gr';
-import useHover from '../../../hooks/useHover'
-import { isFileImage } from '../../../hooks/useIsFileImage'
-import { Card as CardModel } from '../../../models/card'
-import Box from '../../Details/Box/Box'
-import defaultBg from '../../../assets/img/defaultBackground.jpg'
+
 export interface CardProps extends CardModel {
   index: number
   setIsDragDisabled: (value: boolean) => void
@@ -43,6 +41,7 @@ const TaskCard: React.FC<CardProps> = ({
   deadline,
   cover,
   files,
+  usedMaterials,
   createdAt,
   setIsDragDisabled,
 }) => {
@@ -83,7 +82,6 @@ const TaskCard: React.FC<CardProps> = ({
     updateCard({ _id, cover: cardCover })
     updateBoard({ _id: boardId })
   }, [cardCover])
-
 
   const displayCover = () => {
     if (cardFiles) {
@@ -163,6 +161,7 @@ const TaskCard: React.FC<CardProps> = ({
             deadline={deadline}
             labels={labels}
             files={cardFiles}
+            usedMaterials={usedMaterials}
             cover={cardCover}
             completed={cardCompleted}
             cardFileIndex={cardFileIndex}

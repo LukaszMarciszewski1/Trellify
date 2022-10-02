@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { File } from '../../models/file'
+import { File } from 'models/file'
 
 type FilesResponse = File[]
 
@@ -25,8 +25,8 @@ export const filesApi = createApi({
       invalidatesTags: ['Files'],
     }),
     deleteFile: builder.mutation<{ success: boolean; id: string | number },string>({
-      query: (id) => ({
-        url: `files/${id}`,
+      query: (fileUrl) => ({
+        url: `files/${fileUrl}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Files'],

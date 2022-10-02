@@ -9,4 +9,8 @@
   &:hover {
     background-color: darken(rgb(13, 97, 146), 5%);
   }
+  &:disabled {
+    background-color: rgb(182, 182, 182);
+    cursor: auto;
+  }
 }

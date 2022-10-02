@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import TaskButton from '../../Details/TaskButton/TaskButton'
+import TaskButton from 'components/Details/TaskButton/TaskButton'
 import { BsImage } from "react-icons/bs";
 
 type BoardHeaderProps = {

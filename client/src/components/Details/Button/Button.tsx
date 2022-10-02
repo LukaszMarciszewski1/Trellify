@@ -7,13 +7,15 @@ interface ButtonProps {
   title: string
   icon?: Element
   type?: "button" | "submit" | "reset" | undefined
+  disabled?: boolean
 }
 
-const Button: React.FC<ButtonProps> = ({ title, style, onClick, ...props }) => (
+const Button: React.FC<ButtonProps> = ({ title, style, disabled, onClick, ...props }) => (
   <button
     className={styles.button}
     style={style}
     onClick={onClick}
+    disabled={disabled}
     {...props}>
     {title}
   </button>

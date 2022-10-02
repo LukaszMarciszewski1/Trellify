@@ -3,7 +3,7 @@ import styles from './styles.module.scss'
 import IconButton from '../IconButton/IconButton'
 import { BsXLg } from "react-icons/bs";
 import { MdOutlineArrowBackIos } from "react-icons/md";
-import useOnClickOutside from '../../../hooks/useOnClickOutside'
+import useOnClickOutside from 'hooks/useOnClickOutside'
 
 interface PopupPosition {
  right?: string,

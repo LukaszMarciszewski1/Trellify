@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Input from '../../Details/Input/Input';
-import ErrorMessage from '../../Details/Messages/ErrorMessage';
 import styles from './styles.module.scss'
-import Button from '../../Details/Button/Button';
-import { Product as ProductModel } from '../../../models/product';
+import { Product as ProductModel } from 'models/product';
+import Button from 'components/Details/Button/Button';
+import Input from 'components/Details/Input/Input';
+import ErrorMessage from 'components/Details/Messages/ErrorMessage';
 import { ReduceReturnType } from '../Storage'
-import { useAddProductMutation } from "../../../store/api/products";
 
 const validation = {
   name: {
     required: true,
-    maxLength: 20,
+    maxLength: 40,
     minLength: 2,
   },
   category: {
@@ -41,20 +40,22 @@ interface DefaultValuesProps {
 interface AddProductFormProps extends DefaultValuesProps {
   categoryList: ReduceReturnType | undefined
   formTitle: string
+  handleSubmitForm: (data: ProductModel) => void
 }
 
 const AddProductForm: React.FC<AddProductFormProps> = ({
-  _id,
   defaultName,
   defaultCategory,
   defaultQuantity,
   defaultUnit,
   defaultPrice,
   categoryList,
-  formTitle
+  formTitle,
+  handleSubmitForm
 }) => {
-  const [addProduct] = useAddProductMutation()
+
   const [isSuccess, setIsSuccess] = useState(false)
+  const [categorySwitch, setCategorySwitch] = useState(true)
   const {
     register,
     handleSubmit,
@@ -90,9 +91,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   const quantityErrors = (type: any) => {
     switch (type) {
       case 'required':
-        return <ErrorMessage message={'Email jest wymagany'} />
+        return <ErrorMessage message={'Stan jest wymagany'} />
       case 'pattern':
-        return <ErrorMessage message={'Email jest niepoprawny'} />
+        return <ErrorMessage message={'Stan jest niepoprawny'} />
       default:
         return null
     }
@@ -109,24 +110,10 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     }
   }
 
-  const handleAddProduct = (data: ProductModel) => {
-    const { name, category, quantity, unit, price } = data
-    addProduct({
-      name,
-      category,
-      quantity,
-      unit,
-      price
-    })
-    setIsSuccess(true)
-  }
-
-  const [categorySwitch, setCategorySwitch] = useState(true)
-
   return (
     <div className={styles.container}>
       <h2>{formTitle}</h2>
-      <form className={styles.form} onSubmit={handleSubmit(handleAddProduct)}>
+      <form className={styles.form} onSubmit={handleSubmit(handleSubmitForm)}>
         <div className={styles.formContainer}>
           <div className={styles.formGroup}>
             <div className={styles.inputContainer}>
@@ -176,10 +163,11 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
             <div className={styles.inputContainer}>
               <label htmlFor="unit">Jednostka</label>
               <select {...register('unit')} className={styles.select} defaultValue={defaultUnit}>
+                <option value="szt">szt</option>
                 <option value="m2">m2</option>
-                <option value="ark">ark.</option>
+                <option value="mb">mb</option>
+                <option value="ark">ark</option>
                 <option value="ryz">ryz</option>
-                <option value="szt">szt.</option>
                 <option value="litry">litry</option>
                 <option value="inne">inne</option>
               </select>

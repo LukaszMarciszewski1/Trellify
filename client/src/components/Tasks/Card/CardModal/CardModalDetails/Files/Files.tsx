@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import { isFileImage } from '../../../../../../hooks/useIsFileImage'
-import TaskButton from '../../../../../Details/TaskButton/TaskButton'
+import { isFileImage } from 'hooks/useIsFileImage'
+import TaskButton from 'components/Details/TaskButton/TaskButton'
 
 interface FileProps {
   title: string
