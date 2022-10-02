@@ -163,7 +163,7 @@ const Storage: React.FC = () => {
               defaultUnit={currentProduct.unit}
               defaultPrice={currentProduct.price}
               handleSubmitForm={handleEditProduct}
-              message={(isSuccess && <SuccessMessage message={'Produkt został zedytowany'} />)}
+              message={(isSuccess && <SuccessMessage message={'Produkt został zmieniony'} />)}
             />
           )
         }
