@@ -1,7 +1,7 @@
 import React  from 'react'
-import Board from '../../components/Tasks/Board/Board';
-import { useGetAllBoardsQuery } from '../../store/api/boards';
-import Loading from '../../components/Details/Loading/Loading';
+import Board from 'components/Tasks/Board';
+import { useGetAllBoardsQuery } from 'store/api/boards';
+import Loading from 'components/Details/Loading/Loading';
 
 const TasksPage: React.FC = () => {
   const { data, error, isLoading } = useGetAllBoardsQuery()
