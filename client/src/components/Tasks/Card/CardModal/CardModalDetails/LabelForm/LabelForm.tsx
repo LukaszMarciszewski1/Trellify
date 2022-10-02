@@ -1,9 +1,9 @@
 import React from 'react'
-import TextareaAutosize from 'react-textarea-autosize';
 import styles from './styles.module.scss'
-import Button from '../../../../../Details/Button/Button'
 import { HexColorPicker } from "react-colorful";
 import { presetColors } from '../../../../localData'
+import TextareaAutosize from 'react-textarea-autosize';
+import Button from 'components/Details/Button/Button'
 interface LabelProps {
   formId: string
   value: string | undefined

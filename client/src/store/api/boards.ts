@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Board } from '../../models/board'
+import { Board } from 'models/board'
 type BoardResponse = Board[]
 const token = localStorage.getItem('token') || null
 

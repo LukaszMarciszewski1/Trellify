@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Input from '../../Details/Input/Input';
-import ErrorMessage from '../../Details/Messages/ErrorMessage';
 import styles from './styles.module.scss'
-import Button from '../../Details/Button/Button';
-import { Product as ProductModel } from '../../../models/product';
+import { Product as ProductModel } from 'models/product';
+import Button from 'components/Details/Button/Button';
+import Input from 'components/Details/Input/Input';
+import ErrorMessage from 'components/Details/Messages/ErrorMessage';
 import { ReduceReturnType } from '../Storage'
 
 const validation = {

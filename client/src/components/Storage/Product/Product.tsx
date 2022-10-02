@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
-import IconButton from '../../Details/IconButton/IconButton';
-import { Product as ProductModel } from '../../../models/product';
-
+import { Product as ProductModel } from 'models/product';
+import IconButton from 'components/Details/IconButton/IconButton';
+import Popup from 'components/Details/Popup/Popup';
+import TaskButton from 'components/Details/TaskButton/TaskButton';
 import { BiDotsVerticalRounded } from 'react-icons/bi'
-import Popup from '../../Details/Popup/Popup';
-import TaskButton from '../../Details/TaskButton/TaskButton';
 
 interface ProductProps extends ProductModel {
   deleteProd: () => void

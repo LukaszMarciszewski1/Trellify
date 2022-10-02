@@ -1,7 +1,6 @@
 import React from 'react'
-import { Line } from 'rc-progress';
 import styles from './styles.module.scss'
-import Button from '../../../../../Details/Button/Button'
+import Button from 'components/Details/Button/Button'
 interface FileFormProps {
   name: string
   size: number

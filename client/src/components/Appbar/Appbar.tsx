@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
-import Button from '../Details/Button/Button'
-import { useAuth } from '../../hooks/useAuth'
-import Popup from '../Details/Popup/Popup'
-import logoSrc from '../../assets/img/logo.svg'
+import Button from 'components/Details/Button/Button'
+import { useAuth } from 'hooks/useAuth'
+import Popup from 'components/Details/Popup/Popup'
+import logoSrc from 'assets/img/logo.svg'
 
 const AppBar: React.FC = () => {
   const { user, signOut } = useAuth()
@@ -13,7 +13,7 @@ const AppBar: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.logoContainer}>
-        <img src={logoSrc} />
+        <img src={logoSrc} alt='logo' />
       </div>
       <div className={styles.userAction}>
         <button onClick={() => setPopupTrigger(true)} className={styles.userActionBtn}>
@@ -38,7 +38,7 @@ const AppBar: React.FC = () => {
           <Button
             title={'Wyloguj'}
             onClick={signOut}
-            type={'button'} 
+            type={'button'}
           />
         </Popup>
       </div>

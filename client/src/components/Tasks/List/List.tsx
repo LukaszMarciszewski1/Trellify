@@ -1,23 +1,26 @@
 import React, { useState, useRef } from 'react'
 import styles from './styles.module.scss'
-import { Draggable, Droppable } from 'react-beautiful-dnd';
-import TextareaAutosize from 'react-textarea-autosize';
+import { Draggable, Droppable } from 'react-beautiful-dnd'
+
 import {
   useDeleteListMutation,
   useUpdateListMutation,
   useDeleteAllCardsOfListMutation,
-} from "../../../store/api/lists";
-import { useUpdateBoardMutation } from '../../../store/api/boards'
-import { useAddCardMutation } from "../../../store/api/cards";
-import { BsThreeDots } from "react-icons/bs";
-import { GoPlus } from "react-icons/go";
-import useOnClickOutside from '../../../hooks/useOnClickOutside';
-import { List as ListInterface } from '../../../models/list'
-import Card from '../Card/Card';
-import TaskForm from '../TaskForm/TaskForm';
-import TaskButton from '../../Details/TaskButton/TaskButton';
-import IconButton from '../../Details/IconButton/IconButton'
-import Popup from '../../Details/Popup/Popup';
+} from "store/api/lists";
+import { useUpdateBoardMutation } from 'store/api/boards'
+import { useAddCardMutation } from "store/api/cards"
+
+import useOnClickOutside from 'hooks/useOnClickOutside'
+import { List as ListInterface } from 'models/list'
+
+import TextareaAutosize from 'react-textarea-autosize'
+import Card from '../Card/Card'
+import TaskForm from '../TaskForm/TaskForm'
+import TaskButton from 'components/Details/TaskButton/TaskButton'
+import IconButton from 'components/Details/IconButton/IconButton'
+import Popup from 'components/Details/Popup/Popup'
+import { BsThreeDots } from "react-icons/bs"
+import { GoPlus } from "react-icons/go"
 
 interface PropsList extends ListInterface {
   index: number

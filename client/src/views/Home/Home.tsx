@@ -1,12 +1,11 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import styles from './styles.module.scss'
-import Layout from '../../components/Layout';
 import Tasks from './TasksPage/TasksPage';
 import Storage from './StoragePage/StoragePage';
 import Statistics from './Statistics/Statistics';
 import Information from './Settings/Settings';
 import Calculator from './Calculator/Calculator';
+import Layout from 'components/Layout';
 
 const Home: React.FC = () => {
 

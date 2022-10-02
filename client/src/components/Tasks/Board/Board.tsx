@@ -1,19 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './styles.module.scss'
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
-import { useUpdateBoardMutation } from '../../../store/api/boards'
-import { useAddListMutation, useUpdateListMutation } from '../../../store/api/lists';
-import { useUpdateCardMutation } from "../../../store/api/cards";
-import useOnClickOutside from '../../../hooks/useOnClickOutside';
-import { GoPlus } from "react-icons/go";
-import { defaultBackground } from '../localData';
-import { Board as BoardResponse } from '../../../models/board'
-import { List as ListResponse } from '../../../models/list'
-import BoardHeader from '../BoardHeader/BoardHeader';
+import { useUpdateBoardMutation } from 'store/api/boards'
+import { useAddListMutation, useUpdateListMutation } from 'store/api/lists';
+import { useUpdateCardMutation } from "store/api/cards";
+import useOnClickOutside from 'hooks/useOnClickOutside';
+import { Board as BoardResponse } from 'models/board'
+import { List as ListResponse } from 'models/list'
+import TaskButton from 'components/Details/TaskButton/TaskButton'
 import List from '../List/List'
-import TaskButton from '../../Details/TaskButton/TaskButton'
 import TaskForm from '../TaskForm/TaskForm'
 import SideMenu from '../SideMenu/SideMenu';
+import { GoPlus } from "react-icons/go";
+import { defaultBackground } from '../localData';
 
 const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: backgroundApi }) => {
   const [addList] = useAddListMutation()

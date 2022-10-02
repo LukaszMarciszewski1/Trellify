@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
-import TaskButton from '../../Details/TaskButton/TaskButton'
+import Popup from 'components/Details/Popup/Popup'
+import TaskButton from 'components/Details/TaskButton/TaskButton'
+import { ReduceReturnType } from '../Storage'
 import { GoPlus } from 'react-icons/go'
 import { BsFilter } from 'react-icons/bs'
-import Popup from '../../Details/Popup/Popup'
-import { ReduceReturnType } from '../Storage'
 
 interface HeaderProps {
   addNewProduct: () => void

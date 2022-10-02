@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth'
-import Auth from './Auth/Auth'
-import Home from './Home/Home'
+import { useAuth } from 'hooks/useAuth'
+import Auth from 'views/Auth/Auth'
+import Home from 'views/Home/Home'
 
 const Root: React.FC = () => {
   const { user } = useAuth()

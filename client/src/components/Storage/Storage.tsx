@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
-import { Product as ProductModel } from '../../models/product'
 import {
   useGetAllProductsQuery,
   useDeleteProductMutation,
   useAddProductMutation,
   useUpdateProductMutation
-} from "../../store/api/products"
-import Modal from '../Details/Modal/Modal'
+} from "store/api/products"
+import { Product as ProductModel } from 'models/product'
+import Modal from 'components/Details/Modal/Modal'
 import ProductForm from './ProductForm/ProductForm'
 import Header from './Header/Header'
 import ProductsList from './ProductsList/ProductsList'

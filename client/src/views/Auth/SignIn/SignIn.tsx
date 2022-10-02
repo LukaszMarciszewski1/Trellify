@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss'
-import Loading from '../../../components/Details/Loading/Loading'
-import { useAuth } from '../../../hooks/useAuth'
+import { User } from 'models/user'
+import { useAuth } from 'hooks/useAuth'
 import { useForm } from 'react-hook-form';
-import Input from '../../../components/Details/Input/Input'
-import { User } from '../../../models/user'
-import ErrorMessage from '../../../components/Details/Messages/ErrorMessage';
+import Input from 'components/Details/Input/Input'
+import ErrorMessage from 'components/Details/Messages/ErrorMessage';
+import Loading from 'components/Details/Loading/Loading'
 
 const SignIn: React.FC = () => {
   const { loading, error: errorResponse, signIn } = useAuth()

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Product } from '../../models/product'
+import { Product } from 'models/product'
 
 type ProductResponse = Product[]
 const token = localStorage.getItem('token') || null

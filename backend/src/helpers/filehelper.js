@@ -21,6 +21,24 @@ const storage = multerS3({
   },
 })
 
+// const downloadFile = async (filename) => {
+//   try {
+//     const res = await s3.getObject({ Bucket: BUCKET_NAME, Key: filename }).promise();
+//     return { success: true, data: res.Body }
+//   } catch(error) {
+//     return { success: false, data: null }
+//   }
+// }
+
+// const deleteFile = async (filename) => {
+//   try {
+//     await s3.deleteObject({ Bucket: BUCKET_NAME, Key: filename }).promise();
+//     return { success: true, data: "File deleted Successfully" }
+//   } catch(error) {
+//     return { success: false, data: null }
+//   }
+// }
+
 export const deleteFileS3 = (params) => {
   s3.deleteObject(params, function (err, data) {
     if (err) {

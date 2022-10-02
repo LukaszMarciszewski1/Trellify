@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
-import { useAuth } from '../../../hooks/useAuth'
+import { useAuth } from 'hooks/useAuth'
 import { useForm } from 'react-hook-form';
-import { User } from '../../../models/user'
-import Loading from '../../../components/Details/Loading/Loading'
-import Input from '../../../components/Details/Input/Input'
-import ErrorMessage from '../../../components/Details/Messages/ErrorMessage';
+import { User } from 'models/user'
+import Loading from 'components/Details/Loading/Loading'
+import Input from 'components/Details/Input/Input'
+import ErrorMessage from 'components/Details/Messages/ErrorMessage';
 
 const validation = {
   name: {

@@ -1,14 +1,12 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import { BiCategory } from 'react-icons/bi'
-import {ReduceReturnType} from '../Storage'
-
+import { ReduceReturnType } from '../Storage'
 interface CategoriesListProps {
   data: ReduceReturnType | undefined
 }
 
 const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>

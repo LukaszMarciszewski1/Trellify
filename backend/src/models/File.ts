@@ -7,7 +7,6 @@ const FileSchema = new Schema(
       ref: 'Card',
     },
     fileName: String,
-    filePath: String,
     fileType: String,
     fileSize: String,
     fileUrl: String,

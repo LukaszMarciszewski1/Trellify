@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import styles from './styles.module.scss'
-
 import { MdArrowForwardIos } from "react-icons/md";
 import { CgCalculator } from "react-icons/cg";
 import { GiDeliveryDrone } from "react-icons/gi";
@@ -37,7 +36,7 @@ const menuItems = [
   },
 ]
 
-const Sidebar: React.FC = () => {
+const Nav: React.FC = () => {
   const location = useLocation()
   const [isSidebarOpen, setISSidebarOpen] = useState(true)
 
@@ -69,4 +68,4 @@ const Sidebar: React.FC = () => {
   )
 }
 
-export default Sidebar
+export default Nav

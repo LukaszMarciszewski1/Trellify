@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import { BiCheck } from 'react-icons/bi';
-import { BsPencil } from 'react-icons/bs';
-import IconButton from '../../../../../Details/IconButton/IconButton'
+import { BiCheck } from 'react-icons/bi'
+import { BsPencil } from 'react-icons/bs'
+import IconButton from 'components/Details/IconButton/IconButton'
 
 interface LabelProps {
   labelId: string

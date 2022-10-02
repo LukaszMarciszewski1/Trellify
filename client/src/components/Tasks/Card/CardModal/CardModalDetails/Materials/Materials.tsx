@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
+import { useDebouncedCallback } from 'use-debounce';
 import {
   useGetAllProductsQuery,
   useUpdateProductMutation,
-} from "../../../../../../store/api/products"
+} from "store/api/products"
 import {
   useUpdateCardMutation,
-} from "../../../../../../store/api/cards"
+} from "store/api/cards"
 import {
   useUpdateBoardMutation,
-
-} from '../../../../../../store/api/boards'
-import { Product as ProductModel } from '../../../../../../models/product';
-import Button from '../../../../../Details/Button/Button'
-import IconButton from '../../../../../Details/IconButton/IconButton';
+} from 'store/api/boards'
+import { Product as ProductModel } from 'models/product';
+import Button from 'components/Details/Button/Button'
+import IconButton from 'components/Details/IconButton/IconButton';
 interface UsedProductsProps {
   cardId: string
   boardId: string
@@ -64,6 +64,22 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
     }
   }
 
+  // const handleOnChangeUsedValue = useDebouncedCallback(
+  //   (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     if (!productsList) return;
+  //     const { id, valueAsNumber } = e.target;
+  //     const newProducts: ProductModel[] = []
+  //     const targetIndex = productsList.findIndex(item => item._id === id);
+  //     //solution - cannot assign to read only property used of object
+  //     productsList.map((product, index) => (newProducts[index] = { ...product }))
+
+  //     if (targetIndex !== -1) {
+  //       newProducts[targetIndex].used = valueAsNumber
+  //       setProductsList(newProducts)
+  //       setChanged(true)
+  //     }
+  //   }, 500
+  // )
 
   const handleRemoveFromList = (id: string) => {
     if (!productsList) return
@@ -111,7 +127,7 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
       <form className={styles.form} onSubmit={handleSubmitForm}>
         <label htmlFor="products">Dodaj produkt z magazynu</label>
         <div className={styles.selectContainer}>
-          <select className={styles.select} onChange={handleSelectProduct}>
+          <select id='products' className={styles.select} onChange={handleSelectProduct}>
             {
               productsApi ? (
                 productsApi.map(product => (
@@ -148,14 +164,21 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
                   min={1}
                   onChange={handleOnChangeUsedValue}
                 />
-                <IconButton onClick={() => handleRemoveFromList(item._id)} style={{ marginLeft: '8px' }}>X</IconButton>
+                <IconButton
+                  onClick={() => handleRemoveFromList(item._id)}
+                  style={{ marginLeft: '8px' }}>X
+                </IconButton>
               </div>
             ))
           }
         </div>
         {
-          productsApi?.length ? (
-            <Button title={'Zapisz'} type={'submit'} style={{ width: '100%', padding: '0.6rem' }} disabled={changed ? false : true} />
+          productsList?.length ? (
+            <Button
+              title={'Zapisz'}
+              type={'submit'}
+              style={{ width: '100%', padding: '0.6rem' }}
+              disabled={changed ? false : true} />
           ) : null
         }
       </form>
