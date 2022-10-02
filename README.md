@@ -2,6 +2,8 @@
 
 #### This is a work in progress basic clone version of trello. I am using this project to get some practical experience and further develop my knowledge and understanding of TypeScript applications using Front End frameworks
 
+## The application is currently only in the desktop version
+
 ## Demo
 https://print-control-m.netlify.app/
 
