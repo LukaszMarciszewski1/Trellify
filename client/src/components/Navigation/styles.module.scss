@@ -1,44 +1,34 @@
-@import '../../assets/scss/utils.scss';
-.sidebar {
+@import 'assets/styles/mixins.scss';
+@import 'assets/styles/colors.scss';
+
+.nav {
   position: relative;
   width: 250px;
   min-height: 100%;
-  background-color: #fcfcfc;
-  background-color: #fcfcfc;
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: $white;
+  border-right: 1px solid $dark-grey;
   transition: 0.1s ease-in-out;
   z-index: 300;
 }
 
-.sidebarHidden {
+.navHidden {
   width: 69px;
 }
 
-.logo {
-  width: 100%;
-  height: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.navButton {
+.switchButton {
+  @include flex-center;
   position: absolute;
   width: 30px;
   height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   right: -15px;
   top: 10px;
-  background-color: #ebecf0;
-  border: 1px solid #cdced1;
+  background-color: $grey;
+  border: 1px solid $dark-grey;
   padding: 5px;
   border-radius: 50%;
 }
 
-.navButtonHidden {
+.switchButtonHidden {
   transform: rotate(180deg);
 }
 
@@ -60,20 +50,18 @@
   align-items: center;
   font-weight: medium;
   padding: 8px;
-  p {
+  font-size: 1rem;
+  color: $graphite;
+  span {
     margin-left: 16px;
+  }
+  .icon {
+    @include flex-center;
   }
 }
 
-.icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .active {
-  opacity: 1;
-  background-color: #ebecf0;
+  background-color: $grey;
   border-radius: 8px;
   &::before {
     content: '';

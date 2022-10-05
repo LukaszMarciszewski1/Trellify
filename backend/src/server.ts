@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
     'Access-Control-Allow-Methods',
     'PUT, POST, GET, DELETE, PATCH, OPTIONS'
   )
-  // res.end('Hello world!')
+
 })
 
 app.listen(config.server.port, () => {

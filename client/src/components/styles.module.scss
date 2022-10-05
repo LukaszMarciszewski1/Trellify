@@ -1,4 +1,4 @@
-@import '../assets/scss/utils.scss';
+@import 'assets/styles/colors.scss';
 
 .layout {
   width: 100%;
@@ -22,4 +22,5 @@
   grid-column: 2/-1;
   grid-row: 2/-1;
   overflow: hidden;
+  background-color: $light-blue;
 }

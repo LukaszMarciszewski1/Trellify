@@ -1,0 +1,16 @@
+@import 'assets/styles/colors.scss';
+
+.input {
+  outline: none;
+  border: none;
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 6px 0;
+  background-color: $light-blue;
+  border: 1px solid darken($light-blue, 10%);
+  font-size: 14px;
+  &:disabled {
+    opacity: 0.8;
+  }
+}

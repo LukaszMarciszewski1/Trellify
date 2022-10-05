@@ -2,7 +2,7 @@ import React, { useState  } from 'react'
 import Board from 'components/Tasks/Board';
 import { useGetAllBoardsQuery  } from 'store/api/boards';
 import { Board as BoardResponse } from 'models/board'
-import Loading from 'components/Details/Loading/Loading';
+import Loading from 'components/common/Loading/Loading';
 
 const TasksPage: React.FC = () => {
   const { data, error, isLoading } = useGetAllBoardsQuery()

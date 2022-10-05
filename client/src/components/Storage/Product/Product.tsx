@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import { Product as ProductModel } from 'models/product';
-import IconButton from 'components/Details/IconButton/IconButton';
-import Popup from 'components/Details/Popup/Popup';
-import TaskButton from 'components/Details/TaskButton/TaskButton';
+import IconButton from 'components/common/IconButton/IconButton';
+import Popup from 'components/common/Popup/Popup';
+import TaskButton from 'components/common/TaskButton/TaskButton';
 import { BiDotsVerticalRounded } from 'react-icons/bi'
 
 interface ProductProps extends ProductModel {

@@ -1,0 +1,61 @@
+//colors
+$dark: #000;
+$orange: #e08e33;
+$red: #d25e49;
+$box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+
+//breakpoints
+$breakpoints: (
+  tablet: (
+    min-width: 500px,
+  ),
+  desktop: (
+    min-width: 1000px,
+  ),
+);
+
+@mixin mq($breakpoint) {
+  $size: map-get($breakpoints, $breakpoint);
+  @if ($size) {
+    @media #{$size} {
+      @content;
+    }
+  } @else {
+    @error '"#{$breakpoint}" - error';
+  }
+}
+
+@mixin auth_column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(13, 97, 146);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  h1 {
+    margin-top: 0;
+    color: white;
+    font-size: 30px;
+    align-self: center;
+  }
+}
+
+@mixin auth_btn-primary {
+  background-color: rgb(13, 97, 146);
+  color: white;
+  margin: 24px;
+}
+
+@mixin auth_btn-secondary {
+  border: none;
+  outline: none;
+  padding: 12px 0;
+  background-color: white;
+  border-radius: 20px;
+  width: 180px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}

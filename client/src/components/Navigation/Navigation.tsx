@@ -41,9 +41,9 @@ const Nav: React.FC = () => {
   const [isSidebarOpen, setISSidebarOpen] = useState(true)
 
   return (
-    <nav className={`${styles.sidebar} ${isSidebarOpen ? styles.sidebarHidden : styles.sidebar}`}>
+    <nav className={`${styles.nav} ${isSidebarOpen ? styles.navHidden : styles.nav}`}>
       <button
-        className={`${styles.navButton} ${isSidebarOpen ? styles.navButton : styles.navButtonHidden}`}
+        className={`${styles.switchButton} ${isSidebarOpen ? styles.switchButton : styles.switchButtonHidden}`}
         onClick={() => setISSidebarOpen((p) => !p)}>
         <MdArrowForwardIos />
       </button>
@@ -57,7 +57,7 @@ const Nav: React.FC = () => {
             >
               <div className={`${styles.navLink} ${location.pathname === item.path ? styles.active : styles.navLink}`}>
                 <div className={styles.icon}>{item.icon}</div>
-                <p>{!isSidebarOpen ? item.name : null}</p>
+                <span>{!isSidebarOpen ? item.name : null}</span>
               </div>
             </Link>
           </li>

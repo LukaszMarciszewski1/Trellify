@@ -1,0 +1,23 @@
+@import 'assets/styles/colors.scss';
+
+.button {
+  background-color: $blue;
+  color: $white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  &:hover {
+    background-color: $blue-hover;
+  }
+  &:disabled {
+    background-color: $dark-grey;
+    cursor: auto;
+  }
+}
+
+.reset {
+  background-color: $red;
+  &:hover {
+    background-color: $red-hover;
+  }
+}

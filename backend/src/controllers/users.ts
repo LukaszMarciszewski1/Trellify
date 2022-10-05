@@ -55,12 +55,5 @@ export const registerUser = asyncHandler(
 )
 
 export const getMe = asyncHandler(async (req: Request, res: Response) => {
-  // const userId = (req as any).user._id
-  // const {_id, name, email} = await User.findById(req.user?._id)
-  // res.json({
-  //   id: _id,
-  //   name,
-  //   email
-  // })
   res.status(200).json(req.user)
 })

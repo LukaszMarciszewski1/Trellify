@@ -1,4 +1,4 @@
-@import '../../assets/scss/utils.scss';
+@import 'assets/styles/utils.scss';
 
 .container {
   position: relative;
@@ -8,7 +8,7 @@
   height: 100%;
   gap: 2rem;
   padding: 3rem 3rem 0;
-  background-color: #f6faff;
+  // background-color: #f6faff;
 }
 
 .left {

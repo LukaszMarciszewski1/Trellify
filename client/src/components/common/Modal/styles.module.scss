@@ -1,0 +1,40 @@
+@import 'assets/styles/mixins.scss';
+@import 'assets/styles/colors.scss';
+
+.overlay {
+  @include flex-center;
+  position: fixed;
+  overflow-y: scroll;
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color: $overlay;
+  z-index: 998;
+}
+
+.modal {
+  position: absolute;
+  background-color: $white;
+  border-radius: 8px;
+  z-index: 999;
+  @media (max-width: 768px) {
+    max-width: 400px;
+  }
+}
+
+.header {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 200;
+  h3 {
+    font-size: 18px;
+    color: $grey;
+    margin: 0;
+  }
+}

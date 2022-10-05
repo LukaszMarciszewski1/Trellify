@@ -3,12 +3,12 @@ import styles from './styles.module.scss'
 import { User } from 'models/user'
 import { useAuth } from 'hooks/useAuth'
 import { useForm } from 'react-hook-form';
-import Input from 'components/Details/Input/Input'
-import ErrorMessage from 'components/Details/Messages/ErrorMessage';
-import Loading from 'components/Details/Loading/Loading'
+import Input from 'components/common/Input/Input'
+import ErrorMessage from 'components/common/Messages/ErrorMessage';
+import Loading from 'components/common/Loading/Loading'
 
 const SignIn: React.FC = () => {
-  const { loading, error: errorResponse, signIn } = useAuth()
+  const { loading, signIn } = useAuth()
 
   const {
     register,
@@ -21,7 +21,6 @@ const SignIn: React.FC = () => {
       <div className={styles.login_formContainer}>
         <div className={styles.left}>
           {loading ? <Loading /> : null}
-          {errorResponse && <><ErrorMessage message={'Błąd logowania'} /> <br /></>}
           <form className={styles.form_container} onSubmit={handleSubmit(signIn)}>
             <h1>Zaloguj się</h1>
             <Input

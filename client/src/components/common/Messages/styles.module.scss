@@ -1,0 +1,40 @@
+@import 'assets/styles/colors.scss';
+
+.wrapper {
+  width: 100%;
+  padding: 0 3px;
+  border-radius: 0.25rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 15px;
+}
+
+.validateWrapper {
+  width: 100%;
+  max-width: 350px;
+}
+
+.success {
+  text-align: center;
+  width: 100%;
+  align-self: center;
+  margin: 0 auto;
+  color: $green;
+  padding: 10px 1rem;
+  background-color: lighten($success, 45%);
+}
+
+.error {
+  width: 100%;
+  text-align: center;
+  align-self: center;
+  margin: 0 auto;
+  padding: 10px 1rem;
+  color: $error;
+  background-color: lighten(#af5861, 40%);
+}
+
+.validate {
+  color: lighten($error, 20%);
+}

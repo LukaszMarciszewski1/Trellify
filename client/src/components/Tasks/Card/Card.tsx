@@ -12,12 +12,11 @@ import {
 import {
   useUpdateCardMutation,
 } from "store/api/cards";
-import defaultBg from 'assets/img/defaultBackground.jpg'
 import useHover from 'hooks/useHover'
 import { isFileImage } from 'hooks/useIsFileImage'
 import { Card as CardModel } from 'models/card'
-import Box from 'components/Details/Box/Box'
-import CardModal from './CardModal/CardModal';
+import Box from 'components/common/Box/Box'
+import CardWindow from '../CardWindow/CardWindow';
 import { GrTextAlignFull } from 'react-icons/gr';
 import { BsStopwatch } from 'react-icons/bs';
 import { ImCheckboxUnchecked } from 'react-icons/im';
@@ -152,7 +151,7 @@ const TaskCard: React.FC<CardProps> = ({
     <div>
       {
         isCardModalOpen ?
-          <CardModal
+          <CardWindow
             _id={_id}
             nameList={nameList}
             title={title}
@@ -199,8 +198,12 @@ const TaskCard: React.FC<CardProps> = ({
                     labels.length ? (
                       <div className={styles.cardLabels} onClick={handleOpenCardModal}>
                         {
-                          labels.map((label: { active: any; color: any; _id: string; title: string }) => (
-                            <div title={`${label.title}`} key={label._id} className={styles.cardLabel} style={{ backgroundColor: `${label.color}` }}></div>
+                          labels.map((label: { active: any; color: string; _id: string; title: string }) => (
+                            <div
+                              title={`${label.title}`}
+                              key={label._id}
+                              className={styles.cardLabel}
+                              style={{ backgroundColor: `${label.color}` }} />
                           ))
                         }
                       </div>
@@ -218,7 +221,10 @@ const TaskCard: React.FC<CardProps> = ({
                             title={cardDateDisplay.title}
 
                           >
-                            {isHover ? (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />) : <BsStopwatch style={cardDateDisplay.iconStyle} />}
+                            {isHover ?
+                              (cardCompleted ? <ImCheckboxChecked style={cardDateDisplay.iconStyle} /> : <ImCheckboxUnchecked style={cardDateDisplay.iconStyle} />)
+                              : <BsStopwatch style={cardDateDisplay.iconStyle} />
+                            }
                             {dayjs(deadline).format('DD MMM')}
                           </button>
                         ) : null

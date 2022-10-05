@@ -53,8 +53,7 @@ export const useProviderAuth = () => {
       localStorage.setItem('token', data.token)
     } catch (error: any) {
       setLoading(false)
-      setError(true)
-      console.log(error.response.data.message)
+      setError(error.response.data.message)
     }
   }
 
@@ -80,8 +79,7 @@ export const useProviderAuth = () => {
       setTimeout(() => navigate('/logowanie'), 1000)
     } catch (error: any) {
       setLoading(false)
-      setError(true)
-      console.log(error.response.data.message)
+      setError(error.response.data.message)
     }
   }
 

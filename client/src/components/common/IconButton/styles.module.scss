@@ -1,0 +1,17 @@
+@import 'assets/styles/colors.scss';
+@import 'assets/styles/mixins.scss';
+
+.iconButton {
+  width: 30px;
+  height: 30px;
+  max-height: 100%;
+  @include flex-center;
+  background-color: transparent;
+  background-size: cover;
+  background-position: center;
+  padding: 5px;
+  border-radius: 3px;
+  &:hover {
+    background-color: $dark-grey;
+  }
+}

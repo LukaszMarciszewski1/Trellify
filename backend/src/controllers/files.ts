@@ -69,7 +69,7 @@ export const deleteFile = async (req: Request, res: Response) => {
 }
 
 export const downloadFile = async (req: Request, res: Response) => {
-  const { id, fileUrl } = req.params
+  const { id } = req.params
   try {
     const files = await File.find()
     const currentFile = files.find(
@@ -80,8 +80,6 @@ export const downloadFile = async (req: Request, res: Response) => {
       Key: currentFile?.fileKey,
     }
     downloadFileS3(params)
-    console.log(`to jest param: ${fileUrl}`)
-
     res.status(200).send('File Download Successfully')
   } catch (error) {
     res.status(400).json({ error })

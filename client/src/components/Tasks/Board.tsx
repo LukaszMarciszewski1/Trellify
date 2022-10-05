@@ -7,12 +7,12 @@ import { useUpdateCardMutation } from "store/api/cards";
 import useOnClickOutside from 'hooks/useOnClickOutside';
 import { Board as BoardResponse } from 'models/board'
 import { List as ListResponse } from 'models/list'
-import TaskButton from 'components/Details/TaskButton/TaskButton'
+import TaskButton from 'components/common/TaskButton/TaskButton'
 import List from './List/List'
 import TaskForm from './TaskForm/TaskForm'
 import SideMenu from './SideMenu/SideMenu';
 import { GoPlus } from "react-icons/go";
-import { defaultBackground } from '../../assets/localData';
+import { defaultBackground } from 'assets/localData';
 
 const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: backgroundApi }) => {
   const [addList] = useAddListMutation()
@@ -33,7 +33,7 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: back
   useEffect(() => {
     if (listsApi) {
       setLists(listsApi)
-      setBackground(defaultBackground)
+      // setBackground(defaultBackground)
     }
   }, [listsApi, backgroundApi])
 
@@ -199,7 +199,11 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi, background: back
                   titleBtn={'Dodaj Listę'}
                 />
               </div>
-              : <TaskButton onClick={() => setIsOpenForm(true)} name={'Dodaj listę zadań'} icon={<GoPlus style={{ margin: '.3rem 0' }} />} />
+              : <TaskButton
+                onClick={() => setIsOpenForm(true)}
+                name={'Dodaj listę zadań'}
+                icon={<GoPlus style={{ margin: '.3rem 0' }} />}
+              />
             }
           </div>
         </DragDropContext>

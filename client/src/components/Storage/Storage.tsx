@@ -7,13 +7,13 @@ import {
   useUpdateProductMutation
 } from "store/api/products"
 import { Product as ProductModel } from 'models/product'
-import Modal from 'components/Details/Modal/Modal'
+import Modal from 'components/common/Modal/Modal'
 import ProductForm from './ProductForm/ProductForm'
 import Header from './Header/Header'
 import ProductsList from './ProductsList/ProductsList'
 import Product from './Product/Product'
 import CategoriesList from './CategoriesList/CategoriesList'
-import SuccessMessage from 'components/Details/Messages/SuccessMessage'
+import SuccessMessage from 'components/common/Messages/SuccessMessage'
 
 export type ReduceReturnType = Record<string, number>;
 
@@ -36,7 +36,7 @@ const Storage: React.FC = () => {
     if (data) {
       setProducts(data)
       setCategories(getCategories(data))
-      setTimeout(() => setIsSuccess(false), 2000)
+      setTimeout(() => setIsSuccess(false), 1000)
     }
   }, [data])
 
@@ -146,7 +146,7 @@ const Storage: React.FC = () => {
           categoryList={categories}
           formTitle={'Dodaj produkt'}
           handleSubmitForm={handleAddProduct}
-          message={(isSuccess && <SuccessMessage message={'Produkt został dodany'} />)}
+          message={(isSuccess ? <SuccessMessage message={'Produkt został dodany'} /> : null)}
         />
       </Modal>
       <Modal
@@ -163,7 +163,7 @@ const Storage: React.FC = () => {
               defaultUnit={currentProduct.unit}
               defaultPrice={currentProduct.price}
               handleSubmitForm={handleEditProduct}
-              message={(isSuccess && <SuccessMessage message={'Produkt został zmieniony'} />)}
+              message={(isSuccess ? <SuccessMessage message={'Produkt został zmieniony'} /> : null)}
             />
           )
         }

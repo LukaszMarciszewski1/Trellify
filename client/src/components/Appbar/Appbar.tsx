@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
-import Button from 'components/Details/Button/Button'
+import Button from 'components/common/Button/Button'
 import { useAuth } from 'hooks/useAuth'
-import Popup from 'components/Details/Popup/Popup'
+import Popup from 'components/common/Popup/Popup'
 import logoSrc from 'assets/img/logo.svg'
 
 const AppBar: React.FC = () => {

@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import styles from './styles.module.scss'
 import { Product as ProductModel } from 'models/product';
-import Button from 'components/Details/Button/Button';
-import Input from 'components/Details/Input/Input';
-import ErrorMessage from 'components/Details/Messages/ValidateMessage';
+import Button from 'components/common/Button/Button';
+import Input from 'components/common/Input/Input';
+import ErrorMessage from 'components/common/Messages/ValidateMessage';
 import { ReduceReturnType } from '../Storage'
 
 const validation = {
@@ -40,7 +40,7 @@ interface DefaultValuesProps {
 interface AddProductFormProps extends DefaultValuesProps {
   categoryList: ReduceReturnType | undefined
   formTitle: string
-  message?: JSX.Element | boolean
+  message?: JSX.Element | boolean | null
   handleSubmitForm: (data: ProductModel) => void
 }
 
@@ -110,8 +110,6 @@ const ProductForm: React.FC<AddProductFormProps> = ({
         return null
     }
   }
-
-
 
   return (
     <div className={styles.container}>

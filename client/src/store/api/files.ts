@@ -25,8 +25,8 @@ export const filesApi = createApi({
       invalidatesTags: ['Files'],
     }),
     deleteFile: builder.mutation<{ success: boolean; id: string | number },string>({
-      query: (fileUrl) => ({
-        url: `files/${fileUrl}`,
+      query: (id) => ({
+        url: `files/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Files'],

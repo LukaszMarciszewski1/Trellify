@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
-import { presetColors, defaultBgIcon, defaultColorIcon } from '../../../assets/localData'
+import { presetColors, defaultBgIcon, defaultColorIcon } from 'assets/localData'
 import getImages from 'store/api/unsplashApi'
 import { useUpdateBoardMutation } from 'store/api/boards'
 import { BsXLg } from "react-icons/bs"
-import IconButton from 'components/Details/IconButton/IconButton'
+import IconButton from 'components/common/IconButton/IconButton'
 
 interface SideMenuProps {
   boardId: string

@@ -1,12 +1,13 @@
-@import '../../../assets/scss/utils.scss';
-@import '../../../assets/scss/mixins.scss';
+@import 'assets/styles/utils.scss';
+@import 'assets/styles/mixins.scss';
+@import 'assets/styles/colors.scss';
 
 .list {
   margin-right: 16px;
   width: 272px;
   margin-right: 16px;
   border-radius: 5px;
-  background-color: #ebecf0;
+  background-color: $grey;
   -webkit-box-shadow: $box-shadow;
   box-shadow: $box-shadow;
   user-select: none;
@@ -50,9 +51,6 @@
   border: none;
   outline: none;
   outline: 2px solid rgb(38, 99, 149);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
 }
 
 .cardsContainer {

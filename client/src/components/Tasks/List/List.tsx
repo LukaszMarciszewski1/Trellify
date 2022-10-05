@@ -16,9 +16,9 @@ import { List as ListInterface } from 'models/list'
 import TextareaAutosize from 'react-textarea-autosize'
 import Card from '../Card/Card'
 import TaskForm from '../TaskForm/TaskForm'
-import TaskButton from 'components/Details/TaskButton/TaskButton'
-import IconButton from 'components/Details/IconButton/IconButton'
-import Popup from 'components/Details/Popup/Popup'
+import TaskButton from 'components/common/TaskButton/TaskButton'
+import IconButton from 'components/common/IconButton/IconButton'
+import Popup from 'components/common/Popup/Popup'
 import { BsThreeDots } from "react-icons/bs"
 import { GoPlus } from "react-icons/go"
 
@@ -159,13 +159,13 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                           onClick={() => handleSortCardsByDate('sort-from-oldest')}
                           name={'Sortuj karty od najstarszych'}
                         />
+                        <div className={styles.divider}></div>
                       </>
                     ) : null
                   }
                   {
                     cards.length ? (
                       <>
-                        <div className={styles.divider}></div>
                         <TaskButton
                           onClick={handleDeleteAllCardsOfList}
                           name={'Usuń wszystkie karty'}
@@ -222,7 +222,10 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                     titleBtn={'Dodaj Kartę'}
                   />
                 </div>
-                : <TaskButton onClick={() => setIsCardFormOpen(true)} name={'Dodaj kartę'} icon={<GoPlus />} />
+                : <TaskButton
+                  onClick={() => setIsCardFormOpen(true)}
+                  name={'Dodaj kartę'} icon={<GoPlus />}
+                />
               }
             </div>
           </div>
