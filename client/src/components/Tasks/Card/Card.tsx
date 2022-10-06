@@ -22,6 +22,7 @@ import { BsStopwatch } from 'react-icons/bs';
 import { ImCheckboxUnchecked } from 'react-icons/im';
 import { ImCheckboxChecked } from 'react-icons/im';
 import { GrAttachment } from 'react-icons/gr';
+import { BiCategory } from 'react-icons/bi'
 
 export interface CardProps extends CardModel {
   index: number
@@ -230,8 +231,21 @@ const TaskCard: React.FC<CardProps> = ({
                         ) : null
                       }
                     </div>
-                    {description ? <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardModal} /></div> : null}
-                    {cardFiles.length ? <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{cardFiles.length}</span></div> : null}
+                    {
+                      description ? (
+                        <div className={styles.icons} title="Ta karta ma opis."><GrTextAlignFull onClick={handleOpenCardModal} /></div>
+                      ) : null
+                    }
+                    {
+                      cardFiles.length ? (
+                        <div className={styles.icons} title="Załączniki"><GrAttachment /><span>{cardFiles.length}</span></div>
+                      ) : null
+                    }
+                    {
+                      usedMaterials?.length ? (
+                        <div className={styles.icons} title="Materiały"><BiCategory /><span>{usedMaterials.length}</span></div>
+                      ) : null
+                    }
                   </div>
                 </div>
               </Box>

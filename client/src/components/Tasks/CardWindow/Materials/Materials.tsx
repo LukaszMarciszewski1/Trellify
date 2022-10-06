@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import styles from './styles.module.scss'
 import {
   useGetAllProductsQuery,
@@ -14,6 +14,7 @@ import { Product as ProductModel } from 'models/product';
 import Button from 'components/common/Button/Button'
 import IconButton from 'components/common/IconButton/IconButton';
 import { RiDeleteBinLine } from "react-icons/ri";
+import { GiMaterialsScience } from 'react-icons/gi'
 
 interface UsedProductsProps {
   cardId: string
@@ -35,10 +36,6 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
     setSelectProduct(productsApi[0])
   }, [productsApi])
 
-  // useEffect(() => {
-  //   setProductsList(usedMaterials)
-  // }, [])
-
   const handleSelectProduct = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (!productsApi) return
     const product = [...productsApi].find(item => item._id === e.target.value)
@@ -49,25 +46,30 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
     if ([...productsList].find(item => item._id === selectProduct._id)) {
       return alert('produkt został już dodany do listy')
     }
-    const newProducts = [...productsList, { ...selectProduct, used: 1 }]
+    const newProducts = [...productsList, selectProduct]
     setProductsList(newProducts)
     setChanged(true)
   }
 
   const handleOnChangeUsedValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!productsList) return;
-    const { id, valueAsNumber } = e.target;
+    if (!productsList && !productsApi) return
+    const { id, valueAsNumber } = e.target
     const newProducts: ProductModel[] = []
-    const targetIndex = productsList.findIndex(item => item._id === id);
+    const targetIndex = [...productsList].findIndex(item => item._id === id);
+    const productQuantity = productsApi?.filter(product => product._id === id).map(p => p.quantity)[0]
+    const usedBefore = (usedMaterials[targetIndex].used ? usedMaterials[targetIndex].used : 0)
     //solution - cannot assign to read only property used of object
     productsList.map((product, index) => (newProducts[index] = { ...product }))
 
     if (targetIndex !== -1) {
-      newProducts[targetIndex].used = valueAsNumber
+      newProducts[targetIndex].used = valueAsNumber + usedBefore
+      newProducts[targetIndex].quantity = productQuantity && productQuantity + usedBefore
       setProductsList(newProducts)
       setChanged(true)
     }
   }
+
+  console.log(productsList)
 
   const handleRemoveFromList = (id: string) => {
     if (!productsList) return
@@ -88,30 +90,32 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
     setChanged(true)
   }
 
+  const updateStorage = useCallback(() => {
+    const products = [...productsList]
+    products.map(product => {
+      updateProduct({
+        _id: product._id,
+        quantity: product.used ? (product.quantity - product.used) : product.quantity
+      })
+    })
+
+  }, [productsList])
+
   const handleSubmitForm = (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    const products = [...productsList]
     updateCard({
       _id: cardId,
       usedMaterials: productsList
     })
-    products.map(product => {
-      updateProduct({
-        _id: product._id,
-        quantity: product.used && (product.quantity - product.used)
-      })
-    })
+    updateStorage()
     updateBoard({ _id: boardId })
     setChanged(false)
   }
 
   const getProductQuantityFromStorage = (id: string) => {
     if (!productsApi) return
-    const productQuantity = productsApi.filter(product => product._id === id).map(product => product.quantity)
-    return productQuantity.length ? productQuantity : 0
+    return [...productsApi].filter(product => product._id === id).map(product => product.quantity)[0]
   }
-
-  // console.log(productsApi)
 
   return (
     <div className={styles.container}>
@@ -140,7 +144,7 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
           {
             productsList?.map((item) => (
               <div key={item._id}>
-                <span>{item.name}</span>
+                <span>{item.name} {item.used ? `${item.used} ${item.unit}` : null}</span>
                 <input
                   type="text"
                   name="quantity"
@@ -150,12 +154,11 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMateri
                   id={item._id}
                   type="number"
                   name={item.name}
-                  defaultValue={1}
-                  max={!getProductQuantityFromStorage(item._id) ? item.used : item.quantity}
-                  min={1}
+                  defaultValue={0}
+                  max={getProductQuantityFromStorage(item._id)}
+                  min={0}
                   onChange={handleOnChangeUsedValue}
                 />
-                {/* {console.log(getProductQuantityFromStorage(item._id))} */}
                 <IconButton
                   onClick={() => handleRemoveFromList(item._id)}
                   style={{ marginLeft: '8px' }}>

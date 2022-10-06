@@ -1,78 +1,128 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import styles from './styles.module.scss'
 import {
   useGetAllProductsQuery,
   useUpdateProductMutation,
-  useDeleteProductMutation
-} from "../../../../../store/api/products"
+} from "store/api/products"
 import {
   useUpdateCardMutation,
-  useDeleteCardMutation
-} from "../../../../../store/api/cards"
-import { Product as ProductModel } from '../../../../../models/product';
-import Button from '../../../../common/Button/Button'
-import IconButton from '../../../../common/IconButton/IconButton';
+} from "store/api/cards"
+import {
+  useUpdateBoardMutation,
+} from 'store/api/boards'
+import { Product as ProductModel } from 'models/product';
+import Button from 'components/common/Button/Button'
+import IconButton from 'components/common/IconButton/IconButton';
+import { RiDeleteBinLine } from "react-icons/ri";
+import { GiMaterialsScience } from 'react-icons/gi'
+
 interface UsedProductsProps {
   cardId: string
+  boardId: string
   usedMaterials: any
 }
 
-const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, usedMaterials }) => {
-  const { data, error, isLoading } = useGetAllProductsQuery()
+const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, boardId, usedMaterials }) => {
+  const { data: productsApi } = useGetAllProductsQuery()
+  const [updateBoard] = useUpdateBoardMutation();
   const [updateCard] = useUpdateCardMutation()
   const [updateProduct] = useUpdateProductMutation()
   const [selectProduct, setSelectProduct] = useState<any>({})
-  const [products, setProducts] = useState<any>([])
+  const [productsList, setProductsList] = useState<ProductModel[]>(usedMaterials)
+  const [changed, setChanged] = useState(false)
 
   useEffect(() => {
-    if (!data) return
-    setSelectProduct(data[0])
-  }, [data])
+    if (!productsApi) return
+    setSelectProduct(productsApi[0])
+    // setProductsList(productsList)
+  }, [productsApi])
 
-  useEffect(() => {
-    setProducts(usedMaterials)
-  }, [data])
+  // useEffect(() => {
+  //   setProductsList(usedMaterials)
+  // }, [])
 
   const handleSelectProduct = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (!data) return
-    const product = [...data].find(item => item._id === e.target.value)
+    if (!productsApi) return
+    const product = [...productsApi].find(item => item._id === e.target.value)
     setSelectProduct(product)
   }
 
   const handleAddProductToList = () => {
-    if ([...products].find(item => item._id === selectProduct._id)) {
+    if ([...productsList].find(item => item._id === selectProduct._id)) {
       return alert('produkt został już dodany do listy')
     }
-    const newProducts = [...products, { ...selectProduct, used: 1 }]
-    setProducts(newProducts)
+    const newProducts = [...productsList, selectProduct]
+    setProductsList(newProducts)
+    setChanged(true)
   }
 
   const handleOnChangeUsedValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!products) return;
-    const { id, valueAsNumber } = e.target;
-    const newProductsValue = [...products]
-    const targetIndex = newProductsValue.findIndex(item => item._id == id);
+    if (!productsList && !productsApi) return
+    const { id, valueAsNumber } = e.target
+    const newProducts: ProductModel[] = []
+    const targetIndex = [...productsList].findIndex(item => item._id === id);
+    const productQuantity = productsApi?.filter(product => product._id === id).map(p => p.quantity)[0]
+    const usedBefore = (usedMaterials[targetIndex].used ? usedMaterials[targetIndex].used : 0)
+    //solution - cannot assign to read only property used of object
+    productsList.map((product, index) => (newProducts[index] = { ...product }))
+
     if (targetIndex !== -1) {
-      newProductsValue[targetIndex].used = valueAsNumber
-      setProducts(newProductsValue)
+      newProducts[targetIndex].used = valueAsNumber + usedBefore
+      newProducts[targetIndex].quantity = productQuantity && productQuantity + usedBefore
+      setProductsList(newProducts)
+      setChanged(true)
+      console.log(productQuantity)
     }
   }
-  console.log(usedMaterials)
 
+  console.log(productsList)
 
   const handleRemoveFromList = (id: string) => {
-    if (!products) return
-    const newProductsList = [...products].filter(item => item._id !== id)
-    setProducts(newProductsList)
+    if (!productsList) return
+    const newProductsList = [...productsList].filter(item => item._id !== id)
+    setProductsList(newProductsList)
+    updateCard({
+      _id: cardId,
+      usedMaterials: newProductsList
+    })
+    updateBoard({ _id: boardId })
+    const restoreQuantityToStorage = Number([...productsList]
+      .filter(product => product._id === id)
+      .map(product => product.quantity))
+    updateProduct({
+      _id: id,
+      quantity: restoreQuantityToStorage
+    })
+    setChanged(true)
   }
 
+  const updateStorage = useCallback(() => {
+    const products = [...productsList]
+    products.map(product => {
+      updateProduct({
+        _id: product._id,
+        quantity: product.used ? (product.quantity - product.used) : product.quantity
+      })
+    })
+
+  }, [productsList])
 
   const handleSubmitForm = (e: { preventDefault: () => void }) => {
     e.preventDefault()
     updateCard({
       _id: cardId,
-      usedMaterials: products
+      usedMaterials: productsList
     })
+    updateStorage()
+    updateBoard({ _id: boardId })
+    setChanged(false)
+  }
+
+  const getProductQuantityFromStorage = (id: string) => {
+    if (!productsApi) return
+    const products = [...productsApi]
+    const productQuantity = products.filter(product => product._id === id).map(product => product.quantity)
+    return productQuantity[0]
   }
 
   return (
@@ -80,10 +130,10 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, usedMaterials }) =>
       <form className={styles.form} onSubmit={handleSubmitForm}>
         <label htmlFor="products">Dodaj produkt z magazynu</label>
         <div className={styles.selectContainer}>
-          <select className={styles.select} onChange={handleSelectProduct}>
+          <select id='products' className={styles.select} onChange={handleSelectProduct}>
             {
-              data ? (
-                data.map(product => (
+              productsApi ? (
+                productsApi.map(product => (
                   <option key={product._id} value={product._id}>{product.name}</option>
                 ))
               ) : null
@@ -100,25 +150,39 @@ const UsedProducts: React.FC<UsedProductsProps> = ({ cardId, usedMaterials }) =>
         </div>
         <div className={styles.list}>
           {
-            products?.map((item: { _id: string; name: string; quantity: number; unit: string; used: number }) => (
+            productsList?.map((item) => (
               <div key={item._id}>
-                <span>{item.name}</span>
-                <input type="text" name="quantity" value={`stan: ${item.quantity} ${item.unit}`} disabled />
+                <span>{item.name} {item.used ? `${item.used} ${item.unit}` : null}</span>
+                <input
+                  type="text"
+                  name="quantity"
+                  value={`stan: ${getProductQuantityFromStorage(item._id)} ${item.unit}`}
+                  disabled />
                 <input
                   id={item._id}
                   type="number"
                   name={item.name}
-                  defaultValue={item.used}
+                  defaultValue={0}
+                  max={getProductQuantityFromStorage(item._id)}
+                  min={0}
                   onChange={handleOnChangeUsedValue}
                 />
-                <IconButton onClick={() => handleRemoveFromList(item._id)} style={{ marginLeft: '8px' }}>X</IconButton>
+                <IconButton
+                  onClick={() => handleRemoveFromList(item._id)}
+                  style={{ marginLeft: '8px' }}>
+                  <RiDeleteBinLine fontSize={'14px'} />
+                </IconButton>
               </div>
             ))
           }
         </div>
         {
-          products?.length ? (
-            <Button title={'Zapisz'} type={'submit'} style={{ width: '100%', padding: '0.6rem' }} />
+          productsList?.length ? (
+            <Button
+              title={'Zapisz'}
+              type={'submit'}
+              style={{ width: '100%', padding: '0.6rem' }}
+              disabled={changed ? false : true} />
           ) : null
         }
       </form>
