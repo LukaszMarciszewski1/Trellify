@@ -67,6 +67,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
     e.stopPropagation()
     if (cardTitle.length === 0) return
     addCard({
+      boardId,
       listId: _id,
       title: cardTitle
     })
