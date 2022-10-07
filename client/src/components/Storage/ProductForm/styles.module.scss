@@ -1,4 +1,7 @@
-.container {
+@import 'assets/styles/colors.scss';
+@import 'assets/styles/mixins.scss';
+
+.productForm {
   padding: 3rem;
 }
 
@@ -27,15 +30,7 @@
 .select {
   width: 230px;
   max-height: 48px;
-  outline: none;
-  border: none;
-  width: 100%;
-  padding: 15px;
-  border-radius: 10px;
-  background-color: #edf6f9;
-  border: 1px solid darken(#edf3f5, 10%);
-  margin: 6px 0;
-  font-size: 14px;
+  @include input;
 }
 
 .actionForm {
@@ -45,7 +40,7 @@
 }
 
 label {
-  color: rgb(74, 80, 98);
+  color: $graphite;
 }
 
 .message {

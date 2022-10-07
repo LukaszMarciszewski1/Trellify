@@ -26,12 +26,12 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
       type,
       placeholder,
       disabled,
-      onChange,
       value,
       defaultValue,
       step,
       minValue,
       maxValue,
+      onChange,
       ...props
     },
     ref

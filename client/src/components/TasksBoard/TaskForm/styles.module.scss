@@ -1,0 +1,25 @@
+@import 'assets/styles/mixins.scss';
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.3rem;
+}
+
+.textarea {
+  @include textarea();
+  min-height: 60px;
+  padding: 0.5rem;
+  margin-top: -5px;
+}
+
+.actionsForm {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  overflow: hidden;
+  &:last-child {
+    margin-right: 1rem;
+  }
+}

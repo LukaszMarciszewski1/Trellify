@@ -21,7 +21,7 @@ const CardSchema = new Schema(
       default: false,
     },
     cover: String,
-    usedMaterials: [
+    usedProducts: [
       {
         name: String,
         category: String,

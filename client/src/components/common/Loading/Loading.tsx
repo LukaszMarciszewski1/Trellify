@@ -1,9 +1,8 @@
-import React from 'react'
 import MoonLoader from "react-spinners/MoonLoader";
 import styles from './styles.module.scss'
 const Loading = () => {
   return (
-  <div className={styles.loadingContainer}>
+  <div className={styles.loading}>
      <MoonLoader size={40}/>
   </div>
   )

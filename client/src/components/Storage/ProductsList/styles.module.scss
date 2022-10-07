@@ -1,7 +1,7 @@
 @import 'assets/styles/utils.scss';
 @import 'assets/styles/mixins.scss';
 
-.container {
+.productsList {
   position: relative;
   padding-bottom: 1rem;
   height: 600px;
@@ -9,22 +9,6 @@
   overflow-y: auto;
   padding-right: 10px;
   @include scrollbar;
-}
-
-.header {
-  width: 100%;
-  display: flex;
-  font-weight: bold;
-  height: 50px;
-  padding-right: 10px;
-}
-
-.list {
-  // height: 530px;
-  // max-height: 530px;
-  // overflow-y: auto;
-  // padding-right: 10px;
-  // @include scrollbar;
 }
 
 .head {
@@ -35,8 +19,8 @@
   padding: 8px;
   padding-right: 8px;
   font-weight: bold;
-  color: rgb(74, 80, 98);
-  background-color: #fcfcfc;
+  color: $graphite;
+  background-color: $white;
   z-index: 1;
 }
 

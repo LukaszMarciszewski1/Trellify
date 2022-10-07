@@ -14,11 +14,11 @@
   cursor: pointer;
   transition: 0.2s;
   &:hover {
-    background-color: $light-grey;
+    background-color: $light;
   }
 }
 
-.container {
+.wrapper {
   position: relative;
   max-width: 272px;
   flex-grow: 1;

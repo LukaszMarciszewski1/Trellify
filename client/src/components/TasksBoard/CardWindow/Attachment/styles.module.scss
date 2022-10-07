@@ -1,0 +1,53 @@
+@import 'assets/styles/colors.scss';
+
+.attachment {
+  width: 100%;
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.fileImg {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 80px;
+  background-color: $grey;
+  img {
+    height: 100%;
+    object-fit: cover;
+  }
+  .checkboxWrapper {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 20px;
+    height: 20px;
+    input[type='checkbox'] {
+      cursor: pointer;
+    }
+  }
+}
+
+.detailsContainer {
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0;
+  h4 {
+    font-size: 14px;
+    margin: 0;
+  }
+  span {
+    font-size: 14px;
+  }
+}
+
+.buttonsWrapper {
+  max-width: 160px;
+  display: flex;
+  margin: 0;
+}

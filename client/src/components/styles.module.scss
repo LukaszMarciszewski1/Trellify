@@ -8,12 +8,12 @@
   grid-template-rows: 50px 1fr;
 }
 
-.appbar {
+.header {
   grid-column: 1/-1;
   grid-row: 1/2;
 }
 
-.sidebar {
+.navigation {
   grid-column: 1/2;
   grid-row: 2/-1;
 }

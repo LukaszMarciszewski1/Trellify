@@ -8,7 +8,7 @@ interface CardProps {
 const Box: React.FC<CardProps> = ({ onClick, children }) => {
   return (
     <div className={styles.box}>
-      <div className={styles.container} >
+      <div className={styles.wrapper} >
         <div className={styles.clickableArea} onClick={onClick}></div>
         {children}
       </div>

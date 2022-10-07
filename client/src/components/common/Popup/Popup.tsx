@@ -31,9 +31,15 @@ const Popup: React.FC<PopupProps> = ({
 
   return (
     trigger ? (
-      <div className={styles.popup} ref={refPopup} style={{ ...props }}>
+      <div
+        className={styles.popup}
+        ref={refPopup}
+        style={{ ...props }}>
         <div className={styles.header}>
-          {isEditWindow ? <IconButton onClick={backToMainWindow}><MdOutlineArrowBackIos /></IconButton> : null}
+          {isEditWindow ? (
+            <IconButton onClick={backToMainWindow}><MdOutlineArrowBackIos /></IconButton>
+          ) : null
+          }
           <h4>{title}</h4>
           <IconButton onClick={closePopup}><BsXLg /></IconButton>
         </div>

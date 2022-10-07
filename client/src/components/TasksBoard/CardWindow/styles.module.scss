@@ -1,0 +1,171 @@
+@import 'assets/styles/utils.scss';
+@import 'assets/styles/mixins.scss';
+@import 'assets/styles/colors.scss';
+
+.container {
+  position: relative;
+  width: 850px;
+}
+
+.cardCover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #ebebeb;
+  border-radius: 3px;
+  overflow: hidden;
+  img {
+    height: 120px;
+    cursor: pointer;
+  }
+}
+
+.cardModalHeader {
+  width: 100%;
+  padding: 0 0 0.5rem;
+  padding: 1rem;
+  border-bottom: $divider;
+}
+
+.cardModalHeaderTextarea {
+  height: auto;
+  margin-right: 40px;
+  p {
+    color: grey;
+    font-size: 0.9rem;
+  }
+}
+
+.cardModalTextareaTitle {
+  width: 100%;
+  resize: none;
+  font-weight: 500;
+  border-radius: 3px;
+  font-size: 1.4rem;
+  padding: 0.3rem;
+  background-color: #fcfcfc;
+  border: none;
+  color: rgb(61, 61, 61);
+  &:hover {
+    background-color: rgb(248, 248, 248);
+  }
+}
+
+.groupWrapper {
+  width: 100%;
+  display: flex;
+  padding: 1.5rem 1rem 1rem;
+}
+
+.content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 660px;
+  max-height: 500px;
+  background-color: rgb(247, 247, 247);
+  padding: 1rem 1rem;
+  border-radius: 0.5rem;
+  overflow-y: auto;
+  @include scrollbar;
+  @media (max-width: 1300px) {
+    max-height: 300px;
+  }
+}
+
+.descriptionContainer {
+  margin-bottom: 2rem;
+  p {
+    cursor: pointer;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    position: relative;
+  }
+}
+
+.descriptionHeader {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  h4 {
+    color: grey;
+  }
+}
+
+.actionsForm {
+  display: flex;
+  margin-top: 1rem;
+  &:last-child {
+    margin-right: 1rem;
+  }
+}
+
+.cardModalSidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-width: 160px;
+  height: 100%;
+  padding-left: 1rem;
+}
+
+.divider {
+  margin: 1rem 0;
+  border-bottom: $divider;
+}
+
+.cardModalLabels {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardModalLabelsList {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.cardModalLabel {
+  max-width: 200px;
+  min-width: 40px;
+  border-radius: 5px;
+  color: #fcfcfc;
+  margin-right: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  span {
+    line-height: 20px;
+    padding: 8px;
+    font-size: 14px;
+  }
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.dateNotificationSpan {
+  color: white;
+  margin-left: 5px;
+  border-radius: 4px;
+  padding: 0.2rem 0.3rem;
+}
+
+.cardModalSelectedDateBtn {
+  max-width: 400px;
+  padding: 8px;
+  background-color: #ebecf0;
+  border-radius: 4px;
+  &:hover {
+    background-color: darken(#ebecf0, 3%);
+  }
+}
+
+input[type='checkbox'] {
+  cursor: pointer;
+  width: 20px !important;
+  height: 20px !important;
+  margin-right: 10px;
+}

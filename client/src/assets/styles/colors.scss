@@ -1,19 +1,18 @@
 $white: #fcfcfc;
-$light-grey: #f4f5f9;
-$grey: #e5e7ed;
-$grey: #e7e9f0;
-$dark-grey: #d4d4df;
+$light: #f4f5f9;
+$light-grey: #e7e9f0;
+$grey: #d4d4df;
+$dark-grey: #919199;
 $light-blue: #f6faff;
 $green: #30b68e;
-// $light-blue: #edf6f9;
 $blue: #0d6192;
 $blue-hover: darken($blue, 7%);
-$red: red;
+$red: #ca1a2b;
 $red-hover: darken($red, 7%);
 $success: $green;
 $error: #af5861;
 $graphite: #4a5062;
 
 $overlay: rgba(0, 0, 0, 0.6);
-$divider: 1px solid $dark-grey;
+$divider: 1px solid $grey;
 $box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);

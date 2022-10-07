@@ -1,3 +1,5 @@
+@import './colors.scss';
+
 @mixin flex-center {
   display: flex;
   align-items: center;
@@ -49,13 +51,36 @@
 }
 
 @mixin input {
-  max-height: 48px;
   outline: none;
   border: none;
-  padding: 10px;
+  width: 100%;
+  padding: 15px;
   border-radius: 10px;
-  background-color: #edf6f9;
-  border: 1px solid darken(#edf3f5, 10%);
   margin: 6px 0;
+  background-color: $light-blue;
+  border: 1px solid darken($light-blue, 10%);
   font-size: 14px;
+  &:disabled {
+    opacity: 0.8;
+  }
 }
+
+@mixin clip {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin textarea {
+  width: 100%;
+  resize: none;
+  border: none;
+  background-color: $white;
+  border-radius: 4px;
+  -webkit-box-shadow: $box-shadow;
+  box-shadow: $box-shadow;
+  &:focus {
+    outline: none;
+  }
+}
+

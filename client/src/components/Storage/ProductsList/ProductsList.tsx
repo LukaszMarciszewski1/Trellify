@@ -13,7 +13,9 @@ interface ProductsListProps {
 type SortKeys = keyof ProductModel;
 
 const ProductsList: React.FC<ProductsListProps> = ({ data, children, sortProducts }) => {
-  const [order, setOrder] = useState('asc')
+  const asc = 'ascending'
+  const dsc = 'descending'
+  const [order, setOrder] = useState(asc)
   const [sortKey, setSortKey] = useState('');
 
   const headers: { key: SortKeys; label: string, sortable: boolean }[] = [
@@ -29,16 +31,24 @@ const ProductsList: React.FC<ProductsListProps> = ({ data, children, sortProduct
     if (!data) return;
     const array: ProductModel[] = [...data]
 
-    if (order === 'asc') {
-      const sorted = array.sort((a, b) => a[sortBy].toString().localeCompare(b[sortBy].toString(), "pl", { numeric: true }))
+    if (order === asc) {
+      const sorted = array.sort((a, b) => a[sortBy]
+        .toString()
+        .localeCompare(b[sortBy]
+          .toString(), "pl", { numeric: true })
+      )
       sortProducts(sorted)
-      setOrder('desc')
+      setOrder(dsc)
     }
 
-    if (order === 'desc') {
-      const sorted = array.sort((a, b) => b[sortBy].toString().localeCompare(a[sortBy].toString(), "pl", { numeric: true }))
+    if (order === dsc) {
+      const sorted = array.sort((a, b) => b[sortBy]
+        .toString()
+        .localeCompare(a[sortBy]
+          .toString(), "pl", { numeric: true })
+      )
       sortProducts(sorted)
-      setOrder('asc')
+      setOrder(asc)
     }
 
     setSortKey(sortBy);
@@ -46,25 +56,25 @@ const ProductsList: React.FC<ProductsListProps> = ({ data, children, sortProduct
   }, [data, order, sortKey])
 
   return (
-    <div className={styles.container}>
+    <div className={styles.productsList}>
       <div className={styles.head}>
         {headers.map(row => (
           <div
             key={row.key}
             className={`${styles.block} ${row.sortable ? styles.sortable : ''}`}
-            {...(row.sortable && { onClick: () => sortData({ sortBy: row.key })})}>
+            {...(row.sortable && { onClick: () => sortData({ sortBy: row.key }) })}>
             <span>
               {row.label}
-              {row.sortable ?
-                (sortKey === row.key ? (order === 'desc' ? <TiArrowSortedDown /> : <TiArrowSortedUp />) : <TiArrowUnsorted color='#c8c8c8' />)
-                : null}
+              {row.sortable ? (
+                sortKey === row.key ? (
+                  order === dsc ? <TiArrowSortedDown /> : <TiArrowSortedUp />
+                ) : <TiArrowUnsorted color='#d4d4df' />
+              ) : null}
             </span>
           </div>
         ))}
       </div>
-      <div className={styles.list}>
-        {children}
-      </div>
+      {children}
     </div>
   )
 }

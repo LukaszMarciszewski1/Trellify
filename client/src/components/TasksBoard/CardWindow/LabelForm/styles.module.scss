@@ -1,0 +1,51 @@
+@import 'assets/styles/colors.scss';
+@import 'assets/styles/mixins.scss';
+
+.labelForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.3rem;
+}
+
+.textarea {
+  @include textarea();
+  min-height: 40px;
+  padding: 0.5rem;
+  margin-bottom: 10px;
+}
+
+.colorsPalette {
+  min-width: 100%;
+  max-height: 200px;
+  width: auto;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: $box-shadow;
+}
+
+.pickerSwatches {
+  display: flex;
+  padding: 8px 0 0;
+  flex-wrap: wrap;
+}
+
+.pickerSwatch {
+  width: 24px;
+  height: 24px;
+  margin: 4px;
+  border: none;
+  padding: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}
+
+.buttonsWrapper {
+  display: flex;
+  margin-top: 12px;
+  overflow: hidden;
+  &:last-child {
+    margin-right: 1rem;
+  }
+}

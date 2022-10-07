@@ -11,19 +11,30 @@ interface ProductProps extends ProductModel {
   editProd: () => void
 }
 
-const Product: React.FC<ProductProps> = ({ name, category, quantity, unit, price, editProd, deleteProd }) => {
+const Product: React.FC<ProductProps> = ({
+  name,
+  category,
+  quantity,
+  unit,
+  price,
+  editProd,
+  deleteProd
+}) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const quantityColor = quantity === 0 ? 'red' : 'initial'
 
   return (
-    <div className={styles.row} style={{ color: quantityColor }}>
+    <div className={styles.product} style={{ color: quantityColor }}>
       <div className={`${styles.block}`}><span>{name}</span></div>
       <div className={`${styles.block}`}><span>{category}</span></div>
       <div className={`${styles.block}`}><span>{quantity}</span></div>
       <div className={`${styles.block}`}><span>{unit}</span></div>
       <div className={`${styles.block}`}><span>{price} zł</span></div>
       <div className={`${styles.block}`}>
-        <IconButton onClick={() => setIsPopupOpen(true)}><BiDotsVerticalRounded style={{ fontSize: '1.2rem', color: 'grey' }} /></IconButton>
+        <IconButton
+          onClick={() => setIsPopupOpen(true)}>
+          <BiDotsVerticalRounded style={{ fontSize: '1.2rem', color: 'grey' }} />
+        </IconButton>
       </div>
       <Popup
         title={'Akcje produktu'}

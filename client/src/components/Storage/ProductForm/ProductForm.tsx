@@ -112,9 +112,9 @@ const ProductForm: React.FC<AddProductFormProps> = ({
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.productForm}>
       <h2>{formTitle}</h2>
-      <form className={styles.form} onSubmit={handleSubmit(handleSubmitForm)}>
+      <form onSubmit={handleSubmit(handleSubmitForm)}>
         <div className={styles.message}>
           {message}
         </div>
@@ -223,7 +223,10 @@ const ProductForm: React.FC<AddProductFormProps> = ({
           </div>
         </div>
         <div className={styles.actionForm}>
-          <Button title={'Zapisz'} type={'submit'} style={{ width: '100%', padding: '0.8rem' }} />
+          <Button
+            title={'Zapisz'}
+            type={'submit'}
+            style={{ width: '100%', padding: '0.8rem' }} />
         </div>
       </form>
     </div>

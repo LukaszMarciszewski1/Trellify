@@ -6,7 +6,7 @@
   width: 250px;
   min-height: 100%;
   background-color: $white;
-  border-right: 1px solid $dark-grey;
+  border-right: 1px solid $grey;
   transition: 0.1s ease-in-out;
   z-index: 300;
 }
@@ -22,8 +22,8 @@
   height: 30px;
   right: -15px;
   top: 10px;
-  background-color: $grey;
-  border: 1px solid $dark-grey;
+  background-color: $light-grey;
+  border: 1px solid $grey;
   padding: 5px;
   border-radius: 50%;
 }
@@ -61,7 +61,7 @@
 }
 
 .active {
-  background-color: $grey;
+  background-color: $light-grey;
   border-radius: 8px;
   &::before {
     content: '';

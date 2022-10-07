@@ -9,11 +9,13 @@ import {
 import { Product as ProductModel } from 'models/product'
 import Modal from 'components/common/Modal/Modal'
 import ProductForm from './ProductForm/ProductForm'
-import Header from './Header/Header'
+import Controls from './Controls/Controls'
 import ProductsList from './ProductsList/ProductsList'
 import Product from './Product/Product'
 import CategoriesList from './CategoriesList/CategoriesList'
 import SuccessMessage from 'components/common/Messages/SuccessMessage'
+import ErrorMessage from 'components/common/Messages/ErrorMessage'
+import Loading from 'components/common/Loading/Loading'
 
 export type ReduceReturnType = Record<string, number>;
 
@@ -94,14 +96,14 @@ const Storage: React.FC = () => {
   }
 
   return (
-    <div className={styles.container}>
-      {error && <h2>Error 500</h2>}
-      <div className={styles.left}>
+    <div className={styles.storage}>
+      {error && <ErrorMessage message={'Coś poszło nie tak, spróbuj ponownie'} />}
+      <div className={styles.content}>
         <div className={styles.top}>
           <CategoriesList data={categories} />
         </div>
         <div className={styles.bottom}>
-          <Header
+          <Controls
             addNewProduct={() => setIsModalOpen(true)}
             categories={categories}
             handleFilterCategory={handleFilterCategory}
@@ -109,7 +111,7 @@ const Storage: React.FC = () => {
             allCategoryValue={allCategoryValue}
           />
           {
-            isLoading ? <div>Loading...</div> : (
+            isLoading ? <Loading /> : (
               <ProductsList
                 data={products}
                 sortProducts={setProducts}
@@ -138,7 +140,6 @@ const Storage: React.FC = () => {
           }
         </div>
       </div>
-      {/* <div className={styles.right}><p>statystyki magazynu</p></div> */}
       <Modal
         trigger={isModalOpen}
         closeModal={() => setIsModalOpen(false)}>
@@ -146,7 +147,8 @@ const Storage: React.FC = () => {
           categoryList={categories}
           formTitle={'Dodaj produkt'}
           handleSubmitForm={handleAddProduct}
-          message={(isSuccess ? <SuccessMessage message={'Produkt został dodany'} /> : null)}
+          message={(isSuccess ? (
+            <SuccessMessage message={'Produkt został dodany'} />) : null)}
         />
       </Modal>
       <Modal
@@ -163,7 +165,8 @@ const Storage: React.FC = () => {
               defaultUnit={currentProduct.unit}
               defaultPrice={currentProduct.price}
               handleSubmitForm={handleEditProduct}
-              message={(isSuccess ? <SuccessMessage message={'Produkt został zmieniony'} /> : null)}
+              message={(isSuccess ? (
+                <SuccessMessage message={'Produkt został zmieniony'} />) : null)}
             />
           )
         }

@@ -1,0 +1,21 @@
+.controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.filtersWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.filterBtn {
+  max-width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 20px;
+}

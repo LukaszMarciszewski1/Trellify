@@ -8,12 +8,12 @@ interface CategoriesListProps {
 
 const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className={styles.categoriesList}>
+      <div className={styles.titleWrapper}>
         <BiCategory fontSize={'1.5rem'} />
         <h4>Magazyn</h4>
       </div>
-      <div className={styles.categoryList}>
+      <div className={styles.listWrapper}>
         {
           data ? Object.entries(data).map(([name, quantity]) => (
             <div key={name} className={styles.box}>

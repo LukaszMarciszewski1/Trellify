@@ -12,6 +12,6 @@ export interface Card {
   completed: boolean
   nameList: string
   files: any
-  usedMaterials?: Product[]
+  usedProducts?: Product[]
   labels: Labels[]
 }
