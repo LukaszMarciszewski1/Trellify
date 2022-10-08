@@ -161,6 +161,7 @@ const CardModal: React.FC<CardModalProps> = ({
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
   const handleAddNewLabel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     const newLabels = [...boardLabels, { color: currentLabelColor, title: labelTitle, active: false }]
@@ -184,6 +185,9 @@ const CardModal: React.FC<CardModalProps> = ({
     return newLabelsBoard
   }
 
+  console.log(boardLabels)
+  console.log(cardLabels)
+
   const updateAllLabels = useCallback(() => {
     if (!cards) return
     cards?.filter(card => card.boardId === boardId).map(card => {
@@ -191,6 +195,7 @@ const CardModal: React.FC<CardModalProps> = ({
         _id: card._id,
         labels: getChangedLabels(card.labels)
       })
+      // setCardLabels(getChangedLabels(card.labels))
     })
   }, [currentLabelColor, currentLabelTitle])
 
