@@ -1,0 +1,20 @@
+@import 'assets/styles/colors.scss';
+
+.descriptionContainer {
+  margin-bottom: 2rem;
+  p {
+    cursor: pointer;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    position: relative;
+  }
+}
+
+.descriptionHeader {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  h4 {
+    color: $dark-grey;
+  }
+}

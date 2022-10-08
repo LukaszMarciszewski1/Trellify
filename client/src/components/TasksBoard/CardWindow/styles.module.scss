@@ -74,25 +74,6 @@
   }
 }
 
-.descriptionContainer {
-  margin-bottom: 2rem;
-  p {
-    cursor: pointer;
-    overflow-wrap: break-word;
-    word-break: break-all;
-    position: relative;
-  }
-}
-
-.descriptionHeader {
-  display: flex;
-  align-items: center;
-  margin: 8px 0;
-  h4 {
-    color: grey;
-  }
-}
-
 .actionsForm {
   display: flex;
   margin-top: 1rem;
@@ -115,38 +96,6 @@
   margin: 1rem 0;
   border-bottom: $divider;
 }
-
-
-.cardModalLabels {
-  display: flex;
-  flex-direction: column;
-}
-
-.cardModalLabelsList {
-  max-height: 260px;
-  overflow-y: auto;
-}
-
-.cardModalLabel {
-  max-width: 200px;
-  min-width: 40px;
-  border-radius: 5px;
-  color: #fcfcfc;
-  margin-right: 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-  span {
-    line-height: 20px;
-    padding: 8px;
-    font-size: 14px;
-  }
-  &:hover {
-    opacity: 0.9;
-  }
-}
-
 
 .dateNotificationSpan {
   color: white;

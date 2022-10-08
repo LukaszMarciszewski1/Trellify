@@ -35,6 +35,7 @@ import Popup from '../../common/Popup/Popup'
 
 import Labels from './Labels/LabelsList/LabelsList'
 import LabelsPopup from './Labels/LabelsPopup/LabelsPopup'
+import Description from './Description/Description'
 
 import Container from './Container/Container'
 import Button from '../../common/Button/Button'
@@ -100,7 +101,6 @@ const CardModal: React.FC<CardModalProps> = ({
   const [deleteFile] = useDeleteFileMutation();
 
   const [cardTitle, setCardTitle] = useState<string>(title)
-  const [cardDescription, setCardDescription] = useState<string>(description)
   const [cardDeadline, setCardDeadline] = useState<Date | null>(deadline ? new Date(deadline) : new Date())
 
   //triggers
@@ -116,6 +116,7 @@ const CardModal: React.FC<CardModalProps> = ({
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<boolean | null>(null)
 
+  const [cardDescription, setCardDescription] = useState<string>(description)
   const [boardLabels, setBoardLabels] = useState<any>([])
   const [cardLabels, setCardLabels] = useState<LabelsInterface[]>(labels)
 
@@ -375,37 +376,15 @@ const CardModal: React.FC<CardModalProps> = ({
                 }
               </>
             </Container>
-            <div className={styles.descriptionContainer}>
-              <div className={styles.descriptionHeader}>
-                <h4>Opis</h4>
-                <div style={{ maxWidth: '100px', marginLeft: '1rem' }}>
-                  {
-                    !isDescriptionFormOpen && cardDescription !== undefined && cardDescription !== '' ? (
-                      <TaskButton
-                        onClick={() => setIsDescriptionFormOpen(true)}
-                        name={'Edytuj'} icon={<BsPencil />}
-                        style={{ height: '30px' }} />
-                    ) : null
-                  }
-                </div>
-              </div>
-              {
-                isDescriptionFormOpen ?
-                  <TaskForm
-                    id={'card-description'}
-                    handleChange={handleEditCardDescription}
-                    handleSubmit={handleSaveCardDescription}
-                    closeForm={() => { setIsDescriptionFormOpen(false); setCardDescription(description) }}
-                    value={cardDescription}
-                    onFocus={(e) => e.target.select()}
-                    titleBtn={'Zapisz'}
-                  /> :
-                  <div>
-                    {cardDescription !== '' && cardDescription !== undefined ? <p onClick={() => setIsDescriptionFormOpen(true)}>{cardDescription}</p> :
-                      <TaskButton onClick={() => setIsDescriptionFormOpen(true)} name={'Dodaj opis...'} icon={<IoMdAdd />} />}
-                  </div>
-              }
-            </div>
+
+            <Description
+              boardId={boardId}
+              cardId={_id}
+              cardDescription={cardDescription}
+              apiDescription={description}
+              setCardDescription={setCardDescription}
+            />
+
             <Container data={usedProducts} title={'Wykorzystane materiały'}>
               <>
                 {
