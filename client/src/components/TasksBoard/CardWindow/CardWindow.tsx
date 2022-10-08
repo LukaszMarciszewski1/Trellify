@@ -177,43 +177,36 @@ const CardModal: React.FC<CardModalProps> = ({
     if (e.target.id === 'label-title-add') setLabelTitle(e.target.value)
   }
 
-  const getChangedLabel = (labels: any[]) => {
+  const getChangedLabels = (labels: LabelsInterface[]) => {
     const newLabelsBoard = labels.map((label) => {
       if (label._id !== currentLabelId) return label;
       return { ...label, title: currentLabelTitle, color: currentLabelColor };
     });
     return newLabelsBoard
   }
-  // console.log(getChangedLabel())
+
+  console.log(boardLabels)
+  console.log(cardLabels)
 
   const updateAllLabels = useCallback(() => {
     if (!cards) return
     cards?.filter(card => card.boardId === boardId).map(card => {
-      // const newLabels = card.labels.map(label => {
-      //   if (label._id !== currentLabelId) return label;
-      //   return { ...label, title: currentLabelTitle, color: currentLabelColor };
-      // })
       updateCard({
         _id: card._id,
-        labels: getChangedLabel(card.labels)
+        labels: getChangedLabels(card.labels)
       })
-      setCardLabels(getChangedLabel(card.labels))
+      // setCardLabels(getChangedLabels(card.labels))
     })
   }, [currentLabelColor, currentLabelTitle])
 
   const handleSaveLabelEditing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-    if (!boardLabels) return
     e.preventDefault()
-    const newLabels = [...boardLabels]
-    const newLabelsBoard = newLabels.map((label) => {
-      if (label._id !== currentLabelId) return label;
-      return { ...label, title: currentLabelTitle, color: currentLabelColor };
-    });
     updateAllLabels()
-    setBoardLabels(newLabelsBoard)
+    setBoardLabels(getChangedLabels(boardLabels))
+    setCardLabels(getChangedLabels(cardLabels))
     updateBoard({
       _id: boardId,
-      labels: newLabelsBoard
+      labels: getChangedLabels(boardLabels)
     })
     setIsLabelEditPopupOpen(false)
   }
