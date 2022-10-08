@@ -1,0 +1,9 @@
+.cardLabels {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardLabelsList {
+  max-height: 260px;
+  overflow-y: auto;
+}

@@ -10,7 +10,7 @@ interface LabelProps {
   title: string
   color: string
   cardLabels: LabelModel[]
-  handleCheckedLabel: (value: any) => void
+  handleCheckedLabel: () => void
   openLabelEditWindow: () => void
 }
 

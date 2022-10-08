@@ -1,18 +1,10 @@
-.cardModalLabels {
-  display: flex;
-  flex-direction: column;
-}
-
-.cardModalLabelsList {
-  max-height: 260px;
-  overflow-y: auto;
-}
+@import 'assets/styles/colors.scss';
 
 .cardModalLabel {
   max-width: 200px;
   min-width: 40px;
   border-radius: 5px;
-  color: #fcfcfc;
+  color: $white;
   margin-right: 5px;
   white-space: nowrap;
   overflow: hidden;

@@ -1,11 +1,11 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import { Labels as LabelsInterface } from 'models/labels'
-import Container from '../Container/Container'
+import { Labels as LabelModel } from 'models/labels'
+import Container from '../../Container/Container'
 
 
 interface LabelsProps {
-  cardLabels: LabelsInterface[]
+  cardLabels: LabelModel[]
   setLabelsTrigger: () => void
 }
 
