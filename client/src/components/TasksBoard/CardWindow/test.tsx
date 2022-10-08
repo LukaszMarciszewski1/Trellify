@@ -33,6 +33,8 @@ import TaskForm from '../TaskForm/TaskForm'
 import TaskButton from '../../common/TaskButton/TaskButton'
 import Popup from '../../common/Popup/Popup'
 import Label from './Label/Label'
+import Labels from './Labels/Labels'
+
 import Container from './Container/Container'
 import LabelForm from './LabelForm/LabelForm'
 import Button from '../../common/Button/Button'
@@ -99,17 +101,12 @@ const CardModal: React.FC<CardModalProps> = ({
 
   const [cardTitle, setCardTitle] = useState<string>(title)
   const [cardDescription, setCardDescription] = useState<string>(description)
-  const [cardLabels, setCardLabels] = useState<LabelsInterface[]>(labels)
   const [cardDeadline, setCardDeadline] = useState<Date | null>(deadline ? new Date(deadline) : new Date())
-  const [boardLabels, setBoardLabels] = useState<any>([])
-  const [labelTitle, setLabelTitle] = useState('')
 
+  //triggers
   const [isDescriptionFormOpen, setIsDescriptionFormOpen] = useState(false)
   const [isLabelEditPopupOpen, setIsLabelEditPopupOpen] = useState(false)
   const [isAddNewLabelPopupOpen, setIsAddNewLabelPopupOpen] = useState(false)
-  const [currentLabelTitle, setCurrentLabelTitle] = useState('')
-  const [currentLabelId, setCurrentLabelId] = useState('')
-  const [currentLabelColor, setCurrentLabelColor] = useState('')
   const [labelsTrigger, setLabelsTrigger] = useState(false)
   const [dateTrigger, setDateTrigger] = useState(false)
   const [fileTrigger, setFileTrigger] = useState(false)
@@ -120,6 +117,11 @@ const CardModal: React.FC<CardModalProps> = ({
   const [selectedNameFiles, setSelectedNameFiles] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<boolean | null>(null)
+
+  const [boardLabels, setBoardLabels] = useState<any>([])
+  const [cardLabels, setCardLabels] = useState<LabelsInterface[]>(labels)
+  const [labelTitle, setLabelTitle] = useState('')
+  const [currentLabel, setCurrentLabel] = useState({ _id: '', color: '', title: '' })
 
   const refModal = useRef(null)
 
@@ -163,7 +165,7 @@ const CardModal: React.FC<CardModalProps> = ({
 
   const handleAddNewLabel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
-    const newLabels = [...boardLabels, { color: currentLabelColor, title: labelTitle, active: false }]
+    const newLabels = [...boardLabels, { color: currentLabel.color, title: labelTitle, active: false }]
     updateBoard({
       _id: boardId,
       labels: newLabels
@@ -172,14 +174,24 @@ const CardModal: React.FC<CardModalProps> = ({
   }
 
   const handleChangeLabelTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (e.target.id === 'label-title-edit') setCurrentLabelTitle(e.target.value)
+    if (e.target.id === 'label-title-edit') setCurrentLabel(label => { return { ...label, title: e.target.value } })
     if (e.target.id === 'label-title-add') setLabelTitle(e.target.value)
+
+    // console.log(currentLabel.title)
+  }
+
+  const handleGetCurrentEditLabel = (id: string) => {
+    const newLabels = [...boardLabels]
+    const activeLabel = newLabels.filter((label: { _id: string }) => label._id === id)
+    const activeLabelTitle = activeLabel.map((label: { title: string }) => label.title).toString()
+    const activeLabelColor = activeLabel.map((label: { color: string }) => label.color).toString()
+    setCurrentLabel(label => { return { ...label, _id: id, title: activeLabelTitle, color: activeLabelColor } })
   }
 
   const getChangedLabels = (labels: LabelsInterface[]) => {
     return labels.map((label) => {
-      if (label._id !== currentLabelId) return label;
-      return { ...label, title: currentLabelTitle, color: currentLabelColor };
+      if (label._id !== currentLabel._id) return label;
+      return { ...label, title: currentLabel.title, color: currentLabel.color };
     });
   }
 
@@ -190,7 +202,7 @@ const CardModal: React.FC<CardModalProps> = ({
         labels: getChangedLabels(card.labels)
       })
     })
-  }, [currentLabelColor, currentLabelTitle])
+  }, [currentLabel.color, currentLabel.title])
 
   const handleSaveLabelEditing = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
@@ -202,6 +214,7 @@ const CardModal: React.FC<CardModalProps> = ({
       labels: getChangedLabels(boardLabels)
     })
     setIsLabelEditPopupOpen(false)
+    setCurrentLabel(label => { return { ...label, title: '', color: '' } })
   }
 
   const handleCheckedLabel = (item: LabelsInterface) => {
@@ -229,20 +242,10 @@ const CardModal: React.FC<CardModalProps> = ({
     })
   }
 
-  const handleGetCurrentEditLabel = (id: string) => {
-    const newLabels = [...boardLabels]
-    const activeLabel = newLabels.filter((label: { _id: string }) => label._id === id)
-    const activeLabelTitle = activeLabel.map((label: { title: string }) => label.title).toString()
-    const activeLabelColor = activeLabel.map((label: { color: string }) => label.color).toString()
-    setCurrentLabelTitle(activeLabelTitle)
-    setCurrentLabelColor(activeLabelColor)
-    setCurrentLabelId(id)
-  }
-
   const handleDeleteLabel = () => {
-    const newBoardLabels = [...boardLabels].filter((label) => label._id !== currentLabelId);
+    const newBoardLabels = [...boardLabels].filter((label) => label._id !== currentLabel._id);
     cards?.filter(card => card.boardId === boardId).map(card => {
-      const newCardLabels = card.labels.filter((label: { _id: string }) => label._id !== currentLabelId);
+      const newCardLabels = card.labels.filter((label: { _id: string }) => label._id !== currentLabel._id);
       setCardLabels(newCardLabels)
       updateCard({
         _id: card._id,
@@ -256,8 +259,6 @@ const CardModal: React.FC<CardModalProps> = ({
     setIsLabelEditPopupOpen(false)
   }
 
-  console.log(boardLabels)
-  console.log(cardLabels)
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -595,12 +596,14 @@ const CardModal: React.FC<CardModalProps> = ({
                     <LabelForm
                       formId={isLabelEditPopupOpen ? 'label-title-edit' : isAddNewLabelPopupOpen ? 'label-title-add' : ''}
                       handleChangeTitle={handleChangeLabelTitle}
-                      handleSubmitForm={isLabelEditPopupOpen ? handleSaveLabelEditing : isAddNewLabelPopupOpen ? handleAddNewLabel : () => console.log('label does not exist')}
+                      handleSubmitForm={isLabelEditPopupOpen ?
+                        handleSaveLabelEditing : isAddNewLabelPopupOpen ? handleAddNewLabel :
+                          () => console.log('label does not exist')}
                       handleDeleteLabel={handleDeleteLabel}
-                      value={isLabelEditPopupOpen ? currentLabelTitle : isAddNewLabelPopupOpen ? labelTitle : ''}
+                      value={isLabelEditPopupOpen ? currentLabel.title : isAddNewLabelPopupOpen ? labelTitle : ''}
                       onFocus={(e) => e.target.select()}
-                      selectColor={currentLabelColor}
-                      setSelectColor={setCurrentLabelColor}
+                      selectColor={currentLabel.color}
+                      setSelectColor={(e) => setCurrentLabel((label) => { return { ...label, color: e } })}
                     />
                   )
                 }

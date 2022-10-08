@@ -33,6 +33,9 @@ import TaskForm from '../TaskForm/TaskForm'
 import TaskButton from '../../common/TaskButton/TaskButton'
 import Popup from '../../common/Popup/Popup'
 import Label from './Label/Label'
+import Labels from './Labels/Labels'
+import LabelsPopup from './LabelsPopup/LabelsPopup'
+
 import Container from './Container/Container'
 import LabelForm from './LabelForm/LabelForm'
 import Button from '../../common/Button/Button'
@@ -101,6 +104,7 @@ const CardModal: React.FC<CardModalProps> = ({
   const [cardDescription, setCardDescription] = useState<string>(description)
   const [cardDeadline, setCardDeadline] = useState<Date | null>(deadline ? new Date(deadline) : new Date())
 
+  //triggers
   const [isDescriptionFormOpen, setIsDescriptionFormOpen] = useState(false)
   const [isLabelEditPopupOpen, setIsLabelEditPopupOpen] = useState(false)
   const [isAddNewLabelPopupOpen, setIsAddNewLabelPopupOpen] = useState(false)
@@ -118,13 +122,7 @@ const CardModal: React.FC<CardModalProps> = ({
   const [boardLabels, setBoardLabels] = useState<any>([])
   const [cardLabels, setCardLabels] = useState<LabelsInterface[]>(labels)
   const [labelTitle, setLabelTitle] = useState('')
-  const [currentLabel, setCurrentLabel] = useState({
-    _id: '',
-    color: '',
-    title: ''
-  })
-
-  console.log(currentLabel)
+  const [currentLabel, setCurrentLabel] = useState({ _id: '', color: '', title: '' })
 
   const refModal = useRef(null)
 
@@ -179,8 +177,6 @@ const CardModal: React.FC<CardModalProps> = ({
   const handleChangeLabelTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'label-title-edit') setCurrentLabel(label => { return { ...label, title: e.target.value } })
     if (e.target.id === 'label-title-add') setLabelTitle(e.target.value)
-
-    // console.log(currentLabel.title)
   }
 
   const handleGetCurrentEditLabel = (id: string) => {
@@ -262,8 +258,6 @@ const CardModal: React.FC<CardModalProps> = ({
     setIsLabelEditPopupOpen(false)
   }
 
-  // console.log(boardLabels)
-  // console.log(cardLabels)
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -437,20 +431,7 @@ const CardModal: React.FC<CardModalProps> = ({
         </div>
         <div className={styles.groupWrapper}>
           <div className={styles.content}>
-            <Container data={cardLabels} title={'Etykiety'}>
-              {
-                cardLabels.map((label: { title: string; active: boolean; color: string; _id: string }) => (
-                  <div
-                    key={label._id}
-                    style={{ backgroundColor: `${label.color}` }}
-                    className={styles.cardModalLabel}
-                    onClick={() => setLabelsTrigger(true)}
-                  >
-                    <span>{label.title}</span>
-                  </div>
-                ))
-              }
-            </Container>
+            <Labels cardLabels={cardLabels} setLabelsTrigger={() => setLabelsTrigger(true)} />
             <Container data={deadline} title={'Termin'}>
               <>
                 {
@@ -564,7 +545,7 @@ const CardModal: React.FC<CardModalProps> = ({
           </div>
           {/* //sidebar/////////////////////////////////////////////////////////////////// */}
           <div className={styles.cardModalSidebar} >
-            <Popup
+            {/* <Popup
               title={isLabelEditPopupOpen ? 'Edytuj etykietę' : isAddNewLabelPopupOpen ? 'Dodaj Etykietę' : 'Etykiety'}
               trigger={labelsTrigger}
               closePopup={() => { setLabelsTrigger(false); setIsLabelEditPopupOpen(false); setIsAddNewLabelPopupOpen(false) }}
@@ -601,7 +582,9 @@ const CardModal: React.FC<CardModalProps> = ({
                     <LabelForm
                       formId={isLabelEditPopupOpen ? 'label-title-edit' : isAddNewLabelPopupOpen ? 'label-title-add' : ''}
                       handleChangeTitle={handleChangeLabelTitle}
-                      handleSubmitForm={isLabelEditPopupOpen ? handleSaveLabelEditing : isAddNewLabelPopupOpen ? handleAddNewLabel : () => console.log('label does not exist')}
+                      handleSubmitForm={isLabelEditPopupOpen ?
+                        handleSaveLabelEditing : isAddNewLabelPopupOpen ? handleAddNewLabel :
+                          () => console.log('label does not exist')}
                       handleDeleteLabel={handleDeleteLabel}
                       value={isLabelEditPopupOpen ? currentLabel.title : isAddNewLabelPopupOpen ? labelTitle : ''}
                       onFocus={(e) => e.target.select()}
@@ -611,7 +594,17 @@ const CardModal: React.FC<CardModalProps> = ({
                   )
                 }
               </div>
-            </Popup>
+            </Popup> */}
+            <LabelsPopup
+              boardId={boardId}
+              cardId={_id}
+              boardLabels={boardLabels}
+              cardLabels={cardLabels}
+              setBoardLabels={setBoardLabels}
+              setCardLabels={setCardLabels}
+              trigger={labelsTrigger}
+              closePopup={() => setLabelsTrigger(false)}
+            />
             <Popup
               title={'Data'}
               trigger={dateTrigger}

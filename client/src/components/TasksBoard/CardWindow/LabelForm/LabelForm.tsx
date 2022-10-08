@@ -28,7 +28,7 @@ const LabelForm: React.FC<LabelProps> = ({
 }) => {
 
   const placeholder = 'Dodaj nazwę etykiety...'
-  console.log(selectColor)
+
   return (
     <form className={styles.labelForm}>
       <p style={{ marginBottom: '5px' }}>Nazwa</p>
@@ -47,7 +47,7 @@ const LabelForm: React.FC<LabelProps> = ({
         <HexColorPicker
           className={styles.colorsPalette}
           color={selectColor}
-          onChange={setSelectColor}
+          onChange={(e) => setSelectColor((label: any) => { return { ...label, color: e } })}
         />
         <div className={styles.pickerSwatches}>
           {presetColors.slice(0, 14).map((presetColor) => (
@@ -55,7 +55,7 @@ const LabelForm: React.FC<LabelProps> = ({
               key={presetColor}
               className={styles.pickerSwatch}
               style={{ background: presetColor }}
-              onClick={setSelectColor}
+              onClick={() => setSelectColor((label: any) => { return { ...label, color: presetColor } })}
             />
           ))}
         </div>
