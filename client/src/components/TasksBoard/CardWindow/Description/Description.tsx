@@ -1,23 +1,17 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
+import { useUpdateBoardMutation } from 'store/api/boards'
+import { useUpdateCardMutation } from "store/api/cards"
 import TaskButton from 'components/common/TaskButton/TaskButton'
 import TaskForm from 'components/TasksBoard/TaskForm/TaskForm'
 import { BsPencil } from 'react-icons/bs'
 import { IoMdAdd } from 'react-icons/io'
 
-import {
-  useUpdateBoardMutation,
-
-} from 'store/api/boards'
-import {
-  useUpdateCardMutation,
-} from "store/api/cards"
-
 interface DescriptionProps {
   boardId: string
   cardId: string
   cardDescription: string
-  apiDescription: string
+  beforeDescription: string
   setCardDescription: (value: string) => void
 }
 
@@ -25,7 +19,7 @@ const Description: React.FC<DescriptionProps> = ({
   boardId,
   cardId,
   cardDescription,
-  apiDescription,
+  beforeDescription,
   setCardDescription
 }) => {
   const [updateCard] = useUpdateCardMutation();
@@ -70,7 +64,7 @@ const Description: React.FC<DescriptionProps> = ({
             id={'card-description'}
             handleChange={handleEditCardDescription}
             handleSubmit={handleSaveCardDescription}
-            closeForm={() => { setIsDescriptionFormOpen(false); setCardDescription(apiDescription) }}
+            closeForm={() => { setIsDescriptionFormOpen(false); setCardDescription(beforeDescription) }}
             value={cardDescription}
             onFocus={(e) => e.target.select()}
             titleBtn={'Zapisz'}

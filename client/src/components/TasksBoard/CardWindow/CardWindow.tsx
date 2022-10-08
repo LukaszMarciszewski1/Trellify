@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import styles from './styles.module.scss'
 import "react-datepicker/dist/react-datepicker.css"
 import DatePicker, { registerLocale } from "react-datepicker"
@@ -14,7 +14,6 @@ import {
 
 } from 'store/api/boards'
 import {
-  useGetAllCardsQuery,
   useDeleteCardMutation,
   useUpdateCardMutation,
 } from "store/api/cards"
@@ -29,13 +28,13 @@ import useOnClickOutside from 'hooks/useOnClickOutside'
 import { isFileImage } from 'hooks/useIsFileImage'
 
 import TextareaAutosize from 'react-textarea-autosize'
-import TaskForm from '../TaskForm/TaskForm'
 import TaskButton from '../../common/TaskButton/TaskButton'
 import Popup from '../../common/Popup/Popup'
 
 import Labels from './Labels/LabelsList/LabelsList'
 import LabelsPopup from './Labels/LabelsPopup/LabelsPopup'
 import Description from './Description/Description'
+import DeadlineDate from './DeadlineDate/DeadlineDate'
 
 import Container from './Container/Container'
 import Button from '../../common/Button/Button'
@@ -44,12 +43,10 @@ import Files from './Attachment/Attachment'
 import Modal from '../../common/Modal/Modal'
 import UsedProducts from './UsedProducts/UsedProducts'
 
-import { BsPencil } from 'react-icons/bs'
 import { BiTask } from 'react-icons/bi'
 import { GrAttachment } from 'react-icons/gr'
 import { BsStopwatch } from 'react-icons/bs'
 import { MdOutlineLabel } from 'react-icons/md'
-import { IoMdAdd } from 'react-icons/io'
 import { RiDeleteBinLine } from 'react-icons/ri'
 
 interface CardModalProps extends CardModel {
@@ -61,7 +58,7 @@ interface CardModalProps extends CardModel {
       backgroundColor: string
     },
     title: string
-    name: string
+    status: string
   }
   setIsCardWindowOpen: () => void
   setCardCompleted: (value: boolean) => void
@@ -89,11 +86,11 @@ const CardModal: React.FC<CardModalProps> = ({
   setIsCardWindowOpen,
   setCardCover,
   setCardFileIndex,
+  ...props
 }) => {
   dayjs.locale('pl');
   registerLocale("pl", pl);
   const { data: board } = useGetBoardQuery(boardId);
-  const { data: cards } = useGetAllCardsQuery()
 
   const [updateCard] = useUpdateCardMutation();
   const [deleteCard] = useDeleteCardMutation();
@@ -104,7 +101,6 @@ const CardModal: React.FC<CardModalProps> = ({
   const [cardDeadline, setCardDeadline] = useState<Date | null>(deadline ? new Date(deadline) : new Date())
 
   //triggers
-  const [isDescriptionFormOpen, setIsDescriptionFormOpen] = useState(false)
   const [labelsTrigger, setLabelsTrigger] = useState(false)
   const [dateTrigger, setDateTrigger] = useState(false)
   const [fileTrigger, setFileTrigger] = useState(false)
@@ -141,22 +137,6 @@ const CardModal: React.FC<CardModalProps> = ({
     }
   }
 
-  const handleEditCardDescription = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (e.target.id === 'card-description')
-      setCardDescription(e.target.value)
-  }
-
-  const handleSaveCardDescription = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-    e.preventDefault()
-    updateCard({
-      _id: _id,
-      description: cardDescription
-    })
-    updateBoard({
-      _id: boardId
-    })
-    setIsDescriptionFormOpen(false)
-  }
 
   const handleSaveDeadline = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
@@ -189,6 +169,8 @@ const CardModal: React.FC<CardModalProps> = ({
       _id: boardId
     })
   };
+
+
 
   const handleUploadFiles = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { target: { files } } = e
@@ -281,6 +263,8 @@ const CardModal: React.FC<CardModalProps> = ({
       })
   }
 
+
+
   const onClickHandler = () => {
     const newWindow = window.open(`${cover}`, "_blank", 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null
@@ -331,7 +315,7 @@ const CardModal: React.FC<CardModalProps> = ({
 
             <Labels cardLabels={cardLabels} setLabelsTrigger={() => setLabelsTrigger(true)} />
 
-            <Container data={deadline} title={'Termin'}>
+            {/* <Container data={deadline} title={'Termin'}>
               <>
                 {
                   deadline ? (
@@ -348,7 +332,7 @@ const CardModal: React.FC<CardModalProps> = ({
                             <span
                               title={cardDateDisplay.title}
                               style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                              {cardDateDisplay.name}
+                              {cardDateDisplay.status}
                             </span>
                           ) : null
                         }
@@ -357,7 +341,7 @@ const CardModal: React.FC<CardModalProps> = ({
                             <span
                               title={cardDateDisplay.title}
                               style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                              {cardDateDisplay.name}
+                              {cardDateDisplay.status}
                             </span>
                           ) : null
                         }
@@ -366,7 +350,7 @@ const CardModal: React.FC<CardModalProps> = ({
                             <span
                               title={cardDateDisplay.title}
                               style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                              {cardDateDisplay.name}
+                              {cardDateDisplay.status}
                             </span>
                           ) : null
                         }
@@ -375,13 +359,27 @@ const CardModal: React.FC<CardModalProps> = ({
                   ) : null
                 }
               </>
-            </Container>
+            </Container> */}
+
+            <DeadlineDate
+              cardId={_id}
+              boardId={boardId}
+              deadline={deadline}
+              completed={completed}
+              deadlineIsSoon={deadlineIsSoon}
+              dateIsSameOrBefore={dateIsSameOrBefore}
+              setDateTrigger={() => setDateTrigger(true)}
+              setCompleted={setCardCompleted}
+              title={cardDateDisplay.title}
+              backgroundColor={cardDateDisplay.style.backgroundColor}
+              status={cardDateDisplay.status}
+            />
 
             <Description
               boardId={boardId}
               cardId={_id}
               cardDescription={cardDescription}
-              apiDescription={description}
+              beforeDescription={description}
               setCardDescription={setCardDescription}
             />
 

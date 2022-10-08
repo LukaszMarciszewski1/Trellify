@@ -139,7 +139,7 @@ const TaskCard: React.FC<CardProps> = ({
     title: cardCompleted ? 'Ta karta została ukończona' :
       dateIsSameOrBefore ? 'Ta karta jest przeterminowana' :
         deadlineIsSoon ? `Deadline ${dayjs(deadline).fromNow()}` : 'Karta jest na później',
-    name: cardCompleted ? 'zrealizowany' :
+    status: cardCompleted ? 'zrealizowany' :
       dateIsSameOrBefore ? 'termin przekroczony' :
         deadlineIsSoon ? `wkrótce` : '',
     iconStyle: {
