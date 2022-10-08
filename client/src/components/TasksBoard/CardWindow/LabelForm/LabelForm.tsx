@@ -7,13 +7,13 @@ import Button from 'components/common/Button/Button'
 
 interface LabelProps {
   formId: string
-  value: string | undefined
+  value: string
   selectColor: string
-  handleChangeLabelTitle: (value: any) => void
+  handleSubmitForm: (value: any) => void
   handleChangeTitle: (value: any) => void
   onFocus?: (value: any) => void
   handleDeleteLabel: () => void
-  setSelectColor: (value: string) => void
+  setSelectColor: (value: any) => void
 }
 
 const LabelForm: React.FC<LabelProps> = ({
@@ -21,14 +21,14 @@ const LabelForm: React.FC<LabelProps> = ({
   selectColor,
   value,
   handleChangeTitle,
-  handleChangeLabelTitle,
+  handleSubmitForm,
   handleDeleteLabel,
   onFocus,
   setSelectColor,
 }) => {
 
   const placeholder = 'Dodaj nazwę etykiety...'
-
+  console.log(selectColor)
   return (
     <form className={styles.labelForm}>
       <p style={{ marginBottom: '5px' }}>Nazwa</p>
@@ -55,13 +55,13 @@ const LabelForm: React.FC<LabelProps> = ({
               key={presetColor}
               className={styles.pickerSwatch}
               style={{ background: presetColor }}
-              onClick={() => setSelectColor(presetColor)}
+              onClick={setSelectColor}
             />
           ))}
         </div>
       </div>
       <div className={styles.buttonsWrapper}>
-        <Button onClick={handleChangeLabelTitle} title={'Zapisz'} type={'submit'} style={{ marginRight: '16px' }} />
+        <Button onClick={handleSubmitForm} title={'Zapisz'} type={'submit'} style={{ marginRight: '16px' }} />
         <Button onClick={handleDeleteLabel} title={'Usuń'} type={'reset'} />
       </div>
     </form>

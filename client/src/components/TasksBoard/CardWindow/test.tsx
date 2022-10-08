@@ -595,7 +595,7 @@ const CardModal: React.FC<CardModalProps> = ({
                     <LabelForm
                       formId={isLabelEditPopupOpen ? 'label-title-edit' : isAddNewLabelPopupOpen ? 'label-title-add' : ''}
                       handleChangeTitle={handleChangeLabelTitle}
-                      handleChangeLabelTitle={isLabelEditPopupOpen ? handleSaveLabelEditing : isAddNewLabelPopupOpen ? handleAddNewLabel : () => console.log('label does not exist')}
+                      handleSubmitForm={isLabelEditPopupOpen ? handleSaveLabelEditing : isAddNewLabelPopupOpen ? handleAddNewLabel : () => console.log('label does not exist')}
                       handleDeleteLabel={handleDeleteLabel}
                       value={isLabelEditPopupOpen ? currentLabelTitle : isAddNewLabelPopupOpen ? labelTitle : ''}
                       onFocus={(e) => e.target.select()}
