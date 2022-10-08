@@ -35,6 +35,7 @@ import Labels from './Labels/LabelsList/LabelsList'
 import LabelsPopup from './Labels/LabelsPopup/LabelsPopup'
 import Description from './Description/Description'
 import DeadlineDate from './DeadlineDate/DeadlineDate'
+import DeadlineDatePopup from './DeadlineDatePopup/DeadlineDatePopup'
 
 import Container from './Container/Container'
 import Button from '../../common/Button/Button'
@@ -86,7 +87,6 @@ const CardModal: React.FC<CardModalProps> = ({
   setIsCardWindowOpen,
   setCardCover,
   setCardFileIndex,
-  ...props
 }) => {
   dayjs.locale('pl');
   registerLocale("pl", pl);
@@ -98,7 +98,6 @@ const CardModal: React.FC<CardModalProps> = ({
   const [deleteFile] = useDeleteFileMutation();
 
   const [cardTitle, setCardTitle] = useState<string>(title)
-  const [cardDeadline, setCardDeadline] = useState<Date | null>(deadline ? new Date(deadline) : new Date())
 
   //triggers
   const [labelsTrigger, setLabelsTrigger] = useState(false)
@@ -112,6 +111,7 @@ const CardModal: React.FC<CardModalProps> = ({
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<boolean | null>(null)
 
+  const [cardDeadline, setCardDeadline] = useState<Date | null>(deadline ? new Date(deadline) : new Date())
   const [cardDescription, setCardDescription] = useState<string>(description)
   const [boardLabels, setBoardLabels] = useState<any>([])
   const [cardLabels, setCardLabels] = useState<LabelsInterface[]>(labels)
@@ -136,41 +136,7 @@ const CardModal: React.FC<CardModalProps> = ({
       })
     }
   }
-
-
-  const handleSaveDeadline = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-    e.preventDefault()
-    updateCard({
-      _id: _id,
-      deadline: cardDeadline
-    })
-    updateBoard({ _id: boardId })
-    setDateTrigger(false)
-  }
-
-  const handleDeleteDeadline = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-    e.preventDefault()
-    setCardDeadline(null)
-    updateCard({
-      _id: _id,
-      deadline: null
-    })
-    updateBoard({ _id: boardId })
-    setDateTrigger(false)
-  }
-
-  const handleChangeCompleted = () => {
-    setCardCompleted(!completed);
-    updateCard({
-      _id: _id,
-      completed: !completed
-    })
-    updateBoard({
-      _id: boardId
-    })
-  };
-
-
+  
 
   const handleUploadFiles = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { target: { files } } = e
@@ -312,55 +278,9 @@ const CardModal: React.FC<CardModalProps> = ({
         </div>
         <div className={styles.groupWrapper}>
           <div className={styles.content}>
-
-            <Labels cardLabels={cardLabels} setLabelsTrigger={() => setLabelsTrigger(true)} />
-
-            {/* <Container data={deadline} title={'Termin'}>
-              <>
-                {
-                  deadline ? (
-                    <>
-                      <input
-                        type="checkbox"
-                        checked={completed}
-                        onChange={handleChangeCompleted} />
-                      <button onClick={() => setDateTrigger(true)}
-                        className={styles.cardModalSelectedDateBtn}>
-                        <span>{dayjs(deadline).format('DD-MM-YYYY HH:mm')}</span>
-                        {
-                          dateIsSameOrBefore && !completed ? (
-                            <span
-                              title={cardDateDisplay.title}
-                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                              {cardDateDisplay.status}
-                            </span>
-                          ) : null
-                        }
-                        {
-                          deadlineIsSoon && !completed ? (
-                            <span
-                              title={cardDateDisplay.title}
-                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                              {cardDateDisplay.status}
-                            </span>
-                          ) : null
-                        }
-                        {
-                          completed ? (
-                            <span
-                              title={cardDateDisplay.title}
-                              style={{ backgroundColor: cardDateDisplay.style.backgroundColor }} className={styles.dateNotificationSpan}>
-                              {cardDateDisplay.status}
-                            </span>
-                          ) : null
-                        }
-                      </button>
-                    </>
-                  ) : null
-                }
-              </>
-            </Container> */}
-
+            <Labels
+              cardLabels={cardLabels}
+              setLabelsTrigger={() => setLabelsTrigger(true)} />
             <DeadlineDate
               cardId={_id}
               boardId={boardId}
@@ -374,7 +294,6 @@ const CardModal: React.FC<CardModalProps> = ({
               backgroundColor={cardDateDisplay.style.backgroundColor}
               status={cardDateDisplay.status}
             />
-
             <Description
               boardId={boardId}
               cardId={_id}
@@ -418,7 +337,7 @@ const CardModal: React.FC<CardModalProps> = ({
               }
             </Container>
           </div>
-          {/* //sidebar/////////////////////////////////////////////////////////////////// */}
+
           <div className={styles.cardModalSidebar} >
 
             <LabelsPopup
@@ -429,35 +348,18 @@ const CardModal: React.FC<CardModalProps> = ({
               setBoardLabels={setBoardLabels}
               setCardLabels={setCardLabels}
               trigger={labelsTrigger}
-              closePopup={() => setLabelsTrigger(false)}
+              setTrigger={setLabelsTrigger}
             />
 
-            <Popup
-              title={'Data'}
+            <DeadlineDatePopup
+              cardId={_id}
+              boardId={boardId}
+              cardDeadline={cardDeadline}
+              setCardDeadline={setCardDeadline}
               trigger={dateTrigger}
-              closePopup={() => setDateTrigger(false)}
-              backToMainWindow={() => setDateTrigger(false)}
-            >
-              <DatePicker
-                dateFormat='DD/MM/YYYY'
-                timeFormat="hh:mm"
-                locale="pl"
-                selected={cardDeadline}
-                onChange={(date: Date) => setCardDeadline(date)}
-                inline
-                showTimeInput
-                timeInputLabel={`Godzina:`}
-              />
-              <label>Termin <br></br>
-                <input style={{ maxWidth: '100px', marginRight: '10px' }} placeholder={dayjs(cardDeadline ? cardDeadline : new Date()).format('DD/MM/YYYY')} />
-                <input style={{ maxWidth: '100px' }} placeholder={dayjs(cardDeadline ? cardDeadline : new Date()).format('HH:mm')} />
-              </label>
-              <div className={styles.actionsForm}>
-                <Button onClick={handleSaveDeadline} title={'Zapisz'} type={'button'} />
-                <div style={{ marginRight: '1rem' }} />
-                <Button onClick={handleDeleteDeadline} title={'Usuń'} type={'reset'} />
-              </div>
-            </Popup>
+              setTrigger={setDateTrigger}
+            />
+
             <Popup
               title={'Załączniki'}
               trigger={fileTrigger}
@@ -508,7 +410,10 @@ const CardModal: React.FC<CardModalProps> = ({
                 boardId={boardId}
                 usedProducts={usedProducts} />
             </Popup>
-            <TaskButton onClick={() => setLabelsTrigger(true)} name={'Etykiety'} icon={<MdOutlineLabel />} />
+            <TaskButton
+              onClick={() => setLabelsTrigger(true)}
+              name={'Etykiety'}
+              icon={<MdOutlineLabel />} />
             <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
             <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />
             <TaskButton onClick={() => setStorageTrigger(true)} name={'Magazyn'} icon={<BiTask />} />

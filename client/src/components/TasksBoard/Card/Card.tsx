@@ -147,34 +147,9 @@ const TaskCard: React.FC<CardProps> = ({
       fontSize: '14px',
     }
   }
-  //actionsPopupContent
+
   return (
     <div>
-      {
-        isCardModalOpen ?
-          <CardWindow
-            _id={_id}
-            nameList={nameList}
-            title={title}
-            description={description}
-            boardId={boardId}
-            deadline={deadline}
-            labels={labels}
-            files={cardFiles}
-            usedProducts={usedProducts}
-            cover={cardCover}
-            completed={cardCompleted}
-            cardFileIndex={cardFileIndex}
-            dateIsSameOrBefore={dateIsSameOrBefore}
-            deadlineIsSoon={deadlineIsSoon}
-            cardDateDisplay={cardDateDisplay}
-            createdAt={createdAt}
-            setCardCompleted={setCardCompleted}
-            setIsCardWindowOpen={handleCloseCardModal}
-            setCardFileIndex={setCardFileIndex}
-            setCardCover={setCardCover}
-          /> : null
-      }
       <div className={styles.card}>
         <Draggable draggableId={_id} index={index} >
           {provided => (
@@ -270,6 +245,31 @@ const TaskCard: React.FC<CardProps> = ({
           )}
         </Draggable>
       </div>
+      {
+        isCardModalOpen ?
+          <CardWindow
+            _id={_id}
+            nameList={nameList}
+            title={title}
+            description={description}
+            boardId={boardId}
+            deadline={deadline}
+            labels={labels}
+            files={cardFiles}
+            usedProducts={usedProducts}
+            cover={cardCover}
+            completed={cardCompleted}
+            cardFileIndex={cardFileIndex}
+            dateIsSameOrBefore={dateIsSameOrBefore}
+            deadlineIsSoon={deadlineIsSoon}
+            cardDateDisplay={cardDateDisplay}
+            createdAt={createdAt}
+            setCardCompleted={setCardCompleted}
+            setIsCardWindowOpen={handleCloseCardModal}
+            setCardFileIndex={setCardFileIndex}
+            setCardCover={setCardCover}
+          /> : null
+      }
     </div>
   )
 }

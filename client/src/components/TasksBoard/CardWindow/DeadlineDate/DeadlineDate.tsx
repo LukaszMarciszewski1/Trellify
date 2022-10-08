@@ -36,6 +36,7 @@ const DeadlineDate: React.FC<DateProps> = ({
   backgroundColor,
   status
 }) => {
+  
   const [updateCard] = useUpdateCardMutation();
   const [updateBoard] = useUpdateBoardMutation();
 

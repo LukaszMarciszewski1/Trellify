@@ -21,7 +21,7 @@ interface LabelsPopupProps {
   setBoardLabels: (data: LabelModel[]) => void
   setCardLabels: (data: LabelModel[]) => void
   trigger: boolean
-  closePopup: () => void
+  setTrigger: (value: boolean) => void
   boardId: string
   cardId: string
 }
@@ -34,8 +34,9 @@ const LabelsPopup: React.FC<LabelsPopupProps> = ({
   setBoardLabels,
   setCardLabels,
   trigger,
-  closePopup
+  setTrigger
 }) => {
+  
   const { data: cards } = useGetAllCardsQuery()
   const [updateCard] = useUpdateCardMutation();
   const [updateBoard] = useUpdateBoardMutation();
@@ -150,7 +151,7 @@ const LabelsPopup: React.FC<LabelsPopupProps> = ({
     <Popup
       title={isEditLabelPopupOpen ? 'Edytuj etykietę' : isNewLabelPopupOpen ? 'Dodaj Etykietę' : 'Etykiety'}
       trigger={trigger}
-      closePopup={closePopup}
+      closePopup={() => setTrigger(false)}
       isEditWindow={isEditLabelPopupOpen || isNewLabelPopupOpen}
       backToMainWindow={() => { setIsEditLabelPopupOpen(false); setIsNewLabelPopupOpen(false) }}
     >
