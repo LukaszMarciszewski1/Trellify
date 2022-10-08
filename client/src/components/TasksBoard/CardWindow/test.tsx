@@ -161,7 +161,6 @@ const CardModal: React.FC<CardModalProps> = ({
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
   const handleAddNewLabel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault()
     const newLabels = [...boardLabels, { color: currentLabelColor, title: labelTitle, active: false }]
@@ -178,24 +177,18 @@ const CardModal: React.FC<CardModalProps> = ({
   }
 
   const getChangedLabels = (labels: LabelsInterface[]) => {
-    const newLabelsBoard = labels.map((label) => {
+    return labels.map((label) => {
       if (label._id !== currentLabelId) return label;
       return { ...label, title: currentLabelTitle, color: currentLabelColor };
     });
-    return newLabelsBoard
   }
 
-  console.log(boardLabels)
-  console.log(cardLabels)
-
   const updateAllLabels = useCallback(() => {
-    if (!cards) return
     cards?.filter(card => card.boardId === boardId).map(card => {
       updateCard({
         _id: card._id,
         labels: getChangedLabels(card.labels)
       })
-      // setCardLabels(getChangedLabels(card.labels))
     })
   }, [currentLabelColor, currentLabelTitle])
 
@@ -247,32 +240,24 @@ const CardModal: React.FC<CardModalProps> = ({
   }
 
   const handleDeleteLabel = () => {
-    const newBoardLabelsState = [...boardLabels].filter((label) => label._id !== currentLabelId);
+    const newBoardLabels = [...boardLabels].filter((label) => label._id !== currentLabelId);
     cards?.filter(card => card.boardId === boardId).map(card => {
-      const newCardLabelsState = card.labels.filter((label: { _id: string }) => label._id !== currentLabelId);
-      setCardLabels(newCardLabelsState)
+      const newCardLabels = card.labels.filter((label: { _id: string }) => label._id !== currentLabelId);
+      setCardLabels(newCardLabels)
       updateCard({
         _id: card._id,
-        labels: newCardLabelsState
+        labels: newCardLabels
       })
     })
-    // cards?.map(card => {
-    //   const newCardLabelsState = card.labels.filter((label) => label._id !== currentLabelId);
-    //   setCardLabels(newCardLabelsState)
-    //   updateCard({
-    //     _id: card._id,
-    //     labels: newCardLabelsState
-    //   })
-    // })
-    setBoardLabels(newBoardLabelsState)
     updateBoard({
       _id: boardId,
-      labels: newBoardLabelsState
+      labels: newBoardLabels
     })
     setIsLabelEditPopupOpen(false)
   }
 
-
+  console.log(boardLabels)
+  console.log(cardLabels)
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
