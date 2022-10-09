@@ -33,16 +33,16 @@ import Popup from '../../common/Popup/Popup'
 
 import Labels from './Labels/LabelsList/LabelsList'
 import LabelsPopup from './Labels/LabelsPopup/LabelsPopup'
+import DeadlineDate from './Date/DeadlineDate/DeadlineDate'
+import DatePopup from './Date/DatePopup/DatePopup'
 import Description from './Description/Description'
-import DeadlineDate from './DeadlineDate/DeadlineDate'
-import DeadlineDatePopup from './DeadlineDatePopup/DeadlineDatePopup'
+import Attachments from './Attachments/AttachmentsList/AttachmentsList'
+import AttachmentsPopup from './Attachments/AttachmentsPopup/AttachmentsPopup'
 
 import Container from './Container/Container'
-import Button from '../../common/Button/Button'
-import FileForm from './FileForm/FileForm'
-import Files from './Attachment/Attachment'
 import Modal from '../../common/Modal/Modal'
 import UsedProducts from './UsedProducts/UsedProducts'
+import MaterialsList from './UsedProducts/MaterialsList/MaterialsList'
 
 import { BiTask } from 'react-icons/bi'
 import { GrAttachment } from 'react-icons/gr'
@@ -136,7 +136,7 @@ const CardModal: React.FC<CardModalProps> = ({
       })
     }
   }
-  
+
 
   const handleUploadFiles = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { target: { files } } = e
@@ -229,13 +229,6 @@ const CardModal: React.FC<CardModalProps> = ({
       })
   }
 
-
-
-  const onClickHandler = () => {
-    const newWindow = window.open(`${cover}`, "_blank", 'noopener,noreferrer');
-    if (newWindow) newWindow.opener = null
-  }
-
   const handleSelectCover = (index: number) => {
     setCardFileIndex(index)
     setCardCover(files[index].fileUrl)
@@ -247,6 +240,13 @@ const CardModal: React.FC<CardModalProps> = ({
       _id: boardId
     })
   }
+
+
+  const onClickHandler = () => {
+    const newWindow = window.open(`${cover}`, "_blank", 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null
+  }
+
 
   useOnClickOutside(refModal, setIsCardWindowOpen)
 
@@ -260,7 +260,7 @@ const CardModal: React.FC<CardModalProps> = ({
             </div>
           ) : null
         }
-        <div className={styles.cardModalHeader}>
+        <div className={styles.titleContainer}>
           <div className={styles.cardModalHeaderTextarea}>
             <TextareaAutosize
               id='card-title'
@@ -301,48 +301,24 @@ const CardModal: React.FC<CardModalProps> = ({
               beforeDescription={description}
               setCardDescription={setCardDescription}
             />
-
-            <Container data={usedProducts} title={'Wykorzystane materiały'}>
-              <>
-                {
-                  usedProducts?.map((product) => (
-                    <div
-                      key={product._id}
-                      style={{ backgroundColor: `grey` }}
-                      className={styles.cardModalLabel}
-                      onClick={() => setStorageTrigger(true)}
-                    >
-                      <span>{product.name}: {product.used} {product.unit}</span>
-                    </div>
-                  ))
-                }
-              </>
-            </Container>
-            <Container data={files} title={'Załączniki'}>
-              {
-                files?.map((file: { _id: string; fileName: string; createdAt: string; fileUrl: string; fileType: string }, index: number) => (
-                  <Files
-                    key={file._id}
-                    title={file.fileName}
-                    created={`Dodano ${dayjs(file.createdAt).format('DD MMM')} o ${dayjs(file.createdAt).format('HH:mm')}`}
-                    active={cardFileIndex}
-                    index={index}
-                    src={`${file.fileUrl}`}
-                    type={file.fileType}
-                    handleDeleteFile={() => handleDeleteFile(file._id)}
-                    handleDownloadFile={() => handleDownloadFile(file.fileUrl)}
-                    handleSelectCover={() => handleSelectCover(index)}
-                  />
-                ))
-              }
-            </Container>
+            <MaterialsList
+              materials={usedProducts}
+              setTrigger={setStorageTrigger}
+            />
+            <Attachments
+              cardId={_id}
+              boardId={boardId}
+              files={files}
+              cardFileIndex={cardFileIndex}
+              setCardCover={setCardCover}
+              setCardFileIndex={setCardFileIndex}
+            />
           </div>
 
           <div className={styles.cardModalSidebar} >
-
             <LabelsPopup
-              boardId={boardId}
               cardId={_id}
+              boardId={boardId}
               boardLabels={boardLabels}
               cardLabels={cardLabels}
               setBoardLabels={setBoardLabels}
@@ -350,8 +326,7 @@ const CardModal: React.FC<CardModalProps> = ({
               trigger={labelsTrigger}
               setTrigger={setLabelsTrigger}
             />
-
-            <DeadlineDatePopup
+            <DatePopup
               cardId={_id}
               boardId={boardId}
               cardDeadline={cardDeadline}
@@ -359,38 +334,13 @@ const CardModal: React.FC<CardModalProps> = ({
               trigger={dateTrigger}
               setTrigger={setDateTrigger}
             />
-
-            <Popup
-              title={'Załączniki'}
+            <AttachmentsPopup
+              cardId={_id}
+              boardId={boardId}
               trigger={fileTrigger}
-              closePopup={() => setFileTrigger(false)}
-              backToMainWindow={() => setFileTrigger(false)}
-            >
-              <FileForm
-                name={'załączniki'}
-                size={0}
-                label={'załączniki'}
-                type={'file'}
-                listNames={selectedNameFiles}
-                handleInputState={handleUploadFiles}
-                handleSubmitFiles={handleSubmitFiles}
-              />
-              {uploadProgress > 0 ? (
-                <>
-                  {
-                    uploadStatus !== null && uploadStatus === true ? (
-                      <div><ProgressLine percent={uploadProgress} strokeWidth={4} strokeColor="#D3D3D3" /><p>{uploadProgress}%</p></div>
-                    ) : null
-                  }
-                  {
-                    uploadStatus === false ?
-                      <p style={{ color: 'red' }}>Błąd przesyłania<small> (max 10mb, lub nieprawidłowy format pliku)</small></p>
-                      : null
-                  }
-                </>
-              ) : null
-              }
-            </Popup>
+              setTrigger={setFileTrigger}
+            />
+
             <Popup
               title={'Dodaj wycenę'}
               trigger={valuationTrigger}
@@ -414,17 +364,31 @@ const CardModal: React.FC<CardModalProps> = ({
               onClick={() => setLabelsTrigger(true)}
               name={'Etykiety'}
               icon={<MdOutlineLabel />} />
-            <TaskButton onClick={() => setDateTrigger(true)} name={'Data'} icon={<BsStopwatch />} />
-            <TaskButton onClick={() => setFileTrigger(true)} name={'Załącznik'} icon={<GrAttachment />} />
-            <TaskButton onClick={() => setStorageTrigger(true)} name={'Magazyn'} icon={<BiTask />} />
-            <TaskButton onClick={() => setValuationTrigger(true)} name={'Dodaj wycenę'} icon={<BiTask />} />
+            <TaskButton
+              onClick={() => setDateTrigger(true)}
+              name={'Data'}
+              icon={<BsStopwatch />} />
+            <TaskButton
+              onClick={() => setFileTrigger(true)}
+              name={'Załącznik'}
+              icon={<GrAttachment />} />
+            <TaskButton
+              onClick={() => setStorageTrigger(true)}
+              name={'Magazyn'}
+              icon={<BiTask />} />
+            <TaskButton
+              onClick={() => setValuationTrigger(true)}
+              name={'Dodaj wycenę'}
+              icon={<BiTask />} />
             <div className={styles.divider}></div>
             <TaskButton onClick={() => {
               const result = window.confirm("Usunąć kartę?")
               if (!result) return
               deleteCard(_id);
               updateBoard({ _id: boardId })
-            }} name={'Usuń'} icon={<RiDeleteBinLine />} />
+            }}
+              name={'Usuń'}
+              icon={<RiDeleteBinLine />} />
           </div>
         </div>
       </div>

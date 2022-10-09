@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import dayjs from 'dayjs'
-import Container from '../Container/Container'
+import Container from '../../Container/Container'
 
 import { useUpdateBoardMutation } from 'store/api/boards'
 import { useUpdateCardMutation } from "store/api/cards"
@@ -12,7 +12,7 @@ interface DisplayStyle {
   status: string
 }
 
-interface DateProps extends DisplayStyle {
+interface DeadlineDateProps extends DisplayStyle {
   cardId: string
   boardId: string
   deadline: Date | null
@@ -23,7 +23,7 @@ interface DateProps extends DisplayStyle {
   setCompleted: (value: boolean) => void
 }
 
-const DeadlineDate: React.FC<DateProps> = ({
+const DeadlineDate: React.FC<DeadlineDateProps> = ({
   cardId,
   boardId,
   deadline,
@@ -36,7 +36,7 @@ const DeadlineDate: React.FC<DateProps> = ({
   backgroundColor,
   status
 }) => {
-  
+
   const [updateCard] = useUpdateCardMutation();
   const [updateBoard] = useUpdateBoardMutation();
 

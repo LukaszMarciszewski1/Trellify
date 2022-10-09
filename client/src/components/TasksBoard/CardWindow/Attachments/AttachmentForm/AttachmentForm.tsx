@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './styles.module.scss'
 import Button from 'components/common/Button/Button'
 
-interface FileFormProps {
+interface AttachmentFormProps {
   name: string
   size: number
   label: string
@@ -12,7 +12,7 @@ interface FileFormProps {
   handleInputState: (value: any) => void
 }
 
-const FileForm: React.FC<FileFormProps> = ({
+const AttachmentForm: React.FC<AttachmentFormProps> = ({
   name,
   listNames,
   type,
@@ -22,7 +22,7 @@ const FileForm: React.FC<FileFormProps> = ({
 
   return (
     <div >
-      <form className={styles.fileForm}>
+      <form className={styles.attachmentForm}>
         <label id={"formId"} className={styles.inputContainer}>
           <input
             id={"formId"}
@@ -58,4 +58,4 @@ const FileForm: React.FC<FileFormProps> = ({
   )
 }
 
-export default FileForm
+export default AttachmentForm

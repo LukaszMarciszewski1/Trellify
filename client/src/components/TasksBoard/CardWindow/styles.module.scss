@@ -21,7 +21,7 @@
   }
 }
 
-.cardModalHeader {
+.titleContainer {
   width: 100%;
   padding: 0 0 0.5rem;
   padding: 1rem;
@@ -95,31 +95,4 @@
 .divider {
   margin: 1rem 0;
   border-bottom: $divider;
-}
-
-
-
-
-.dateNotificationSpan {
-  color: white;
-  margin-left: 5px;
-  border-radius: 4px;
-  padding: 0.2rem 0.3rem;
-}
-
-.cardModalSelectedDateBtn {
-  max-width: 400px;
-  padding: 8px;
-  background-color: #ebecf0;
-  border-radius: 4px;
-  &:hover {
-    background-color: darken(#ebecf0, 3%);
-  }
-}
-
-input[type='checkbox'] {
-  cursor: pointer;
-  width: 20px !important;
-  height: 20px !important;
-  margin-right: 10px;
 }

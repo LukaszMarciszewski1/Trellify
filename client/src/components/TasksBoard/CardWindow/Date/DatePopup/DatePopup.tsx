@@ -9,7 +9,7 @@ import Button from 'components/common/Button/Button'
 import { useUpdateBoardMutation } from 'store/api/boards'
 import { useUpdateCardMutation } from "store/api/cards"
 
-interface DeadlineDatePopupProps {
+interface DatePopupProps {
   cardId: string
   boardId: string
   trigger: boolean
@@ -18,7 +18,7 @@ interface DeadlineDatePopupProps {
   setCardDeadline: (value: Date | null) => void
 }
 
-const DeadlineDatePopup: React.FC<DeadlineDatePopupProps> = ({
+const DatePopup: React.FC<DatePopupProps> = ({
   cardId,
   boardId,
   cardDeadline,
@@ -94,4 +94,4 @@ const DeadlineDatePopup: React.FC<DeadlineDatePopupProps> = ({
   )
 }
 
-export default DeadlineDatePopup
+export default DatePopup
