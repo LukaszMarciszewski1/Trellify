@@ -1,17 +1,17 @@
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 @import 'assets/styles/mixins.scss';
 
 .labelForm {
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: 0.3rem;
+  margin-top: 5px;
 }
 
 .textarea {
   @include textarea();
   min-height: 40px;
-  padding: 0.5rem;
+  padding: 8px;
   margin-bottom: 10px;
 }
 
@@ -46,6 +46,6 @@
   margin-top: 12px;
   overflow: hidden;
   &:last-child {
-    margin-right: 1rem;
+    margin-right: 16px;
   }
 }

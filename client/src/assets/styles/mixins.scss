@@ -1,4 +1,4 @@
-@import './colors.scss';
+@import './theme.scss';
 
 @mixin flex-center {
   display: flex;
@@ -59,7 +59,7 @@
   margin: 6px 0;
   background-color: $light-blue;
   border: 1px solid darken($light-blue, 10%);
-  font-size: 14px;
+  font-size: $font-size-m;
   &:disabled {
     opacity: 0.8;
   }
@@ -82,5 +82,26 @@
   &:focus {
     outline: none;
   }
+}
+
+@mixin authContainer {
+  @include flex-center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: $light;
+}
+
+@mixin authBtn {
+  border: none;
+  outline: none;
+  padding: 12px 0;
+  border-radius: 20px;
+  width: 180px;
+  font-weight: bold;
+  margin: 24px;
+  cursor: pointer;
 }
 

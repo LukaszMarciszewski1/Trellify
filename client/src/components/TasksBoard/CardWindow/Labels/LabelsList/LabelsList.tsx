@@ -17,7 +17,7 @@ const Labels: React.FC<LabelsProps> = ({ cardLabels, setLabelsTrigger }) => {
           <div
             key={label._id}
             style={{ backgroundColor: `${label.color}` }}
-            className={styles.cardModalLabel}
+            className={styles.labelsList}
             onClick={() => setLabelsTrigger(true)}
           >
             <span>{label.title}</span>

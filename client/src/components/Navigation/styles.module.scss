@@ -1,5 +1,5 @@
 @import 'assets/styles/mixins.scss';
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 
 .nav {
   position: relative;
@@ -39,7 +39,7 @@
 
 .navItem {
   position: relative;
-  font-size: 1.1rem;
+  font-size: 17px;
   margin-bottom: 16px;
 }
 
@@ -50,7 +50,7 @@
   align-items: center;
   font-weight: medium;
   padding: 8px;
-  font-size: 1rem;
+  font-size: $font-size-l;
   color: $graphite;
   span {
     margin-left: 16px;

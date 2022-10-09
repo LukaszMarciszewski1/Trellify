@@ -70,12 +70,12 @@ const SignUp: React.FC = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.signup_formContainer}>
+    <div className={styles.auth}>
+      <div className={styles.formContainer}>
         <div className={styles.left}>
           <h1>Zaloguj się</h1><br />
           <Link to='/logowanie'>
-            <button type='button' className={styles.white_btn}>
+            <button type='button' className={styles.whiteBtn}>
               Logowanie
             </button>
           </Link>
@@ -83,7 +83,7 @@ const SignUp: React.FC = () => {
         <div className={styles.right}>
           {loading ? <Loading /> : null}
           {successResponse && <SuccessMessage message={'Zostałeś zarejestrowany'} />}
-          <form className={styles.form_container} onSubmit={handleSubmit(signUp)}>
+          <form className={styles.form} onSubmit={handleSubmit(signUp)}>
             <h1>Utwórz konto</h1>
             <Input
               id={'name'}
@@ -120,7 +120,7 @@ const SignUp: React.FC = () => {
               })}
             />
             {errors.confirm_password && <ErrorMessage message={'Wpisz poprawne hasło'} />}
-            <button type='submit' className={styles.green_btn}>
+            <button type='submit' className={styles.blueBtn}>
               Rejestracja
             </button>
           </form>

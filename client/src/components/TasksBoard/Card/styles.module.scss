@@ -1,4 +1,4 @@
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 
 .card {
   margin-bottom: 8px;
@@ -14,14 +14,15 @@
 
 .cardDetails {
   padding: 6px;
+  p, span {
+    font-size: $font-size-m;
+  }
   p {
-    font-size: 14px;
     color: $graphite;
     font-weight: medium;
     overflow-wrap: break-word;
   }
   span {
-    font-size: 14px;
     color: $graphite;
     font-weight: normal;
   }

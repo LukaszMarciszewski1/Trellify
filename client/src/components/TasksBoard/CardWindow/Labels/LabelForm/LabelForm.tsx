@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import { HexColorPicker } from "react-colorful";
-import { presetColors } from 'assets/localData'
+import { presetColors } from 'assets/presetColors'
 import TextareaAutosize from 'react-textarea-autosize';
 import Button from 'components/common/Button/Button'
 

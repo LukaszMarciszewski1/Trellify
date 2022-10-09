@@ -1,4 +1,4 @@
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 
 .attachmentForm {
   display: flex;
@@ -8,14 +8,14 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 14px;
+    font-size: $font-size-m;
     margin-bottom: 5px;
   }
 }
 
 .inputContainer {
   width: 100%;
-  padding: 0.6rem;
+  padding: 10px;
   background-color: $light-grey;
   border-radius: 5px;
   transition: 0.1s;

@@ -10,7 +10,7 @@ const TasksPage: React.FC = () => {
     <>
       {error && <ErrorMessage message={'Wystąpił błąd serwera, nie można wyświetlić zawartości'} />}
       {
-        isLoading ? <Loading /> : (
+        isLoading ? <div>Loading...</div> : (
           data?.map((board) => (
             < Board
               key={board._id}

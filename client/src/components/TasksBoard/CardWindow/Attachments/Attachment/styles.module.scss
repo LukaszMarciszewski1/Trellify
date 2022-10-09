@@ -1,4 +1,4 @@
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 
 .attachment {
   width: 100%;
@@ -37,12 +37,11 @@
   flex-direction: column;
   justify-content: space-between;
   margin: 0;
-  h4 {
-    font-size: 14px;
-    margin: 0;
+  h4, span {
+    font-size: $font-size-m;
   }
-  span {
-    font-size: 14px;
+  h4 {
+    margin: 0;
   }
 }
 

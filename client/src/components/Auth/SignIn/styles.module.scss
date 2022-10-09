@@ -1,0 +1,63 @@
+@import 'assets/styles/mixins.scss';
+@import 'assets/styles/theme.scss';
+
+.auth {
+  @include authContainer;
+}
+
+.formContainer {
+  width: 900px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: $box-shadow-auth;
+}
+
+.form {
+  width: 370px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  h1 {
+    font-size: 35px;
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+}
+
+.left {
+  position: relative;
+  flex: 2;
+  @include flex-center;
+  flex-direction: column;
+  background-color: $white;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.right {
+  flex: 1;
+  @include flex-center;
+  flex-direction: column;
+  background-color: $blue;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  h1 {
+    margin-top: 0;
+    color: $white;
+    font-size: 30px;
+    align-self: center;
+  }
+}
+
+.whiteBtn {
+  @include authBtn;
+  background-color: $white;
+}
+
+.blueBtn {
+  @include authBtn;
+  background-color: $blue;
+  color: $white;
+}

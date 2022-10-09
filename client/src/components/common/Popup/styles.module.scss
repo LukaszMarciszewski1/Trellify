@@ -1,4 +1,4 @@
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 
 .popup {
   max-width: 500px;
@@ -6,7 +6,7 @@
   position: absolute;
   right: -40px;
   top: 5px;
-  padding: 0.5rem 1rem 1rem;
+  padding: 8px 16px 16px;
   background-color: $white;
   border: 1px solid $grey;
   border-radius: 4px;
@@ -22,7 +22,7 @@
   padding-bottom: 8px;
   h4 {
     width: 100%;
-    font-size: 14px;
+    font-size: $font-size-m;
     text-align: center;
     color: $graphite;
   }

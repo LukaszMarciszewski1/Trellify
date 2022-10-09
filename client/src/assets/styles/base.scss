@@ -1,0 +1,37 @@
+@import './theme.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+a,
+button,
+input,
+textarea {
+  font-family: 'Open Sans', sans-serif;
+}
+
+a,
+button {
+  font-size: $font-size-m;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+ul {
+  list-style: none;
+}

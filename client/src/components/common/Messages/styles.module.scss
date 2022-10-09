@@ -1,4 +1,4 @@
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 
 .wrapper {
   width: 100%;
@@ -32,7 +32,7 @@
   margin: 0 auto;
   padding: 10px 1rem;
   color: $error;
-  background-color: lighten(#af5861, 40%);
+  background-color: lighten($error, 40%);
 }
 
 .validate {

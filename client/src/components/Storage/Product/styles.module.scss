@@ -1,4 +1,5 @@
 @import 'assets/styles/mixins.scss';
+@import 'assets/styles/theme.scss';
 
 .product {
   position: relative;
@@ -8,9 +9,9 @@
   border-radius: 8px;
   padding: 8px;
   margin: 8px 0;
-  color: rgb(74, 80, 98);
-  border: 1px solid rgb(223, 223, 223);
-  background-color: #fbfbfb;
+  color: $graphite;
+  border: 1px solid $light-grey;
+  background-color: $white;
 }
 
 .block {

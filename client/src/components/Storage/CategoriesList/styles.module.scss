@@ -1,5 +1,5 @@
 @import 'assets/styles/mixins.scss';
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 
 .categoriesList {
   display: flex;
@@ -10,10 +10,10 @@
 .titleWrapper {
   display: flex;
   align-items: center;
-  padding: 1rem;
+  padding: 16px;
   border-right: 1px solid $grey;
   h4 {
-    padding: 0 1rem;
+    padding: 0 16px;
   }
 }
 
@@ -23,13 +23,13 @@
   align-items: center;
   overflow-x: auto;
   @include scrollbar;
-  margin-right: 1.5rem;
-  margin-left: 1.5rem;
+  margin-right: 24px;
+  margin-left: 24px;
 }
 
 .box {
-  margin-right: 2rem;
-  padding: 0 1rem;
+  margin-right: 32px;
+  padding: 0 16px;
   color: $graphite;
   white-space: nowrap;
   &:last-child {

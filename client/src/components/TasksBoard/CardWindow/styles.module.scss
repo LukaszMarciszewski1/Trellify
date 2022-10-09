@@ -1,5 +1,5 @@
 @import 'assets/styles/mixins.scss';
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 
 .cardWindow {
   position: relative;
@@ -9,7 +9,7 @@
 .cardWindowWrapper {
   width: 100%;
   display: flex;
-  padding: 1.5rem 1rem 1rem;
+  padding: 24px 16px 16px;
 }
 
 .cardWindowContent {
@@ -19,8 +19,8 @@
   max-width: 660px;
   max-height: 500px;
   background-color: $light;
-  padding: 1rem 1rem;
-  border-radius: 0.5rem;
+  padding: 16px;
+  border-radius: 8px;
   overflow-y: auto;
   @include scrollbar;
   @media (max-width: 1300px) {
@@ -35,5 +35,5 @@
   justify-content: space-around;
   min-width: 160px;
   height: 100%;
-  padding-left: 1rem;
+  padding-left: 16px;
 }

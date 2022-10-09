@@ -1,14 +1,14 @@
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 @import 'assets/styles/mixins.scss';
 
 .productForm {
-  padding: 3rem;
+  padding: 48px;
 }
 
 .formContainer {
   display: flex;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 32px;
+  margin-bottom: 32px;
 }
 
 .formGroup {
@@ -16,11 +16,11 @@
 }
 
 .formGroup:first-child {
-  margin-right: 2rem;
+  margin-right: 32px;
 }
 
 .inputContainer {
-  margin-bottom: 1.2rem;
+  margin-bottom: 20px;
   .selectGroup {
     display: flex;
     align-items: center;

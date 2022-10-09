@@ -17,11 +17,11 @@ const SignIn: React.FC = () => {
   } = useForm<User>();
 
   return (
-    <div className={styles.container}>
-      <div className={styles.login_formContainer}>
+    <div className={styles.auth}>
+      <div className={styles.formContainer}>
         <div className={styles.left}>
           {loading ? <Loading /> : null}
-          <form className={styles.form_container} onSubmit={handleSubmit(signIn)}>
+          <form className={styles.form} onSubmit={handleSubmit(signIn)}>
             <h1>Zaloguj się</h1>
             <Input
               id={'email'}
@@ -39,7 +39,7 @@ const SignIn: React.FC = () => {
               {...register("password", { required: true })}
             />
             {errors.password && <ErrorMessage message={'Hasło jest wymagane'} />}
-            <button type='submit' className={styles.green_btn}>
+            <button type='submit' className={styles.blueBtn}>
               Logowanie
             </button>
           </form>
@@ -47,7 +47,7 @@ const SignIn: React.FC = () => {
         <div className={styles.right}>
           <h1>Zarejestruj się</h1> <br />
           <Link to='/rejestracja'>
-            <button type='button' className={styles.white_btn}>
+            <button type='button' className={styles.whiteBtn}>
               Rejestracja
             </button>
           </Link>

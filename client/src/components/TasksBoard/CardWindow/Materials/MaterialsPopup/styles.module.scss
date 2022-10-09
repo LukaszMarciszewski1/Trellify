@@ -1,5 +1,5 @@
 @import 'assets/styles/mixins.scss';
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 
 .materialsFormContainer {
   position: relative;
@@ -43,7 +43,7 @@
     background-color: $light;
     span {
       width: 200px;
-      font-size: 14px;
+      font-size: $font-size-m;
     }
     input[type='text'],
     input[type='number'] {

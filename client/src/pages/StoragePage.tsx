@@ -6,12 +6,11 @@ import Loading from 'components/common/Loading/Loading'
 
 const StoragePage: React.FC = () => {
   const { data, error, isLoading } = useGetAllProductsQuery()
-  
+
   return (
     <>
       {
-        error && (
-          <ErrorMessage message={'Wystąpił błąd serwera, nie można wyświetlić zawartości'} />)
+        error && (<ErrorMessage message={'Wystąpił błąd serwera, nie można wyświetlić zawartości'} />)
       }
       {
         isLoading ? <Loading /> : <Storage data={data} />

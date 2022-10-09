@@ -1,4 +1,4 @@
-@import 'assets/styles/colors.scss';
+@import 'assets/styles/theme.scss';
 @import 'assets/styles/mixins.scss';
 
 .taskButton {
@@ -6,7 +6,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 0.6rem;
+  padding: 10px;
   background-color: $light-grey;
   border-radius: 5px;
   transition: 0.1s;
@@ -17,7 +17,7 @@
   color: $graphite;
   white-space: nowrap;
   .icon {
-    margin-right: 0.5rem;
+    margin-right: 8px;
     display: flex;
     align-items: center;
     justify-content: center;

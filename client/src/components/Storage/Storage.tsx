@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.scss'
 import {
-  useGetAllProductsQuery,
   useDeleteProductMutation,
   useAddProductMutation,
   useUpdateProductMutation
@@ -14,8 +13,6 @@ import ProductsList from './ProductsList/ProductsList'
 import Product from './Product/Product'
 import CategoriesList from './CategoriesList/CategoriesList'
 import SuccessMessage from 'components/common/Messages/SuccessMessage'
-import ErrorMessage from 'components/common/Messages/ErrorMessage'
-import Loading from 'components/common/Loading/Loading'
 
 export type ReduceReturnType = Record<string, number>;
 
