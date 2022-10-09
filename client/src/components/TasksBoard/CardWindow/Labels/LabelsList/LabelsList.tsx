@@ -6,7 +6,7 @@ import Container from '../../Container/Container'
 
 interface LabelsProps {
   cardLabels: LabelModel[]
-  setLabelsTrigger: () => void
+  setLabelsTrigger: (value: boolean) => void
 }
 
 const Labels: React.FC<LabelsProps> = ({ cardLabels, setLabelsTrigger }) => {
@@ -18,7 +18,7 @@ const Labels: React.FC<LabelsProps> = ({ cardLabels, setLabelsTrigger }) => {
             key={label._id}
             style={{ backgroundColor: `${label.color}` }}
             className={styles.cardModalLabel}
-            onClick={setLabelsTrigger}
+            onClick={() => setLabelsTrigger(true)}
           >
             <span>{label.title}</span>
           </div>

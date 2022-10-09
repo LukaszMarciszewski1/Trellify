@@ -36,7 +36,7 @@ const LabelsPopup: React.FC<LabelsPopupProps> = ({
   trigger,
   setTrigger
 }) => {
-  
+
   const { data: cards } = useGetAllCardsQuery()
   const [updateCard] = useUpdateCardMutation();
   const [updateBoard] = useUpdateBoardMutation();

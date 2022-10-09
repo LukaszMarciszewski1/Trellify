@@ -19,7 +19,7 @@ interface DeadlineDateProps extends DisplayStyle {
   completed: boolean
   dateIsSameOrBefore: boolean
   deadlineIsSoon: boolean
-  setDateTrigger: () => void
+  setDateTrigger: (value: boolean) => void
   setCompleted: (value: boolean) => void
 }
 
@@ -61,7 +61,7 @@ const DeadlineDate: React.FC<DeadlineDateProps> = ({
                 type="checkbox"
                 checked={completed}
                 onChange={handleChangeCompleted} />
-              <button onClick={setDateTrigger}
+              <button onClick={() => setDateTrigger(true)}
                 className={styles.selectedDateBtn}>
                 <span>{dayjs(deadline).format('DD-MM-YYYY HH:mm')}</span>
                 {

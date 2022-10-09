@@ -34,7 +34,7 @@ const TaskCard: React.FC<CardProps> = ({
   boardId,
   title,
   index,
-  nameList,
+  listTitle,
   description,
   completed,
   labels,
@@ -249,7 +249,7 @@ const TaskCard: React.FC<CardProps> = ({
         isCardModalOpen ?
           <CardWindow
             _id={_id}
-            nameList={nameList}
+            listTitle={listTitle}
             title={title}
             description={description}
             boardId={boardId}

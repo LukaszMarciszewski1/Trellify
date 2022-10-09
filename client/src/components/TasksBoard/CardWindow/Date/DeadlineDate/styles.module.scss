@@ -1,5 +1,7 @@
+@import 'assets/styles/colors.scss';
+
 .notificationSpan {
-  color: white;
+  color: $white;
   margin-left: 5px;
   border-radius: 4px;
   padding: 0.2rem 0.3rem;
@@ -8,10 +10,10 @@
 .selectedDateBtn {
   max-width: 400px;
   padding: 8px;
-  background-color: #ebecf0;
+  background-color: $light-grey;
   border-radius: 4px;
   &:hover {
-    background-color: darken(#ebecf0, 3%);
+    background-color: $grey;
   }
 }
 

@@ -200,7 +200,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                           files={card.files}
                           cover={card.cover}
                           usedProducts={card.usedProducts}
-                          nameList={listTitle}
+                          listTitle={listTitle}
                           createdAt={card.createdAt}
                           setIsDragDisabled={setIsDragDisabled}
                         />

@@ -1,0 +1,14 @@
+@import 'assets/styles/colors.scss';
+@import 'assets/styles/mixins.scss';
+
+.cardCover {
+  @include flex-center;
+  width: 100%;
+  background-color: $light;
+  border-radius: 3px;
+  overflow: hidden;
+  img {
+    height: 120px;
+    cursor: pointer;
+  }
+}

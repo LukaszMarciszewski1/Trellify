@@ -3,6 +3,7 @@ import styles from './styles.module.scss'
 import dayjs from 'dayjs'
 import pl from "date-fns/locale/pl"
 import DatePicker, { registerLocale } from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 import Popup from 'components/common/Popup/Popup'
 import Button from 'components/common/Button/Button'
 

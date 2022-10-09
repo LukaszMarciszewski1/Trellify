@@ -1,5 +1,4 @@
 import React from 'react'
-import styles from './styles.module.scss'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import fileDownload from 'js-file-download'

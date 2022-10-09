@@ -10,7 +10,7 @@ export interface Card {
   deadline: Date | null
   cover: string
   completed: boolean
-  nameList: string
+  listTitle: string
   files: any
   usedProducts?: Product[]
   labels: Labels[]

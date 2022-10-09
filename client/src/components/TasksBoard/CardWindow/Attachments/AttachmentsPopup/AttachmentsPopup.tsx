@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react'
-import styles from './styles.module.scss'
 import axios from 'axios'
 import { Line as ProgressLine } from 'rc-progress'
 import Popup from 'components/common/Popup/Popup'
