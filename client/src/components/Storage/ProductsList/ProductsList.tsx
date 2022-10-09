@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useState } from 'react'
 import styles from './styles.module.scss'
 import { Product as ProductModel } from 'models/product';

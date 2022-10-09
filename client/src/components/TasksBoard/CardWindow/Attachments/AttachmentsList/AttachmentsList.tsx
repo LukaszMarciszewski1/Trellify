@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import React from 'react'
 import axios from 'axios'
 import dayjs from 'dayjs'

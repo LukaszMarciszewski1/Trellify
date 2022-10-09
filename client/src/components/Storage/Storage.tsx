@@ -19,8 +19,11 @@ import Loading from 'components/common/Loading/Loading'
 
 export type ReduceReturnType = Record<string, number>;
 
-const Storage: React.FC = () => {
-  const { data, error, isLoading } = useGetAllProductsQuery()
+interface StorageProps {
+  data: ProductModel[] | undefined
+}
+
+const Storage: React.FC<StorageProps> = ({ data }) => {
   const [deleteProduct] = useDeleteProductMutation()
   const [addProduct] = useAddProductMutation()
   const [updateProduct] = useUpdateProductMutation()
@@ -38,9 +41,15 @@ const Storage: React.FC = () => {
     if (data) {
       setProducts(data)
       setCategories(getCategories(data))
-      setTimeout(() => setIsSuccess(false), 1000)
     }
   }, [data])
+
+  useEffect(() => {
+    const formStatus = setTimeout(() => setIsSuccess(false), 1000)
+    return () => {
+      clearTimeout(formStatus)
+    }
+  }, [updateProduct])
 
   const getCategories = (data: ProductModel[] | undefined) => {
     if (!data) return
@@ -49,7 +58,6 @@ const Storage: React.FC = () => {
       ...acc,
       [value]: (acc[value] || 0) + 1
     }), {});
-
     return categoryObj
   }
 
@@ -97,7 +105,6 @@ const Storage: React.FC = () => {
 
   return (
     <div className={styles.storage}>
-      {error && <ErrorMessage message={'Coś poszło nie tak, spróbuj ponownie'} />}
       <div className={styles.content}>
         <div className={styles.top}>
           <CategoriesList data={categories} />
@@ -111,7 +118,6 @@ const Storage: React.FC = () => {
             allCategoryValue={allCategoryValue}
           />
           {
-            isLoading ? <Loading /> : (
               <ProductsList
                 data={products}
                 sortProducts={setProducts}
@@ -136,7 +142,6 @@ const Storage: React.FC = () => {
                   ))
                 }
               </ProductsList>
-            )
           }
         </div>
       </div>

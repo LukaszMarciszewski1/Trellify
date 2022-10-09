@@ -41,8 +41,6 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   const [popupTrigger, setPopupTrigger] = useState(false)
   const ref = useRef(null)
 
-  // console.log(cards)
-
   const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
     updateList({
@@ -108,15 +106,15 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   useOnClickOutside(ref, handleCloseForm)
 
   return (
-    <div className={styles.listWrapper}>
+    <div>
       <Draggable draggableId={String(_id)} index={index} isDragDisabled={isDragDisabled}>
         {provided => (
-          <div className={styles.list} {...provided.draggableProps} ref={provided.innerRef} {...provided.dragHandleProps}>
-            <div className={styles.listHeader}>
+          <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className={styles.list}>
+            <div className={styles.header}>
               <div onClick={() => setIsTitleFormOpen(true)} ref={ref}>
                 {
                   isTitleFormOpen ?
-                    <div className={styles.textareaWrapper}>
+                    <div className={styles.titleWrapper}>
                       <TextareaAutosize
                         id='list'
                         autoFocus={true}
@@ -129,7 +127,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                         required
                       />
                     </div>
-                    : <div className={styles.textareaWrapper}><h2>{listTitle}</h2></div>
+                    : <div className={styles.titleWrapper}><h2>{listTitle}</h2></div>
                 }
               </div>
               <IconButton onClick={() => {
@@ -166,12 +164,10 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                   }
                   {
                     cards.length ? (
-                      <>
-                        <TaskButton
-                          onClick={handleDeleteAllCardsOfList}
-                          name={'Usuń wszystkie karty'}
-                        />
-                      </>
+                      <TaskButton
+                        onClick={handleDeleteAllCardsOfList}
+                        name={'Usuń wszystkie karty'}
+                      />
                     ) : null
                   }
                   <TaskButton
@@ -183,7 +179,7 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
             </div>
             <Droppable droppableId={String(_id)} type="card">
               {provided => (
-                <div {...provided.droppableProps} ref={provided.innerRef} className={styles.cards}>
+                <div {...provided.droppableProps} ref={provided.innerRef}>
                   <div className={styles.cardsContainer}>
                     {
                       cards?.map((card, index: number) => (
@@ -211,8 +207,8 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                 </div>
               )}
             </Droppable>
-            <div className={styles.addCardForm}>
-              {isCardFormOpen ?
+            <div className={styles.listForm}>
+              {isCardFormOpen ? (
                 <div ref={ref}>
                   <TaskForm
                     id={'card'}
@@ -223,15 +219,14 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
                     titleBtn={'Dodaj Kartę'}
                   />
                 </div>
-                : <TaskButton
-                  onClick={() => setIsCardFormOpen(true)}
-                  name={'Dodaj kartę'} icon={<GoPlus />}
-                />
+              ) : <TaskButton
+                onClick={() => setIsCardFormOpen(true)}
+                name={'Dodaj kartę'} icon={<GoPlus />}
+              />
               }
             </div>
           </div>
-        )
-        }
+        )}
       </Draggable>
     </div>
   )

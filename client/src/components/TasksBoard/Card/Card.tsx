@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react'
 import styles from './styles.module.scss'
 import { Draggable } from 'react-beautiful-dnd';

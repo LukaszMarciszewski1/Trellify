@@ -5,14 +5,14 @@ import { useUpdateBoardMutation } from 'store/api/boards'
 import { useAddListMutation, useUpdateListMutation } from 'store/api/lists';
 import { useUpdateCardMutation } from "store/api/cards";
 import useOnClickOutside from 'hooks/useOnClickOutside';
-import { Board as BoardResponse } from 'models/board'
-import { List as ListResponse } from 'models/list'
+import { Board as BoardModel } from 'models/board'
+import { List as ListModel} from 'models/list'
 import TaskButton from 'components/common/TaskButton/TaskButton'
 import List from './List/List'
 import TaskForm from './TaskForm/TaskForm'
 import { GoPlus } from "react-icons/go";
 
-const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi }) => {
+const Board: React.FC<BoardModel> = ({ _id, lists: listsApi }) => {
   const [addList] = useAddListMutation()
   const [updateList] = useUpdateListMutation()
   const [updateCard] = useUpdateCardMutation()
@@ -20,7 +20,7 @@ const Board: React.FC<BoardResponse> = ({ _id, lists: listsApi }) => {
 
   const [listTitle, setListTitle] = useState('');
   const [isOpenForm, setIsOpenForm] = useState(false)
-  const [lists, setLists] = useState<ListResponse[]>([] as ListResponse[])
+  const [lists, setLists] = useState<ListModel[]>([])
   const formRef = useRef(null)
 
   const closeForm = () => { setIsOpenForm(false); setListTitle('') }

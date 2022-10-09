@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable array-callback-return */
 import React, { useState, useEffect, useCallback } from 'react'
 import styles from './styles.module.scss'
 import { Labels as LabelModel } from 'models/labels'

@@ -1,16 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Board from 'components/TasksBoard/TasksBoard';
 import { useGetAllBoardsQuery } from 'store/api/boards';
-import { Board as BoardResponse } from 'models/board'
 import Loading from 'components/common/Loading/Loading';
+import ErrorMessage from 'components/common/Messages/ErrorMessage'
 
 const TasksPage: React.FC = () => {
   const { data, error, isLoading } = useGetAllBoardsQuery()
-  const [boards, setBoards] = useState<BoardResponse[]>([] as BoardResponse[])
-
   return (
     <>
-      {error && <h2>Error 500</h2>}
+      {error && <ErrorMessage message={'Wystąpił błąd serwera, nie można wyświetlić zawartości'} />}
       {
         isLoading ? <Loading /> : (
           data?.map((board) => (

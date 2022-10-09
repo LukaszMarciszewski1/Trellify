@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { useEffect, useState, useCallback } from 'react'
 import styles from './styles.module.scss'
 import { Product as ProductModel } from 'models/product';
@@ -106,7 +107,7 @@ const MaterialsPopup: React.FC<MaterialsPopupProps> = ({
       })
     })
 
-  }, [materialsList])
+  }, [materialsList, updateProduct])
 
   const handleSubmitForm = (e: { preventDefault: () => void }) => {
     e.preventDefault()

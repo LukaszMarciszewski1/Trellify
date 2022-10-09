@@ -1,10 +1,10 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import Tasks from './TasksPage/TasksPage';
-import Storage from './StoragePage/StoragePage';
-import Statistics from './Statistics/Statistics';
-import Settings from './Settings/Settings';
-import Calculator from './Calculator/Calculator';
+import Tasks from './TasksPage';
+import Storage from './StoragePage';
+import Statistics from './Statistics';
+import Settings from './Settings';
+import Calculator from './Calculator';
 import Layout from 'components/Layout';
 
 const Home: React.FC = () => {

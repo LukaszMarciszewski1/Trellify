@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styles from './styles.module.scss'
+import useOnClickOutside from 'hooks/useOnClickOutside'
 import { useGetBoardQuery, useUpdateBoardMutation } from 'store/api/boards'
 import { useDeleteCardMutation } from "store/api/cards"
 import { Card as CardModel } from 'models/card'
 import { Labels as LabelsModel } from 'models/labels'
-import { Product as ProductModel } from 'models/product'
-import useOnClickOutside from 'hooks/useOnClickOutside'
 import Modal from 'components/common/Modal/Modal'
 import Popup from 'components/common/Popup/Popup'
 import TaskButton from 'components/common/TaskButton/TaskButton'
@@ -79,8 +78,6 @@ const CardModal: React.FC<CardModalProps> = ({
   const [cardDescription, setCardDescription] = useState<string>(description)
   const [boardLabels, setBoardLabels] = useState<LabelsModel[] | undefined>([])
   const [cardLabels, setCardLabels] = useState<LabelsModel[]>(labels)
-  const [materials, setMaterials] = useState<ProductModel[] | undefined>(usedProducts)
-  //state materials
 
   const refModal = useRef(null)
 
@@ -107,7 +104,7 @@ const CardModal: React.FC<CardModalProps> = ({
           <div className={styles.cardWindowContent}>
             <Labels
               cardLabels={cardLabels}
-              setLabelsTrigger={setLabelsTrigger} />
+              setLabelsTrigger={() => setLabelsTrigger(true)} />
             <DeadlineDate
               cardId={_id}
               boardId={boardId}

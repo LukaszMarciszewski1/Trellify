@@ -1,6 +1,5 @@
 import defaultImg from 'assets/img/defaultImg.jpg'
 import defaultColors from 'assets/img/defaultColors.jpg'
-import defaultBg from 'assets/img/defaultBackground.jpg'
 
 export const defaultBgIcon = defaultImg
 export const defaultColorIcon = defaultColors

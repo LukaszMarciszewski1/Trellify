@@ -41,9 +41,8 @@ const TaskForm: React.FC<TaskFormProps> = ({ value, id, titleBtn, onBlur, onFocu
         onKeyDown={onKeyDown}
         required
       />
-      <div className={styles.actionsForm}>
-        <Button title={titleBtn} type={'submit'} onClick={handleSubmit} />
-        <div style={{ marginRight: '16px' }} />
+      <div className={styles.buttonsWrapper}>
+        <Button title={titleBtn} type={'submit'} onClick={handleSubmit} style={{ marginRight: '16px' }}/>
         <IconButton onClick={closeForm}><BsXLg /></IconButton>
       </div>
     </form>

@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 export const isFileImage = (url: string) => {
   if (typeof url !== 'string') {
     return false
