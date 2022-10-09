@@ -41,8 +41,9 @@ import AttachmentsPopup from './Attachments/AttachmentsPopup/AttachmentsPopup'
 
 import Container from './Container/Container'
 import Modal from '../../common/Modal/Modal'
-import UsedProducts from './UsedProducts/UsedProducts'
-import MaterialsList from './UsedProducts/MaterialsList/MaterialsList'
+import UsedProducts from './Materials/UsedProducts'
+import MaterialsList from './Materials/MaterialsList/MaterialsList'
+import MaterialsPopup from './Materials/MaterialsPopup/MaterialsPopup'
 
 import { BiTask } from 'react-icons/bi'
 import { GrAttachment } from 'react-icons/gr'
@@ -314,7 +315,6 @@ const CardModal: React.FC<CardModalProps> = ({
               setCardFileIndex={setCardFileIndex}
             />
           </div>
-
           <div className={styles.cardModalSidebar} >
             <LabelsPopup
               cardId={_id}
@@ -350,7 +350,7 @@ const CardModal: React.FC<CardModalProps> = ({
                 <p>Is in progress ...</p>
               </div>
             </Popup>
-            <Popup
+            {/* <Popup
               title={'Wykorzystane materiały'}
               trigger={storageTrigger}
               closePopup={() => setStorageTrigger(false)}
@@ -359,7 +359,14 @@ const CardModal: React.FC<CardModalProps> = ({
                 cardId={_id}
                 boardId={boardId}
                 usedProducts={usedProducts} />
-            </Popup>
+            </Popup> */}
+            <MaterialsPopup
+              cardId={_id}
+              boardId={boardId}
+              usedProducts={usedProducts}
+              trigger={storageTrigger}
+              setTrigger={setStorageTrigger}
+            />
             <TaskButton
               onClick={() => setLabelsTrigger(true)}
               name={'Etykiety'}

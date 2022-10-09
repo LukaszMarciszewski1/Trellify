@@ -1,0 +1,64 @@
+@import 'assets/styles/mixins.scss';
+@import 'assets/styles/colors.scss';
+
+.materialsFormContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 440px;
+}
+
+.materialsForm {
+  margin-top: 10px;
+  label {
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+}
+
+.selectContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  select {
+    @include input;
+    flex-grow: 1;
+    margin: 0;
+    padding: 12px;
+  }
+}
+
+.materialsList {
+  width: 100%;
+  margin: 20px 0;
+  .formGroup {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px 8px;
+    border-radius: 8px;
+    color: $graphite;
+    border: 1px solid $light-grey;
+    background-color: $light;
+    span {
+      width: 200px;
+      font-size: 14px;
+    }
+    input[type='text'],
+    input[type='number'] {
+      @include input;
+      margin: 0;
+      padding: 6px;
+    }
+    input[type='text'] {
+      max-width: 110px;
+      margin-right: 10px;
+      background-color: $light-blue;
+      opacity: 0.8;
+    }
+    input[type='number'] {
+      max-width: 80px;
+    }
+  }
+}
