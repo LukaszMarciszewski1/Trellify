@@ -41,6 +41,14 @@ export const createList = async (req: Request, res: Response) => {
   }
 }
 
+export const updateList = async (req: Request, res: Response) => {
+  const { id } = req.params
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send(`No list with id: ${id}`)
+  const updateList = await List.findByIdAndUpdate(id, req.body, { new: true })
+  res.json(updateList)
+}
+
 export const deleteList = async (req: Request, res: Response) => {
   const { id } = req.params
   try {
@@ -68,14 +76,6 @@ export const deleteList = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(404).json({ error })
   }
-}
-
-export const updateList = async (req: Request, res: Response) => {
-  const { id } = req.params
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`No list with id: ${id}`)
-  const updateList = await List.findByIdAndUpdate(id, req.body, { new: true })
-  res.json(updateList)
 }
 
 export const deleteAllCardsOfList = async (req: Request, res: Response) => {
