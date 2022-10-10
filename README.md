@@ -6,7 +6,7 @@
 https://print-control-m.netlify.app/
 
 ## Demo Account Credentials
-Email:  `demo@gmail.com`
+Login:  `demo@gmail.com`
 Password:  `Demo1234` 
 
 ## Built With
