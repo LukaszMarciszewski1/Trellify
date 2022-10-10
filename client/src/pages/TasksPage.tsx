@@ -1,7 +1,6 @@
 import React from 'react'
 import Board from 'components/TasksBoard/TasksBoard';
 import { useGetAllBoardsQuery } from 'store/api/boards';
-import Loading from 'components/common/Loading/Loading';
 import ErrorMessage from 'components/common/Messages/ErrorMessage'
 
 const TasksPage: React.FC = () => {

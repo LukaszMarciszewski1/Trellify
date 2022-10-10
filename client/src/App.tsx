@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from 'hooks/useAuth'
 import Layout from 'components/Layout';
 import SignIn from 'components/Auth/SignIn/SignIn';
@@ -12,11 +12,6 @@ import Settings from 'pages/SettingsPage';
 
 const App: React.FC = () => {
   const { user } = useAuth()
-  const navigate = useNavigate()
-
-  // useEffect(() => {
-  //   user ? navigate('/') : navigate('/logowanie')
-  // }, [user])
 
   return (
     <>

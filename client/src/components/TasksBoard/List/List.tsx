@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import styles from './styles.module.scss'
+import { useDebouncedCallback } from 'use-debounce';
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 
 import {
@@ -41,12 +42,19 @@ const List: React.FC<PropsList> = ({ _id, boardId, title, cards, index }) => {
   const [popupTrigger, setPopupTrigger] = useState(false)
   const ref = useRef(null)
 
+  const debouncedListTitle = useDebouncedCallback(
+    (value) => {
+      updateList({
+        _id,
+        title: value
+      })
+    },
+    500
+  )
+
   const handleChangeListTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'list') setListTitle(e.target.value)
-    updateList({
-      _id: _id,
-      title: e.target.value
-    })
+    debouncedListTitle(e.target.value)
   }
 
   const handleAddCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {

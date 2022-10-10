@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './styles.module.scss'
+import { useDebouncedCallback } from 'use-debounce';
 import TextareaAutosize from 'react-textarea-autosize'
 import { useUpdateBoardMutation } from 'store/api/boards'
 import { useUpdateCardMutation } from "store/api/cards"
@@ -22,16 +23,21 @@ const Title: React.FC<TitleProps> = ({
   const [updateCard] = useUpdateCardMutation();
   const [updateBoard] = useUpdateBoardMutation();
 
+  const debouncedCardTitle = useDebouncedCallback(
+    (value) => {
+      updateCard({
+        _id: cardId,
+        title: value
+      })
+      updateBoard({ _id: boardId })
+    },
+    300
+  )
+
   const handleEditCardTitle = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (e.target.id === 'card-title') {
       setCardTitle(e.target.value)
-      updateCard({
-        _id: cardId,
-        title: e.target.value
-      })
-      updateBoard({
-        _id: boardId
-      })
+      debouncedCardTitle(e.target.value)
     }
   }
 
