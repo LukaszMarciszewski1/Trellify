@@ -12,6 +12,9 @@
   justify-content: center;
   border-radius: 10px;
   box-shadow: $box-shadow-auth;
+  @media screen and (max-width: 750px) {
+    flex-direction: column-reverse;
+  }
 }
 
 .form {
@@ -23,6 +26,9 @@
     font-size: 35px;
     margin-top: 0;
     margin-bottom: 12px;
+  }
+  @media screen and (max-width: 500px) {
+    width: 300px;
   }
 }
 
@@ -48,6 +54,10 @@
     color: $white;
     font-size: 30px;
     align-self: center;
+  }
+  @media screen and (max-width: 750px) {
+    border-radius: 10px 10px 0 0 ;
+
   }
 }
 
