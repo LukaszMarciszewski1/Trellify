@@ -5,7 +5,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 440px;
+  width: 460px;
 }
 
 .materialsForm {
@@ -31,34 +31,39 @@
 .materialsList {
   width: 100%;
   margin: 20px 0;
-  .formGroup {
-    width: 100%;
+}
+
+.formGroup {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  color: $graphite;
+  border: 1px solid $light-grey;
+  background-color: $light;
+  div{
     display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    padding: 5px 8px;
-    border-radius: 8px;
-    color: $graphite;
-    border: 1px solid $light-grey;
-    background-color: $light;
-    span {
-      width: 200px;
-      font-size: $font-size-m;
-    }
-    input[type='text'],
-    input[type='number'] {
-      @include input;
-      margin: 0;
-      padding: 6px;
-    }
-    input[type='text'] {
-      max-width: 110px;
-      margin-right: 10px;
-      background-color: $light-blue;
-      opacity: 0.8;
-    }
-    input[type='number'] {
-      max-width: 80px;
-    }
+  }
+  span {
+    width: 200px;
+    font-size: $font-size-m;
+  }
+  input[type='text'],
+  input[type='number'] {
+    @include input;
+    margin: 0;
+    padding: 6px;
+  }
+  input[type='text'] {
+    max-width: 110px;
+    margin-right: 10px;
+    background-color: $light-blue;
+    opacity: 0.8;
+  }
+  input[type='number'] {
+    max-width: 80px;
   }
 }

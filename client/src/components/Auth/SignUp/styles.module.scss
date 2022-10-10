@@ -47,8 +47,7 @@
     align-self: center;
   }
   @media screen and (max-width: 750px) {
-    border-radius: 10px 10px 0 0 ;
-
+    border-radius: 10px 10px 0 0;
   }
 }
 
@@ -61,8 +60,6 @@
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
 }
-
-
 
 .whiteBtn {
   @include authBtn;

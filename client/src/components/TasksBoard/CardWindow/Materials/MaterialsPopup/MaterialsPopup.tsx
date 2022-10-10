@@ -161,25 +161,27 @@ const MaterialsPopup: React.FC<MaterialsPopupProps> = ({
               materialsList?.map((material) => (
                 <div key={material._id} className={styles.formGroup}>
                   <span>{material.name} {material.used ? `${material.used} ${material.unit}` : null}</span>
-                  <input
-                    type="text"
-                    name="quantity"
-                    value={`stan: ${getProductQuantityFromStorage(material._id)} ${material.unit}`}
-                    disabled />
-                  <input
-                    id={material._id}
-                    type="number"
-                    name={material.name}
-                    defaultValue={0}
-                    max={getProductQuantityFromStorage(material._id)}
-                    min={0}
-                    onChange={handleOnChangeUsedValue}
-                  />
-                  <IconButton
-                    onClick={() => handleRemoveFromList(material._id)}
-                    style={{ marginLeft: '8px' }}>
-                    <RiDeleteBinLine fontSize={'14px'} />
-                  </IconButton>
+                  <div>
+                    <input
+                      type="text"
+                      name="quantity"
+                      value={`stan: ${getProductQuantityFromStorage(material._id)} ${material.unit}`}
+                      disabled />
+                    <input
+                      id={material._id}
+                      type="number"
+                      name={material.name}
+                      defaultValue={0}
+                      max={getProductQuantityFromStorage(material._id)}
+                      min={0}
+                      onChange={handleOnChangeUsedValue}
+                    />
+                    <IconButton
+                      onClick={() => handleRemoveFromList(material._id)}
+                      style={{ marginLeft: '8px' }}>
+                      <RiDeleteBinLine fontSize={'14px'} />
+                    </IconButton>
+                  </div>
                 </div>
               ))
             }

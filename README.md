@@ -9,7 +9,7 @@ https://print-control-m.netlify.app/
 
 ## Demo Account Credentials
 Email:  `demo@gmail.com`
-Password:  `Demo123` 
+Password:  `Demo1234` 
 
 ## Built With
 TypeScript,

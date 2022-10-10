@@ -46,7 +46,7 @@ const Storage: React.FC<StorageProps> = ({ data }) => {
     return () => {
       clearTimeout(formStatus)
     }
-  }, [updateProduct])
+  }, [isModalOpen, isModalEditOpen, products])
 
   const getCategories = (data: ProductModel[] | undefined) => {
     if (!data) return
@@ -115,30 +115,30 @@ const Storage: React.FC<StorageProps> = ({ data }) => {
             allCategoryValue={allCategoryValue}
           />
           {
-              <ProductsList
-                data={products}
-                sortProducts={setProducts}
-              >
-                {
-                  products?.slice(0).reverse().map(product => (
-                    <Product
-                      key={product._id}
-                      _id={product._id}
-                      name={product.name}
-                      category={product.category}
-                      quantity={product.quantity}
-                      unit={product.unit}
-                      price={product.price}
-                      editProd={() => handleOpenEditProduct(product)}
-                      deleteProd={() => {
-                        const result = window.confirm("Usunąć produkt?")
-                        if (!result) return
-                        deleteProduct(product._id)
-                      }}
-                    />
-                  ))
-                }
-              </ProductsList>
+            <ProductsList
+              data={products}
+              sortProducts={setProducts}
+            >
+              {
+                products?.slice(0).reverse().map(product => (
+                  <Product
+                    key={product._id}
+                    _id={product._id}
+                    name={product.name}
+                    category={product.category}
+                    quantity={product.quantity}
+                    unit={product.unit}
+                    price={product.price}
+                    editProd={() => handleOpenEditProduct(product)}
+                    deleteProd={() => {
+                      const result = window.confirm("Usunąć produkt?")
+                      if (!result) return
+                      deleteProduct(product._id)
+                    }}
+                  />
+                ))
+              }
+            </ProductsList>
           }
         </div>
       </div>
