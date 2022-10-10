@@ -4,7 +4,7 @@ import styles from './styles.module.scss'
 import { MdArrowForwardIos } from "react-icons/md";
 import { CgCalculator } from "react-icons/cg";
 import { GiDeliveryDrone } from "react-icons/gi";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { FiSettings } from "react-icons/fi";
 import { GrTask } from "react-icons/gr";
 import { BiCategory } from 'react-icons/bi'
 
@@ -32,7 +32,7 @@ const menuItems = [
   {
     name: 'Ustawienia',
     path: '/ustawienia',
-    icon: <AiOutlineInfoCircle />
+    icon: <FiSettings />
   },
 ]
 
@@ -56,7 +56,7 @@ const Nav: React.FC = () => {
               to={item.path}
             >
               <div className={`${styles.navLink} ${location.pathname === item.path ? styles.active : styles.navLink}`}>
-                <div className={styles.icon}>{item.icon}</div>
+                <div className={styles.icon} title={item.name}>{item.icon}</div>
                 <span>{!isSidebarOpen ? item.name : null}</span>
               </div>
             </Link>

@@ -23,7 +23,7 @@ const ProductsList: React.FC<ProductsListProps> = ({ data, children, sortProduct
     { key: "name", label: "Nazwa", sortable: true },
     { key: "category", label: "Kategoria", sortable: true },
     { key: "quantity", label: "Stan", sortable: true },
-    { key: "unit", label: "Jedn.", sortable: false },
+    { key: "unit", label: "Jedn.", sortable: true },
     { key: "price", label: "Cena", sortable: true },
     { key: "actions", label: "Akcje", sortable: false },
   ];

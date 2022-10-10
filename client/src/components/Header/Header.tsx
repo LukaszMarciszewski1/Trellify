@@ -3,7 +3,7 @@ import styles from './styles.module.scss'
 import { useAuth } from 'hooks/useAuth'
 import Popup from 'components/common/Popup/Popup'
 import Button from 'components/common/Button/Button'
-import logoSrc from 'assets/img/logo.svg'
+import logoSrc from 'assets/img/trellify-white.svg'
 
 const Header: React.FC = () => {
   const { user, signOut } = useAuth()
