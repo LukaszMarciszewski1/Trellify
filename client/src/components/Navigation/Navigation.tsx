@@ -20,16 +20,6 @@ const menuItems = [
     icon: <BiCategory />
   },
   {
-    name: 'Kalkulator',
-    path: '/kalkulator',
-    icon: <CgCalculator />
-  },
-  {
-    name: 'Statystyki',
-    path: '/statystyki',
-    icon: <GiDeliveryDrone />
-  },
-  {
     name: 'Ustawienia',
     path: '/ustawienia',
     icon: <FiSettings />
