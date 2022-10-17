@@ -1,6 +1,6 @@
 # Task Manager With MERN Stack
 
-#### This is a work in progress. I am using this project to get some practical experience and further develop my knowledge and understanding of TypeScript applications using Front End frameworks
+#### This work is in progress. I am using this project to get some practical experience and further develop my knowledge and understanding of TypeScript applications using Front End frameworks
 
 ## Demo
 👉  https://print-control-m.netlify.app/
