@@ -41,13 +41,13 @@ To run the server in TypeScript, you will need to install TypeScript globally. Y
 npm install -g typescript
 - Backend environment variables .env file:
  (`
-_ PORT: Port number
-_ MONGODB_URI: The URI for your MongoDB database.
-_ JWT_SECRET: The secret key for JWT token generation.
-_ AWS_ACCESS_KEY_ID: The access key ID for your AWS S3 bucket.
-_ AWS_SECRET_ACCESS_KEY: The secret access key for your AWS S3 bucket.
-_ AWS_REGION: The region for your AWS S3 bucket.
-_ AWS_BUCKET_NAME: The name of your AWS S3 bucket.
+- PORT: Port number
+- MONGODB_URI: The URI for your MongoDB database.
+- JWT_SECRET: The secret key for JWT token generation.
+- AWS_ACCESS_KEY_ID: The access key ID for your AWS S3 bucket.
+- AWS_SECRET_ACCESS_KEY: The secret access key for your AWS S3 bucket.
+- AWS_REGION: The region for your AWS S3 bucket.
+- AWS_BUCKET_NAME: The name of your AWS S3 bucket.
  `)
 
 
