@@ -25,10 +25,10 @@ Password:  `Demo1234`
 ## Installation
 - Clone the repository from GitHub.
 - Install Node.js on your machine if it is not already installed.
-- Move into the project directory: cd Trellify
-- Install backend dependencies: npm install
-- Move into the client directory: cd client
-- Install client dependencies: npm install
+- Move into the project directory: `cd Trellify`
+- Install backend dependencies: `npm install`
+- Move into the client directory: `cd client`
+- Install client dependencies: `npm install`
 
 ## Setup
 ### Backend setup
@@ -38,25 +38,25 @@ To set up MongoDB, you will need to create a database and a user with read and w
 To set up AWS S3, you will need to create an AWS account and set up a bucket to store images.
 - Installing TypeScript
 To run the server in TypeScript, you will need to install TypeScript globally. You can do this by running the following command:
-npm install -g typescript
+`npm install -g typescript`
 - Backend environment variables .env file:
- "`
- PORT: Port number
- MONGODB_URI: The URI for your MongoDB database.
- JWT_SECRET: The secret key for JWT token generation.
- AWS_ACCESS_KEY_ID: The access key ID for your AWS S3 bucket.
- AWS_SECRET_ACCESS_KEY: The secret access key for your AWS S3 bucket.
- AWS_REGION: The region for your AWS S3 bucket.
- AWS_BUCKET_NAME: The name of your AWS S3 bucket.
- `"
+ ``` 
+  PORT: Port number
+  MONGODB_URI: The URI for your MongoDB database.  
+  JWT_SECRET: The secret key for JWT token generation.  
+  AWS_ACCESS_KEY_ID: The access key ID for your AWS S3 bucket.  
+  AWS_SECRET_ACCESS_KEY: The secret access key for your AWS S3 bucket.  
+  AWS_REGION: The region for your AWS S3 bucket.  
+  AWS_BUCKET_NAME: The name of your AWS S3 bucket.  
+```
 
 
 
 ### Client setup
-- Client environment variables .env file
-REACT_APP_API_URL: local host URL
+- Client environment variables .env file:  
+```REACT_APP_API_URL: local host URL```
 
 ## Running the application
-Start the backend: npm start
-In a separate terminal window, start the client: npm start
+Start the backend: ```npm start```
+In a separate terminal window, start the client: ```npm start```
 The application should now be running at http://localhost:3000.
