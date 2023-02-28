@@ -39,7 +39,8 @@ To set up AWS S3, you will need to create an AWS account and set up a bucket to 
 - Installing TypeScript
 To run the server in TypeScript, you will need to install TypeScript globally. You can do this by running the following command:
 npm install -g typescript
-- Backend environment variables .env file
+- Backend environment variables .env file:
+- (```)
 PORT: Port number
 MONGODB_URI: The URI for your MongoDB database.
 JWT_SECRET: The secret key for JWT token generation.
@@ -47,6 +48,7 @@ AWS_ACCESS_KEY_ID: The access key ID for your AWS S3 bucket.
 AWS_SECRET_ACCESS_KEY: The secret access key for your AWS S3 bucket.
 AWS_REGION: The region for your AWS S3 bucket.
 AWS_BUCKET_NAME: The name of your AWS S3 bucket.
+(```)
 
 ### Client setup
 - Client environment variables .env file
