@@ -32,14 +32,14 @@ Password:  `Demo1234`
 
 ## Setup
 ### Backend setup
-####Setting up MongoDB
+- Setting up MongoDB
 To set up MongoDB, you will need to create a database and a user with read and write access to the database.
-####Setting up AWS S3
+- Setting up AWS S3
 To set up AWS S3, you will need to create an AWS account and set up a bucket to store images.
-####Installing TypeScript
+- Installing TypeScript
 To run the server in TypeScript, you will need to install TypeScript globally. You can do this by running the following command:
 npm install -g typescript
-#### Backend environment variables .env file
+- Backend environment variables .env file
 PORT: Port number
 MONGODB_URI: The URI for your MongoDB database.
 JWT_SECRET: The secret key for JWT token generation.
@@ -49,7 +49,7 @@ AWS_REGION: The region for your AWS S3 bucket.
 AWS_BUCKET_NAME: The name of your AWS S3 bucket.
 
 ### Client setup
-#### Client environment variables .env file
+- Client environment variables .env file
 REACT_APP_API_URL: local host URL
 
 ## Running the application
