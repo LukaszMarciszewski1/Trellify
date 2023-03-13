@@ -22,6 +22,9 @@ Module SCSS
 Login:  `demo@gmail.com`
 Password:  `Demo1234` 
 
+### Demo video
+https://user-images.githubusercontent.com/66526279/224668957-c0680aaa-695c-408a-98f3-181061518c37.mp4
+
 ## Installation
 - Clone the repository from GitHub.
 - Install Node.js on your machine if it is not already installed.
